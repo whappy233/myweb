@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="../../../static/bootstrap_4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/cropper.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-9">
+        <h3>Demo:</h3>
+        <div class="docs-demo">
+          <div class="img-container">
+            <img src="" alt="Picture" id="img_tag">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <h3>预览:</h3>
+        <div class="docs-preview clearfix">
+          <div class="img-preview preview-lg"></div>
+          <div class="img-preview preview-md"></div>
+          <div class="img-preview preview-sm"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="actions">
+      <div class="col-md-9 docs-buttons">
+
+        <button type="button" class="btn btn-primary" data-method="rotate" data-option="-45" title="Rotate Left">
+          <span class="docs-tooltip" data-toggle="tooltip" title="cropper.rotate(-45)">
+            逆时针旋转45°
+          </span>
+        </button>
+
+        <button type="button" class="btn btn-primary" data-method="rotate" data-option="45" title="Rotate Right">
+          <span class="docs-tooltip" data-toggle="tooltip" title="cropper.rotate(45)">
+            顺时针旋转45°
+          </span>
+        </button>
+
+        <button type="button" class="btn btn-primary" data-method="scaleX" data-option="-1" title="Flip Horizontal">
+          <span class="docs-tooltip" data-toggle="tooltip" title="cropper.scaleX(-1)">
+            左右翻转
+          </span>
+        </button>
+
+        <button type="button" class="btn btn-primary" data-method="scaleY" data-option="-1" title="Flip Vertical">
+          <span class="docs-tooltip" data-toggle="tooltip" title="cropper.scaleY(-1)">
+            上下翻转
+          </span>
+        </button>
+
+        <button type="button" class="btn btn-primary" data-method="reset" title="Reset">
+          <span class="docs-tooltip" data-toggle="tooltip" title="cropper.reset()">
+            恢复图形默认大小
+          </span>
+        </button>
+
+        <label class="btn btn-primary btn-upload" for="inputImage" title="Upload image file">
+          <input type="file" class="sr-only" id="inputImage" name="file" accept="image/*">
+          <span class="docs-tooltip" data-toggle="tooltip" title="Import image with Blob URLs">
+            打开新图像
+          </span>
+        </label>
+
+        <button type="button" class="btn btn-primary" data-method="getData" data-option data-target="#putData">
+          <span class="docs-tooltip" data-toggle="tooltip" title="cropper.getData()">
+            Get Data
+          </span>
+        </button>
+
+        <textarea class="form-control" id="putData"
+          placeholder="Get data to here or set data with this value"></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="../../../static/jquery-3.5.1.min.js"></script>
+  <script src="../../../static/bootstrap_4.5.0/js/bootstrap.bundle.min.js"></script>
+  <script src="js/cropper.js"></script>
+
+  <script>
+
+    window.onload = function () {
+      'use strict';
+
+      var image = document.getElementById('img_tag');  // img 图像标签
+      var actions = document.getElementById('actions');  // 包含按钮的容器
+
+      var options = {
+        aspectRatio: 1 / 1,  // 纵横比
+        preview: '.img-preview',
+        viewMode: 1,
+        autoCropArea: 1,
+      };
+
+      var cropper = new Cropper(image, options);
+      var uploadedImageURL;
+
+      // Tooltip
+      $('[data-toggle="tooltip"]').tooltip();
+
+      // Methods
+      actions.querySelector('.docs-buttons').onclick = function (event) {
+        var e = event || window.event;
+        var target = e.target || e.srcElement;
+        var cropped;
+        var result;
+        var input;
+        var data;
+
+        if (!cropper) {
+          return;
+        }
+
+        while (target !== this) {
+          if (target.getAttribute('data-method')) {
+            break;
+          }
+
+          target = target.parentNode;
+        }
+
+        if (target === this || target.disabled || target.className.indexOf('disabled') > -1) {
+          return;
+        }
+
+        data = {
+          method: target.getAttribute('data-method'),
+          target: target.getAttribute('data-target'),
+          option: target.getAttribute('data-option') || undefined,
+          secondOption: target.getAttribute('data-second-option') || undefined
+        };
+
+        cropped = cropper.cropped;
+
+        if (data.method) {
+          if (typeof data.target !== 'undefined') {
+            input = document.querySelector(data.target);
+
+            if (!target.hasAttribute('data-option') && data.target && input) {
+              try {
+                data.option = JSON.parse(input.value);
+              } catch (e) {
+                console.log(e.message);
+              }
+            }
+          }
+
+          switch (data.method) {
+            case 'rotate':
+              if (cropped && options.viewMode > 0) {
+                cropper.clear();
+              }
+              break;
+          }
+
+          result = cropper[data.method](data.option, data.secondOption);
+
+          switch (data.method) {
+            case 'rotate':
+              if (cropped && options.viewMode > 0) {
+                cropper.crop();
+              }
+
+              break;
+
+            case 'scaleX':
+            case 'scaleY':
+              target.setAttribute('data-option', -data.option);
+              break;
+          }
+
+          if (typeof result === 'object' && result !== cropper && input) {
+            try {
+              input.value = JSON.stringify(result);
+            } catch (e) {
+              console.log(e.message);
+            }
+          }
+        }
+      };
+
+      // 上下左右按键
+      document.body.onkeydown = function (event) {
+        var e = event || window.event;
+
+        if (e.target !== this || !cropper || this.scrollTop > 300) {
+          return;
+        }
+
+        switch (e.keyCode) {
+          case 37:
+            e.preventDefault();
+            cropper.move(-1, 0);
+            console.log('左移');
+            break;
+
+          case 38:
+            e.preventDefault();
+            cropper.move(0, -1);
+            console.log('上移');
+            break;
+
+          case 39:
+            e.preventDefault();
+            cropper.move(1, 0);
+            console.log('右移');
+            break;
+
+          case 40:
+            e.preventDefault();
+            cropper.move(0, 1);
+            console.log('下移');
+            break;
+        }
+      };
+
+      // 导入图像
+      var inputImage = document.getElementById('inputImage');
+      var URL = window.URL || window.webkitURL;  // 打开新图像
+      if (URL) {
+        inputImage.onchange = function () {
+          var files = this.files;
+          var file;
+
+          if (files && files.length) {
+            file = files[0];
+
+            if (/^image\/\w+/.test(file.type)) {
+              if (uploadedImageURL) {
+                URL.revokeObjectURL(uploadedImageURL);
+              }
+
+              // 新文件覆旧文件
+              image.src = uploadedImageURL = URL.createObjectURL(file);  // blob:null/c90a699f-51f2-4a2e-af62-3a9c742bfa74
+
+              if (cropper) {
+                cropper.destroy(); // 销毁后新建
+              }
+              cropper = new Cropper(image, options);  // 新建
+              inputImage.value = null;
+            } else {
+              window.alert('只能打开image文件类型');
+            }
+          }
+        };
+      } else {
+        inputImage.disabled = true;
+        inputImage.parentNode.className += ' disabled';
+      }
+    };
+
+
+  </script>
+</body>
+</html>

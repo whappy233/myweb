@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Cropperjs</title>
+  <link rel="stylesheet" href="../../../static/bootstrap_4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/cropper.css">
+
+  <style>
+
+    .avatar-body {
+      padding-right: 15px;
+      padding-left: 15px;
+    }
+
+    .docs-demo {
+      margin-bottom: 1rem;
+      overflow: hidden;
+      padding: 2px;
+    }
+
+    .img-container,
+    .img-preview {
+      text-align: center;
+      width: 100%;
+    }
+
+    /* 圆形遮罩 */
+    .cropper-view-box,
+    .cropper-face {
+      border-radius: 50%;
+    }
+
+    .img-container {
+      height: 364px;
+      width: 100%;
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, .25);
+      background-color: #fcfcfc;
+      overflow: hidden;
+    }
+
+    .img-container img {
+      display: block;
+      height: auto;
+      max-width: 100%;
+    }
+
+
+    .avatar-upload {
+      overflow: hidden;
+    }
+
+    .avatar-upload label {
+      display: block;
+      float: left;
+      clear: left;
+      width: 100px;
+    }
+
+    .avatar-upload input {
+      display: block;
+    }
+
+    .img-container>img {
+      max-width: 100%;
+    }
+
+    .img-preview {
+      float: left;
+      margin-bottom: 0.5rem;
+      margin-right: 0.5rem;
+      overflow: hidden;
+      border-radius: 50%;
+    }
+
+
+    .img-preview>img {
+      max-width: 100%;
+    }
+
+    .preview-lg {
+      height: 150px;
+      width: 150px;
+    }
+
+    .preview-md {
+      height: 100px;
+      width: 100px;
+    }
+
+    .preview-sm {
+      height: 50px;
+      width: 50px;
+    }
+
+
+    @media (min-width: 1000px) {
+      .img-preview {
+        float: none;
+      }
+    }
+
+
+
+    .docs-buttons>.btn,
+    .docs-buttons>.btn-group,
+    .docs-buttons>.form-control {
+      margin-bottom: 0.5rem;
+      margin-right: 0.25rem;
+    }
+
+    .btn-upload {
+      white-space: nowrap;
+    }
+
+    .loading {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      opacity: .75;
+      filter: alpha(opacity=75);
+      z-index: 20140628;
+    }
+  </style>
+</head>
+
+<body style="background-color: black;">
+
+  <div data-target="#modal" data-toggle="modal">
+    <img id="image" src="images/36.png" alt="Picture" id="img_tag">
+  </div>
+
+  <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <form class="modal-form" action="{% url 'app_user:ajax_photo_upload" enctype="multipart/form-data" method="post">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">上传</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <div class="avatar-body">
+              <div class="avatar-upload">
+                <input class="avatar-src" name="photo_src" type="hidden" placeholder="src">
+                <input class="avatar-data" name="photo_data" type="hidden" placeholder="data" id="putData">
+                <input type="file" class="avatar-file" id="inputImage" accept="image/*">
+              </div>
+  
+              <div class="row">
+                <div class="col-md-9">
+                  <div class="docs-demo">
+                    <div class="img-container">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="img-preview preview-lg"></div>
+                  <div class="img-preview preview-md"></div>
+                  <div class="img-preview preview-sm"></div>
+                </div>
+              </div>
+  
+              <div class="row" id="actions">
+                <div class="col-md-9 docs-buttons">
+  
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-primary" data-method="rotate" data-option="-45" title="逆时针旋转45°"
+                      data-toggle="tooltip">↪️</button>
+  
+                    <button type="button" class="btn btn-primary" data-method="rotate" data-option="45" title="顺时针旋转45°"
+                      data-toggle="tooltip">↩️</button>
+  
+                    <button type="button" class="btn btn-primary" data-method="scaleX" data-option="-1" title="水平翻转"
+                      data-toggle="tooltip">↔️</button>
+  
+                    <button type="button" class="btn btn-primary" data-method="scaleY" data-option="-1" title="垂直翻转"
+                      data-toggle="tooltip">↕️</button>
+  
+                    <button type="button" class="btn btn-primary" data-method="reset" title="恢复图形默认大小"
+                      data-toggle="tooltip">🔄</button>
+  
+                  </div>
+  
+                </div>
+  
+                <div class="col-md-3">
+                  <button class="btn btn-success btn-block avatar-save" type="submit">
+                    <i class="fa fa-save"></i>
+                    保存修改
+                  </button>
+                </div>
+  
+              </div>
+
+            </div>
+
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>
+
+  <script src="../../../static/jquery-3.5.1.min.js"></script>
+  <script src="../../../static/bootstrap_4.5.0/js/bootstrap.bundle.min.js"></script>
+  <script src="js/cropper.js"></script>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+
+      var support = {
+        fileList: !!$('<input type="file">').prop('files'),
+        formData: !!window.FormData
+      };
+
+      support.datauri = support.fileList && support.blobURLs;
+      var $modal_form = $('.modal-form');
+      var $image = $('#image');  // img 图像
+      var actions = document.getElementById('actions');  // 包含按钮的容器
+      var $avatarModal = $("body").find('#modal');  // 找到 model
+      var $preview = $('.img-preview');
+      var cropper, uploadedImageURL, first_open;
+      var $input_img = $('#inputImage');
+      var $input_src = $('#avatar-src');
+      var $input_data = $('.avatar-data');
+      var $loading = $('.loading');
+      var $img_upload = $('.avatar-upload');
+      var $avatarSave = $modal_form.find('.avatar-save');
+      var $img_wrapper = $('.img-container');
+
+
+      var options = {
+        aspectRatio: 1 / 1,  // 纵横比
+        preview: '.img-preview',
+        viewMode: 1,
+        autoCropArea: 0.8,
+        dragMode: 'move', // 定义cropper的拖拽模式
+        crop: function (data) {  // 剪裁框发生变化执行的函数
+          $input_data.val(JSON.stringify(data.detail));
+        }
+      };
+
+      // Tooltip
+      $('[data-toggle="tooltip"]').tooltip();
+
+      // Methods
+      actions.querySelector('.docs-buttons').onclick = function (event) {
+        var e = event || window.event;
+        var target = e.target || e.srcElement;
+        var cropped, result, input, data;
+
+        if (!cropper) {
+          return;
+        }
+
+        while (target !== this) {
+          if (target.getAttribute('data-method')) {
+            break;
+          }
+          target = target.parentNode;
+        }
+
+        if (target === this || target.disabled || target.className.indexOf('disabled') > -1) {
+          return;
+        }
+
+        data = {
+          method: target.getAttribute('data-method'),
+          target: target.getAttribute('data-target'),
+          option: target.getAttribute('data-option') || undefined,
+          secondOption: target.getAttribute('data-second-option') || undefined
+        };
+
+        cropped = cropper.cropped;
+
+        if (data.method) {
+          if (typeof data.target !== 'undefined') {
+            input = document.querySelector(data.target);
+
+            if (!target.hasAttribute('data-option') && data.target && input) {
+              try {
+                data.option = JSON.parse(input.value);
+              } catch (e) {
+                console.log(e.message);
+              }
+            }
+          }
+
+          switch (data.method) {
+            case 'rotate':
+              if (cropped && options.viewMode > 0) {
+                cropper.clear();
+              }
+              break;
+          }
+
+          result = cropper[data.method](data.option, data.secondOption);
+
+          switch (data.method) {
+            case 'rotate':
+              if (cropped && options.viewMode > 0) {
+                cropper.crop();
+              }
+
+              break;
+
+            case 'scaleX':
+            case 'scaleY':
+              target.setAttribute('data-option', -data.option);
+              break;
+          }
+
+          if (typeof result === 'object' && result !== cropper && input) {
+            try {
+              input.value = JSON.stringify(result);
+            } catch (e) {
+              console.log(e.message);
+            }
+          }
+        }
+      };
+
+      // 上下左右按键
+      document.body.onkeydown = function (event) {
+        var e = event || window.event;
+
+        if (e.target !== this || !cropper || this.scrollTop > 300) {
+          return;
+        }
+
+        switch (e.keyCode) {
+          case 37:
+            e.preventDefault();
+            cropper.move(-1, 0);
+            console.log('左移');
+            break;
+
+          case 38:
+            e.preventDefault();
+            cropper.move(0, -1);
+            console.log('上移');
+            break;
+
+          case 39:
+            e.preventDefault();
+            cropper.move(1, 0);
+            console.log('右移');
+            break;
+
+          case 40:
+            e.preventDefault();
+            cropper.move(0, 1);
+            console.log('下移');
+            break;
+        }
+      };
+
+      // 点击保存事件
+      $modal_form.on('submit', function () {
+        if (!$input_src.val() && !$input_img.val()) {
+          return false;
+        }
+        if (support.formData) {
+          ajaxUpload();
+          return false;
+        }
+      });
+
+      // 保存时使用 ajax post 上传到服务器
+      ajaxUpload = function () {
+        var url = $modal_form.attr('action'),
+          data = new FormData($modal_form[0]),
+          _this = this;
+
+        $.ajax(url, {
+          headers: { 'X-XSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+          type: 'post',
+          data: data,
+          dataType: 'json',
+          processData: false,
+          contentType: false,
+
+          beforeSend: function () {
+            submitStart();  // 提交之前
+          },
+
+          success: function (data) {
+            submitDone(data);  // 提交成功后
+          },
+
+          error: function (XMLHttpRequest, textStatus, errorThrown) {
+            submitFail(textStatus || errorThrown);
+          },
+
+          complete: function () {
+            submitEnd();
+          }
+        });
+      };
+
+      syncUpload = function () {
+        $avatarSave.click();
+      };
+
+      // 准备提交
+      submitStart = function () {
+        console.log('准备');
+        $loading.fadeIn();
+      };
+
+      // 提交成功
+      submitDone = function (data) {
+        console.log('提交成功');
+        if ($.isPlainObject(data)) {
+          if (data.result) {
+            this.url = data.result;
+            if (this.support.datauri || this.uploaded) {
+              this.uploaded = false;
+              cropDone();
+            } else {
+              this.uploaded = true;
+              this.$avatarSrc.val(this.url);
+              this.startCropper();
+            }
+            this.$avatarInput.val('');
+          } else if (data.message) {
+            this.alert(data.message);
+          }
+        } else {
+          this.alert('Failed to response');
+        }
+      };
+
+      // 提交失败
+      submitFail = function (msg) {
+        console.log(`提交失败, msg: ${msg}`);
+        alert(msg);
+      };
+
+      // 提交结束
+      submitEnd = function () {
+        console.log('提交结束');
+        $loading.fadeOut();
+      };
+
+      cropDone = function () {
+        $modal_form.get(0).reset();
+        $image.attr('src', this.url);
+        this.stopCropper();
+        $avatarModal.modal('hide');
+      };
+
+      // 错误提示
+      alert = function (msg) {
+        var $alert = [
+          '<div class="alert alert-danger avater-alert">',
+          '<button type="button" class="close" data-dismiss="alert">&times;</button>',
+          msg,
+          '</div>'
+        ].join('');
+
+        $img_upload.after($alert);
+      };
+
+
+      // 导入图像
+      var inputImage = document.getElementById('inputImage');
+      var URL = window.URL || window.webkitURL;  // 打开新图像
+      if (URL) {
+        inputImage.onchange = function () {
+          var files = this.files;
+          var file;
+
+          if (files && files.length) {
+            file = files[0];
+
+            if (/^image\/\w+/.test(file.type)) {
+              if (uploadedImageURL) {
+                URL.revokeObjectURL(uploadedImageURL);
+              }
+
+              // 新文件覆旧文件
+              uploadedImageURL = URL.createObjectURL(file);  // blob:null/c90a699f-51f2-4a2e-af62-3a9c742bfa74
+
+              if (cropper) {
+                cropper.destroy(); // 销毁后新建
+              }
+
+              $img = $('<img src="' + uploadedImageURL + '">');
+              $img_wrapper.empty().html($img);
+
+              cropper = new Cropper($img[0], options);  // 新建
+              // inputImage.value = null;
+            } else {
+              window.alert('只能打开image文件类型');
+            }
+          }
+        };
+      } else {
+        inputImage.disabled = true;
+        inputImage.parentNode.className += ' disabled';
+      }
+
+      $avatarModal.on('shown.bs.modal', function () {
+        if (!first_open){
+          var url = $image.attr('src');
+          $preview.empty().html(`<img src="${url}">`);  // 使用原始图像填充预览
+          first_open = true;
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

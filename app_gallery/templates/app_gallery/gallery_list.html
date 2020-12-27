@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h3>相册</h3>
+{% if page_obj %}
+<div>
+  <div class="my-gallery">
+    {% for gallery in page_obj %}
+    {% with gallery_title=gallery.title %}
+    <div class="box" style="background-color: floralwhite;">
+      <a href="{% url 'app_gallery:gallery_detail' gallery.pk gallery.slug %}?before={{request.get_full_path}}">
+        <img src="{{ gallery.thumb.url }}" class="responsive-img dpg-album-image" title="{{gallery_title}}" />
+      </a>
+      <div>
+        <span>{% if gallery_title|length > 7 %}{{gallery_title|truncatechars:7}}...{% else %}{{gallery_title}}{% endif %}</span>
+        <span style="float: right;">{{gallery.photos.count}}张</span>
+        <p style="margin: 0;">{{ gallery.mod_date |date:"Y-m-j H:i:s" }}</p>
+      </div>
+    </div>
+    {% endwith %}
+    {% endfor %}
+  </div>
+
+  <div>
+    {% if is_paginated %}
+    <ul class="pagination" style="margin: revert;">
+      {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">上一页</a></li>
+      {% else %}
+      <li class="page-item disabled"><span class="page-link">上一页</span></li>
+      {% endif %}
+
+      {% for i in paginator.page_range %}
+      {% if page_obj.number == i %}
+      <li class="page-item active"><span class="page-link"> {{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+      <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">下一页</a></li>
+      {% else %}
+      <li class="page-item disabled"><span class="page-link">下一页</span></li>
+      {% endif %}
+    </ul>
+    {% endif %}
+  </div>
+</div>
+{% else %}
+  <p>No gallery yet</p>
+{% endif %}
+{% endblock %}
+
+{% block css_style %}
+<style>
+  .box {
+    display: inline-block;
+    /* div 水平排列 */
+    border: 0px;
+    margin: 10px;
+    width: 200px;
+    height: 250px;
+    margin-bottom: 100px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
+{% endblock %}

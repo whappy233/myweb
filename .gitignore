@@ -1,0 +1,5 @@
+__pycache__/
+.history
+db.sqlite3
+media
+.DS_Store

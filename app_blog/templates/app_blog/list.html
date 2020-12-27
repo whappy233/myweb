@@ -1,0 +1,54 @@
+{#   文章列表   #}
+
+
+{% extends 'app_blog/base_blog.html' %}
+{% load  blog_tags %}
+
+
+{% block title %}浩瀚星海{% endblock title %}
+
+{% block content %}
+    {{Carlos}}
+    {% if name %}
+    <h1>{{ name }} 的所有文章</h1>
+    <p>共 {{ page_obj.paginator.count }} 篇 </p>
+    {% elif tag %}
+    <h1>{{ tag.name }} 标签下的所有文章</h1>
+    <p>共 {{ page_obj.paginator.count }} 篇 </p>
+    {% else %}
+    <p>博客共有 {{ page_obj.paginator.count }} 篇 </p>
+    {% endif %}
+
+    {% for post in page_obj %}
+        <h4>
+            <a href="{{post.get_absolute_url}}"> {{ post.title }} </a>
+        </h4>
+        <p class='date'>
+            作者 : <a href="{% url 'app_blog:post_list_by_author' post.author %}"> {{ post.author }}</a> <br>
+            发表日期 : {{ post.publish }}
+            阅读量 : {{ post.views }}
+
+            {% with post.tags.all as tags%}
+                {% if tags %}
+                <span class='tags'>
+                    标签:
+                    {% for tag in tags %}
+                        <a href="{% url 'app_blog:post_list_by_tag' tag.slug %}">
+                            {{ tag.name }}</a>
+                        {% if not forloop.last %} , {% endif %}
+                    {% endfor %}
+                </span>
+            {% endif %}
+            {% endwith %}
+
+        </p>
+        {% comment %} {{ post.body|truncatewords:10|linebreaks }} {% endcomment %}
+        {{ post.body|markdown|truncatewords_html:30 }}
+    {% endfor %}
+
+    {# 下面使用 类 视图 django 中的通用视图 ListView 将所选页面传递到变量 page_obj 中  #}
+    {# 从 paginator.html 引入分页模板  #}
+    {% include 'app_blog/pagination.html' with page_obj=page_obj %}
+
+{% endblock content %}
+

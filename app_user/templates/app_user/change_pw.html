@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<h1>修改密码</h1>
+<div class="form-wrapper">
+    <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.username }}
+        <div class="fieldWrapper">
+            <table>
+                <tr>
+                    <td>{{ form.old_pw.label_tag }}</td>
+                    <td>{{ form.old_pw }}</td>
+                    {% if form.old_pw.errors %}
+                    {% for error in form.old_pw.errors %}
+                        <td class="errorlist">{{ error|escape }}</td>
+                    {% endfor %}
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td>{{ form.pw1.label_tag }}</td>
+                    <td>{{ form.pw1 }}</td>
+                    {% if form.pw1.errors %}
+                    {% for error in form.pw1.errors %}
+                        <td class="errorlist">{{ error|escape }}</td>
+                    {% endfor %}
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td>{{ form.pw2.label_tag }}</td>
+                    <td>{{ form.pw2 }}</td>
+                    {% if form.pw2.errors %}
+                    {% for error in form.pw2.errors %}
+                        <td class="errorlist">{{ error|escape }}</td>
+                    {% endfor %}
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td>{{ form.check_code.label_tag }}</td>
+                    <td>{{ form.check_code }}</td>
+                    <td><img src="{% url 'app_user:check_code' %}" onclick="ChangeCode(this);"></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="button-wrapper submit">
+            {% if message %}
+                <p style="color: rgb(242, 58, 105);">{{ message }}</p>
+            {% endif %}
+            <input type="submit" value="Change" />
+        </div>
+    </form>
+    <a href="{% url 'app_sheet:index' %}">sheet</a>
+</div>
+
+<script>
+    // 点击一次,更改图片内容,
+    function ChangeCode(ths){
+        ths.src = ths.src + '?';
+    }
+</script>
+
+{% endblock %}

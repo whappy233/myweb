@@ -1,0 +1,104 @@
+{#   文章详情   #}
+{% extends 'app_blog/base_blog.html' %}
+{% load  blog_tags %}
+
+
+{% block title %}
+    {{ post.title }}
+{% endblock title %}
+
+{% block content %}
+    <h1> {{ post.title }} </h1>
+    <p class='date'>
+        作者 : <a href="{% url 'app_blog:post_list_by_author' post.author %}"> {{ post.author }}</a><br>
+        出版日期 : {{ post.publish }}
+        阅读量 : {{ post.views }}
+
+        {% with post.tags.all as tages %}
+        {% if tages %}
+            <span class='tags'>
+                标签:
+                {% for tag in tages %}
+                    <a href="{% url 'app_blog:post_list_by_tag' tag.slug %}">
+                        {{ tag.name }}</a>
+                    {% if not forloop.last %} , {% endif %}
+                {% endfor %}
+            </span>
+        {% endif %}
+        {% endwith %}
+
+    </p>
+
+    {% comment %} {{ post.body| linebreaks }} {% endcomment %}
+    {{ post.body|markdown}}
+
+    <p><a href="{% url 'app_blog:post_share' post.id %}"> 分享文章 </a></p>
+
+    <h2>相似文章</h2>
+    {% for post in similar_posts %}
+        <p><a href="{{ post.get_absolute_url }}"> {{ post.title }}</a></p>
+    {% empty %}
+        没有相似文章推荐
+    {% endfor %}
+
+    <div>
+    {# with 标签可以将某个值赋予到新的变量中,对于避免数据库访问或者多次访问开销交的的方法十分有用 #}
+    {% with comments.count as total_comments %}
+        {% ifnotequal total_comments 0 %}
+            <h2> 有 {{ total_comments }}  条评论 </h2>
+        {% endifnotequal %}
+    {% endwith %}
+
+    {% for comment in comments %}
+        <div>
+            <p class="info">
+                {{ forloop.counter }}#: {{ comment.name }}
+                <i>评论日期:{{ comment.created }}</i>
+            </p>
+                {{ comment.body|linebreaks }}
+        </div>
+    {% empty %}
+        <p>还没有评论,快来抢板凳吧!</p>
+    {% endfor %}
+    </div>
+
+    <button id="btn1">点击发送ajax</button>
+    <p id="pp1"></p>
+
+    {% if message %}
+    <p>{{message}}</p>
+    {% else %}
+    <h2>添加评论</h2>
+    <form action='.' method='post'>
+        <table>
+            {{comment_form.as_table}}
+        </table>
+        {% csrf_token %}
+        <p><input type='submit' vaule='Add comment' ></p>
+        
+    </form>
+    {% endif %}
+
+{% endblock content %}
+
+{% block javascript %}
+<script>
+
+    // 按钮点击异步请求
+    $('#btn1').on('click', function(){
+        $.ajax({
+            url: '{% url "app_blog:ajax_app_test" %}',
+            data: {
+            'keyword': `发送: ${Math.random()}`
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+            $("#pp1").text("返回结果是: " + data.count)
+            }
+        });
+    })
+
+
+</script>
+{% endblock %}
