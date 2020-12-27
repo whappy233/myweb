@@ -148,7 +148,7 @@ def profile(request):
         else:
             message = '修改失败'
 
-    user_form = UserEditForm(instance=request.user)
+    user_form = UserEditForm(instance=request.user)  # 初始化表单
     profile_form = ProfileEditForm(instance=request.user.profile)
     # profile_form = EditForm()
     return render(request,
