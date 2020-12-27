@@ -44,6 +44,7 @@ def check_code(request):
     except Exception as e:
         return HttpResponse("请求异常：{}".format(repr(e)))
 
+
 def register(request):
     message = ''
     if request.method == 'POST':

@@ -17,7 +17,7 @@ _upper_cases = _letter_cases.upper()  # 大写字母
 _numbers = ''.join(map(str, range(3, 10)))  # 数字
 init_chars = ''.join((_letter_cases, _upper_cases, _numbers))
 static_path = os.path.join(settings.BASE_DIR, "static")  # 静态文件路径
-font_path = os.path.join(static_path, "MONACO.TTF")  # 字体路径
+font_path = os.path.join(static_path, 'font', "MONACO.TTF")  # 字体路径
 
 # 生成验证码图片
 def create_validate_code(size:tuple=(120, 30),
