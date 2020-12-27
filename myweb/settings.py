@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'myweb.wsgi.application'
 #         'ENGINE': 'django.db.backends.mysql',
 #         'NAME': 'blog',
 #         'USER': 'root',
-#         'PASSWORD': 'wu910hao',
+#         'PASSWORD': '********',
 #         'port': '3306',
 #         'host': 'localhost',
 #     }
