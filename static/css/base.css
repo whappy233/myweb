@@ -45,6 +45,7 @@ ol {
     overflow:auto;
     position: sticky;
     top: 0px;
+    z-index: 999;
 }
 #header .logo {
     font-family: 'Muli', sans-serif;

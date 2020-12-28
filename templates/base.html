@@ -27,8 +27,8 @@
             <li {% ifequal section "gallery" %}class="selected" {% endifequal %}>
                 <a href="{% url 'app_gallery:gallery_list' %}">Gallery</a>
             </li>
-            <li {% ifequal section "people" %}class="selected" {% endifequal %}>
-                <a href="#">People</a>
+            <li {% ifequal section "sheet" %}class="selected" {% endifequal %}>
+                <a href="{% url 'app_sheet:index' %}">Sheet</a>
             </li>
         </ul>
 
