@@ -21,5 +21,5 @@ urlpatterns = [
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),  # 静态文件
 
     path('sitemap.xml', sitemap, {'sitemaps':{'posts':PostSitemap}}, name='django.contrib.sitemaps.views.sitemap'),  # 网站地图
-]
+] # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
