@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Comment
+from .models import Post, Comment, Category
 from uuid import uuid4
 # 在这里注册模型，并将其纳入Django管理站点中
 
@@ -26,13 +26,20 @@ class PostAdmin(admin.ModelAdmin):
     #     ('Date information', {'fields': ['pub_date']}),
     # ]
 
+    # model form 保存方法  (重写)
+    # def save_model(self, request, obj, form, change):
+    #     if form.is_valid():
+    #         if not form.cleaned_data['slug']:
+    #             obj.slug = uuid4().hex[:10]
+    #         super().save_model(request, obj, form, change)
 
-    def save_model(self, request, obj, form, change):
-        if form.is_valid():
-            if not form.cleaned_data['slug']:
-                obj.slug = uuid4().hex[:10]
-            super().save_model(request, obj, form, change)
 
+# admin.site.register(Category, CategoryAdmin)  # 注册方式1
+@admin.register(Category)  # 注册方式2（使用包装）
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug', 'parent_category']
+    prepopulated_fields = {'slug':('name',)}  # 自动生成slug, 根据name填充slug
+    search_fields = ['name',]
 
 
 

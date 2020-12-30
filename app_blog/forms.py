@@ -1,7 +1,23 @@
 # 表单
 
 from django import forms
-from .models import Comment
+from .models import Comment, Post
+
+
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        exclude = ['author', 'views', 'slug', 'publish']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'body': forms.Textarea(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'tags': forms.CheckboxSelectMultiple(attrs={'class': 'multi-checkbox'}),
+        }
+
 
 
 # 邮件分享表单

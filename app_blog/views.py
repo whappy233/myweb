@@ -1,17 +1,21 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger  # 分页
+from django.utils.decorators import method_decorator
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import Post, Comment
-from django.http import HttpResponse, JsonResponse
-from .forms import EmailPostForm, CommentForm, SearchForm
+from .models import Post, Comment, Category
+from django.http import HttpResponse, JsonResponse, Http404
+from .forms import EmailPostForm, CommentForm, SearchForm, PostForm
 from django.core.mail import send_mail
 from taggit.models import Tag  # 导入标签模型
 from django.db.models import Count, Q
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import UpdateView, CreateView, DeleteView
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
-import time
-# from django.http import HttpResponse
+
+
 # from django.template import loader
 # def index(request):
 #     latest_question_list = Comment.objects.order_by('-pub_date')[:5]
@@ -24,11 +28,10 @@ import time
 
 # 类视图
 # 所有文章
-from django.views.generic import ListView  # 基类视图
 # django 中的通用视图 ListView 将所选页面传递到变量 page_obj 中
 # path('', views.PostListView.as_view(), name='post_list')
 class PostListView(ListView):
-    queryset = Post.published.all()  #  === model = Post
+    queryset = Post.published.all()  # === model = Post
     # model = Post
     # context_object_name = 'page_obj'  # 设置上下文变量
     paginate_by = 3  # 3个一页
@@ -62,13 +65,14 @@ def post_list(request, tag_slug=None, author_name=None):
         posts = paginator.page(1)
     except EmptyPage:  # 页码不存在, 返回当前页
         if int(page) > paginator.num_pages:  # 返回尾页
-            posts = paginator.page(paginator.num_pages)  # paginator.num_pages 页面数
+            # paginator.num_pages 页面数
+            posts = paginator.page(paginator.num_pages)
         else:
             posts = paginator.page(1)
 
     context = {
-        'page_obj': posts, 
-        'tag': tag, 
+        'page_obj': posts,
+        'tag': tag,
         'name': author_name,
         'section': 'blog'
     }
@@ -80,13 +84,13 @@ def post_list(request, tag_slug=None, author_name=None):
 @login_required
 def post_detail(request, year, month, day, post):
     # 使用 get() 返回一个对象，如果该对象不存在，则引发Http404异常。
-    post = get_object_or_404(Post, 
-                            slug=post, 
-                            status='published', 
-                            publish__year=year,
-                            publish__month=month,
-                            publish__day=day,
-                            )
+    post = get_object_or_404(Post,
+                             slug=post,
+                             status='p',
+                             publish__year=year,
+                             publish__month=month,
+                             publish__day=day,
+                             )
 
     post.viewed()  # 阅读量 +1
 
@@ -99,7 +103,7 @@ def post_detail(request, year, month, day, post):
             comment_form = CommentForm(data=request.POST)  # 提交表单
             if comment_form.is_valid():
                 # 创建表单连接的模型实例(commit=False, 不会立即保存到数据库中),save()方法仅适用于ModelsForm
-                new_comment = comment_form.save(commit=False)  
+                new_comment = comment_form.save(commit=False)
                 new_comment.post = post
                 new_comment.save()
                 request.session['has_commented'] = True
@@ -115,9 +119,11 @@ def post_detail(request, year, month, day, post):
     # qq = '|'.join(['Q(tags=%s)' % i for i in list(post_tags_ids)])  # Q(tags=1)|Q(tags=2)...
     # similar_posts = Post.published.filter(eval(qq)).exclude(id=post.id)  # 获取所有此标签的全部帖子,排除自身
 
-    similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)  # 获取所有此标签的全部帖子,排除自身
-    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')[:4]
-    # 这里 annotate 做的事情就是把全部 Category 取出来，然后去 Post 查询每一个 Category 对应的文章
+    # 获取包含此标签或分组的全部帖子,排除自身
+    similar_posts = Post.published.filter(
+        Q(tags__in=post_tags_ids) | Q(category=post.category)).exclude(id=post.id)
+    similar_posts = similar_posts.annotate(same_tags=Count(
+        'tags'), some_category=Count('category')).order_by('-same_tags', '-publish')[:4]
 
     context = {
         'post': post,
@@ -126,14 +132,102 @@ def post_detail(request, year, month, day, post):
         'similar_posts': similar_posts,
         'section': 'blog',
         'message': message,
-        }
+    }
 
     return render(request, 'app_blog/detail.html', context)
+
+
+
+
+
+# Create your views here.
+class PostListView1(ListView):
+    paginate_by = 3
+
+    def get_queryset(self):
+        return Post.objects.filter(status='p').order_by('-pub_date')
+
+# 已发布文章列表
+@method_decorator(login_required, name='dispatch')
+class PublishedPostListView(ListView):
+    '''已发布文章列表'''
+    template_name = "blog/published_article_list.html"
+    paginate_by = 3
+
+    def get_queryset(self):
+        return Post.objects.filter(author=self.request.user).filter(status='p').order_by('-pub_date')
+
+@method_decorator(login_required, name='dispatch')
+class PostDraftListView(ListView):
+    template_name = "app_blog/article_draft_list.html"
+    paginate_by = 3
+
+    def get_queryset(self):
+        return Post.objects.filter(author=self.request.user).filter(status='d').order_by('-pub_date')
+
+# 文章详细
+class PostDetailView(DetailView):
+    '''文章详细'''
+    model = Post
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        obj.viewed()
+        return obj
+
+# 创建文章
+@method_decorator(login_required, name='dispatch')
+class PostCreateView(CreateView):
+    '''创建文章'''
+    model = Post
+    form_class = PostForm
+    template_name = 'app_blog/article_create_form.html'
+
+    # Associate form.instance.user with self.request.user
+    def form_valid(self, form):
+
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+@method_decorator(login_required, name='dispatch')
+class PostUpdateView(UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'app_blog/article_update_form.html'
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        if obj.author != self.request.user:
+            raise Http404()
+        return obj
+
+@method_decorator(login_required, name='dispatch')
+class PostDeleteView(DeleteView):
+    model = Post
+    success_url = reverse_lazy('app_blog:article_list')
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        if obj.author != self.request.user:
+            raise Http404()
+        return obj
+
+# 文章详情
+@login_required()
+def article_publish(request, pk, slug1):
+    '''文章详情'''
+    article = get_object_or_404(Post, pk=pk, author=request.user)
+    article.published()
+    return redirect(reverse("app_blog:article_detail", args=[str(pk), slug1]))
+
+
+
+
 
 # From 表单 (分享文章)
 @login_required
 def post_share(request, post_id):
-    post = get_object_or_404(Post, id=post_id, status='published')  # 检索ID
+    post = get_object_or_404(Post, id=post_id, status='p')  # 检索ID
     sent = False
     if request.method == 'POST':
         form = EmailPostForm(data=request.POST)  # 提交表单
@@ -154,11 +248,11 @@ def post_share(request, post_id):
         form = EmailPostForm()
 
     context = {
-        'post': post, 
-        'form': form, 
+        'post': post,
+        'form': form,
         'sent': sent,
         'section': 'blog'
-        }
+    }
     return render(request, 'app_blog/share.html', context)
 
 # Search
@@ -193,13 +287,12 @@ def post_search(request):
                                             ).filter(similarity__gt=0.3).order_by('-similarity')
 
     context = {
-        'form': form, 
-        'query': query, 
+        'form': form,
+        'query': query,
         'results': results,
         'section': 'blog'
-        }
+    }
     return render(request, 'app_blog/search.html', context)
-
 
 # ajax 测试
 def ajax_test(request):
@@ -207,5 +300,5 @@ def ajax_test(request):
         keyword = request.GET.get('keyword', None)
         print(keyword)
         if keyword:
-            data = {'count': f'Carlos-{time.time()}', }
+            data = {'count': f'Carlos-{timezone.now()}', }
             return JsonResponse(data)
