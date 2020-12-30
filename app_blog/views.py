@@ -1,8 +1,9 @@
+from django.http.request import HttpRequest
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger  # 分页
 from django.utils.decorators import method_decorator
 from django.utils import timezone
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from .models import Post, Comment, Category
 from django.http import HttpResponse, JsonResponse, Http404
@@ -15,17 +16,6 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
 
-
-# from django.template import loader
-# def index(request):
-#     latest_question_list = Comment.objects.order_by('-pub_date')[:5]
-#     template = loader.get_template('polls/index.html')
-#     context = {
-#         'latest_question_list': latest_question_list,
-#     }
-#     return HttpResponse(template.render(context, request))
-
-
 # 类视图
 # 所有文章
 # django 中的通用视图 ListView 将所选页面传递到变量 page_obj 中
@@ -34,14 +24,13 @@ class PostListView(ListView):
     queryset = Post.published.all()  # === model = Post
     # model = Post
     # context_object_name = 'page_obj'  # 设置上下文变量
-    paginate_by = 3  # 3个一页
-    template_name = 'app_blog/list.html'  # 使用自定义模板渲染
+    paginate_by = 3  # 3个一页 生成 page_obj 对象
+    # template_name = 'app_blog/post_list.html'  # 视图默认的模板名称是: 模型名小写_list.html
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['section'] = 'blog'
         return context
-
 
 # 函数视图
 @login_required
@@ -77,7 +66,7 @@ def post_list(request, tag_slug=None, author_name=None):
         'section': 'blog'
     }
 
-    return render(request, 'app_blog/list.html', context)
+    return render(request, 'app_blog/post_list.html', context)
 
 # 文章详情
 # path('<int:year>/<int:month>/<int:day>/<slug:post>/', views.post_detail, name='post_detail')
@@ -139,7 +128,7 @@ def post_detail(request, year, month, day, post):
 
 
 
-# 文章列表 - PostListView - 不需要login_required装饰器
+# 文章列表 - AdminPostListView - 不需要login_required装饰器
 # 文章详情 - PostDetailView - 不需要login_required装饰器
 # 创建文章 - PostCreateView - 需要login_required装饰器
 # 修改文章 - PostUpdateView - 需要login_required装饰器
@@ -149,30 +138,33 @@ def post_detail(request, year, month, day, post):
 # 发表文章 (由草稿变发布) - 需要login_required装饰器
 
 
-# Create your views here.
-class PostListView1(ListView):
-    paginate_by = 3
 
-    def get_queryset(self):
-        return Post.objects.filter(status='p').order_by('-pub_date')
+# Admin -------------------------------------------------
 
-# 已发布文章列表
-@method_decorator(login_required, name='dispatch')
-class PublishedPostListView(ListView):
+@method_decorator(login_required, name='dispatch')  # 此页面需要登录
+@method_decorator(permission_required('app_blog.change_post', 'app_blog:post_list'), name='dispatch')  # 此页面需要验证权限
+class AdminPostListView(ListView):
     '''已发布文章列表'''
-    template_name = "blog/published_article_list.html"
-    paginate_by = 3
+    paginate_by = 5
+    template_name = 'admin/published_article_list.html'
+
+    # def get(self, request, *args, **kwargs):
+    #     return HttpResponse('gggggggg')
 
     def get_queryset(self):
-        return Post.objects.filter(author=self.request.user).filter(status='p').order_by('-pub_date')
+        if 'draft' in self.request.path:
+            return Post.objects.filter(status='d').order_by('-publish')
+        else:
+            return Post.objects.filter(status='p').order_by('-publish')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['show_publish'] = True
+        if 'draft' in self.request.path:
+            context['show_publish'] = False
+        return context
 
-@method_decorator(login_required, name='dispatch')
-class PostDraftListView(ListView):
-    template_name = "app_blog/article_draft_list.html"
-    paginate_by = 3
 
-    def get_queryset(self):
-        return Post.objects.filter(author=self.request.user).filter(status='d').order_by('-pub_date')
 
 # 文章详细
 class PostDetailView(DetailView):
@@ -213,7 +205,7 @@ class PostUpdateView(UpdateView):
 @method_decorator(login_required, name='dispatch')
 class PostDeleteView(DeleteView):
     model = Post
-    success_url = reverse_lazy('app_blog:article_list')
+    success_url = reverse_lazy('app_blog:post_list')
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset=queryset)
@@ -223,11 +215,11 @@ class PostDeleteView(DeleteView):
 
 # 文章详情
 @login_required()
-def article_publish(request, pk, slug1):
+def post_publish(request, pk, slug1):
     '''文章详情'''
-    article = get_object_or_404(Post, pk=pk, author=request.user)
-    article.published()
-    return redirect(reverse("app_blog:article_detail", args=[str(pk), slug1]))
+    post = get_object_or_404(Post, pk=pk, author=request.user)
+    post.published()
+    return redirect(reverse("app_blog:post_detail", args=[str(pk), slug1]))
 
 
 

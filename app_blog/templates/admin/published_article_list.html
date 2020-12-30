@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if show_publish %}
+<h3>已发表的文章</h3>
+{% else %}
+<h3>未发表的文章</h3>
+{% endif %}
+
+<form action="{% url 'app_blog:post_search' %}" role="search" method="get">
+    {% csrf_token %}
+    <div class="input-group col-md-12">
+        <input type="text" name="q" id="q" class="form-control" placeholder="搜索文章">
+        <span class="input-group-btn">
+            <button class="btn btn-default form-control" type="submit" value="submit">
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
+        </span>
+    </div>
+</form>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>标题</th>
+            <th>类别</th>
+            <th>发布日期</th>
+            <th>查看</th>
+            <th>修改</th>
+            <th>删除</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if page_obj %}
+        {% for post in page_obj %}
+        <tr>
+            <td>{{ post.title }}</td>
+            <td>{{ post.category.name }}</td>
+            <td>{{ post.publish | date:"Y-m-d" }}</td>
+            <td><a href="{{ post.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">☺︎</span></a></td>
+            <td><a href="{{ post.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">✎</span></a></td>
+            <td><a href="{{ post.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">✗</span></a></td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+        {% endif %}
+    </tbody>
+
+
+</table>
+
+
+
+
+{# 注释: 下面代码一点也不要动 #}
+{% if is_paginated %}
+<ul class="pagination">
+    {% if page_obj.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">上一页</a></li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">上一页</span></li>
+    {% endif %}
+
+    {% for i in paginator.page_range %}
+    {% if page_obj.number == i %}
+    <li class="page-item active"><span class="page-link"> {{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+    {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">下一页</a></li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">下一页</span></li>
+    {% endif %}
+</ul>
+
+{% endif %}
+
+{% endblock %}

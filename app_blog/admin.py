@@ -11,7 +11,7 @@ from uuid import uuid4
 # admin.site.register(Post, PostAdmin)  # 注册方式1
 @admin.register(Post)  # 注册方式2（使用包装）
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'id','slug', 'author', 'created', 'publish', 'updated', 'status']  # 显示字段
+    list_display = ['title', 'id', 'author', 'created', 'publish', 'updated', 'status', 'slug', ]  # 显示字段
     search_fields = ['title', 'body']  # 搜索字段
     list_filter = ['publish', 'created', 'updated', 'status']  # 过滤器
     prepopulated_fields = {'slug':('title',)}  # 自动生成slug, 根据title填充slug
@@ -23,7 +23,7 @@ class PostAdmin(admin.ModelAdmin):
 
     # fieldsets = [
     #     (None, {'fields': ['question_text']}),
-    #     ('Date information', {'fields': ['pub_date']}),
+    #     ('Date information', {'fields': ['publish']}),
     # ]
 
     # model form 保存方法  (重写)
@@ -37,9 +37,10 @@ class PostAdmin(admin.ModelAdmin):
 # admin.site.register(Category, CategoryAdmin)  # 注册方式1
 @admin.register(Category)  # 注册方式2（使用包装）
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'parent_category']
+    list_display = ['name', 'parent_category', 'slug']
     prepopulated_fields = {'slug':('name',)}  # 自动生成slug, 根据name填充slug
     search_fields = ['name',]
+    ordering = ['parent_category'] 
 
 
 
