@@ -139,6 +139,15 @@ def post_detail(request, year, month, day, post):
 
 
 
+# 文章列表 - PostListView - 不需要login_required装饰器
+# 文章详情 - PostDetailView - 不需要login_required装饰器
+# 创建文章 - PostCreateView - 需要login_required装饰器
+# 修改文章 - PostUpdateView - 需要login_required装饰器
+# 删除文章 - PostDeleteView - 需要login_required装饰器
+# 查看已发布文章 - PublishedPostListView - 需要login_required装饰器
+# 草稿箱 - PostDraftListView - 需要login_required装饰器
+# 发表文章 (由草稿变发布) - 需要login_required装饰器
+
 
 # Create your views here.
 class PostListView1(ListView):
