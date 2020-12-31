@@ -2,21 +2,22 @@
 
 from django import forms
 from .models import Comment, Post
-
+from ckeditor_uploader.widgets import CKEditorUploadingWidget  # 富文本编辑器表单组件
 
 
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ['author', 'views', 'slug', 'publish']
+        exclude = ['author', 'views', 'slug', 'publish', 'is_delete', 'users_like']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'body': forms.Textarea(attrs={'class': 'form-control'}),
+            'body': CKEditorUploadingWidget(attrs={'class': 'form-control'}),
             'status': forms.Select(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
-            'tags': forms.CheckboxSelectMultiple(attrs={'class': 'multi-checkbox'}),
+            'tags': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
 
 
 

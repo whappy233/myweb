@@ -5,19 +5,20 @@ from .feeds import LatestPostsFeed
 app_name = 'app_blog'  # 定义应用程序命名空间
 urlpatterns = [
     path('', views.PostListView.as_view(), name='post_list'),   # 使用类视图
-    # path('', views.post_list, name='post_list'),  # 使用函数视图
-    path('<int:year>/<int:month>/<int:day>/<slug:post>/', views.post_detail, name='post_detail'),
-    path('<int:post_id>/share/', views.post_share, name='post_share'),
-    path('author/<str:author_name>', views.post_list, name='post_list_by_author'),
-    path('tags/<slug:tag_slug>', views.post_list, name='post_list_by_tag'),
-    path('search/', views.post_search, name='post_search'),
-    path('feed/', LatestPostsFeed(), name='post_feed'),
-    path('ajax_app_test/', views.ajax_test, name='ajax_app_test'),
+    path('category/<slug:slug>/', views.CategoryDetailView.as_view(), name='category_detail'),  # 分组下的文章列表
 
-    path('blog/category/<slug:slug>/', views.CategoryDetailView.as_view(), name='category_detail'),
+    path('<int:year>/<int:month>/<int:day>/<slug:post>/', views.post_detail, name='post_detail'),  # 文章详情
 
-    path('post/admin/', views.AdminPostListView.as_view(), name='admin_pub_post_list'),
-    path('post/admin/draft', views.AdminPostListView.as_view(), {'show_publish': False}, name='admin_drafy_post_list'),
+    path('<int:post_id>/share/', views.post_share, name='post_share'),  # 分享文章
+    path('author/<str:author_name>', views.post_list, name='post_list_by_author'),  # 某个作者下的所有文章
+    path('tags/<slug:tag_slug>', views.post_list, name='post_list_by_tag'),  # 某个标签下的所有文章
+    path('search/', views.post_search, name='post_search'),   # 搜索
+    path('feed/', LatestPostsFeed(), name='post_feed'),  # 订阅链接
+    path('ajax_app_test/', views.ajax_test, name='ajax_app_test'),  # ajax 请求
+    path('blog/like/', views.blog_like, name='blog_like'),  # 点赞 +1 (ajax)
+
+    path('blog/admin/', views.AdminPostListView.as_view(), name='admin_post_list'),  # 所有文章列表
+    path('blog/create/', views.PostCreateView.as_view(), name='blog_create'),  # 创建文章
     # path('post/admin/chnage/<int:year>/<int:month>/<int:day>/<slug:post>/', views.AdminPublishedPostListView.as_view(), name='admin_post_list'),
 ]
 

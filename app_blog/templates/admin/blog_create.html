@@ -8,6 +8,8 @@
 <form method="POST" class="form-horizontal" role="form" action="">
     {% csrf_token %}
 
+    {{ form.media }} {# 使用{{ form.media }}调入ckeditor静态文件 #}
+
     {% for hidden_field in form.hidden_fields %}
     {{ hidden_field }}
     {% endfor %}
@@ -21,8 +23,11 @@
     {% endif %}
 
     {% for field in form.visible_fields %}
-    <div class="form-group col-md-12">
+    <div class="form-group">
         {{ field.label_tag }}
+        {% if field.help_text %}
+        <i class="form-text text-muted">{{ field.help_text }}</i>
+        {% endif %}
         {{ field }}
         {% if field.errors %}
         {% for error in field.errors %}
@@ -31,12 +36,10 @@
         </div>
         {% endfor %}
         {% endif %}
-        {% if field.help_text %}
-        <small class="form-text text-muted">{{ field.help_text }}</small>
 
-        {% endif %}
     </div>
     {% endfor %}
+
     <div class="form-group">
         <div class="col-md-12">
             <input type="submit" class="btn btn-primary form-control" value="提交">

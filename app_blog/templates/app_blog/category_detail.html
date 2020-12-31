@@ -7,7 +7,7 @@
     {% if category.parent_category %}
     <a href="{% url 'app_blog:category_detail' category.parent_category.slug %}">{{ category.parent_category.name }}</a> /
     {% endif %}
-    <a href="{% url 'app_blog:category_detail' category.slug %}">{{ category }}</a>
+    <a href="{% url 'app_blog:category_detail' category.slug %}">{{ category }}</a>  {# 当前 #}
 </p>
 
 

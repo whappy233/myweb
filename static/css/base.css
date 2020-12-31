@@ -209,7 +209,6 @@ ul.messages li a.close {
     padding:10px 20px;
     margin:20px 10px 0;
 }
-a.like, a.follow { float:right; margin-top:-8px; }
 
 #image-list { overflow:auto; }
 #image-list .image {

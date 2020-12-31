@@ -1,105 +1,157 @@
-{#   文章详情   #}
+{# 文章详情 #}
 {% extends 'app_blog/base_blog.html' %}
-{% load  blog_tags %}
+{% load blog_tags %}
 
 
 {% block title %}
-    {{ post.title }}
+{{ post.title }}
 {% endblock title %}
 
 {% block content %}
-    <h1> {{ post.title }} </h1>
-    <p class='date'>
-        作者 : <a href="{% url 'app_blog:post_list_by_author' post.author %}"> {{ post.author }}</a><br>
-        出版日期 : {{ post.publish }}
-        阅读量 : {{ post.views }}
-        分组 : <a href="{% url 'app_blog:category_detail' post.category.slug %}"> {{ post.category }}</a> 
+<h1> {{ post.title }} </h1>
+<p class='date'>
+    作者 : <a href="{% url 'app_blog:post_list_by_author' post.author %}"> {{ post.author }}</a><br>
+    分组 : <a href="{% url 'app_blog:category_detail' post.category.slug %}"> {{ post.category }}</a><br>
+    发布于{{ post.publish | date:"Y-m-j" }} 浏览{{ post.views }}次
+    {% with total_likes=post.users_like.count users_like=post.users_like.all %}
+    <a href="#" data-id="{{ post.id }}" data-action="{% if request.user in users_like %}un{% endif %}like"
+        class="like">
+        <span class="glyphicon glyphicon-thumbs-up count">{{ total_likes }}</span>
+    </a>
+    {% endwith %}
 
-        {% with post.tags.all as tages %}
-        {% if tages %}
-            <span class='tags'>
-                标签:
-                {% for tag in tages %}
-                    <a href="{% url 'app_blog:post_list_by_tag' tag.slug %}">
-                        {{ tag.name }}</a>
-                    {% if not forloop.last %} , {% endif %}
-                {% endfor %}
-            </span>
-        {% endif %}
-        {% endwith %}
 
-    </p>
+    {% with post.tags.all as tages %}
+    {% if tages %}
+    <span class='tags'>
+        标签:
+        {% for tag in tages %}
+        <a href="{% url 'app_blog:post_list_by_tag' tag.slug %}">
+            {{ tag.name }}</a>
+        {% if not forloop.last %} , {% endif %}
+        {% endfor %}
+    </span>
+    {% endif %}
+    {% endwith %}
 
-    {% comment %} {{ post.body| linebreaks }} {% endcomment %}
-    {{ post.body|markdown}}
+</p>
 
-    <p><a href="{% url 'app_blog:post_share' post.id %}"> 分享文章 </a></p>
+{% comment %} {{ post.body| linebreaks }} {% endcomment %}
+{{ post.body|markdown}}
 
-    <h2>相似文章</h2>
-    {% for post in similar_posts %}
-        <p><a href="{{ post.get_absolute_url }}"> {{ post.title }}</a></p>
-    {% empty %}
-        没有相似文章推荐
-    {% endfor %}
+<p><a href="{% url 'app_blog:post_share' post.id %}"> 分享文章 </a></p>
 
-    <div>
+<h2>相似文章</h2>
+{% for post in similar_posts %}
+<p><a href="{{ post.get_absolute_url }}"> {{ post.title }}</a></p>
+{% empty %}
+没有相似文章推荐
+{% endfor %}
+
+<div>
     {# with 标签可以将某个值赋予到新的变量中,对于避免数据库访问或者多次访问开销交的的方法十分有用 #}
     {% with comments.count as total_comments %}
-        {% ifnotequal total_comments 0 %}
-            <h2> 有 {{ total_comments }}  条评论 </h2>
-        {% endifnotequal %}
+    {% ifnotequal total_comments 0 %}
+    <h2> 有 {{ total_comments }} 条评论 </h2>
+    {% endifnotequal %}
     {% endwith %}
 
     {% for comment in comments %}
-        <div>
-            <p class="info">
-                {{ forloop.counter }}#: {{ comment.name }}
-                <i>评论日期:{{ comment.created }}</i>
-            </p>
-                {{ comment.body|linebreaks }}
-        </div>
-    {% empty %}
-        <p>还没有评论,快来抢板凳吧!</p>
-    {% endfor %}
+    <div>
+        <p class="info">
+            {{ forloop.counter }}#: {{ comment.name }}
+            <i>评论日期:{{ comment.created }}</i>
+        </p>
+        {{ comment.body|linebreaks }}
     </div>
+    {% empty %}
+    <p>还没有评论,快来抢板凳吧!</p>
+    {% endfor %}
+</div>
 
-    <button id="btn1">点击发送ajax</button>
-    <p id="pp1"></p>
+<button id="btn1">点击发送ajax</button>
+<p id="pp1"></p>
 
-    {% if message %}
-    <p>{{message}}</p>
-    {% else %}
-    <h2>添加评论</h2>
-    <form action='.' method='post'>
-        <table>
-            {{comment_form.as_table}}
-        </table>
-        {% csrf_token %}
-        <p><input type='submit' vaule='Add comment' ></p>
-        
-    </form>
-    {% endif %}
+{% if message %}
+<p>{{message}}</p>
+{% else %}
+<h2>添加评论</h2>
+<form action='.' method='post'>
+    <table>
+        {{comment_form.as_table}}
+    </table>
+    {% csrf_token %}
+    <p><input type='submit' vaule='Add comment'></p>
+
+</form>
+{% endif %}
 
 {% endblock content %}
 
 {% block javascript %}
+
+<script src=" https://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.cookie.min.js "></script>
 <script>
 
     // 按钮点击异步请求
-    $('#btn1').on('click', function(){
+    $('#btn1').on('click', function () {
         $.ajax({
             url: '{% url "app_blog:ajax_app_test" %}',
             data: {
-            'keyword': `发送: ${Math.random()}`
+                'keyword': `发送: ${Math.random()}`
             },
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-            $("#pp1").text("返回结果是: " + data.count)
+                $("#pp1").text("返回结果是: " + data.count)
             }
         });
-    })
+    });
 
+    var csrftoken = $.cookie('csrftoken');
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $(document).ready(function () {
+        $('a.like').click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var action = $(this).data('action');
+
+            $.ajax({
+                url: '{% url "app_blog:blog_like" %}',
+                data: {
+                    'id': id,
+                    'action': action,
+                },
+                type: 'POST',
+                dataType: 'json',
+                beforeSend: function (xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                },
+                success: function (data) {
+                    if (data['status'] == 'ok') {
+                        var previous_action = $('a.like').data('action');
+
+                        // 变换动作
+                        $('a.like').data('action', previous_action == 'like' ? 'unlike' : 'like');
+                        // 变换链接对应文本
+                        // $('a.like').text(previous_action == 'like' ? 'Unlike' : 'Like');
+
+                        // 更新总点赞数
+                        var previous_likes = parseInt($('span.count .total').text());
+                        $('span.count .total').text(previous_action == 'like' ? previous_likes + 1 : previous_likes - 1);
+                    }
+                    else {
+                        window.location.href = "{% url 'app_user:login' %}?next={{ post.get_absolute_url }}"
+                    }
+                },
+            });
+        });
+    });
 
 </script>
 {% endblock %}

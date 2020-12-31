@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from taggit.managers import TaggableManager  # 第三方标签应用
+from ckeditor_uploader.fields import RichTextUploadingField  # 富文本编辑器
 import base64
 
 
@@ -71,10 +72,11 @@ class Post(models.Model):
     slug = models.SlugField(
         'slug', max_length=250, unique_for_date='publish', blank=True)
     # related_name 指定反向关系名称(从User到Post)
+    users_like = models.ManyToManyField(User, related_name='blog_liked', blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts', verbose_name='作者')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='blog_posts', verbose_name='分类', blank=False, null=False)
 
-    body = models.TextField('正文')
+    body = RichTextUploadingField('正文')
     views = models.PositiveIntegerField('阅读次数', default=0)
     publish = models.DateTimeField('发布时间', default=timezone.now, null=True, blank=True)
     created = models.DateTimeField('创建时间', auto_now_add=True)
@@ -106,6 +108,11 @@ class Post(models.Model):
     def to_publish(self):
         self.status = 'p'
         self.publish = timezone.now()
+        self.save(update_fields=['status', 'publish'])
+
+    def to_draft(self):
+        self.status = 'd'
+        self.publish = None
         self.save(update_fields=['status', 'publish'])
 
     # 标准 urls

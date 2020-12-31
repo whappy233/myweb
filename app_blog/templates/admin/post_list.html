@@ -2,11 +2,16 @@
 
 {% block content %}
 
-{% if show_publish %}
-<h3>已发表的文章</h3>
-{% else %}
-<h3>未发表的文章</h3>
-{% endif %}
+<div>
+    <div style="display: inline-block;">
+        <h3>所有文章</h3>
+    </div>
+    <div style="float: right;">
+        <a href="{% url 'app_blog:blog_create' %}">
+            <button class='btn btn-info'>+</button>
+        </a>
+    </div>
+</div>
 
 <form action="{% url 'app_blog:post_search' %}" role="search" method="get">
     {% csrf_token %}
@@ -38,10 +43,18 @@
         <tr>
             <td>{{ post.title }}</td>
             <td>{{ post.category.name }}</td>
-            <td>{{ post.publish | date:"Y-m-d" }}</td>
+            <td>{{ post.publish | date:"Y-m-d" | default:"-" }}</td>
+
+            {% if post.publish %}
             <td><a href="{{ post.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">☺︎</span></a></td>
             <td><a href="{{ post.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">✎</span></a></td>
             <td><a href="{{ post.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">✗</span></a></td>
+            {% else %}
+            <td>-</td><td>-</td><td>-</td>
+            {% endif %}
+
+
+
         </tr>
         {% endfor %}
         {% else %}

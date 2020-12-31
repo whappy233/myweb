@@ -1,9 +1,11 @@
+from django.core import paginator
 from django.http.request import HttpRequest
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger  # 分页
 from django.utils.decorators import method_decorator
-from django.utils import timezone
+from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required, permission_required
+from django.utils import timezone
 from django.contrib.auth.models import User
 from .models import Post, Comment, Category
 from django.http import HttpResponse, JsonResponse, Http404
@@ -125,9 +127,9 @@ def post_detail(request, year, month, day, post):
 
     return render(request, 'app_blog/detail.html', context)
 
-# 分组详情
+# 分组下的文章列表
 class CategoryDetailView(DetailView):
-    '''分组详情'''
+    '''分组下的文章列表'''
     model = Category
 
     def get_context_data(self, **kwargs):
@@ -151,44 +153,25 @@ class CategoryDetailView(DetailView):
         return context
 
 
-
-
-# 文章列表 - AdminPostListView - 不需要login_required装饰器
-# 文章详情 - PostDetailView - 不需要login_required装饰器
-# 创建文章 - PostCreateView - 需要login_required装饰器
-# 修改文章 - PostUpdateView - 需要login_required装饰器
-# 删除文章 - PostDeleteView - 需要login_required装饰器
-# 查看已发布文章 - PublishedPostListView - 需要login_required装饰器
-# 草稿箱 - PostDraftListView - 需要login_required装饰器
-# 发表文章 (由草稿变发布) - 需要login_required装饰器
-
-
-
-# Admin -------------------------------------------------
-
-@method_decorator(login_required, name='dispatch')  # 此页面需要登录
-@method_decorator(permission_required('app_blog.change_post', 'app_blog:post_list'), name='dispatch')  # 此页面需要验证权限
-class AdminPostListView(ListView):
-    '''已发布文章列表'''
-    paginate_by = 5
-    template_name = 'admin/published_article_list.html'
-
-    # def get(self, request, *args, **kwargs):
-    #     return HttpResponse('gggggggg')
-
-    def get_queryset(self):
-        if 'draft' in self.request.path:
-            return Post.objects.filter(status='d').order_by('-publish')
-        else:
-            return Post.objects.filter(status='p').order_by('-publish')
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['show_publish'] = True
-        if 'draft' in self.request.path:
-            context['show_publish'] = False
-        return context
-
+# 点👍 +1
+@login_required
+@require_http_methods(["POST"])  # 只接受 POST 方法
+def blog_like(request):
+    blog_id = request.POST.get('id')
+    action = request.POST.get('action')
+    print(blog_id)
+    print(action)
+    if blog_id and action:
+        try:
+            blog = Post.objects.get(id=blog_id)
+            if action == 'like':
+                blog.users_like.add(request.user)
+            else:
+                blog.users_like.remove(request.user)
+            return JsonResponse({'status':'ok'})
+        except:
+            pass
+    return JsonResponse({'status':'fail'})
 
 
 # 文章详细
@@ -196,30 +179,75 @@ class PostDetailView(DetailView):
     '''文章详细'''
     model = Post
 
+    # def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    #     context = super().get_context_data(**kwargs)
+    #     comments = post.comments.filter(active=True)  # 查询所有评论
+
     def get_object(self, queryset=None):
         obj = super().get_object(queryset=queryset)
         obj.viewed()
         return obj
 
+
+
+# Admin -------------------------------------------------
+
+# 所有文章列表
+# post/admin/
+@method_decorator(login_required, name='dispatch')  # 此页面需要登录
+@method_decorator(permission_required('app_blog.change_post', 'app_blog:post_list'), name='dispatch')  # 此页面需要验证权限
+class AdminPostListView(ListView):
+    '''文章列表'''
+    paginate_by = 10
+    template_name = 'admin/post_list.html'
+
+    # def get(self, request, *args, **kwargs):
+
+    #     show_publish = self.request.GET.get('draft')
+    #     if show_publish:
+    #         posts = Post.objects.filter(status='p').order_by('-publish')
+    #     else:
+    #         posts = Post.objects.filter(status='d').order_by('-publish')
+    #     paginator = Paginator(posts, 5)
+    #     page = self.request.GET.get('page')
+    #     page_obj = paginator.get_page(page)
+    #     context = {
+    #         'page_obj': page_obj,
+    #         'show_publish': show_publish
+    #     }
+        # return render(request, 'admin/post_list.html', context)
+
+    def get_queryset(self):
+            return Post.objects.all().order_by('-publish')
+
+
 # 创建文章
+# blog/create/
 @method_decorator(login_required, name='dispatch')
 class PostCreateView(CreateView):
     '''创建文章'''
     model = Post
     form_class = PostForm
-    template_name = 'app_blog/article_create_form.html'
+    template_name = 'admin/blog_create.html'
+    success_url = reverse_lazy('app_blog:admin_post_list')  # 成功后跳转地址
 
     # Associate form.instance.user with self.request.user
     def form_valid(self, form):
-
         form.instance.author = self.request.user
+        # print(form.cleaned_data)
         return super().form_valid(form)
 
+
+
+
+
+# 修改文章
 @method_decorator(login_required, name='dispatch')
 class PostUpdateView(UpdateView):
+    '''修改文章'''
     model = Post
     form_class = PostForm
-    template_name = 'app_blog/article_update_form.html'
+    template_name = 'app_blog/blog_update_form.html'
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset=queryset)
@@ -227,8 +255,10 @@ class PostUpdateView(UpdateView):
             raise Http404()
         return obj
 
+# 删除文章
 @method_decorator(login_required, name='dispatch')
 class PostDeleteView(DeleteView):
+    '''删除文章'''
     model = Post
     success_url = reverse_lazy('app_blog:post_list')
 
@@ -238,12 +268,12 @@ class PostDeleteView(DeleteView):
             raise Http404()
         return obj
 
-# 文章详情
+# 发表文章
 @login_required()
 def post_publish(request, pk, slug1):
-    '''文章详情'''
+    '''发表文章'''
     post = get_object_or_404(Post, pk=pk, author=request.user)
-    post.published()
+    post.to_publish()
     return redirect(reverse("app_blog:post_detail", args=[str(pk), slug1]))
 
 

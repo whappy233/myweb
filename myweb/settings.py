@@ -32,11 +32,15 @@ INSTALLED_APPS = [
     'app_sheet.apps.AppSheetConfig',
     'app_gallery.apps.AppGalleryConfig',
 
-    'taggit',  # 第三方标签管理器
     'django.contrib.sites',  # 网站地图App1
     'django.contrib.sitemaps',  # 网站地图App2
     # 'django.contrib.postgres',
-    'imagekit', #  第三方缩略图应用 pip install django-imagekit
+
+    'taggit',  # 第三方标签管理器
+    'imagekit', # 第三方缩略图应用 pip install django-imagekit
+    'ckeditor', # 第三方富文本编辑器 pip install django-ckeditor==6.0.0
+    'ckeditor_uploader', # 第三方富文本编辑器_文件组件
+
 ]
 
 # 中间件
@@ -163,3 +167,30 @@ LOGOUT_URL = 'app_user:logout'   # 用户重定向并实现退出登陆的URL
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # 输出到 Shell
 AUTHENTICATION_BACKENDS = ('app_user.views.CustomBackend',)
+
+
+# CkEditor 富文本编辑器配置
+CKEDITOR_UPLOAD_PATH = 'blog_uploads/'  # 文件上传文件夹  media/blog_uploads/
+CKEDITOR_JQUERY_URL ='https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js'
+CKEDITOR_IMAGE_BACKEND = 'pillow'
+CKEDITOR_ALLOW_NONIMAGE_FILES = False
+CKEDITOR_BROWSE_SHOW_DIRS = True
+CKEDITOR_RESTRICT_BY_USER = False  # 如果为True /media/blog_uploads/用户名/ 
+CKEDITOR_RESTRICT_BY_DATE = True  # /media/blog_uploads/用户名(CKEDITOR_RESTRICT_BY_USER 如果为True)/年/月/日/文件名
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': (['Source', '-',  'Preview', '-', ],
+                    ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Print', 'SpellChecker', ],
+                    ['Undo', 'Redo', '-', 'Find', 'Replace', '-', 'SelectAll', 'RemoveFormat', '-',
+                     "CodeSnippet", 'Subscript', 'Superscript'],
+                    ['NumberedList', 'BulletedList', '-', 'Blockquote'],
+                    ['Link', 'Unlink', ],
+                    ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', ],
+                    ['Format', 'Font', 'FontSize', 'TextColor', 'BGColor', ],
+                    ['Bold', 'Italic', 'Underline', 'Strike', ],
+                    ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+                    ),
+        'extraPlugins': 'codesnippet',
+        'width': 'auto',
+    }
+}
