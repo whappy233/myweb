@@ -14,6 +14,8 @@ urlpatterns = [
     path('feed/', LatestPostsFeed(), name='post_feed'),
     path('ajax_app_test/', views.ajax_test, name='ajax_app_test'),
 
+    path('blog/category/<slug:slug>/', views.CategoryDetailView.as_view(), name='category_detail'),
+
     path('post/admin/', views.AdminPostListView.as_view(), name='admin_pub_post_list'),
     path('post/admin/draft', views.AdminPostListView.as_view(), {'show_publish': False}, name='admin_drafy_post_list'),
     # path('post/admin/chnage/<int:year>/<int:month>/<int:day>/<slug:post>/', views.AdminPublishedPostListView.as_view(), name='admin_post_list'),

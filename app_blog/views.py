@@ -125,6 +125,31 @@ def post_detail(request, year, month, day, post):
 
     return render(request, 'app_blog/detail.html', context)
 
+# 分组详情
+class CategoryDetailView(DetailView):
+    '''分组详情'''
+    model = Category
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.object.has_child():
+            posts = Post.objects.filter()
+            categories = self.object.category_set.all()  # 所有子类目
+            for category in categories:
+                queryset = Post.objects.filter(category=category.id).order_by('-publish')
+                posts.union(queryset)
+        else:
+            posts = Post.objects.filter(category=self.object.id).order_by('-publish')
+
+        paginator = Paginator(posts, 3)
+        page = self.request.GET.get('page')
+        page_obj = paginator.get_page(page)
+        context['page_obj'] = page_obj
+        context['is_paginated'] = True
+        context['section'] = 'blog'
+        return context
+
 
 
 
