@@ -168,7 +168,8 @@ def blog_like(request):
                 blog.users_like.add(request.user)
             else:
                 blog.users_like.remove(request.user)
-            return JsonResponse({'status':'ok'})
+            count = blog.users_like.count()
+            return JsonResponse({'status':'ok', 'count': count})
         except:
             pass
     return JsonResponse({'status':'fail'})

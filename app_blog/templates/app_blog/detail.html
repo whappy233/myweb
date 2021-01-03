@@ -12,15 +12,7 @@
 <p class='date'>
     作者 : <a href="{% url 'app_blog:post_list_by_author' post.author %}"> {{ post.author }}</a><br>
     分组 : <a href="{% url 'app_blog:category_detail' post.category.slug %}"> {{ post.category }}</a><br>
-    发布于{{ post.publish | date:"Y-m-j" }} 浏览{{ post.views }}次
-    {% with total_likes=post.users_like.count users_like=post.users_like.all %}
-    <a href="#" data-id="{{ post.id }}" data-action="{% if request.user in users_like %}un{% endif %}like"
-        class="like">
-        <span class="glyphicon glyphicon-thumbs-up count">{{ total_likes }}</span>
-    </a>
-    {% endwith %}
-
-
+    发布于{{ post.publish | date:"Y-m-j" }} 浏览{{ post.views }}次<br>
     {% with post.tags.all as tages %}
     {% if tages %}
     <span class='tags'>
@@ -30,10 +22,14 @@
             {{ tag.name }}</a>
         {% if not forloop.last %} , {% endif %}
         {% endfor %}
-    </span>
+    </span><br>
     {% endif %}
     {% endwith %}
-
+    {% with total_likes=post.users_like.count users_like=post.users_like.all %}
+    <a href="#" data-id="{{ post.id }}" data-action="{% if request.user in users_like %}un{% endif %}like" class="like">
+        <span id="count">👍 {{ total_likes }}</span>
+    </a>
+    {% endwith %}
 </p>
 
 {% comment %} {{ post.body| linebreaks }} {% endcomment %}
@@ -142,8 +138,9 @@
                         // $('a.like').text(previous_action == 'like' ? 'Unlike' : 'Like');
 
                         // 更新总点赞数
-                        var previous_likes = parseInt($('span.count .total').text());
-                        $('span.count .total').text(previous_action == 'like' ? previous_likes + 1 : previous_likes - 1);
+                        // var previous_likes = parseInt($('span.count').text());
+                        // $('span.count').text(previous_action == 'like' ? previous_likes + 1 : previous_likes - 1);
+                        $('span#count').text('👍 ' + data['count']);
                     }
                     else {
                         window.location.href = "{% url 'app_user:login' %}?next={{ post.get_absolute_url }}"
