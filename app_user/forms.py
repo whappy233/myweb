@@ -43,7 +43,7 @@ class RegistrationForm(forms.Form):
         return email
 
     def clean_password1(self):
-        password1 = self.cleaned_data.get('password1')
+        password1 = self.cleaned_data.get('password1', '')
         if len(password1) < 6:
             raise forms.ValidationError("密码太短。")
         return password1
@@ -77,7 +77,7 @@ class PwdChangeForm(forms.Form):
         label='验证码', widget=forms.TextInput(attrs={'placeholder': '不区分大小写'}))
 
     def clean_old_pw(self):
-        old_pw = self.cleaned_data.get('old_pw')
+        old_pw = self.cleaned_data.get('old_pw', '')
         if len(old_pw) < 6:
             raise forms.ValidationError("密码太短。")
         else:
@@ -88,7 +88,7 @@ class PwdChangeForm(forms.Form):
         return old_pw
 
     def clean_pw1(self):
-        pw1 = self.cleaned_data.get('pw1')
+        pw1 = self.cleaned_data.get('pw1', '')
         if len(pw1) < 6:
             raise forms.ValidationError("密码太短。")
         return pw1
@@ -155,6 +155,12 @@ class ProfileEditForm(forms.ModelForm):
 class UserPhotoUploadForm(forms.Form):
     photo_file = forms.ImageField()
 
+    def clean_photo_file(self):
+        photo_file = self.cleaned_data.get('photo_file', '')
+        if not re.search(r'\.(png|jpg|jpeg|gif)$', photo_file.name):
+            # print('文件类型只能是: png,jpg,jpeg,gif')
+            raise forms.ValidationError('文件类型只能是: png,jpg,jpeg,gif')
+        return photo_file
 
 # formset_factory ---------------------------------------------------------------------
 # 有的时候用户需要在1个页面上使用多个表单，比如一次性提交添加多本书的信息，这时我们可以使用formset。这是一个表单的集合

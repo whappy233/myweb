@@ -169,13 +169,13 @@ def ajax_photo_upload(request):
         form = UserPhotoUploadForm(request.POST, request.FILES)
         if form.is_valid():
             photo = request.FILES['photo_file']  # 获取上传图片
-            data = request.POST['photo_data']  # 获取ajax返回图片坐标
+            data = request.POST['photo_data']  # 获取ajax返回图片坐标 {"x":0,"y":0,"width":80,"height":80,"rotate":0,"scaleX":1,"scaleY":1}
 
             if photo.size/1024 > 3000:
-                return JsonResponse({"message": "图片大小请控制在3M以内, 请重新上传。", })
+                return JsonResponse({"msg": "图片大小请控制在3M以内, 请重新上传。", })
 
             old_photo = user_profile.photo  # 旧的头像
-            cropped_photo = crop_image(old_photo, photo, data, user.id)  # 裁剪头像
+            cropped_photo = crop_image(old_photo, photo, data, user.id)  # 剪裁保存图片
             user_profile.photo = cropped_photo  # 将图片路径修改到当前用户数据库
             user_profile.save()
 

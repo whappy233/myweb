@@ -435,8 +435,8 @@
           this.url = data.result;
           cropDone();
           $input_img.val('');
-        } else if (data.message) {
-          this.alert(data.message);
+        } else if (data.msg) {
+          this.alert(data.msg);
         }
       } else {
         this.alert('Failed to response');

@@ -111,10 +111,10 @@ def create_validate_code(size:tuple=(120, 30),
     return img, strs
 
 
-# 图片剪裁
+# 剪裁保存图片
 def crop_image(old_photo, file, data, uid):
     '''
-    图片剪裁.
+    剪裁保存图片.
     @prams:
 
         old_photo:    user_profile.photo
@@ -130,8 +130,6 @@ def crop_image(old_photo, file, data, uid):
     w = x + int(coords['width'])
     h = y + int(coords['height'])
     r = coords['rotate']
-    print(20*'-')
-    print(r)
 
     # 裁剪图片,压缩尺寸为400*400。
     photo = Image.open(file)
