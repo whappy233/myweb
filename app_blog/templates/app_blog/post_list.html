@@ -26,6 +26,7 @@
         <p class='date'>
             作者 : <a href="{% url 'app_blog:post_list_by_author' post.author %}"> {{ post.author }}</a> <br>
             发表日期 : {{ post.publish }}
+            {% format_time post.publish "%Y-%m-%d %H:%M" %}
             阅读量 : {{ post.views }}
             分组 : <a href="{% url 'app_blog:category_detail' post.category.slug %}"> {{ post.category }}</a> 
 

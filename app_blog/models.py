@@ -132,6 +132,7 @@ class Post(models.Model):
             self.slug = slug
         super().save(*args, **kwargs)
 
+    # save 前的验证
     # 草稿文章(d)不应该有发布日期( publish )
     # 当文章状态为发布(p), 而发布日期为空时，发布日期应该为当前时间
     def clean(self):

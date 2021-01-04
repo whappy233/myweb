@@ -1,5 +1,6 @@
 {# 文章详情 #}
 {% extends 'app_blog/base_blog.html' %}
+{% load static %}
 {% load blog_tags %}
 
 
@@ -86,7 +87,7 @@
 
 {% block javascript %}
 
-<script src=" https://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.cookie.min.js "></script>
+<script src="{% static 'js/jquery.cookie_1.4.1.min.js' %}"></script>
 <script>
 
     // 按钮点击异步请求

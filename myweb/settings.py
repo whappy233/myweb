@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'taggit',  # 第三方标签管理器
     'imagekit', # 第三方缩略图应用 pip install django-imagekit
     'ckeditor', # 第三方富文本编辑器 pip install django-ckeditor==6.0.0
-    'ckeditor_uploader', # 第三方富文本编辑器_文件组件
+    'ckeditor_uploader', # 第三方富文本编辑器_文件上传组件
 
 ]
 

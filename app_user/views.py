@@ -175,7 +175,7 @@ def ajax_photo_upload(request):
                 return JsonResponse({"message": "图片大小请控制在3M以内, 请重新上传。", })
 
             old_photo = user_profile.photo  # 旧的头像
-            cropped_photo = crop_image(old_photo, photo, data, user.id)  # 新生成的头像
+            cropped_photo = crop_image(old_photo, photo, data, user.id)  # 裁剪头像
             user_profile.photo = cropped_photo  # 将图片路径修改到当前用户数据库
             user_profile.save()
 
