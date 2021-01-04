@@ -57,7 +57,6 @@ class Category(models.Model):
             self.slug = slug
         super().save(*args, **kwargs)
 
-
 # 文章模型
 class Post(models.Model):
     '''文章模型'''
@@ -142,8 +141,6 @@ class Post(models.Model):
             # raise ValidationError('草稿没有发布日期. 发布日期已清空。')
         if self.status == 'p' and self.publish is None:
             self.publish = timezone.now()
-
-
 
 # 评论模型
 class Comment(models.Model):
