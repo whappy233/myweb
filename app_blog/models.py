@@ -135,6 +135,7 @@ class Post(models.Model):
     # 草稿文章(d)不应该有发布日期( publish )
     # 当文章状态为发布(p), 而发布日期为空时，发布日期应该为当前时间
     def clean(self):
+        print('dddddddd')
         # 不允许草稿条目具有 publish
         if self.status == 'd' and self.publish is not None:
             self.publish = None

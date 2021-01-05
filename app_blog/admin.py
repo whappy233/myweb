@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Post, Comment, Category
 from uuid import uuid4
 from django.utils.html import format_html
-
+from django.utils import timezone
 
 # 自定义 list_filter
 class TitleKeywordFilter(admin.SimpleListFilter):
@@ -53,10 +53,72 @@ class PostAdmin(admin.ModelAdmin):
     date_hierarchy = 'publish'  # 按日期月份筛选
     list_display_links = ['title', 'author']  # 设置带连接的字段
 
-    # fieldsets = [
-    #     (None, {'fields': ['question_text']}),
-    #     ('Date information', {'fields': ['publish']}),
-    # ]
+
+    actions = ['make_published', 'make_published_false', 
+                'make_delete_true', 'make_delete_false', 
+                'action_func']  # 自定义actions
+
+    def make_published(self, request, queryset):
+        # 注意: 此操作不会触发模型的 clean 方法!
+        queryset.update(status='p', publish=timezone.now())
+    make_published.short_description = "发布所选文章"
+    make_published.allowed_permissions = ('change',)  #  要求只有change权限的管理人员才能更改文章发表状态
+
+    def make_published_false(self, request, queryset):
+        # 注意: 此操作不会触发模型的 clean 方法!
+        queryset.update(status='d', publish=None)
+    make_published_false.short_description = "取消发布"
+
+    def make_delete_true(self, request, queryset):
+        # 注意: 此操作不会触发模型的 clean 方法!
+        queryset.update(is_delete=True)
+
+    make_delete_true.short_description = "逻辑删除-是"
+
+    def make_delete_false(self, request, queryset):
+        # 注意: 此操作不会触发模型的 clean 方法!
+        queryset.update(is_delete=False)
+
+    make_delete_false.short_description = "逻辑删除-否"
+
+
+    # 对批量选择进行某些操作
+    # 如果想对queryset中的对象一个一个修改或导出
+    def action_func(self, request, queryset):
+        for obj in queryset:
+            # do_something(obj)
+            pass
+    action_func.short_description = "对批量选择进行某些操作"
+
+    # 重写了get_actions方法，只给了用户名为John批量删除对象的权限。
+    # 如果用户名不为 891953720,我们把 delete_selected 动作从下拉菜单中删除
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        if request.user.username != '891953720':
+            if 'delete_selected' in actions:
+                del actions['delete_selected']
+        return actions
+
+    # 如果我们想实现根据不同的用户显示不同表单form，我们可以通过重写get_form方法实现。
+    # 如下例中给Superuser显示了不同的表单
+    # def get_form(self, request, obj=None, **kwargs):
+    #     if request.user.is_superuser:
+    #         kwargs['form'] = MySuperuserForm
+    #     return super().get_form(request, obj, **kwargs)
+
+    # 自定义显示表单的Choice字段
+    # 下例中通过重写formfiled_for_choice_field方法给superuser多了一个选择
+    # def formfield_for_choice_field(self, db_field, request, **kwargs):
+    #     if db_field.name == "status":
+    #         kwargs['choices'] = (
+    #             ('accepted', 'Accepted'),
+    #             ('denied', 'Denied'),
+    #         )
+    #         if request.user.is_superuser:
+    #             kwargs['choices'] += (('ready', 'Ready for deployment'),)
+    #     return super().formfield_for_choice_field(db_field, request, **kwargs)
+
+
 
     # model form 保存方法  (重写)
     # def save_model(self, request, obj, form, change):
@@ -64,6 +126,9 @@ class PostAdmin(admin.ModelAdmin):
     #         if not form.cleaned_data['slug']:
     #             obj.slug = uuid4().hex[:10]
     #         super().save_model(request, obj, form, change)
+
+
+
 
     # Django的admin默认会展示所有对象。
     # 通过重写get_queryset方法，我们可以控制所需要获取的对象。
