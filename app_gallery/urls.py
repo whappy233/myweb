@@ -10,5 +10,4 @@ urlpatterns = [
     path('', views.GalleryListView.as_view(), name='gallery_list'),   # 使用类视图
     # path('detail/<int:pk>/<str:slug>/', views.GalleryDetail.as_view(), name='gallery_detail'),
     re_path(r'^detail/(?P<pk>\d+)/(?P<slug>[-\w]+)/$', views.GalleryDetail.as_view(), name='gallery_detail'),
-    re_path(r'^download/(?P<file_path>.*)/$', views.file_download, name='file_download'),  # 文件下载
 ]

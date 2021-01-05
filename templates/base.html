@@ -38,9 +38,10 @@
             <a href="{% url 'app_user:profile' %}" title="修改信息">{{ request.user }}, </a>
             <a href="{% url 'app_user:logout' %}">退出登陆</a>
             <a href="{% url 'app_user:change_pw' %}">修改密码</a>
-                {% if perms.app_blog.change_post %}
-                <a href="{% url 'app_blog:admin_post_list' %}">ADMIN</a>
-                {% endif %}
+            {% if request.user.is_superuser %}
+            <a href="{% url 'app_blog:admin_post_list' %}">ADMIN</a>
+            <a href="/admin">Django 管理</a>
+            {% endif %}
             {% else %}
             <a href="{% url 'app_user:login' %}">登陆</a>
             <a href="{% url 'app_user:register' %}">注册</a>

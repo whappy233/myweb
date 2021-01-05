@@ -1,25 +1,57 @@
 from django.contrib import admin
 from .models import Post, Comment, Category
 from uuid import uuid4
-# 在这里注册模型，并将其纳入Django管理站点中
+from django.utils.html import format_html
 
-# admin.StackedInline
-# admin.TabularInline
-# admin.ModelAdmin
+
+# 自定义 list_filter
+class TitleKeywordFilter(admin.SimpleListFilter):
+    #  右侧栏人为可读的标题
+    title = '标题关键词'
+    # 在url中显示的参数名，如?keyword=xxx.
+    parameter_name = 'keyword'
+
+    """
+    自定义需要筛选的参数元组. 
+    """
+    def lookups(self, request, model_admin):
+        return (
+            ('python', '含python文章'),
+            ('django', '含django文章'),
+             )
+
+    def queryset(self, request, queryset):
+        """
+        调用self.value()获取url中的参数， 然后筛选所需的queryset.
+        """
+        if self.value() == 'python':
+            return queryset.filter(title__icontains='python')
+        if self.value() == 'django':
+            return queryset.filter(title__icontains='django')
+
 
 
 # admin.site.register(Post, PostAdmin)  # 注册方式1
 @admin.register(Post)  # 注册方式2（使用包装）
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'id', 'author', 'created', 'publish', 'updated', 'status', 'slug', ]  # 显示字段
+    list_display = ['show_tags', 'title', 'author', 'created', 'publish', 'updated', 'status', 'is_delete', 'slug']  # 显示字段
     search_fields = ['title', 'body']  # 搜索字段
-    list_filter = ['publish', 'created', 'updated', 'status']  # 过滤器
+    list_filter = [TitleKeywordFilter, 'publish', 'created', 'updated', 'status']  # 过滤字段
     prepopulated_fields = {'slug':('title',)}  # 自动生成slug, 根据title填充slug
-    raw_id_fields = ['author',]  # 下拉框改为微件
+    raw_id_fields = ['author',]  # 下拉框改为微件(多个外键使建议使用)
+    filter_horizontal = ['users_like']  # 多对多
+    # filter_vertical = ['users_like']  # 多对多
     actions_on_top = True   # 执行动作的位置
     # actions_on_bottom = False
     ordering = ['author']  # 默认排序
     # fields = ['title', 'slug', 'author', 'body', 'publish', 'status']  # 编辑页面的显示顺序
+
+    empty_value_display = '<span>-</span>'  # 字段值为空时显示的文本(可为纯文本,可为html)
+    # admin_order_field = ('title', 'updated')  # 设置需要排序的字段
+    list_per_page = 20  # 每页显示条目数
+    list_editable = ('status',)  # 设置可编辑字段
+    date_hierarchy = 'publish'  # 按日期月份筛选
+    list_display_links = ['title', 'author']  # 设置带连接的字段
 
     # fieldsets = [
     #     (None, {'fields': ['question_text']}),
@@ -32,6 +64,29 @@ class PostAdmin(admin.ModelAdmin):
     #         if not form.cleaned_data['slug']:
     #             obj.slug = uuid4().hex[:10]
     #         super().save_model(request, obj, form, change)
+
+    # Django的admin默认会展示所有对象。
+    # 通过重写get_queryset方法，我们可以控制所需要获取的对象。
+    # 比如下例中，我们先对用户进行判定，如果用户是超级用户就展示所有文章，如果不是超级用户，我们仅展示用户自己所发表的文章
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(author=request.user)
+
+    def show_tags(self, obj):
+        '''展示tags'''
+        tag_list = []
+        tags = obj.tags.all()
+        if tags:
+            for tag in tags:
+                tag_list.append(tag.name)
+            return ','.join(tag_list)
+        else:
+            return format_html('<span style="color:red;">文章{}无标签</span>', obj.id,)
+
+    show_tags.short_description = '标签'  # 设置表头
+
 
 
 # admin.site.register(Category, CategoryAdmin)  # 注册方式1
