@@ -95,6 +95,14 @@ class Post(models.Model):
         ordering = ('-publish',)  # 出版日期降序
         verbose_name = '文章'  # 定义一个可读名字
         verbose_name_plural = verbose_name
+        # Django项目中如果你需要频繁地对数据表中的某些字段(如title)使用filter(), exclude()和order_by()方法进行查询，
+        # 建议你对这些字段建议索引(index), 提升查询效率
+        indexes = [
+            models.Index(fields=['title']),  # 建立索引
+        ]
+
+
+
 
     def __str__(self):
         return self.title
