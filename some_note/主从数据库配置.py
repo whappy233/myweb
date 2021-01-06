@@ -124,10 +124,10 @@ class AppDBRouter:
 
 # 由于manage.py一次只能创建一个数据库，我们可以使用--database选项来依次创建我们需要的数据库。例如:
 
-# 将app01下models中的表创建到db01的数据库”db1”中
+# 将app01下models中的表创建到db01的数据库'db1'中
 # python manage.py  migrate  --database=db1                                
 
-# 将app02下models中的表创建到db02的数据库”db2”中
+# 将app02下models中的表创建到db02的数据库'db2'中
 # python manage.py  migrate  --database=db2
 
 # 在使用多数据库时，我们可以使用 using 方法来手动选择需要读写的数据库，如下所示:
