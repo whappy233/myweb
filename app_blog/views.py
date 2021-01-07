@@ -195,6 +195,27 @@ class PostDetailView(DetailView):
 
 # 所有文章列表
 # post/admin/
+# 权限名一般由app名(app_label)，权限动作和模型名组成。以 app_blog 应用为例，Django为 Post 模型自动创建的4个可选权限名分别为:
+# 查看文章(view): app_blog.view_post
+# 创建文章(add): app_blog.add_post
+# 更改文章(change): app_blog.change_post
+# 删除文章(delete): app_blog.delete_post
+# 在视图中可以使用 user.has_perm() 方法来判断一个用户是不是有相应的权限, 
+# user_A.has_perm('app_blog.add_post')
+# user_A.has_perm('app_blog.change_post)
+
+# 最快捷的方式是使用 @permission_required 这个装饰器
+# permission_required(perm, login_url=None, raise_exception=False)
+# raise_exception=True, 会直接返回403无权限的错误
+# 没有权限将会跳转到 login_url='app_blog:post_list'
+
+# 如果你使用基于类的视图(Class Based View), 可以继承PermissionRequiredMixin这个类
+# from django.contrib.auth.mixins import PermissionRequiredMixin
+# class MyView(PermissionRequiredMixin, View):
+    # permission_required = 'polls.can_vote'
+    # Or multiple of permissions:
+    # permission_required = ('polls.can_open', 'polls.can_edit')
+
 @method_decorator(login_required, name='dispatch')  # 此页面需要登录
 @method_decorator(permission_required('app_blog.change_post', 'app_blog:post_list'), name='dispatch')  # 此页面需要验证权限
 class AdminPostListView(ListView):
@@ -239,9 +260,6 @@ class PostCreateView(CreateView):
         return super().form_valid(form)
 
 
-
-
-
 # 修改文章
 @method_decorator(login_required, name='dispatch')
 class PostUpdateView(UpdateView):
@@ -276,8 +294,6 @@ def post_publish(request, pk, slug1):
     post = get_object_or_404(Post, pk=pk, author=request.user)
     post.to_publish()
     return redirect(reverse("app_blog:post_detail", args=[str(pk), slug1]))
-
-
 
 
 

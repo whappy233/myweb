@@ -1,7 +1,7 @@
-bogon:myweb carlos$ echo "# myweb" >> README.md
-bogon:myweb carlos$ git init
-bogon:myweb carlos$ git add README.md
-bogon:myweb carlos$ git commit -m '第一次提交'
-bogon:myweb carlos$ git branch -M main
-bogon:myweb carlos$ git remote add origin https://github.com/whappy233/myweb.git
-bogon:myweb carlos$ git push -u origin mai  n
+echo "# myweb" >> README.md
+git init
+git add README.md
+git commit -m '第一次提交'
+git branch -M main
+git remote add origin https://github.com/whappy233/myweb.git
+git push -u origin mai  n

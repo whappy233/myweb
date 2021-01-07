@@ -8,7 +8,7 @@
 # 这时你可能希望实现数据库的主从配置，读写分离，把各个数据库放在不同的服务器上，
 # 有的专门负责写入，有的专门负责读取，这时你就要学会使用Django同时连接多个数据库，并自定义读写操作。
 
- 
+
 
 '第一步 修改项目的 settings 配置 '
 # 在 settings.py 中配置需要连接的多个数据库名称和登录信息。
@@ -114,13 +114,13 @@ class AppDBRouter:
             return 'db1'
         if model._meta.app_label == 'app02':
             return 'db2'
- 
+
     def db_for_write(self, model, **hints):
        if model._meta.app_label == 'app01':
             return 'db1'
        if model._meta.app_label == 'app02':
             return 'db2'
- 
+
 
 # 由于manage.py一次只能创建一个数据库，我们可以使用--database选项来依次创建我们需要的数据库。例如:
 

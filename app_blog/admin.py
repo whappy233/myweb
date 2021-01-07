@@ -44,7 +44,7 @@ class PostAdmin(admin.ModelAdmin):
     actions_on_top = True   # 执行动作的位置
     # actions_on_bottom = False
     ordering = ['author']  # 默认排序
-    # fields = ['title', 'slug', 'author', 'body', 'publish', 'status']  # 编辑页面的显示顺序
+    # fields = ['title', 'slug', 'author', 'body', 'publish', 'status']  # 在详细编辑页面的显示字段
 
     empty_value_display = '<span>-</span>'  # 字段值为空时显示的文本(可为纯文本,可为html)
     # admin_order_field = ('title', 'updated')  # 设置需要排序的字段
@@ -52,7 +52,6 @@ class PostAdmin(admin.ModelAdmin):
     list_editable = ('status',)  # 设置可编辑字段
     date_hierarchy = 'publish'  # 按日期月份筛选
     list_display_links = ['title', 'author']  # 设置带连接的字段
-
 
     actions = ['make_published', 'make_published_false', 
                 'make_delete_true', 'make_delete_false', 
@@ -81,7 +80,6 @@ class PostAdmin(admin.ModelAdmin):
 
     make_delete_false.short_description = "逻辑删除-否"
 
-
     # 对批量选择进行某些操作
     # 如果想对queryset中的对象一个一个修改或导出
     def action_func(self, request, queryset):
@@ -90,7 +88,7 @@ class PostAdmin(admin.ModelAdmin):
             pass
     action_func.short_description = "对批量选择进行某些操作"
 
-    # 重写了get_actions方法，只给了用户名为John批量删除对象的权限。
+    # 重写了 get_actions 方法，只给了用户名为 891953720 批量删除对象的权限。
     # 如果用户名不为 891953720,我们把 delete_selected 动作从下拉菜单中删除
     def get_actions(self, request):
         actions = super().get_actions(request)
@@ -118,17 +116,12 @@ class PostAdmin(admin.ModelAdmin):
     #             kwargs['choices'] += (('ready', 'Ready for deployment'),)
     #     return super().formfield_for_choice_field(db_field, request, **kwargs)
 
-
-
     # model form 保存方法  (重写)
     # def save_model(self, request, obj, form, change):
     #     if form.is_valid():
     #         if not form.cleaned_data['slug']:
     #             obj.slug = uuid4().hex[:10]
     #         super().save_model(request, obj, form, change)
-
-
-
 
     # Django的admin默认会展示所有对象。
     # 通过重写get_queryset方法，我们可以控制所需要获取的对象。
@@ -149,7 +142,6 @@ class PostAdmin(admin.ModelAdmin):
             return ','.join(tag_list)
         else:
             return format_html('<span style="color:red;">文章{}无标签</span>', obj.id,)
-
     show_tags.short_description = '标签'  # 设置表头
 
 
