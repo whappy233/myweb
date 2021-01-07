@@ -18,7 +18,7 @@ class Student(models.Model):
     hobbies = models.ManyToManyField(Hobby)
 
 
-from django.db.models import Avg, Count, Max, Min, Sum, F ,Q, FloatField
+from django.db.models import Avg, Count, Max, Min, Sum
 
 
 # 计算学生平均年龄, 返回字典。age和avg间是双下划线哦

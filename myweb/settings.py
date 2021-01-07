@@ -9,6 +9,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # 确保生产环境使用的密码并未用于其它环境，且未被提交至版本控制系统
 SECRET_KEY = 'jh*9r+p97rvldfkdnm6yvnm(m&ws$x)=squ!=rlu5s(uilhj+g'
+# Django文档建议不直接在settings.py里输入字符串
+# SECRET_KEY= os.environ['SECRET_KEY']
+
 
 # 不要在生产环境打开 debug 开关
 DEBUG = True
@@ -26,6 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',  # 会话框架
     'django.contrib.messages',  # 消息框架
     'django.contrib.staticfiles',  # 管理静态文件的框架
+
+    'django.contrib.humanize',
 
     'app_user.apps.AppUserConfig',
     'app_blog.apps.AppBlogConfig',
@@ -57,8 +62,6 @@ MIDDLEWARE = [
     # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', '')  # 获取真实ip
     # if x_forwarded_for: p = x_forwarded_for.split(',')[0]  # 所以这里是真实的ip
     # else: ip = request.META.get('REMOTE_ADDR')  # 这里获得代理ip
-
-
 ]
 
 # 表示Python模块，定义程序的根URL路径
@@ -131,13 +134,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'Asia/Shanghai'
+TIME_ZONE = 'Asia/Shanghai'  # 设置时区
 
-USE_I18N = True
+USE_I18N = True  # 默认为True，是否启用自动翻译系统
 
-USE_L10N = True
+USE_L10N = True  # 默认False，以本地化格式显示数字和时间
 
-USE_TZ = False
+USE_TZ = False  # 默认值True。若使用了本地时间，必须设为False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -194,3 +197,13 @@ CKEDITOR_CONFIGS = {
         'width': 'auto',
     }
 }
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # 引擎（默认）
+SESSION_COOKIE_NAME = "sessionid"  # Session的cookie保存在浏览器上时的key，
+SESSION_COOKIE_PATH = "/"  # Session的cookie保存的路径（默认）
+SESSION_COOKIE_DOMAIN = None  # Session的cookie保存的域名（默认）
+SESSION_COOKIE_SECURE = False  # 是否Https传输cookie（默认）
+SESSION_COOKIE_HTTPONLY = True  # 是否Session的cookie只支持http传输（默认）
+SESSION_COOKIE_AGE = 60 * 30  # Session的cookie失效日期（30min）（默认）
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # 是否关闭浏览器使得Session过期（默认）
+SESSION_SAVE_EVERY_REQUEST = True  # 是否每次请求都保存Session，默认修改之后才保存

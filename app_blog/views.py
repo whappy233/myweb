@@ -217,7 +217,7 @@ class PostDetailView(DetailView):
     # permission_required = ('polls.can_open', 'polls.can_edit')
 
 @method_decorator(login_required, name='dispatch')  # 此页面需要登录
-@method_decorator(permission_required('app_blog.change_post', 'app_blog:post_list'), name='dispatch')  # 此页面需要验证权限
+@method_decorator(permission_required('app_blog.delete_post', 'app_blog:post_list'), name='dispatch')  # 此页面需要验证权限
 class AdminPostListView(ListView):
     '''文章列表'''
     paginate_by = 10

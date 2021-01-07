@@ -3,7 +3,7 @@
 
 {% extends 'app_blog/base_blog.html' %}
 {% load  blog_tags %}
-
+{% load humanize %} 
 
 {% block title %}浩瀚星海{% endblock title %}
 
@@ -24,9 +24,11 @@
             <a href="{{post.get_absolute_url}}"> {{ post.title }} </a>
         </h4>
         <p class='date'>
-            作者 : <a href="{% url 'app_blog:post_list_by_author' post.author %}"> {{ post.author }}</a> <br>
-            发表日期 : {{ post.publish }}
-            {% format_time post.publish "%Y-%m-%d %H:%M" %}
+            作者 : <a href="{% url 'app_blog:post_list_by_author' post.author %}"> {{ post.author }}</a><br>
+            发表日期 : {{ post.publish }}<br>
+            {% format_time post.publish "%Y-%m-%d %H:%M" %}<br>
+            {{post.publish | naturaltime }}<br>
+
             阅读量 : {{ post.views }}
             分组 : <a href="{% url 'app_blog:category_detail' post.category.slug %}"> {{ post.category }}</a> 
 
