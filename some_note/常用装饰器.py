@@ -111,7 +111,7 @@ def my_view(request):
 # s_maxage=num_seconds
 
 'vary_on_headers'
-# 缺省情况下，Django 的缓存系统使用所请求的路径(如blog/article/1)来创建其缓存键。
+# 缺省情况下，Django 的缓存系统使用所请求的路径(如blog/post/1)来创建其缓存键。
 # 这意味着不同用户请求同样路径都会得到同样的缓存版本，不考虑客户端user-agent, cookie和语言配置的不同,
 #  除非你使用Vary头部通知缓存机制需要考虑请求头里的cookie和语言的不同。
 # 要在 Django 完成这项工作，可使用便利的 vary_on_headers 视图装饰器。

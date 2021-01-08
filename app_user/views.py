@@ -8,11 +8,11 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-
 from .forms import (EditForm, LoginForm, ProfileEditForm, PwdChangeForm,
                     RegistrationForm, UserEditForm, UserPhotoUploadForm)
 from .models import UserProfile
-from .utils import create_validate_code as CheckCode, crop_image
+from .utils import create_validate_code as CheckCode
+from .utils import crop_image, generate_vcode, send_email
 
 
 class CustomBackend(ModelBackend):
@@ -44,8 +44,13 @@ def check_code(request):
     except Exception as e:
         return HttpResponse("请求异常：{}".format(repr(e)))
 
-
+# 注册
 def register(request):
+    '''注册'''
+    # 如果登录用户访问注册页面，跳转到首页
+    if request.user.is_authenticated:
+        return redirect('app_blog:post_list')
+
     message = ''
     if request.method == 'POST':
 
@@ -69,7 +74,9 @@ def register(request):
         form = RegistrationForm()
     return render(request, 'app_user/registration.html', {'form': form, 'message': message})
 
+# 登录
 def login(request):
+    '''登录'''
     # 第三步
     # from .tasks import XXX
     # r = XXX.delay()  # 添加到Celery, 可通过 r.result获取结果
@@ -82,6 +89,10 @@ def login(request):
     # r.status      # PENDING, START, SUCCESS，任务当前的状态
     # r.successful  # 任务成功返回true
     # r.traceback  # 如果任务抛出了一个异常，可以获取原始的回溯信息
+
+    # 如果登录用户访问注册页面，跳转到首页
+    if request.user.is_authenticated:
+        return redirect('app_blog:post_list')
 
     next = request.GET.get('next', reverse('app_blog:post_list'))
 
@@ -97,19 +108,22 @@ def login(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user = auth.authenticate(username=username, password=password)
-            if user and user.is_active:
-                auth.login(request, user)
-                return redirect(next)
-
-
+            if user:
+                if user.is_active:
+                    auth.login(request, user)
+                    return redirect(next)
+                else:
+                    message = '用户被禁用！'
             else:
                 message = '密码错误。请重试。'
     else:
         form = LoginForm()
     return render(request, 'app_user/login.html', {'form': form, 'message': message})
 
+# 修改密码
 @login_required
 def change_pw(request):
+    '''修改密码'''
     message = ''
     if request.method == 'POST':
         form = PwdChangeForm(request.POST)
@@ -134,9 +148,63 @@ def change_pw(request):
 
     return render(request, 'app_user/change_pw.html', {'form': form, 'message': message})
 
+# Ajax 发送邮箱验证码
+def send_email_vcode(request):
+    if request.method == 'POST':
+        email = request.POST.get('email',None)
+        is_email = User.objects.filter(email=email)
+        if is_email.count() != 0:
+            vcode_str = generate_vcode()
+            # 发送邮件
+            send_status = send_email(to_email=email, vcode_str=vcode_str)
+            if send_status:
+                request.session['email'] = email
+                request.session['vcode'] = vcode_str
+                request.session.set_expiry(300)
+                print(f'邮箱验证码: {vcode_str}')
+                return JsonResponse({'status':True,'data':'发送成功'})
+            else:
+                return JsonResponse({'status':False,'data':'发送验证码出错，请重试！'})
+        else:
+            return JsonResponse({'status':False,'data':'电子邮箱不存在！'})
+    else:
+        return JsonResponse({'status':False,'data':'方法错误'})
 
+# 忘记密码
+def forget_pwd(request):
+    if request.method == 'GET':
+        return render(request, 'app_user/forget_pwd.html')
+    elif request.method == 'POST':
+        email = request.POST.get("email", None)  # 邮箱
+        vcode = request.POST.get("vcode", None)  # 验证码
+        new_pwd= request.POST.get('password', None)  # 密码
+        new_pwd_confirm = request.POST.get('confirm_password')
+        # 查询验证码和邮箱是否匹配
+        try:
+            s_data = request.session.get('vcode', None)
+            s_email = request.session.get('email', None)
+            if s_data and s_email:
+                if s_data==vcode and s_email==email:
+                    user = User.objects.get(email=email)
+                    user.set_password(new_pwd)
+                    user.save()
+                    request.session.flush()
+                    message = f"修改密码成功，去<a href='{reverse('app_user:login')}'>登录</a>！"
+                    return render(request, 'app_user/forget_pwd.html', {'msg': message})
+                else:
+                    message = "验证码错误"
+                    return render(request, 'app_user/forget_pwd.html', {'msg': message})
+            else:
+                message = "验证码过期"
+                return render(request, 'app_user/forget_pwd.html', {'msg': message})
+        except Exception as e:
+            message = "验证码错误"
+            return render(request,'app_user/forget_pwd.html', {'msg': message})
+
+# 编辑资料
 @login_required
 def profile(request):
+    '''资料编辑'''
     message = ''
     if request.method == 'POST':
         user_form = UserEditForm(data=request.POST, instance=request.user)
@@ -152,16 +220,16 @@ def profile(request):
     user_form = UserEditForm(instance=request.user)  # 初始化表单
     profile_form = ProfileEditForm(instance=request.user.profile)
     # profile_form = EditForm()
-    return render(request,
-                  'app_user/profile.html',
+    return render(request, 'app_user/profile.html',
                   context={
                       'user_form': user_form,
                       'profile_form': profile_form,
                       'message': message})
 
-
+# Ajax 上传头像
 @login_required
 def ajax_photo_upload(request):
+    '''头像上传'''
     user = request.user
     user_profile = get_object_or_404(UserProfile, user=user)
 

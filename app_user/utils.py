@@ -2,14 +2,15 @@
 # coding:utf-8
 
 
+import json
 import os
-import re
 import random
+import re
+from uuid import uuid4
 from django.conf import settings
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
-import json
-from uuid import uuid4
-
+import smtplib
+from email.mime.text import MIMEText
 
 
 _letter_cases = "abcdefghjkmnpqrstuvwxy"  # 小写字母，去除可能干扰的i，l，o，z
@@ -18,6 +19,77 @@ _numbers = ''.join(map(str, range(3, 10)))  # 数字
 init_chars = ''.join((_letter_cases, _upper_cases, _numbers))
 static_path = os.path.join(settings.BASE_DIR, "static")  # 静态文件路径
 font_path = os.path.join(static_path, 'font', "MONACO.TTF")  # 字体路径
+
+
+# 生成数字验证码
+def generate_vcode(n=6):
+    '''生成数字验证码'''
+    _num = ''.join(map(str, range(3, 10)))
+    vcode_str = ''.join(random.sample(_num, n))
+    return vcode_str
+
+# 发送电子邮件
+def send_email(to_email, vcode_str):
+    # email_enable = SysSetting.objects.get(types="basic",name='enable_email')
+    # if email_enable.value == 'on':
+    #     smtp_host = SysSetting.objects.get(types='email',name='smtp_host').value
+    #     send_emailer = SysSetting.objects.get(types='email', name='send_emailer').value
+    #     smtp_port = SysSetting.objects.get(types='email', name='smtp_port').value
+    #     username = SysSetting.objects.get(types='email', name='username').value
+    #     pwd = SysSetting.objects.get(types='email', name='pwd').value
+    #     ssl = SysSetting.objects.get(types='email',name='smtp_ssl').value
+    #     print(smtp_host,smtp_port,send_emailer,username,pwd)
+
+    #     msg_from = send_emailer  # 发件人邮箱
+    #     passwd = dectry(pwd)  # 发件人邮箱密码
+    #     msg_to = to_email  # 收件人邮箱
+    #     if ssl:
+    #         s = smtplib.SMTP_SSL(smtp_host, int(smtp_port))  # 发件箱邮件服务器及端口号
+    #     else:
+    #         s = smtplib.SMTP(smtp_host, int(smtp_port))
+    #     subject = "浩瀚星海 - 重置密码验证码"
+    #     content = f"你的验证码为：{vcode_str}，验证码30分钟内有效！"
+
+    #     msg = MIMEText(content, _subtype='html', _charset='utf-8')
+    #     msg['Subject'] = subject
+    #     msg['From'] = 'MrDoc助手[{}]'.format(msg_from)
+    #     msg['To'] = msg_to
+    #     try:
+    #         s.login(username, passwd)
+    #         s.sendmail(msg_from, msg_to, msg.as_string())
+    #         return True
+    #     except smtplib.SMTPException as e:
+    #         print(repr(e))
+    #         return False
+    #     finally:
+    #         s.quit()
+    # else:
+    #     return False
+    print('邮件发送成功')
+    return True
+
+
+# 加密
+def enctry(s):
+    k = settings.SECRET_KEY
+    encry_str = ""
+    for i,j in zip(s,k):
+        # i为字符，j为秘钥字符
+        temp = str(ord(i)+ord(j))+'_' # 加密字符 = 字符的Unicode码 + 秘钥的Unicode码
+        encry_str = encry_str + temp
+    return encry_str
+
+
+# 解密
+def dectry(p):
+    k = settings.SECRET_KEY
+    dec_str = ""
+    for i,j in zip(p.split("_")[:-1],k):
+        # i 为加密字符，j为秘钥字符
+        temp = chr(int(i) - ord(j)) # 解密字符 = (加密Unicode码字符 - 秘钥字符的Unicode码)的单字节字符
+        dec_str = dec_str+temp
+    return dec_str
+
 
 # 生成验证码图片
 def create_validate_code(size:tuple=(120, 30),

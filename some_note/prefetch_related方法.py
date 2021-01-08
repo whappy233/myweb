@@ -20,9 +20,9 @@ from django.shortcuts import render
 from app_blog.models import Post
 from taggit.managers import TaggableManager
 
-def article_list(request):
-    articles = Post.objects.all().select_related('category').prefetch_related('tags')
-    return render(request, 'blog/article_list.html', {'articles': articles, })
+def post_list(request):
+    posts = Post.objects.all().select_related('category').prefetch_related('tags')
+    return render(request, 'blog/post_list.html', {'posts': posts, })
 
 
 # 文章列表及每篇文章的tags对象名字信息
@@ -41,8 +41,8 @@ Post.objects.all().prefetch_related(
     Prefetch('tags', queryset=TaggableManager.objects.filter(name__startswith="P"))
 )
 
-# 文章列表及每篇文章的名字以P开头的tags对象信息, 放在article_p_tag列表
+# 文章列表及每篇文章的名字以P开头的tags对象信息, 放在post_p_tag列表
 Post.objects.all().prefetch_related(
     Prefetch('tags', queryset=TaggableManager.objects.filter(name__startswith="P")),
-to_attr='article_p_tag'
+to_attr='post_p_tag'
 )

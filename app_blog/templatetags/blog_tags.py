@@ -52,10 +52,10 @@ def my_tag(a, b, *args, **kwargs):
     return ...
 '''
 
-# <p>Published at at {% format_time article.pub_date "%Y-%m-%d %I:%M %p" %}.</p>
+# <p>Published at at {% format_time post.pub_date "%Y-%m-%d %I:%M %p" %}.</p>
 @register.tag(name="format_time")
 def do_format_time(parser, token):
-    # 获取 format_time article.pub_date "%Y-%m-%d %I:%M %p" 这一长串字符串作为token
+    # 获取 format_time post.pub_date "%Y-%m-%d %I:%M %p" 这一长串字符串作为token
     try:
         # split_contents（）知道不拆分带引号的字符串
         tag_name, date_to_be_formatted, format_string = token.split_contents()
@@ -107,7 +107,7 @@ def chinese_date_format(value):
         return value
 
 # {{ value | add_description:args }}
-# {{ article.title | add_description:"最热" }}时，标题后面会加上"最热"字样
+# {{ post.title | add_description:"最热" }}时，标题后面会加上"最热"字样
 @register.filter(name='add_description')
 def add_description(value, args):
     return "{} ({})".format(value, args)

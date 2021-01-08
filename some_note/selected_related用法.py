@@ -20,10 +20,10 @@ from django.utils import timezone
 
 
 # 在查询文章列表时同时一次性获取相关联的category对象信息，
-# 这样在模板中调用 {{ article.category.name }}时就不用再查询数据库了。
+# 这样在模板中调用 {{ post.category.name }}时就不用再查询数据库了。
 def post_list(request):
-    articles = Post.objects.all().select_related('category')
-    return render(request, 'blog/post_list.html', {'articles': articles, })
+    posts = Post.objects.all().select_related('category')
+    return render(request, 'blog/post_list.html', {'posts': posts, })
 
 # 获取id=13的文章对象同时，获取其相关category信息
 Post.objects.select_related('category').get(id=13)

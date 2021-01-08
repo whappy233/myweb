@@ -265,14 +265,14 @@ def recipe_add(request):
 
 # 整个formset的验证 ---------------------------------------------------------------------
 # 下面例子中用户一次性提交多篇文章标题后，我们需要检查title是否已重复。
-# 我们先定义一个BaseFormSet，然后使用formset=BaseArticleFormSet添加formset的验证。
+# 我们先定义一个BaseFormSet，然后使用formset=BasePostFormSet添加formset的验证。
 from django.forms import BaseFormSet
 from django.forms import formset_factory
-# from myapp.forms import ArticleForm
+# from myapp.forms import PostForm
 
-class BaseArticleFormSet(BaseFormSet):
+class BasePostFormSet(BaseFormSet):
     def clean(self):
-        """Checks that no two articles have the same title."""
+        """Checks that no two posts have the same title."""
         if any(self.errors):
             return
 
@@ -280,24 +280,24 @@ class BaseArticleFormSet(BaseFormSet):
         for form in self.forms:
             title = form.cleaned_data['title']
             if title in titles:
-                raise forms.ValidationError("Articles in a set must have distinct titles.")
+                raise forms.ValidationError("Posts in a set must have distinct titles.")
         titles.append(title)
 
-# ArticleFormSet = formset_factory(ArticleForm, formset=BaseArticleFormSet)
+# PostFormSet = formset_factory(PostForm, formset=BasePostFormSet)
 
 
 # 给Formset添加额外字段 ---------------------------------------------------------------------
 # 在BaseFormSet里我们不仅可以添加formset的验证，而且可以添加额外的字段，如下所示:
 from django.forms import BaseFormSet
 from django.forms import formset_factory
-# from myapp.forms import ArticleForm
+# from myapp.forms import PostForm
 
-class BaseArticleFormSet(BaseFormSet):
+class BasePostFormSet(BaseFormSet):
     def add_fields(self, form, index):
         super().add_fields(form, index)
         form.fields["my_field"] = forms.CharField()
           
-# ArticleFormSet = formset_factory(ArticleForm, formset=BaseArticleFormSet)
+# PostFormSet = formset_factory(PostForm, formset=BasePostFormSet)
 
 
 

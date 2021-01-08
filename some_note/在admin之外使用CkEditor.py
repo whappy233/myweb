@@ -19,7 +19,7 @@ INSTALLED_APPS = [
 # CKEDITOR_CONFIGS可以设置显示在工具栏toolbar的按钮。
 
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
-from .models import Article
+from .models import Post
 from django import forms
 from ckeditor_uploader.fields import RichTextUploadingField
 CKEDITOR_UPLOAD_PATH = 'blog_uploads/'
@@ -54,7 +54,7 @@ CKEDITOR_CONFIGS = {
 
 # 4. 模型中使用ckeditor
 # 我们只需将body的TextField改成RichTextUploadingField。如果你不需要上传图片，可以直接使用RichTextField。
-class Article(models.Model):
+class Post(models.Model):
     """文章模型"""
     STATUS_CHOICES = (
         ('d', '草稿'),
@@ -68,10 +68,10 @@ class Article(models.Model):
 
 # 5. 表单中使用ckeditor
 # 因为我们使用到了表单，所以表单的输入widget还需要改为CKEditorUploadingWidget.
-class ArticleForm(forms.ModelForm):
+class PostForm(forms.ModelForm):
 
     class Meta:
-        model = Article
+        model = Post
         exclude = ['author', 'views', 'slug', 'pub_date']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
