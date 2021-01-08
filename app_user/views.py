@@ -5,8 +5,7 @@ from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.http import HttpResponse, JsonResponse
-from django.http.request import HttpRequest
+from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
@@ -222,8 +221,9 @@ def profile(request):
         user_form = UserEditForm(instance=request.user)  # 初始化表单
         profile_form = ProfileEditForm(instance=request.user.profile)
     except Exception as e:
-        print(e)
-        return HttpRequest('请检查是否关联了UserProfile!')
+        err_info = f'ERROR Info: {e}<br>请检查是否关联了UserProfile(OneToOneField)'
+        return HttpResponse(err_info)
+
     return render(request, 'app_user/profile.html',
                   context={
                       'user_form': user_form,

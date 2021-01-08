@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'app_blog.apps.AppBlogConfig',
     'app_sheet.apps.AppSheetConfig',
     'app_gallery.apps.AppGalleryConfig',
+    'app_admin.apps.AppAdminConfig',
 
     'django.contrib.sites',  # 网站地图App1
     'django.contrib.sitemaps',  # 网站地图App2

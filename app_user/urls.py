@@ -10,10 +10,10 @@ urlpatterns = [
     path('register/', views.register, name='register'),  #注册
     path('change_pw/', views.change_pw, name='change_pw'),  # 修改密码
     path('forget_pwd/', views.forget_pwd, name='forget_pwd'), # 忘记密码
-    path('send_email_vcode/', views.send_email_vcode, name='send_email_vcode'), # 忘记密码发送邮件验证码
-    path('profile/', views.profile, name='profile'),
-    path('check_code/', views.check_code, name='check_code'),
+    path('send_email_vcode/', views.send_email_vcode, name='send_email_vcode'), # ajax 发送邮件验证码
+    path('profile/', views.profile, name='profile'),  # 资料编辑
+    path('check_code/', views.check_code, name='check_code'),  # 刷新验证吗
 
-    path('profile/ajax/photo/', views.ajax_photo_upload, name='ajax_photo_upload'),
+    path('profile/ajax/photo/', views.ajax_photo_upload, name='ajax_photo_upload'),  # ajax 上传头像
 
 ]

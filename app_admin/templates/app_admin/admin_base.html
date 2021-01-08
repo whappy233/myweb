@@ -1,0 +1,142 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} - 后台管理 - 觅道文档MrDoc</title>
+    <link rel="icon" href="{% static 'search/mrdoc_logo_300.png' %}" sizes="192x192" />
+    <link href="{% static 'layui/css/layui.css' %}?version={{mrdoc_version}}" rel="stylesheet">
+    <link href="{% static 'mrdoc/mrdoc-admin.css' %}?version={{mrdoc_version}}" rel="stylesheet">
+    <style>
+
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">
+            <a class="logo" href="{% url 'pro_list' %}">  
+                <h1 style="color: white;">
+                    <strong>MrDoc</strong>
+                    <span style="font-size: 14px;" class="layui-badge-rim">后台管理</span>
+                </h1>
+        </a>
+        </div>
+        <ul class="layui-nav layui-layout-right">
+          <li class="layui-nav-item">
+            <a href="javascript:void(0);">
+              <i class="layui-icon layui-icon-username"></i> {{request.user.username}}
+            </a>
+            <dl class="layui-nav-child">
+              <!-- <dd><a href="">基本资料</a></dd> -->
+              <dd><a href="{% url 'manage_overview' %}">个人中心</a></dd>
+              <dd><a href="{% url 'logout' %}">退出登录</a></dd>
+            </dl>
+          </li>
+        </ul>
+    </div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+          <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+          <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+            <li class="layui-nav-item layui-nav-itemed">
+              <a href="{% url 'project_manage' %}"><i class="layui-icon layui-icon-list"></i> 文集管理</a>
+            </li>
+            <li class="layui-nav-item layui-nav-itemed">
+              <a href="{% url 'doc_manage' %}"><i class="layui-icon layui-icon-file-b"></i> 文档管理</a>
+            </li>
+              <li class="layui-nav-item layui-nav-itemed">
+              <a href="{% url 'doctemp_manage' %}"><i class="layui-icon layui-icon-template"></i> 文档模板管理</a>
+            </li>
+              {% if request.user.is_superuser %}
+               <li class="layui-nav-item layui-nav-itemed">
+                  <a href="{% url 'user_manage' %}"><i class="layui-icon layui-icon-user"></i> 用户管理</a>
+               </li>
+              <li class="layui-nav-item layui-nav-itemed">
+                  <a href="{% url 'register_code_manage' %}"><i class="layui-icon layui-icon-engine"></i> 注册码管理</a>
+               </li>
+              <li class="layui-nav-item layui-nav-itemed">
+                  <a href="{% url 'sys_setting' %}"><i class="layui-icon layui-icon-set-sm"></i> 站点设置</a>
+               </li>
+              <li class="layui-nav-item layui-nav-itemed">
+                <a href="http://mrdoc.zmister.com/project-7/" target="_blank"><i class="layui-icon layui-icon-tips"></i> 配置手册</a>
+              </li>
+              <li class="layui-nav-item layui-nav-itemed">
+                <a href="http://mrdoc.zmister.com/project-54/" target="_blank"><i class="layui-icon layui-icon-help"></i> 使用手册</a>
+              </li>
+              {% endif %}
+          </ul>
+        </div>
+      </div>
+
+      <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            {% if debug %}
+                <blockquote class="layui-elem-quote">当前站点处于Debug调试模式</blockquote>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+      </div>
+
+      <div class="layui-footer" style="text-align:center;font-size: 12px;">
+        <!-- 底部固定区域 -->
+          © <a href="https://gitee.com/zmister/MrDoc" target="_blank">MrDoc 2019-2020</a>&nbsp;-&nbsp;
+          当前版本：<a href="https://gitee.com/zmister/MrDoc/tree/{{mrdoc_version}}/" target="_blank">{{mrdoc_version}}</a>&nbsp;-&nbsp;
+          <a href="https://github.com/zmister2016/MrDoc" target="_blank">GitHub</a>&nbsp;-&nbsp;
+          <a href="https://gitee.com/zmister/MrDoc" target="_blank">码云</a>&nbsp;-&nbsp;
+          <a class="register-link" id="dashang" href="javascript:void(0);">打赏作者</a>
+      </div>
+</div>
+
+<script src="{% static 'jquery/3.1.1/jquery.min.js' %}"></script>
+<script src="{% static 'layui/layui.all.js' %}"></script>
+<script>
+    var form = layui.form;
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+    // 显示打赏图片
+  $("#dashang").click(function(r){
+      var layer = layui.layer;
+      layer.open({
+          type: 1,
+          title: false,
+          closeBtn: 0,
+          area: ['400px','400px'],
+          shadeClose: true,
+          content: $('#dashang_img')
+        });
+  })
+</script>
+{% block custom_script %}
+{% endblock %}
+</body>
+<!-- 打赏选项卡模板 -->
+<div id="dashang_img" style="display: none;">
+  <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+      <ul class="layui-tab-title">
+        <li class="layui-this">微信</li>
+        <li>支付宝</li>
+        <li>QQ支付</li>
+        <li>PayPal</li>
+      </ul>
+      <div class="layui-tab-content" style="height: 100px;">
+        <div class="layui-tab-item layui-show" align='center'>
+          <img src="{% static 'dashang/dashang_wx.webp' %}" style="width: 300px;height: auto;" />
+        </div>
+        <div class="layui-tab-item" align='center'>
+          <img src="{% static 'dashang/dashang_alipay.webp' %}" style="width: 300px;height: auto;" />
+        </div>
+        <div class="layui-tab-item" align='center'>
+          <img src="{% static 'dashang/dashang_qq.webp' %}" style="width: 300px;height: auto;" />
+        </div>
+        <div class="layui-tab-item" align='center'>
+          <a href="https://paypal.me/zmister" target="_blank">
+              <img src="{% static 'dashang/dashang_paypal.png' %}" style="width: 280px;height: auto;" />
+          </a>
+        </div>
+      </div>
+    </div> 
+</div>
+</html>
