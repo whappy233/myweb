@@ -30,7 +30,6 @@ class TitleKeywordFilter(admin.SimpleListFilter):
             return queryset.filter(title__icontains='django')
 
 
-
 # admin.site.register(Post, PostAdmin)  # 注册方式1
 @admin.register(Post)  # 注册方式2（使用包装）
 class PostAdmin(admin.ModelAdmin):
@@ -143,7 +142,6 @@ class PostAdmin(admin.ModelAdmin):
         else:
             return format_html('<span style="color:red;">文章{}无标签</span>', obj.id,)
     show_tags.short_description = '标签'  # 设置表头
-
 
 
 # admin.site.register(Category, CategoryAdmin)  # 注册方式1

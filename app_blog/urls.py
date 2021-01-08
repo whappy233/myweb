@@ -14,49 +14,10 @@ urlpatterns = [
     path('tags/<slug:tag_slug>', views.post_list, name='post_list_by_tag'),  # 某个标签下的所有文章
     path('search/', views.post_search, name='post_search'),   # 搜索
     path('feed/', LatestPostsFeed(), name='post_feed'),  # 订阅链接
+
     path('ajax_app_test/', views.ajax_test, name='ajax_app_test'),  # ajax 请求
     path('blog/like/', views.blog_like, name='blog_like'),  # 点赞 +1 (ajax)
 
-    path('blog/admin/', views.AdminPostListView.as_view(), name='admin_post_list'),  # 所有文章列表
-    path('blog/create/', views.PostCreateView.as_view(), name='blog_create'),  # 创建文章
-    # path('post/admin/chnage/<int:year>/<int:month>/<int:day>/<slug:post>/', views.AdminPublishedPostListView.as_view(), name='admin_post_list'),
 ]
 
 
-# urlpatterns = [
-#     # 所有文章列表 - 不需登录
-#     path('', views.PostListView.as_view(), name='post_list'),
-
-#     # 展示文章详情 - 登录/未登录均可
-#     path(r'post/<int:year>/<int:month>/<int:day>/<slug:post>/', views.PostDetailView.as_view(), name='post_detail'),
-
-#     # 草稿箱 - 需要登录
-#     path('draft/', views.PostDraftListView.as_view(), name='post_draft_list'),
-
-#     # 已发表文章列表(含编辑) - 需要登录
-#     path('admin/', views.PublishedPostListView.as_view(), name='published_post_list'),
-
-#     # 更新文章- 需要登录
-#     re_path(r'^post/(?P<pk>\d+)/(?P<slug1>[-\w]+)/update/$', views.PostUpdateView.as_view(), name='post_update'),
-#     # 创建文章 - 需要登录
-#     re_path(r'^post/create/$', views.PostCreateView.as_view(), name='post_create'),
-
-#     # 发表文章 - 需要登录
-#     re_path(r'^post/(?P<pk>\d+)/(?P<slug1>[-\w]+)/publish/$', views.post_publish, name='post_publish'),
-
-#     # 删除文章 - 需要登录
-#     re_path(r'^post/(?P<pk>\d+)/(?P<slug1>[-\w]+)/delete$', views.PostDeleteView.as_view(), name='post_delete'),
-
-#     # 展示类别列表
-#     # re_path(r'^category/$', views.CategoryListView.as_view(), name='category_list'),
-
-#     # 展示类别详情
-#     # re_path(r'^category/(?P<slug>[-\w]+)/$', views.CategoryDetailView.as_view(), name='category_detail'),
-
-#     # 展示Tag详情
-#     # re_path(r'^tags/(?P<slug>[-\w]+)/$', views.TagDetailView.as_view(), name='tag_detail'),
-
-#     # 搜索文章
-#     re_path(r'^search/$', views.post_search, name='post_search'),
-
-# ]

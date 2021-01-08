@@ -1,22 +1,24 @@
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import User
+from django.contrib.postgres.search import (SearchQuery, SearchRank,
+                                            SearchVector, TrigramSimilarity)
 from django.core import paginator
-from django.http.request import HttpRequest
-from django.shortcuts import render, get_object_or_404, redirect
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger  # 分页
+from django.core.mail import send_mail
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator  # 分页
+from django.db.models import Count, Q
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth.decorators import login_required, permission_required
-from django.utils import timezone
-from django.contrib.auth.models import User
-from .models import Post, Comment, Category
-from django.http import HttpResponse, JsonResponse, Http404
-from .forms import EmailPostForm, CommentForm, SearchForm, PostForm
-from django.core.mail import send_mail
+from django.views.generic import DetailView, ListView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from taggit.models import Tag  # 导入标签模型
-from django.db.models import Count, Q
-from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, DetailView
-from django.views.generic.edit import UpdateView, CreateView, DeleteView
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
+
+from .forms import CommentForm, EmailPostForm, PostForm, SearchForm
+from .models import Category, Comment, Post
+
 
 # 类视图
 # 所有文章
@@ -188,113 +190,6 @@ class PostDetailView(DetailView):
         obj = super().get_object(queryset=queryset)
         obj.viewed()
         return obj
-
-
-
-# Admin -------------------------------------------------
-
-# 所有文章列表
-# post/admin/
-# 权限名一般由app名(app_label)，权限动作和模型名组成。以 app_blog 应用为例，Django为 Post 模型自动创建的4个可选权限名分别为:
-# 查看文章(view): app_blog.view_post
-# 创建文章(add): app_blog.add_post
-# 更改文章(change): app_blog.change_post
-# 删除文章(delete): app_blog.delete_post
-# 在视图中可以使用 user.has_perm() 方法来判断一个用户是不是有相应的权限, 
-# user_A.has_perm('app_blog.add_post')
-# user_A.has_perm('app_blog.change_post)
-
-# 最快捷的方式是使用 @permission_required 这个装饰器
-# permission_required(perm, login_url=None, raise_exception=False)
-# raise_exception=True, 会直接返回403无权限的错误
-# 没有权限将会跳转到 login_url='app_blog:post_list'
-
-# 如果你使用基于类的视图(Class Based View), 可以继承PermissionRequiredMixin这个类
-# from django.contrib.auth.mixins import PermissionRequiredMixin
-# class MyView(PermissionRequiredMixin, View):
-    # permission_required = 'polls.can_vote'
-    # Or multiple of permissions:
-    # permission_required = ('polls.can_open', 'polls.can_edit')
-
-@method_decorator(login_required, name='dispatch')  # 此页面需要登录
-@method_decorator(permission_required('app_blog.delete_post', 'app_blog:post_list'), name='dispatch')  # 此页面需要验证权限
-class AdminPostListView(ListView):
-    '''文章列表'''
-    paginate_by = 10
-    template_name = 'admin/post_list.html'
-
-    # def get(self, request, *args, **kwargs):
-
-    #     show_publish = self.request.GET.get('draft')
-    #     if show_publish:
-    #         posts = Post.objects.filter(status='p').order_by('-publish')
-    #     else:
-    #         posts = Post.objects.filter(status='d').order_by('-publish')
-    #     paginator = Paginator(posts, 5)
-    #     page = self.request.GET.get('page')
-    #     page_obj = paginator.get_page(page)
-    #     context = {
-    #         'page_obj': page_obj,
-    #         'show_publish': show_publish
-    #     }
-        # return render(request, 'admin/post_list.html', context)
-
-    def get_queryset(self):
-            return Post.objects.all().order_by('-publish')
-
-
-# 创建文章
-# blog/create/
-@method_decorator(login_required, name='dispatch')
-class PostCreateView(CreateView):
-    '''创建文章'''
-    model = Post
-    form_class = PostForm
-    template_name = 'admin/blog_create.html'
-    success_url = reverse_lazy('app_blog:admin_post_list')  # 成功后跳转地址
-
-    # Associate form.instance.user with self.request.user
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        # print(form.cleaned_data)
-        return super().form_valid(form)
-
-
-# 修改文章
-@method_decorator(login_required, name='dispatch')
-class PostUpdateView(UpdateView):
-    '''修改文章'''
-    model = Post
-    form_class = PostForm
-    template_name = 'app_blog/blog_update_form.html'
-
-    def get_object(self, queryset=None):
-        obj = super().get_object(queryset=queryset)
-        if obj.author != self.request.user:
-            raise Http404()
-        return obj
-
-# 删除文章
-@method_decorator(login_required, name='dispatch')
-class PostDeleteView(DeleteView):
-    '''删除文章'''
-    model = Post
-    success_url = reverse_lazy('app_blog:post_list')
-
-    def get_object(self, queryset=None):
-        obj = super().get_object(queryset=queryset)
-        if obj.author != self.request.user:
-            raise Http404()
-        return obj
-
-# 发表文章
-@login_required()
-def post_publish(request, pk, slug1):
-    '''发表文章'''
-    post = get_object_or_404(Post, pk=pk, author=request.user)
-    post.to_publish()
-    return redirect(reverse("app_blog:post_detail", args=[str(pk), slug1]))
-
 
 
 # From 表单 (分享文章)
