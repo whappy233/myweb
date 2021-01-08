@@ -22,6 +22,6 @@ urlpatterns = [
     # path('send_email_vcode/',views.send_email_vcode,name='send_email_vcode'), # 忘记密码发送邮件验证码
     # path('admin_register_code/',views.admin_register_code,name='register_code_manage'), # 注册邀请码管理
 
-    path('blog/', views.AdminArticleListView.as_view(), name='admin_blog_list'),  # 所有文章列表
+    path('blog/', views.AdminArticleListView.as_view(), name='blog_list'),  # 所有文章列表
     path('create_blog/', views.ArticleCreateView.as_view(), name='create_blog'),  # 创建文章
 ]

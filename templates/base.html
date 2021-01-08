@@ -39,7 +39,7 @@
             <a href="{% url 'app_user:logout' %}">退出登陆</a>
             <a href="{% url 'app_user:change_pw' %}">修改密码</a>
             {% if request.user.is_superuser %}
-            <a href="{% url 'app_admin:admin_blog_list' %}">ADMIN</a>
+            <a href="{% url 'app_admin:blog_list' %}">ADMIN</a>
             <a href="/admin">Django 管理</a>
             {% endif %}
             {% else %}
