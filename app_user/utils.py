@@ -225,7 +225,7 @@ def crop_image(old_photo, file, data, uid):
         crop_im.save(file_path)
 
     # 如果头像不是默认头像，删除老头像图片, 节省空间
-    if not old_photo == os.path.join("users", "default.jpeg"):
+    if not old_photo == os.path.join("users", "default.png"):
         current_photo_path = os.path.join("media", 'users', str(uid), "photo", os.path.basename(old_photo.url))
         os.remove(current_photo_path)
 

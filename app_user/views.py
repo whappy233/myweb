@@ -1,10 +1,12 @@
 import io
+
 from django.contrib import auth
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
+from django.http.request import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
@@ -140,7 +142,7 @@ def change_pw(request):
             if user:
                 user.set_password(pw1)
                 user.save()
-                return redirect('app_blog:post_list')
+                return redirect('app_user:login')
             else:
                 message = '密码错误。请重试。'
     else:
@@ -216,10 +218,12 @@ def profile(request):
             message = '信息修改成功'
         else:
             message = '修改失败'
-
-    user_form = UserEditForm(instance=request.user)  # 初始化表单
-    profile_form = ProfileEditForm(instance=request.user.profile)
-    # profile_form = EditForm()
+    try:
+        user_form = UserEditForm(instance=request.user)  # 初始化表单
+        profile_form = ProfileEditForm(instance=request.user.profile)
+    except Exception as e:
+        print(e)
+        return HttpRequest('请检查是否关联了UserProfile!')
     return render(request, 'app_user/profile.html',
                   context={
                       'user_form': user_form,

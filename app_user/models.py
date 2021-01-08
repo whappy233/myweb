@@ -22,7 +22,7 @@ def user_directory_path(instance, filename):
 # UserProfile只是对User模型的扩展, 与User是1对1的关系
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    photo = models.ImageField('头像', upload_to=user_directory_path, blank=True, default=os.path.join("users", "default.jpeg"))
+    photo = models.ImageField('头像', upload_to=user_directory_path, blank=True, default=os.path.join("users", "default.png"))
     org = models.CharField('组织', max_length=128, blank=True)
     telephone = models.CharField('手机号', max_length=50, blank=True)
     mod_date = models.DateTimeField('最近修改', auto_now=True)
