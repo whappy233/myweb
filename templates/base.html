@@ -19,10 +19,10 @@
 <body>
     {# head 头 #}
     <div id="header">
-        <span class="logo"><a href="{% url 'app_blog:post_list' %}">浩瀚星海</a></span>
+        <span class="logo"><a href="{% url 'app_blog:article_list' %}">浩瀚星海</a></span>
         <ul class="menu">
             <li {% ifequal section "blog" %}class="selected" {% endifequal %}>
-                <a href="{% url 'app_blog:post_list' %}">Blog</a>
+                <a href="{% url 'app_blog:article_list' %}">Blog</a>
             </li>
             <li {% ifequal section "gallery" %}class="selected" {% endifequal %}>
                 <a href="{% url 'app_gallery:gallery_list' %}">Gallery</a>

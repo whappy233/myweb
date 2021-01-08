@@ -1,9 +1,0 @@
-{#   最近更新模板(自定义标签返回)   #}
-
-<ul>
-    {% for  post in latest_posts %}
-        <li>
-            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
-        </li>
-    {% endfor %}
-</ul>

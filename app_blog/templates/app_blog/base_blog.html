@@ -6,15 +6,15 @@
 
 
 {% block sidebar %}
-<p><a href="{% url 'app_blog:post_feed' %}">订阅博客</a></p>
+<p><a href="{% url 'app_blog:article_feed' %}">订阅博客</a></p>
 <h3> 最近更新 </h3>
-{% show_latest_posts 5 %}
+{% show_latest_articles 5 %}
 <h3>最多评论文章</h3>
-{% get_most_commented_posts as most_commented_posts %}
+{% get_most_commented_articles as most_commented_articles %}
 <ul>
-    {% for post in most_commented_posts %}
+    {% for article in most_commented_articles %}
         <li>
-            <a href="{{ post.get_absolute_url }}"> {{ post.title }} </a>
+            <a href="{{ article.get_absolute_url }}"> {{ article.title }} </a>
         </li>
     {% endfor %}
 </ul>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Comment, Category
+from .models import Article, Comment, Category
 from uuid import uuid4
 from django.utils.html import format_html
 from django.utils import timezone
@@ -30,9 +30,9 @@ class TitleKeywordFilter(admin.SimpleListFilter):
             return queryset.filter(title__icontains='django')
 
 
-# admin.site.register(Post, PostAdmin)  # 注册方式1
-@admin.register(Post)  # 注册方式2（使用包装）
-class PostAdmin(admin.ModelAdmin):
+# admin.site.register(Article, ArticleAdmin)  # 注册方式1
+@admin.register(Article)  # 注册方式2（使用包装）
+class ArticleAdmin(admin.ModelAdmin):
     list_display = ['show_tags', 'title', 'author', 'created', 'publish', 'updated', 'status', 'is_delete', 'slug']  # 显示字段
     search_fields = ['title', 'body']  # 搜索字段
     list_filter = [TitleKeywordFilter, 'publish', 'created', 'updated', 'status']  # 过滤字段
@@ -157,10 +157,10 @@ class CategoryAdmin(admin.ModelAdmin):
 # admin.site.register(Comment)  # 注册方式1
 @admin.register(Comment)  # 注册方式2（使用包装）
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'post', 'body', 'created', 'updated', 'active']  # 显示字段
+    list_display = ['name', 'email', 'article', 'body', 'created', 'updated', 'active']  # 显示字段
     search_fields = ['name', 'email', 'body']  # 搜索字段
     list_filter = ['created', 'updated', 'active']  # 过滤器
-    # raw_id_fields = ['post',]  # 下拉框改为微件
+    # raw_id_fields = ['article',]  # 下拉框改为微件
 
 
 

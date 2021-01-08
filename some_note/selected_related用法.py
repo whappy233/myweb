@@ -14,30 +14,30 @@ select_related将会根据外键关系（注意: 仅限单对单和单对多关�
 
 
 from django.shortcuts import render
-from app_blog.models import Post
+from app_blog.models import Article
 from django.utils import timezone
 
 
 
 # 在查询文章列表时同时一次性获取相关联的category对象信息，
-# 这样在模板中调用 {{ post.category.name }}时就不用再查询数据库了。
-def post_list(request):
-    posts = Post.objects.all().select_related('category')
-    return render(request, 'blog/post_list.html', {'posts': posts, })
+# 这样在模板中调用 {{ article.category.name }}时就不用再查询数据库了。
+def article_list(request):
+    articles = Article.objects.all().select_related('category')
+    return render(request, 'blog/article_list.html', {'articles': articles, })
 
 # 获取id=13的文章对象同时，获取其相关category信息
-Post.objects.select_related('category').get(id=13)
+Article.objects.select_related('category').get(id=13)
 
 # 获取id=13的文章对象同时，获取其相关作者名字信息
-Post.objects.select_related('author__name').get(id=13)
+Article.objects.select_related('author__name').get(id=13)
 
 # 获取id=13的文章对象同时，获取其相关category和相关作者名字信息。下面方法等同。
-Post.objects.select_related('category', 'author__name').get(id=13)
-Post.objects.select_related('category').select_related('author__name').get(id=13)
+Article.objects.select_related('category', 'author__name').get(id=13)
+Article.objects.select_related('category').select_related('author__name').get(id=13)
 
 # 使用select_related()可返回所有相关主键信息。all()非必需。
-Post.objects.all().select_related()
+Article.objects.all().select_related()
 
-# 获取 Post 信息同时获取blog信息。filter方法和selected_related方法顺序不重要。
-Post.objects.filter(pub_date__gt=timezone.now()).select_related('blog')
-Post.objects.select_related('blog').filter(pub_date__gt=timezone.now())
+# 获取 Article 信息同时获取blog信息。filter方法和selected_related方法顺序不重要。
+Article.objects.filter(pub_date__gt=timezone.now()).select_related('blog')
+Article.objects.select_related('blog').filter(pub_date__gt=timezone.now())

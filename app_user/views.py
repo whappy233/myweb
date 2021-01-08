@@ -50,7 +50,7 @@ def register(request):
     '''注册'''
     # 如果登录用户访问注册页面，跳转到首页
     if request.user.is_authenticated:
-        return redirect('app_blog:post_list')
+        return redirect('app_blog:article_list')
 
     message = ''
     if request.method == 'POST':
@@ -93,9 +93,9 @@ def login(request):
 
     # 如果登录用户访问注册页面，跳转到首页
     if request.user.is_authenticated:
-        return redirect('app_blog:post_list')
+        return redirect('app_blog:article_list')
 
-    next = request.GET.get('next', reverse('app_blog:post_list'))
+    next = request.GET.get('next', reverse('app_blog:article_list'))
 
     message = ''
     if request.method == 'POST':

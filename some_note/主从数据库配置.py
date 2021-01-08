@@ -133,7 +133,7 @@ class AppDBRouter:
 # 在使用多数据库时，我们可以使用 using 方法来手动选择需要读写的数据库，如下所示:
 
 Aricle.objects.using('db1').all()
-post_object.save(using='db2')
+article_object.save(using='db2')
  
 
 # Django中使用多数据库注意事项:

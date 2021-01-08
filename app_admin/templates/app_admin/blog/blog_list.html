@@ -13,7 +13,7 @@
     </div>
 </div>
 
-<form action="{% url 'app_blog:post_search' %}" role="search" method="get">
+<form action="{% url 'app_blog:article_search' %}" role="search" method="get">
     {% csrf_token %}
     <div class="input-group col-md-12">
         <input type="text" name="q" id="q" class="form-control" placeholder="搜索文章">
@@ -39,16 +39,16 @@
     </thead>
     <tbody>
         {% if page_obj %}
-        {% for post in page_obj %}
+        {% for article in page_obj %}
         <tr>
-            <td>{{ post.title }}</td>
-            <td>{{ post.category.name }}</td>
-            <td>{{ post.publish | date:"Y-m-d" | default:"-" }}</td>
+            <td>{{ article.title }}</td>
+            <td>{{ article.category.name }}</td>
+            <td>{{ article.publish | date:"Y-m-d" | default:"-" }}</td>
 
-            {% if post.publish %}
-            <td><a href="{{ post.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">☺︎</span></a></td>
-            <td><a href="{{ post.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">✎</span></a></td>
-            <td><a href="{{ post.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">✗</span></a></td>
+            {% if article.publish %}
+            <td><a href="{{ article.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">☺︎</span></a></td>
+            <td><a href="{{ article.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">✎</span></a></td>
+            <td><a href="{{ article.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">✗</span></a></td>
             {% else %}
             <td>-</td><td>-</td><td>-</td>
             {% endif %}

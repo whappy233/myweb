@@ -3,34 +3,34 @@
 {% block content %}
 
 <p>类别:
-    {% if post.category.parent_category %}
-    <a href="{% url 'blog:category_detail' post.category.parent_category.slug %}">{{
-        post.category.parent_category.name }}</a> /
+    {% if article.category.parent_category %}
+    <a href="{% url 'blog:category_detail' article.category.parent_category.slug %}">{{
+        article.category.parent_category.name }}</a> /
     {% endif %}
-    <a href="{% url 'blog:category_detail' post.category.slug %}">{{ post.category }}</a>
+    <a href="{% url 'blog:category_detail' article.category.slug %}">{{ article.category }}</a>
 </p>
 
 
-<h3>{{ post.title }}
-    {% if post.status == "d" %}
+<h3>{{ article.title }}
+    {% if article.status == "d" %}
     (草稿)
     {% endif %}
 </h3>
-{% if post.status == "p" %}
-<p>发布于{{ post.pub_date | date:"Y-m-d" }} 浏览{{ post.views }}次</p>
+{% if article.status == "p" %}
+<p>发布于{{ article.pub_date | date:"Y-m-d" }} 浏览{{ article.views }}次</p>
 {% endif %}
-<p>{{ post.body }}</p>
+<p>{{ article.body }}</p>
 <p>标签:
-    {% for tag in post.tags.all %}
+    {% for tag in article.tags.all %}
     <a href="{% url 'blog:tag_detail' tag.slug %}">{{ tag.name }}</a>,
     {% endfor %}
 </p>
 
-{% if post.author == request.user %}
-{% if post.status == "d" %}
-<a href="{% url 'blog:post_publish' post.id post.slug %}">发布</a> |
-{% endif %}<a href="{% url 'blog:post_update' post.id post.slug %}">编辑</a> |
-<a href="{% url 'blog:post_delete' post.id post.slug %}">删除</a>
+{% if article.author == request.user %}
+{% if article.status == "d" %}
+<a href="{% url 'blog:article_publish' article.id article.slug %}">发布</a> |
+{% endif %}<a href="{% url 'blog:article_update' article.id article.slug %}">编辑</a> |
+<a href="{% url 'blog:article_delete' article.id article.slug %}">删除</a>
 {% endif %}
 
 {% endblock %}

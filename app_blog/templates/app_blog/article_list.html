@@ -19,25 +19,25 @@
     <p>博客共有 {{ page_obj.paginator.count }} 篇 </p>
     {% endif %}
 
-    {% for post in page_obj %}
+    {% for article in page_obj %}
         <h4>
-            <a href="{{post.get_absolute_url}}"> {{ post.title }} </a>
+            <a href="{{article.get_absolute_url}}"> {{ article.title }} </a>
         </h4>
         <p class='date'>
-            作者 : <a href="{% url 'app_blog:post_list_by_author' post.author %}"> {{ post.author }}</a><br>
-            发表日期 : {{ post.publish }}<br>
-            {% format_time post.publish "%Y-%m-%d %H:%M" %}<br>
-            {{post.publish | naturaltime }}<br>
+            作者 : <a href="{% url 'app_blog:article_list_by_author' article.author %}"> {{ article.author }}</a><br>
+            发表日期 : {{ article.publish }}<br>
+            {% format_time article.publish "%Y-%m-%d %H:%M" %}<br>
+            {{article.publish | naturaltime }}<br>
 
-            阅读量 : {{ post.views }}
-            分组 : <a href="{% url 'app_blog:category_detail' post.category.slug %}"> {{ post.category }}</a> 
+            阅读量 : {{ article.views }}
+            分组 : <a href="{% url 'app_blog:category_detail' article.category.slug %}"> {{ article.category }}</a> 
 
-            {% with post.tags.all as tags%}
+            {% with article.tags.all as tags%}
                 {% if tags %}
                 <span class='tags'>
                     标签:
                     {% for tag in tags %}
-                        <a href="{% url 'app_blog:post_list_by_tag' tag.slug %}">
+                        <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">
                             {{ tag.name }}</a>
                         {% if not forloop.last %} , {% endif %}
                     {% endfor %}
@@ -46,8 +46,8 @@
             {% endwith %}
 
         </p>
-        {% comment %} {{ post.body|truncatewords:10|linebreaks }} {% endcomment %}
-        {{ post.body|markdown|truncatewords_html:30 }}
+        {% comment %} {{ article.body|truncatewords:10|linebreaks }} {% endcomment %}
+        {{ article.body|markdown|truncatewords_html:30 }}
     {% endfor %}
 
     {# 下面使用 类 视图 django 中的通用视图 ListView 将所选页面传递到变量 page_obj 中  #}

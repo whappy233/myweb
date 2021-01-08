@@ -3,7 +3,7 @@ from django.urls import path, include, re_path
 
 # 添加网站地图
 from django.contrib.sitemaps.views import sitemap
-from app_blog.sitemaps import PostSitemap
+from app_blog.sitemaps import ArticleSitemap
 
 from django.conf import settings
 from django.views.static import serve
@@ -23,6 +23,6 @@ urlpatterns = [
 
     re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
 
-    path('sitemap.xml', sitemap, {'sitemaps':{'posts':PostSitemap}}, name='django.contrib.sitemaps.views.sitemap'),  # 网站地图
+    path('sitemap.xml', sitemap, {'sitemaps':{'articles':ArticleSitemap}}, name='django.contrib.sitemaps.views.sitemap'),  # 网站地图
 ] # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

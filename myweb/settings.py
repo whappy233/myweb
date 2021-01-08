@@ -157,7 +157,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 
-LOGIN_REDIRECT_URL = 'app_blog:post_list'  # 如果请求中没有出现next参数, 在成功登陆后通知 Django 重定向到该地址
+LOGIN_REDIRECT_URL = 'app_blog:article_list'  # 如果请求中没有出现next参数, 在成功登陆后通知 Django 重定向到该地址
 LOGIN_URL = 'app_user:login'  # 用户重定向并实现登陆的URL(例如使用login_required装饰器的视图)
 LOGOUT_URL = 'app_user:logout'   # 用户重定向并实现退出登陆的URL
 

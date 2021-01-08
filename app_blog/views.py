@@ -16,20 +16,20 @@ from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from taggit.models import Tag  # 导入标签模型
 
-from .forms import CommentForm, EmailPostForm, PostForm, SearchForm
-from .models import Category, Comment, Post
+from .forms import CommentForm, EmailArticleForm, SearchForm
+from .models import Category, Comment, Article
 
 
 # 类视图
 # 所有文章
 # django 中的通用视图 ListView 将所选页面传递到变量 page_obj 中
-# path('', views.PostListView.as_view(), name='post_list')
-class PostListView(ListView):
-    queryset = Post.published.all()  # === model = Post
-    # model = Post
+# path('', views.ArticleListView.as_view(), name='article_list')
+class ArticleListView(ListView):
+    queryset = Article.published.all()  # === model = Article
+    # model = Article
     # context_object_name = 'page_obj'  # 设置上下文变量
     paginate_by = 3  # 3个一页 生成 page_obj 对象
-    # template_name = 'app_blog/post_list.html'  # 视图默认的模板名称是: 模型名小写_list.html
+    # template_name = 'app_blog/article_list.html'  # 视图默认的模板名称是: 模型名小写_list.html
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -38,8 +38,8 @@ class PostListView(ListView):
 
 # 函数视图
 @login_required
-def post_list(request, tag_slug=None, author_name=None):
-    object_list = Post.published.all()  # 自定义的管理器published(只显示published 的文章)
+def article_list(request, tag_slug=None, author_name=None):
+    object_list = Article.published.all()  # 自定义的管理器published(只显示published 的文章)
     tag = None
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
@@ -47,47 +47,47 @@ def post_list(request, tag_slug=None, author_name=None):
     if author_name:
         user = get_object_or_404(User, username=author_name)  # 1  方式1
         object_list = object_list.filter(author=user)  # 1
-        # object_list = Post.published.filter(author__username=author_name)   # 2  方式2
+        # object_list = Article.published.filter(author__username=author_name)   # 2  方式2
 
     paginator = Paginator(object_list, 3)
     page = request.GET.get('page')
-    # posts = paginator.get_page(page)
+    # articles = paginator.get_page(page)
     try:
-        posts = paginator.page(page)
+        articles = paginator.page(page)
     except PageNotAnInteger:  # 非整数
-        posts = paginator.page(1)
+        articles = paginator.page(1)
     except EmptyPage:  # 页码不存在, 返回当前页
         if int(page) > paginator.num_pages:  # 返回尾页
             # paginator.num_pages 页面数
-            posts = paginator.page(paginator.num_pages)
+            articles = paginator.page(paginator.num_pages)
         else:
-            posts = paginator.page(1)
+            articles = paginator.page(1)
 
     context = {
-        'page_obj': posts,
+        'page_obj': articles,
         'tag': tag,
         'name': author_name,
         'section': 'blog'
     }
 
-    return render(request, 'app_blog/post_list.html', context)
+    return render(request, 'app_blog/article_list.html', context)
 
 # 文章详情
-# path('<int:year>/<int:month>/<int:day>/<slug:post>/', views.post_detail, name='post_detail')
+# path('<int:year>/<int:month>/<int:day>/<slug:article>/', views.article_detail, name='article_detail')
 @login_required
-def post_detail(request, year, month, day, post):
+def article_detail(request, year, month, day, article):
     # 使用 get() 返回一个对象，如果该对象不存在，则引发Http404异常。
-    post = get_object_or_404(Post,
-                             slug=post,
+    article = get_object_or_404(Article,
+                             slug=article,
                              status='p',
                              publish__year=year,
                              publish__month=month,
                              publish__day=day,
                              )
 
-    post.viewed()  # 阅读量 +1
+    article.viewed()  # 阅读量 +1
 
-    comments = post.comments.filter(active=True)  # 查询所有评论
+    comments = article.comments.filter(active=True)  # 查询所有评论
     message = ''
 
     has_commented = request.session.get('has_commented', False)
@@ -97,32 +97,32 @@ def post_detail(request, year, month, day, post):
             if comment_form.is_valid():
                 # 创建表单连接的模型实例(commit=False, 不会立即保存到数据库中),save()方法仅适用于ModelsForm
                 new_comment = comment_form.save(commit=False)
-                new_comment.post = post
+                new_comment.article = article
                 new_comment.save()
                 request.session['has_commented'] = True
-                return redirect(post.get_absolute_url())
+                return redirect(article.get_absolute_url())
     else:
         message = '你已经评论过了'
 
     comment_form = CommentForm()
 
     # 相似文章
-    post_tags_ids = post.tags.values_list('id', flat=True)  # 当前帖子的 Tag ID 列表
+    article_tags_ids = article.tags.values_list('id', flat=True)  # 当前帖子的 Tag ID 列表
 
-    # qq = '|'.join(['Q(tags=%s)' % i for i in list(post_tags_ids)])  # Q(tags=1)|Q(tags=2)...
-    # similar_posts = Post.published.filter(eval(qq)).exclude(id=post.id)  # 获取所有此标签的全部帖子,排除自身
+    # qq = '|'.join(['Q(tags=%s)' % i for i in list(article_tags_ids)])  # Q(tags=1)|Q(tags=2)...
+    # similar_articles = Article.published.filter(eval(qq)).exclude(id=article.id)  # 获取所有此标签的全部帖子,排除自身
 
     # 获取包含此标签或分组的全部帖子,排除自身
-    similar_posts = Post.published.filter(
-        Q(tags__in=post_tags_ids) | Q(category=post.category)).exclude(id=post.id)
-    similar_posts = similar_posts.annotate(same_tags=Count(
+    similar_articles = Article.published.filter(
+        Q(tags__in=article_tags_ids) | Q(category=article.category)).exclude(id=article.id)
+    similar_articles = similar_articles.annotate(same_tags=Count(
         'tags'), some_category=Count('category')).order_by('-same_tags', '-publish')[:4]
 
     context = {
-        'post': post,
+        'article': article,
         'comments': comments,
         'comment_form': comment_form,
-        'similar_posts': similar_posts,
+        'similar_articles': similar_articles,
         'section': 'blog',
         'message': message,
     }
@@ -138,15 +138,15 @@ class CategoryDetailView(DetailView):
         context = super().get_context_data(**kwargs)
 
         if self.object.has_child():
-            posts = Post.objects.filter()
+            articles = Article.objects.filter()
             categories = self.object.category_set.all()  # 所有子类目
             for category in categories:
-                queryset = Post.objects.filter(category=category.id).order_by('-publish')
-                posts.union(queryset)
+                queryset = Article.objects.filter(category=category.id).order_by('-publish')
+                articles.union(queryset)
         else:
-            posts = Post.objects.filter(category=self.object.id).order_by('-publish')
+            articles = Article.objects.filter(category=self.object.id).order_by('-publish')
 
-        paginator = Paginator(posts, 3)
+        paginator = Paginator(articles, 3)
         page = self.request.GET.get('page')
         page_obj = paginator.get_page(page)
         context['page_obj'] = page_obj
@@ -165,7 +165,7 @@ def blog_like(request):
     print(action)
     if blog_id and action:
         try:
-            blog = Post.objects.get(id=blog_id)
+            blog = Article.objects.get(id=blog_id)
             if action == 'like':
                 blog.users_like.add(request.user)
             else:
@@ -178,13 +178,13 @@ def blog_like(request):
 
 
 # 文章详细
-class PostDetailView(DetailView):
+class ArticleDetailView(DetailView):
     '''文章详细'''
-    model = Post
+    model = Article
 
     # def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
     #     context = super().get_context_data(**kwargs)
-    #     comments = post.comments.filter(active=True)  # 查询所有评论
+    #     comments = article.comments.filter(active=True)  # 查询所有评论
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset=queryset)
@@ -194,29 +194,29 @@ class PostDetailView(DetailView):
 
 # From 表单 (分享文章)
 @login_required
-def post_share(request, post_id):
-    post = get_object_or_404(Post, id=post_id, status='p')  # 检索ID
+def article_share(request, article_id):
+    article = get_object_or_404(Article, id=article_id, status='p')  # 检索ID
     sent = False
     if request.method == 'POST':
-        form = EmailPostForm(data=request.POST)  # 提交表单
+        form = EmailArticleForm(data=request.POST)  # 提交表单
         # print(form.errors)  # 错误列表
         if form.is_valid():  # 判断数据是否合法
             cd = form.cleaned_data  # 表单字段及对应值的字典( 若表单字段未被验证，则只包含有效的字段 )
             # 发邮件
             # build_absolute_uri
             # 假设当前路径为:127.0.0.1/123/456/7
-            # post.get_absolute_url() 路径为: 456/789/6
-            # 那么post_url 路径为 127.0.0.1/123/456/789/6
-            post_url = request.build_absolute_uri(post.get_absolute_url())
-            subject = f"{cd['name']}({cd['email']}) 分享给你 '{post.title}'"
-            message = f"Read '{post.title}' at {post_url} \n\n{cd['name']}\'s comments:{cd['comments']}"
+            # article.get_absolute_url() 路径为: 456/789/6
+            # 那么article_url 路径为 127.0.0.1/123/456/789/6
+            article_url = request.build_absolute_uri(article.get_absolute_url())
+            subject = f"{cd['name']}({cd['email']}) 分享给你 '{article.title}'"
+            message = f"Read '{article.title}' at {article_url} \n\n{cd['name']}\'s comments:{cd['comments']}"
             # send_mail(subject, message, 'haha@qq.com', [cd['to']])
             sent = True
     else:
-        form = EmailPostForm()
+        form = EmailArticleForm()
 
     context = {
-        'post': post,
+        'article': article,
         'form': form,
         'sent': sent,
         'section': 'blog'
@@ -224,7 +224,7 @@ def post_share(request, post_id):
     return render(request, 'app_blog/share.html', context)
 
 # Search
-def post_search(request):
+def article_search(request):
     form = SearchForm()
     query = None
     results = []
@@ -233,12 +233,12 @@ def post_search(request):
         if form.is_valid():
             query = form.cleaned_data['query']
             # 普通搜索排序
-            # results = Post.objects.annotate(search=SearchVector('title', 'body')).filter(search=query)
+            # results = Article.objects.annotate(search=SearchVector('title', 'body')).filter(search=query)
             # ------------------------------------------------------------------------------------------
             # 搜索相关性排序
             # search_vector = SearchVector('title', 'body')
             # search_query = SearchQuery(query)
-            # results = Post.objects.annotate(search=search_vector, rank=SearchRank(search_vector, search_query)
+            # results = Article.objects.annotate(search=search_vector, rank=SearchRank(search_vector, search_query)
             #                                 ).filter(search=search_query).order_by('-rank')
             # ------------------------------------------------------------------------------------------
             # 加权查询
@@ -247,11 +247,11 @@ def post_search(request):
             # search_vector = SearchVector('title', weight='A') + SearchVector('body', weight='B')
             # search_query = SearchQuery(query)
             # rank__gte=0.3 : 仅显示大于0.3 的结果
-            # results = Post.objects.annotate(rank=SearchRank(search_vector, search_query)
+            # results = Article.objects.annotate(rank=SearchRank(search_vector, search_query)
             #                                 ).filter(rank__gte=0.3).order_by('-rank')
             # ------------------------------------------------------------------------------------------
             # 三元搜索
-            results = Post.objects.annotate(similarity=TrigramSimilarity('title', query),
+            results = Article.objects.annotate(similarity=TrigramSimilarity('title', query),
                                             ).filter(similarity__gt=0.3).order_by('-similarity')
 
     context = {

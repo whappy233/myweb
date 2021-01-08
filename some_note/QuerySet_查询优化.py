@@ -1,14 +1,14 @@
 # Django的QuerySet自带缓存(Cache)
-# 例2比例3要好，因为在你打印文章标题后，Django不仅执行了查询，还把查询到的post_list放在了缓存里。
-# 这个post_list是可以复用的。例3就不行了。
+# 例2比例3要好，因为在你打印文章标题后，Django不仅执行了查询，还把查询到的article_list放在了缓存里。
+# 这个article_list是可以复用的。例3就不行了。
 # Example 2: Good
-post_list = Post.objects.filter(title__contains="django")
-for post in post_list:
-    print(post.title)
+article_list = Article.objects.filter(title__contains="django")
+for article in article_list:
+    print(article.title)
 
 # Example 3: Bad
-for post in Post.objects.filter(title__contains="django"):
-    print(post.title)
+for article in Article.objects.filter(title__contains="django"):
+    print(article.title)
 
 
 
@@ -16,11 +16,11 @@ for post in Post.objects.filter(title__contains="django"):
 # 用if也会导致queryset的执行
 # 有时我们只希望了解查询的结果是否存在，而不需要使用整个数据集
 # 这时你可以用 exists() 方法。
-# 与if判断不同，exists 只会检查查询结果是否存在，返回True或False，而不会缓存post_list(见例5）
+# 与if判断不同，exists 只会检查查询结果是否存在，返回True或False，而不会缓存article_list(见例5）
 # 判断查询结果是否存在到底用if还是exists取决于你是否希望缓存查询数据集复用，如果是用if，反之用exists。
 # Example 5: Good
-post_list = Post.objects.filter(title__contains="django")
-if post_list.exists():
+article_list = Article.objects.filter(title__contains="django")
+if article_list.exists():
     print("Records found.")
 else:
     print("No records")
@@ -34,15 +34,15 @@ else:
 # 但事情也没有绝对，如果数据集queryset已经在缓存里了，使用len更快，因为它不需要跟数据库再次打交道
 # 下面三个例子中，只有例7最差，尽量不要用。
 # Example 6: Good
-count = Post.objects.filter(title__contains="django").count()  # 没有缓存时
+count = Article.objects.filter(title__contains="django").count()  # 没有缓存时
 
 # Example 7:Bad
-count = Post.objects.filter(title__contains="django").len()
+count = Article.objects.filter(title__contains="django").len()
 
 # Example 8: Good
-post_list = Post.objects.filter(title__contains="django")
-if post_list:  # 在这里缓存了查询结果
-    print("{} records found.".format(post_list.len()))
+article_list = Article.objects.filter(title__contains="django")
+if article_list:  # 在这里缓存了查询结果
+    print("{} records found.".format(article_list.len()))
 
 
 
@@ -53,13 +53,13 @@ if post_list:  # 在这里缓存了查询结果
 # 比如我们只需要打印文章标题，这时我们完全没有必要把每篇文章对象的全部信息都提取出来载入到内存中。我们可以做如下改进（例9）
 # values和values_list返回的是字典形式字符串数据，而不是对象集合。如果不理解请不要乱用
 # Example 9: Good
-post_list = Post.objects.filter(title__contains="django").values('title')
-if post_list:
-    print(post.title)
+article_list = Article.objects.filter(title__contains="django").values('title')
+if article_list:
+    print(article.title)
 
-post_list = Post.objects.filter(title__contains="django").values_list('id', 'title')
-if post_list:
-    print(post.title)
+article_list = Article.objects.filter(title__contains="django").values_list('id', 'title')
+if article_list:
+    print(article.title)
 
 
 
@@ -67,16 +67,16 @@ if post_list:
 # 更新数据库部分字段请用update方法
 # 如果需要对数据库中的某条已有数据或某些字段进行更新，更好的方式是用update，而不是save方法。
 # 我们现在可以对比下面两个案例。
-# 例10中需要把整个Post对象的数据(标题，正文.....)先提取出来，缓存到内存中，变更信息后再写入数据库。
+# 例10中需要把整个Article对象的数据(标题，正文.....)先提取出来，缓存到内存中，变更信息后再写入数据库。
 # 而例11直接对标题做了更新，不需要把整个文章对象的数据载入内存，显然更高效。
 # 尽管单篇文章占用内存不多，但是万一用户非常多呢，那么占用的内存加起来也是很恐怖的
 # Example 10: Bad
-post = Post.objects.get(id=10)
-Post.title = "Django"
-post.save()
+article = Article.objects.get(id=10)
+Article.title = "Django"
+article.save()
 
 # Example 11: Good
-Post.objects.filter(id=10).update(title='Django')  # 返回已更新条目的数量
+Article.objects.filter(id=10).update(title='Django')  # 返回已更新条目的数量
 
 
 

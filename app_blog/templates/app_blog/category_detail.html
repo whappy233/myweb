@@ -14,8 +14,8 @@
 <h3>博客文章清单</h3>
 {% if page_obj %}
 <ul>
-    {% for post in page_obj %}
-    <li><a href="{{post.get_absolute_url}}"> {{ post.title }}</a> {{ post.publish | date:"Y-m-j" }}</li>
+    {% for article in page_obj %}
+    <li><a href="{{article.get_absolute_url}}"> {{ article.title }}</a> {{ article.publish | date:"Y-m-j" }}</li>
     {% endfor %}
 </ul>
 
@@ -44,7 +44,7 @@
 {% endif %}
 
 {% else %}
-<p>No post yet.</p>
+<p>No article yet.</p>
 {% endif %}
 
 {% endblock %}

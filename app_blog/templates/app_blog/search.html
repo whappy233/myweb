@@ -11,13 +11,13 @@
                 找到 {{ total_results }} 条结果
             {% endwith %}
         </h3>
-        {% for post in results %}
-            <h4><a href="{{post.get_absolute_url}}">{{post.title}}</a></h4>
-            {{post.body|truncatewords:5}}
+        {% for article in results %}
+            <h4><a href="{{article.get_absolute_url}}">{{article.title}}</a></h4>
+            {{article.body|truncatewords:5}}
         {%empty%}
             <p>没有结果</p>
         {% endfor %}
-        <p><a href="{% url 'app_blog:post_search' %}"> 重新搜索</a></p>
+        <p><a href="{% url 'app_blog:article_search' %}"> 重新搜索</a></p>
     {%else%}
         <h1>搜索博客</h1>
         <form action="." method='get'>

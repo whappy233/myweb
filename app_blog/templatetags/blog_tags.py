@@ -4,7 +4,7 @@ from django import template
 from django.db.models import Count
 from django.utils.safestring import mark_safe  # 标记为安全的html
 
-from ..models import Post
+from ..models import Article
 
 register = template.Library()
 
@@ -14,22 +14,22 @@ register = template.Library()
 
 # 自定义模板标签 ------------------------------------------------------------------------------------
 # 文章总数
-# simple_tag (处理数据并返回一个字符串或者给context设置或添加变量)  {% total_posts %}
-@register.simple_tag(name='total_posts')  # 注册模板标签和过滤器, 默认使用函数名作为标签名字，也可自定义 @register.simple_tag(name='name')
-def total_posts():  # 定义标签
-    return Post.published.count()
+# simple_tag (处理数据并返回一个字符串或者给context设置或添加变量)  {% total_articles %}
+@register.simple_tag(name='total_articles')  # 注册模板标签和过滤器, 默认使用函数名作为标签名字，也可自定义 @register.simple_tag(name='name')
+def total_articles():  # 定义标签
+    return Article.published.count()
 
 # 最多评论
 @register.simple_tag
-def get_most_commented_posts(count=5):
-    return Post.published.annotate(total_comments=Count('comments')).order_by('-total_comments')[:count]
+def get_most_commented_articles(count=5):
+    return Article.published.annotate(total_comments=Count('comments')).order_by('-total_comments')[:count]
 
 # 最近更新
-# inclusion_tag (处理数据并返回模板)   {% show_latest_posts 5 %}
-@register.inclusion_tag('app_blog/latest_posts.html')  # 指定利用返回值显示的模板
-def show_latest_posts(count=5):
-    latest_posts = Post.published.order_by('-publish')[:count]
-    return {'latest_posts':latest_posts}
+# inclusion_tag (处理数据并返回模板)   {% show_latest_articles 5 %}
+@register.inclusion_tag('app_blog/latest_articles.html')  # 指定利用返回值显示的模板
+def show_latest_articles(count=5):
+    latest_articles = Article.published.order_by('-publish')[:count]
+    return {'latest_articles':latest_articles}
 
 # 在设置 takes_context=True 后, 可以直接使用 context 里的变量.
 # {% show_results %} 不再需要 poll 这个参数，即可显示 poll 的结果
@@ -52,10 +52,10 @@ def my_tag(a, b, *args, **kwargs):
     return ...
 '''
 
-# <p>Published at at {% format_time post.pub_date "%Y-%m-%d %I:%M %p" %}.</p>
+# <p>Published at at {% format_time article.pub_date "%Y-%m-%d %I:%M %p" %}.</p>
 @register.tag(name="format_time")
 def do_format_time(parser, token):
-    # 获取 format_time post.pub_date "%Y-%m-%d %I:%M %p" 这一长串字符串作为token
+    # 获取 format_time article.pub_date "%Y-%m-%d %I:%M %p" 这一长串字符串作为token
     try:
         # split_contents（）知道不拆分带引号的字符串
         tag_name, date_to_be_formatted, format_string = token.split_contents()
@@ -93,7 +93,7 @@ class FormatTimeNode(template.Node):
 
 # 自定义模板过滤器 ------------------------------------------------------------------------------------
 # { 使用 '|' 前的值}
-# 过滤器 (转换为makedown)  {{ post.body| markdown }}
+# 过滤器 (转换为makedown)  {{ article.body| markdown }}
 @register.filter(name='markdown')
 def markdown_format(text):
     return mark_safe(markdown.markdown(text))
@@ -107,7 +107,7 @@ def chinese_date_format(value):
         return value
 
 # {{ value | add_description:args }}
-# {{ post.title | add_description:"最热" }}时，标题后面会加上"最热"字样
+# {{ article.title | add_description:"最热" }}时，标题后面会加上"最热"字样
 @register.filter(name='add_description')
 def add_description(value, args):
     return "{} ({})".format(value, args)

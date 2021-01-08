@@ -2,16 +2,16 @@
 
 from django.contrib.syndication.views import Feed
 from django.template.defaultfilters import truncatewords  # 过滤器
-from .models import Post
+from .models import Article
 
 
-class LatestPostsFeed(Feed):
+class LatestArticlesFeed(Feed):
     title = 'My blog'  # <title>
     link = '/blog/'  # <link>
-    description = 'New posts of my blog'  # <description>
+    description = 'New articles of my blog'  # <description>
 
     def items(self):
-        return Post.published.all()[:5]
+        return Article.published.all()[:5]
 
     def item_title(self, item):
         return item.title

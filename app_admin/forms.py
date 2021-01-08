@@ -1,12 +1,12 @@
 from django import forms
-from app_blog.models import Post, Comment, Category
+from app_blog.models import Article, Comment, Category
 from ckeditor_uploader.widgets import CKEditorUploadingWidget  # 富文本编辑器表单组件
 
 
 
 class ArticleCreateForm(forms.ModelForm):
     class Meta:
-        model = Post
+        model = Article
         exclude = ['author', 'views', 'slug', 'publish', 'is_delete', 'users_like']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),

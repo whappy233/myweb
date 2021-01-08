@@ -17,19 +17,19 @@ prefect_related 可用于多对多关系字段，也可用于反向外键关系(
 
 from django.db.models.query import Prefetch
 from django.shortcuts import render
-from app_blog.models import Post
+from app_blog.models import Article
 from taggit.managers import TaggableManager
 
-def post_list(request):
-    posts = Post.objects.all().select_related('category').prefetch_related('tags')
-    return render(request, 'blog/post_list.html', {'posts': posts, })
+def article_list(request):
+    articles = Article.objects.all().select_related('category').prefetch_related('tags')
+    return render(request, 'blog/article_list.html', {'articles': articles, })
 
 
 # 文章列表及每篇文章的tags对象名字信息
-Post.objects.all().prefetch_related('tags__name')
+Article.objects.all().prefetch_related('tags__name')
 
 # 获取id=13的文章对象同时，获取其相关tags信息
-Post.objects.prefetch_related('tags').get(id=13)
+Article.objects.prefetch_related('tags').get(id=13)
 
 
 
@@ -37,12 +37,12 @@ Post.objects.prefetch_related('tags').get(id=13)
 # 我们可以使用Prefetch方法给prefect_related方法添加条件和属性。
 
 # 获取文章列表及每篇文章相关的名字以P开头的tags对象信息
-Post.objects.all().prefetch_related(
+Article.objects.all().prefetch_related(
     Prefetch('tags', queryset=TaggableManager.objects.filter(name__startswith="P"))
 )
 
-# 文章列表及每篇文章的名字以P开头的tags对象信息, 放在post_p_tag列表
-Post.objects.all().prefetch_related(
+# 文章列表及每篇文章的名字以P开头的tags对象信息, 放在article_p_tag列表
+Article.objects.all().prefetch_related(
     Prefetch('tags', queryset=TaggableManager.objects.filter(name__startswith="P")),
-to_attr='post_p_tag'
+to_attr='article_p_tag'
 )
