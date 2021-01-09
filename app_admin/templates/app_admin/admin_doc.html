@@ -9,13 +9,13 @@
       </div>
   </div>
     <div class="layui-row">
-        <form action="{% url 'doc_manage' %}" method="get">
+        <form action="" method="get">
         <div class="layui-form-item">
             <div class="layui-input-inline">
                 <input type="text" name="kw" id="kw" placeholder="输入文档标题或内容" autocomplete="off" class="layui-input">
             </div>
             <button class="layui-btn layui-btn-normal layui-btn-sm" type="submit"><i class="layui-icon layui-icon-search"></i>搜索</button>
-            <a href="{% url 'create_doc' %}" target="_blank" class="layui-btn layui-btn-normal layui-btn-sm"><i class="layui-icon layui-icon-addition"></i>新建文档</a>
+            <a href="" target="_blank" class="layui-btn layui-btn-normal layui-btn-sm"><i class="layui-icon layui-icon-addition"></i>新建文档</a>
         </div>
         </form>
     </div>
@@ -38,13 +38,13 @@
         <tr>
             {% if doc.status == 1 %}
                 <td>
-                    <a href="{% url 'doc' doc.top_doc doc.id %}" target="_blank" title="查看文档：{{doc.name}}">{{ doc.name }} 
+                    <a href="" target="_blank" title="查看文档：{{doc.name}}">{{ doc.name }} 
                         <i class="layui-icon layui-icon-circle-dot" style="color: #1E9FFF;"></i>
                     </a>
                 </td>
             {% else %}
                 <td>
-                    <a href="{% url 'modify_doc' doc.id %}" target="_blank" title="修改文档：{{doc.name}}">{{ doc.name }} 
+                    <a href="" target="_blank" title="修改文档：{{doc.name}}">{{ doc.name }} 
                         <i class="layui-icon layui-icon-circle-dot" style="color: #FF5722;"></i>
                     </a>
                 </td>
@@ -54,7 +54,7 @@
             <td>{{ doc.create_user }}</td>
           <td>{{ doc.create_time }}</td>
           <td>
-              <a href="{% url 'modify_doc' doc_id=doc.id %}" target="_blank" class="layui-btn layui-btn-normal layui-btn-xs">
+              <a href="" target="_blank" class="layui-btn layui-btn-normal layui-btn-xs">
                   <i class="layui-icon layui-icon-edit"></i>修改
                 </a>
               <a href="javascript:void(0);" onclick="delDoc('{{doc.id}}');" class="layui-btn layui-btn-danger layui-btn-xs">
@@ -105,7 +105,7 @@
                 data = {
                     'doc_id':doc_id,
                 }
-                $.post("{% url 'del_doc' %}",data,function(r){
+                $.post("",data,function(r){
                     layer.closeAll('loading');
                     if(r.status){
                         //修改成功

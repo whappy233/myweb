@@ -18,7 +18,7 @@
           <div class="layui-tab-content">
               <!-- 网站设置 -->
             <div class="layui-tab-item layui-show">
-               <form class="layui-form" action="{% url 'sys_setting' %}" method="post">
+               <form class="layui-form" action="" method="POST">
                    {% csrf_token %}
                     <input type="text" name="type" hidden value="basic">
                   <div class="layui-form-item">
@@ -99,7 +99,7 @@
 
               <!-- 邮箱设置 -->
             <div class="layui-tab-item">
-                <form class="layui-form" action="" method="post">
+                <form class="layui-form" action="" method="POST">
                    {% csrf_token %}
                     <input type="text" name="type" hidden value="email">
                   <div class="layui-form-item">

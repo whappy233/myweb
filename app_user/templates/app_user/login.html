@@ -6,7 +6,7 @@
 <h1>Login <span style="font-size: 10px;">{% if request.GET.next %}该页面需要登录才能查看{% endif %}</span></h1>
 
 <div class="form-wrapper">
-    <form method="post" action="" enctype="multipart/form-data">
+    <form method="POST" action="" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="fieldWrapper">
             <table>

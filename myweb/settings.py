@@ -111,6 +111,22 @@ DATABASES = {
 }
 
 
+# 缓存
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache', # 引擎 (开发调试缓存)
+        'TIMEOUT': 300, # 缓存超时时间（默认300，None表示永不过期，0表示立即过期）
+        'OPTIONS':{
+            'MAX_ENTRIES': 300, # 最大缓存个数（默认300）                                      
+            'CULL_FREQUENCY': 3, # 缓存到达最大个数之后，剔除缓存个数的比例，即：1/CULL_FREQUENCY（默认3）                                   
+        },
+        'KEY_PREFIX': '',  # 缓存key的前缀（默认空）
+        'VERSION': 1, # 缓存key的版本（默认1）
+        # 'KEY_FUNCTION': '对应的函数名'   # 生成key的函数（默认函数会生成为：【前缀:版本:key】）
+    }
+}
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

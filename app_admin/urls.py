@@ -6,7 +6,7 @@ from app_admin import views
 app_name = 'app_admin'
 
 urlpatterns = [
-    path('user_manage/', views.admin_user, name='user_manage'),  # 用户管理
+    path('user_manage/', views.AdminUserListView.as_view(), name='user_manage'),  # 用户管理
 
     # path('create_user/',views.admin_create_user,name="create_user"), # 新建用户
     # path('del_user/',views.admin_del_user,name='del_user'), # 删除用户

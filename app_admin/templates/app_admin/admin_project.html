@@ -9,7 +9,7 @@
       </div>
   </div>
     <div class="layui-row">
-        <form action="{% url 'project_manage' %}" method="get">
+        <form action="" method="get">
         <div class="layui-form-item">
             <div class="layui-input-inline">
                 <input type="text" name="kw" id="kw" placeholder="输入文集内容" autocomplete="off" class="layui-input">
@@ -44,27 +44,27 @@
       <tbody>
         {% for pro in projects %}
         <tr>
-          <td><a href="{% url 'pro_index' pro_id=pro.id %}"  target="_blank">{{ pro.name }}</a></td>
+          <td><a href=""  target="_blank">{{ pro.name }}</a></td>
           <td>{{ pro.intro }}</td>
           {% load project_filter %}
           <td>{{ pro.id | get_doc_count }}</td>
             <td>
               <div class="layui-input-inline">
               {% if pro.role == 0 %}
-                  <i class="layui-icon layui-icon-circle"></i> 公开 <a href="{% url 'admin_project_role' pro.id %}"  title="修改文集权限"><i class="layui-icon layui-icon-edit"></i></a>
+                  <i class="layui-icon layui-icon-circle"></i> 公开 <a href=""  title="修改文集权限"><i class="layui-icon layui-icon-edit"></i></a>
               {% elif pro.role == 1 %}
-                  <i class="layui-icon layui-icon-menu-fill"></i> 私密 <a href="{% url 'admin_project_role' pro.id %}"  title="修改文集权限"><i class="layui-icon layui-icon-edit"></i></a>
+                  <i class="layui-icon layui-icon-menu-fill"></i> 私密 <a href=""  title="修改文集权限"><i class="layui-icon layui-icon-edit"></i></a>
               {% elif pro.role == 2 %}
-                  <i class="layui-icon layui-icon-group"></i> 指定用户可见 <a href="{% url 'admin_project_role' pro.id %}"  title="修改文集权限"><i class="layui-icon layui-icon-edit"></i></a>
+                  <i class="layui-icon layui-icon-group"></i> 指定用户可见 <a href=""  title="修改文集权限"><i class="layui-icon layui-icon-edit"></i></a>
               {% elif pro.role == 3 %}
-                  <i class="layui-icon layui-icon-password"></i> 访问码可见 <a href="{% url 'admin_project_role' pro.id %}"  title="修改文集权限"><i class="layui-icon layui-icon-edit"></i></a>
+                  <i class="layui-icon layui-icon-password"></i> 访问码可见 <a href=""  title="修改文集权限"><i class="layui-icon layui-icon-edit"></i></a>
               {% endif %}
               </div>
           </td>
           <td>{{ pro.create_time }}</td>
           <td>{{ pro.create_user }}</td>
           <td>
-              <!-- <a href="{% url 'pro_index' pro_id=pro.id %}"  target="_blank" class="layui-btn layui-btn-normal layui-btn-xs">
+              <!-- <a href=""  target="_blank" class="layui-btn layui-btn-normal layui-btn-xs">
                   <i class="layui-icon layui-icon-read"></i>查看
                 </a> -->
               <a href="javascript:void(0);" onclick="modifyProject('{{pro.id}}','{{pro.name}}','{{pro.intro}}')" class="layui-btn layui-btn-normal layui-btn-xs">
@@ -123,7 +123,7 @@
                     'pname':$("#pname").val(),
                     'desc':$("#desc").val(),
                 }
-                $.post("{% url 'create_project' %}",data,function(r){
+                $.post("",data,function(r){
                     layer.closeAll('loading');
                     if(r.status){
                         //创建成功
@@ -153,7 +153,7 @@
                     'name':$("#pname").val(),
                     'desc':$("#desc").val(),
                 }
-                $.post("{% url 'modify_project' %}",data,function(r){
+                $.post("",data,function(r){
                     if(r.status){
                         //修改成功
                         window.location.reload();
@@ -180,7 +180,7 @@
                 data = {
                     'pro_id':pro_id,
                 }
-                $.post("{% url 'del_project' %}",data,function(r){
+                $.post("",data,function(r){
                     if(r.status){
                         //修改成功
                         window.location.reload();

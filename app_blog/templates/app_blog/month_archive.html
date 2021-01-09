@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>月度归档 {{year_month.0}}年{{year_month.1}}月</h3>
+
+{% if page_obj %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>标题</th>
+            <th>发布日期</th>
+            <th>查看</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for article in page_obj %}
+        <tr>
+            <td>{{ article.title }}</td>
+            <td>{{ article.publish | date:"Y-m-d" }}</td>
+            <td>
+                <a href="{{article.get_absolute_url}}"><span class="glyphicon glyphicon-eye-open">☺︎</span></a>
+            </td>
+            {% endfor %}
+        </tr>
+    </tbody>
+</table>
+{% else %}
+<p>没有文章。</p>
+{% endif %}
+
+{% if is_paginated %}
+{# 从 paginator.html 引入分页模板  #}
+{% include 'pagination.html' with page_obj=page_obj %}
+{% endif %}
+
+{% endblock %}

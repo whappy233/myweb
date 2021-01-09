@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load blog_tags %}
-
+{% load cache %}
 
 
 
@@ -9,6 +9,12 @@
 <p><a href="{% url 'app_blog:article_feed' %}">订阅博客</a></p>
 <h3> 最近更新 </h3>
 {% show_latest_articles 5 %}
+
+{% cache 500 monthly_archive %}
+<h3>归档</h3>
+{% show_monthly_archive %}
+{% endcache %}
+
 <h3>最多评论文章</h3>
 {% get_most_commented_articles as most_commented_articles %}
 <ul>

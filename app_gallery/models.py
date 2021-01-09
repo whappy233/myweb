@@ -2,8 +2,8 @@ from django.db import models
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFit
 from django.urls import reverse
-from uuid import uuid4
-import sys
+from django.utils.text import slugify
+
 
 
 # 相册
@@ -29,6 +29,11 @@ class Gallery(models.Model):
     def get_absolute_url(self):
         return reverse('app_gallery:photo_detail', kwargs={'pk': self.pk, 'slug': self.slug})
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            slug = slugify(self.title, True)[:8]
+            self.slug = slug
+        super().save(*args, **kwargs)
 
 
 # 一张相片

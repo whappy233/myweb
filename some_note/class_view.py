@@ -47,7 +47,7 @@ class RestaurantForm(ModelForm):
 
 {% block content %}
 
-<form action="" method="post" enctype="multipart/form-data" >
+<form action="" method="POST" enctype="multipart/form-data" >
   {% csrf_token %}
 
   {% for hidden_field in form.hidden_fields %}

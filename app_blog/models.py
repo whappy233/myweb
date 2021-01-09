@@ -1,11 +1,14 @@
+import base64
+
+from ckeditor_uploader.fields import RichTextUploadingField  # 富文本编辑器
+from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import base
-from django.utils import timezone
-from django.contrib.auth.models import User
 from django.urls import reverse
+from django.utils import timezone
 from taggit.managers import TaggableManager  # 第三方标签应用
-from ckeditor_uploader.fields import RichTextUploadingField  # 富文本编辑器
-import base64
+
+from .cn_taggit import CnTaggedItem
 
 
 # 自定义的管理器
@@ -60,16 +63,12 @@ class Category(models.Model):
 # 文章模型
 class Article(models.Model):
     '''文章模型'''
-    tags = TaggableManager()  # 添加标签管理器
-    STATUS_CHOICES = (
-        ('d', '草稿'),
-        ('p', '发布'),
-    )
+    STATUS_CHOICES = (('d', '草稿'), ('p', '发布'),)
+    tags = TaggableManager(blank=True, through=CnTaggedItem)  # 添加标签管理器
     title = models.CharField('标题', max_length=250)
     # slug 字段用于 URL 中，仅包含字母数字下划线以及连字符。根据 slug 字段，可对博客构建具有良好外观和 SEO 友好的 URL。
     # 使用 unique_for_date 参数可采用发布日期与 slug 对帖子构建URL
-    slug = models.SlugField(
-        'slug', max_length=250, unique_for_date='publish', blank=True)
+    slug = models.SlugField('slug', max_length=250, unique_for_date='publish', blank=True)
     # related_name 指定反向关系名称(从User到Article)
     users_like = models.ManyToManyField(User, related_name='blog_liked', blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_articles', verbose_name='作者')
@@ -80,8 +79,7 @@ class Article(models.Model):
     publish = models.DateTimeField('发布时间', default=timezone.now, null=True, blank=True)
     created = models.DateTimeField('创建时间', auto_now_add=True)
     updated = models.DateTimeField('更新时间', auto_now=True)
-    status = models.CharField(
-        '文章状态', max_length=10, choices=STATUS_CHOICES, default='d')
+    status = models.CharField('文章状态', max_length=10, choices=STATUS_CHOICES, default='d')
     is_delete = models.BooleanField(default=False)
 
     objects = models.Manager()  # 默认管理器
@@ -100,9 +98,6 @@ class Article(models.Model):
         indexes = [
             models.Index(fields=['title']),  # 建立索引
         ]
-
-
-
 
     def __str__(self):
         return self.title
@@ -124,7 +119,7 @@ class Article(models.Model):
 
     # 标准 urls
     def get_absolute_url(self):  # 构建URL
-        # <int:year>/<int:month>/<int:day>/<slug:article>/
+        # <int:year>/<int:month>/<int:day>/<slug:slug>/
         # /2020/1/10/markdown/
         a = [self.publish.year, self.publish.month, self.publish.day, self.slug]
         return reverse('app_blog:article_detail', args=a)
@@ -143,7 +138,6 @@ class Article(models.Model):
     # 草稿文章(d)不应该有发布日期( publish )
     # 当文章状态为发布(p), 而发布日期为空时，发布日期应该为当前时间
     def clean(self):
-        print('dddddddd')
         # 不允许草稿条目具有 publish
         if self.status == 'd' and self.publish is not None:
             self.publish = None

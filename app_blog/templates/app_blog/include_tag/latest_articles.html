@@ -1,0 +1,10 @@
+{#   最近更新模板 (由自定义标签返回)   #}
+<ul>
+    {% for article in latest_articles %}
+        <li>
+            <a href="{{ article.get_absolute_url }}">
+                {{ article.title }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>

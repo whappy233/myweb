@@ -21,11 +21,10 @@ static_path = os.path.join(settings.BASE_DIR, "static")  # 静态文件路径
 font_path = os.path.join(static_path, 'font', "MONACO.TTF")  # 字体路径
 
 
-# 生成数字验证码
-def generate_vcode(n=6):
-    '''生成数字验证码'''
-    _num = ''.join(map(str, range(3, 10)))
-    vcode_str = ''.join(random.sample(_num, n))
+# 生成验证码
+def generate_vcode(n=8):
+    '''生成验证码'''
+    vcode_str = ''.join(random.sample(init_chars, n))
     return vcode_str
 
 # 发送电子邮件

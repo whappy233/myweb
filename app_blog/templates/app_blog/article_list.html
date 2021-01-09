@@ -50,9 +50,8 @@
         {{ article.body|markdown|truncatewords_html:30 }}
     {% endfor %}
 
-    {# 下面使用 类 视图 django 中的通用视图 ListView 将所选页面传递到变量 page_obj 中  #}
     {# 从 paginator.html 引入分页模板  #}
-    {% include 'app_blog/pagination.html' with page_obj=page_obj %}
+    {% include 'pagination.html' with page_obj=page_obj %}
 
 {% endblock content %}
 

@@ -12,24 +12,53 @@ register = template.Library()
 # 在使用自定义模板标签 和过滤器时 应该在模板中首先在开头引入 {% load xxxx %}
 
 
-# 自定义模板标签 ------------------------------------------------------------------------------------
+'''
+自定义模板标签 
+------------------------------------------------------------------------------------
+'''
 # 文章总数
-# simple_tag (处理数据并返回一个字符串或者给context设置或添加变量)  {% total_articles %}
+'simple_tag (处理数据并返回一个字符串或者给context设置或添加变量)  {% total_articles %}'
 @register.simple_tag(name='total_articles')  # 注册模板标签和过滤器, 默认使用函数名作为标签名字，也可自定义 @register.simple_tag(name='name')
 def total_articles():  # 定义标签
     return Article.published.count()
+
 
 # 最多评论
 @register.simple_tag
 def get_most_commented_articles(count=5):
     return Article.published.annotate(total_comments=Count('comments')).order_by('-total_comments')[:count]
 
-# 最近更新
-# inclusion_tag (处理数据并返回模板)   {% show_latest_articles 5 %}
-@register.inclusion_tag('app_blog/latest_articles.html')  # 指定利用返回值显示的模板
+
+# 最近更新 (返回模板)
+'inclusion_tag (处理数据并返回模板)   {% show_latest_articles 5 %}'
+@register.inclusion_tag('app_blog/include_tag/latest_articles.html')  # 指定利用返回值显示的模板
 def show_latest_articles(count=5):
     latest_articles = Article.published.order_by('-publish')[:count]
     return {'latest_articles':latest_articles}
+
+
+# 月度归档 (返回模板)
+@register.inclusion_tag('app_blog/include_tag/monthly_archive_list.html')
+def show_monthly_archive():
+    #按日期逆序排序
+    articles = Article.objects.filter(status='p').order_by('-publish')
+    rows = []
+    if articles:
+        #获取最大和最小年份, 缩小归档时间范围
+        max_year = articles[0].publish.year
+        min_year = articles[len(articles)-1].publish.year
+        #按年和月循环，排除空月份，生成子一个字典列表
+        # 利用for循环查询最大年份和最小年份间每年的12个月中是否有文章发表
+        for year in range(max_year, min_year-1, -1):
+            for month in range(12, 0, -1):
+                total = Article.objects.filter(publish__year=year, publish__month=month).count()
+                if total > 0:
+                    # 由年份、月份和和文章数量构建成的字典插入列表
+                    rows.append({"year": year, "month": month, "total": total})
+                else:
+                    continue
+    return {'rows': rows}
+
 
 # 在设置 takes_context=True 后, 可以直接使用 context 里的变量.
 # {% show_results %} 不再需要 poll 这个参数，即可显示 poll 的结果
@@ -86,17 +115,16 @@ class FormatTimeNode(template.Node):
 
 
 
-
-
-
-
-
-# 自定义模板过滤器 ------------------------------------------------------------------------------------
+'''
+自定义模板过滤器 
+------------------------------------------------------------------------------------
+'''
 # { 使用 '|' 前的值}
 # 过滤器 (转换为makedown)  {{ article.body| markdown }}
 @register.filter(name='markdown')
 def markdown_format(text):
     return mark_safe(markdown.markdown(text))
+
 
 import datetime
 @register.filter(name='chinese_date_format')
@@ -105,6 +133,7 @@ def chinese_date_format(value):
         return "{}年{}月{}日".format(value.year, value.month, value.day)
     else:
         return value
+
 
 # {{ value | add_description:args }}
 # {{ article.title | add_description:"最热" }}时，标题后面会加上"最热"字样

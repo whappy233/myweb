@@ -17,7 +17,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from taggit.models import Tag  # 导入标签模型
 
 from .forms import CommentForm, EmailArticleForm, SearchForm
-from .models import Category, Comment, Article
+from .models import Article, Category, Comment
 
 
 # 类视图
@@ -36,11 +36,13 @@ class ArticleListView(ListView):
         context['section'] = 'blog'
         return context
 
+
 # 函数视图
 @login_required
 def article_list(request, tag_slug=None, author_name=None):
     object_list = Article.published.all()  # 自定义的管理器published(只显示published 的文章)
     tag = None
+    print(20*'^')
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
         object_list = object_list.filter(tags__in=[tag])
@@ -72,27 +74,46 @@ def article_list(request, tag_slug=None, author_name=None):
 
     return render(request, 'app_blog/article_list.html', context)
 
+
 # 文章详情
 # path('<int:year>/<int:month>/<int:day>/<slug:article>/', views.article_detail, name='article_detail')
-@login_required
-def article_detail(request, year, month, day, article):
-    # 使用 get() 返回一个对象，如果该对象不存在，则引发Http404异常。
-    article = get_object_or_404(Article,
-                             slug=article,
-                             status='p',
-                             publish__year=year,
-                             publish__month=month,
-                             publish__day=day,
-                             )
+class ArticleDetailView(DetailView):
+    '''文章详细'''
+    model = Article
 
-    article.viewed()  # 阅读量 +1
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    comments = article.comments.filter(active=True)  # 查询所有评论
-    message = ''
+        message = ''
+        comments = self.object.comments.filter(active=True)  # 查询所有评论
+        # 相似文章
+        article_tags_ids = self.object.tags.values_list('id', flat=True)  # 当前帖子的 Tag ID 列表
+        # 获取包含此标签或分组的全部帖子,排除自身
+        similar_articles = Article.published.filter(Q(tags__in=article_tags_ids) | Q(category=self.object.category)).exclude(id=self.object.id)
+        similar_articles = similar_articles.annotate(same_tags=Count('tags'), some_category=Count('category')).order_by('-same_tags', '-publish')[:4]
 
-    has_commented = request.session.get('has_commented', False)
-    if not has_commented:
-        if request.method == 'POST' and not has_commented:
+        comment_form = CommentForm()
+
+        context.update({
+            'comments': comments,
+            'comment_form': comment_form,
+            'similar_articles': similar_articles,
+            'section': 'blog',
+            'message': message,
+        })
+
+        return context
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        obj.viewed()
+        return obj
+
+    def post(self, request, *args, **kwargs):
+        message = ''
+        self.object = article = self.get_object()
+        has_commented = request.session.get('has_commented', False)
+        if not has_commented:
             comment_form = CommentForm(data=request.POST)  # 提交表单
             if comment_form.is_valid():
                 # 创建表单连接的模型实例(commit=False, 不会立即保存到数据库中),save()方法仅适用于ModelsForm
@@ -101,33 +122,14 @@ def article_detail(request, year, month, day, article):
                 new_comment.save()
                 request.session['has_commented'] = True
                 return redirect(article.get_absolute_url())
-    else:
-        message = '你已经评论过了'
+        else:
+            message = '你已经评论过了'
 
-    comment_form = CommentForm()
+        context = self.get_context_data()
+        context.update({'message': message,})
 
-    # 相似文章
-    article_tags_ids = article.tags.values_list('id', flat=True)  # 当前帖子的 Tag ID 列表
+        return render(request, 'app_blog/article_detail.html', context)
 
-    # qq = '|'.join(['Q(tags=%s)' % i for i in list(article_tags_ids)])  # Q(tags=1)|Q(tags=2)...
-    # similar_articles = Article.published.filter(eval(qq)).exclude(id=article.id)  # 获取所有此标签的全部帖子,排除自身
-
-    # 获取包含此标签或分组的全部帖子,排除自身
-    similar_articles = Article.published.filter(
-        Q(tags__in=article_tags_ids) | Q(category=article.category)).exclude(id=article.id)
-    similar_articles = similar_articles.annotate(same_tags=Count(
-        'tags'), some_category=Count('category')).order_by('-same_tags', '-publish')[:4]
-
-    context = {
-        'article': article,
-        'comments': comments,
-        'comment_form': comment_form,
-        'similar_articles': similar_articles,
-        'section': 'blog',
-        'message': message,
-    }
-
-    return render(request, 'app_blog/detail.html', context)
 
 # 分组下的文章列表
 class CategoryDetailView(DetailView):
@@ -155,6 +157,18 @@ class CategoryDetailView(DetailView):
         return context
 
 
+# 月度归档(某月的列表)
+def month_archive(request, year, month):
+    '''月度归档'''
+    articles = Article.objects.filter(status='p', publish__year=year, publish__month=month).order_by('-publish')
+    paginator = Paginator(articles, 3)
+    page = request.GET.get('page')
+    page_obj = paginator.get_page(page)
+    
+    context = {'page_obj': page_obj, 'paginator': paginator, 'is_paginated': True, 'year_month': (year, month)}
+    return render(request, 'app_blog/month_archive.html', context)
+
+
 # 点👍 +1
 @login_required
 @require_http_methods(["POST"])  # 只接受 POST 方法
@@ -175,21 +189,6 @@ def blog_like(request):
         except:
             pass
     return JsonResponse({'status':'fail'})
-
-
-# 文章详细
-class ArticleDetailView(DetailView):
-    '''文章详细'''
-    model = Article
-
-    # def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-    #     context = super().get_context_data(**kwargs)
-    #     comments = article.comments.filter(active=True)  # 查询所有评论
-
-    def get_object(self, queryset=None):
-        obj = super().get_object(queryset=queryset)
-        obj.viewed()
-        return obj
 
 
 # From 表单 (分享文章)
@@ -222,6 +221,7 @@ def article_share(request, article_id):
         'section': 'blog'
     }
     return render(request, 'app_blog/share.html', context)
+
 
 # Search
 def article_search(request):
@@ -261,6 +261,7 @@ def article_search(request):
         'section': 'blog'
     }
     return render(request, 'app_blog/search.html', context)
+
 
 # ajax 测试
 def ajax_test(request):

@@ -9,13 +9,13 @@
       </div>
   </div>
     <div class="layui-row">
-        <form action="{% url 'doctemp_manage' %}" method="get">
+        <form action="" method="get">
         <div class="layui-form-item">
             <div class="layui-input-inline">
                 <input type="text" name="kw" id="kw"  placeholder="输入文档模板内容" autocomplete="off" class="layui-input">
             </div>
             <button class="layui-btn layui-btn-normal layui-btn-sm" type="submit"><i class="layui-icon layui-icon-search"></i>搜索</button>
-            <a href="{% url 'create_doctemp' %}" target="_blank" class="layui-btn layui-btn-normal layui-btn-sm"><i class="layui-icon layui-icon-addition"></i>新建文档模板</a>
+            <a href="" target="_blank" class="layui-btn layui-btn-normal layui-btn-sm"><i class="layui-icon layui-icon-addition"></i>新建文档模板</a>
         </div>
         </form>
     </div>
@@ -41,7 +41,7 @@
             <td>{{ temp.create_user }}</td>
           <td>{{ temp.create_time }}</td>
           <td>
-              <a href="{% url 'modify_doctemp' doctemp_id=temp.id %}" target="_blank" class="layui-btn layui-btn-normal layui-btn-xs">
+              <a href="" target="_blank" class="layui-btn layui-btn-normal layui-btn-xs">
                 <i class="layui-icon layui-icon-edit"></i>修改
                 </a>
               <a href="javascript:void(0);" onclick="delTemp('{{temp.id}}');" class="layui-btn layui-btn-danger layui-btn-xs">
@@ -92,7 +92,7 @@
                 data = {
                     'doctemp_id':doctemp_id,
                 }
-                $.post("{% url 'del_doctemp' %}",data,function(r){
+                $.post("",data,function(r){
                     layer.closeAll('loading');
                     if(r.status){
                         //修改成功

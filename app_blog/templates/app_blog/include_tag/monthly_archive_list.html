@@ -1,0 +1,10 @@
+{# 月度归档模板 (由自定义标签返回) #}
+<ul>
+{% for row in rows %}
+    <li>
+        <a href="{% url 'app_blog:month_archive' row.year row.month %}">
+            {{ row.year }}年{{ row.month }}月     {{ row.total }}篇
+        </a>
+    </li>
+{% endfor %}
+</ul>

@@ -17,8 +17,6 @@ def user_directory_path(instance, filename):
     return os.path.join('users', str(instance.user.id), sub_folder, filename)
 
 
-
-# Model ---------------------------------------------------
 # UserProfile只是对User模型的扩展, 与User是1对1的关系
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
@@ -46,3 +44,5 @@ class UserProfile(models.Model):
     def img_url(self):
         if self.photo and hasattr(self.photo, 'url'):
             return self.photo.url
+
+

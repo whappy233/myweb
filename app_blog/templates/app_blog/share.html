@@ -17,7 +17,7 @@
         <a href="{{article.get_absolute_url}}"> 返回到文章:{{article.title}} </a>
     {% else %}
         <h3> 通过邮件分享 "{{ article.title }}" </h3>
-        <form action="." method="article">
+        <form action="." method="POST">
             <table>
                 {{ form.as_table }}     {# 方式一 #}
             </table>

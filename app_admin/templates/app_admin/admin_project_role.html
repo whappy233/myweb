@@ -5,7 +5,7 @@
     <link href="{% static 'tagsInput/tagsinput.css' %}" rel="stylesheet" type="text/css"/>
     <div class="layui-row" style="margin-bottom: 10px;padding-left:15px;">
         <span class="layui-breadcrumb" lay-separator=">">
-          <a href="{% url 'project_manage' %}">文集管理</a>
+          <a href="">文集管理</a>
           <a><cite>权限管理</cite></a>
         </span>
     </div>
@@ -17,7 +17,7 @@
       </div>
   </div>
     <div class="layui-row">
-        <form action="{% url 'admin_project_role' pro.id %}" method="post" class="layui-form">
+        <form action="" method="POST" class="layui-form">
             {% csrf_token %}
             <div class="layui-form-item">
                 <label class="layui-form-label">文集作者</label>

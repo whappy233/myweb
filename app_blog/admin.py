@@ -1,8 +1,11 @@
-from django.contrib import admin
-from .models import Article, Comment, Category
 from uuid import uuid4
-from django.utils.html import format_html
+
+from django.contrib import admin
 from django.utils import timezone
+from django.utils.html import format_html
+
+from .models import Article, Category, Comment
+
 
 # 自定义 list_filter
 class TitleKeywordFilter(admin.SimpleListFilter):
@@ -151,7 +154,6 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug':('name',)}  # 自动生成slug, 根据name填充slug
     search_fields = ['name',]
     ordering = ['parent_category'] 
-
 
 
 # admin.site.register(Comment)  # 注册方式1

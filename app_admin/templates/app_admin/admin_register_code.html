@@ -9,7 +9,7 @@
       </div>
   </div>
     <div class="layui-row">
-        <form action="{% url 'project_manage' %}" method="get">
+        <form action="" method="get">
         <div class="layui-form-item">
             <!--<div class="layui-input-inline">-->
                 <!--<input type="text" name="kw" id="kw" placeholder="输入文集内容" autocomplete="off" class="layui-input">-->
@@ -113,7 +113,7 @@
                     'types':1,
                     'all_cnt':$("#regCodeCnt").val(),
                 }
-                $.post("{% url 'register_code_manage' %}",data,function(r){
+                $.post("",data,function(r){
                     layer.closeAll('loading');
                     if(r.status){
                         //新增成功，刷新页面
@@ -143,7 +143,7 @@
                     'types':2,
                     'code_id':code_id,
                 }
-                $.post("{% url 'register_code_manage' %}",data,function(r){
+                $.post("",data,function(r){
                     if(r.status){
                         //删除成功，刷新页面
                         window.location.reload();

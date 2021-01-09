@@ -11,42 +11,35 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from .forms import ArticleCreateForm
 
 from app_blog.models import Article, Category, Comment
 from app_user.models import UserProfile
+from .decorators import superuser_only
+from .forms import ArticleCreateForm
 
 
-def admin_user(request):
-    if request.method == 'GET':
-        # user_list = User.objects.all()
-        return render(request, 'app_admin/admin_user.html', locals())
-    elif request.method == 'POST':
-        username = request.POST.get('username','')
+# user_manage/
+@method_decorator(superuser_only('app_user:login'), name='dispatch')
+class AdminUserListView(ListView):
+    '''用户列表'''
+    paginate_by = 10
+    template_name = 'app_admin/admin_user.html'
+
+    def get_queryset(self):
+        return User.objects.all()
+
+    def get_context_data(self, **kwargs):
+        username = ''
+        fields = ['id','last_login','is_superuser','username','email','date_joined','is_active','first_name']
         if username == '':
-            user_data = User.objects.all().values_list(
-                'id','last_login','is_superuser','username','email','date_joined','is_active','first_name'
-            )
+            user_data = User.objects.all().values_list(*fields)
         else:
-            user_data = User.objects.filter(username__icontains=username).values_list(
-                'id','last_login','is_superuser','username','email','date_joined','is_active','first_name'
-            )
-        table_data = []
-        for i in list(user_data):
-            item = {
-                'id':i[0],
-                'last_login':i[1],
-                'is_superuser':i[2],
-                'username':i[3],
-                'email':i[4],
-                'date_joined':i[5],
-                'is_active':i[6],
-                'first_name':i[7]
-            }
-            table_data.append(item)
-        return JsonResponse({'status':True,'data':table_data})
-    else:
-        return JsonResponse({'status':False,'data':'方法错误'})
+            user_data = User.objects.filter(username__icontains=username).values_list(*fields)
+
+        table_data = [dict(zip(fields, i)) for i in user_data]
+        context = super().get_context_data(**kwargs)
+        context['table_data'] = table_data
+        return context
 
 
 # 所有文章列表

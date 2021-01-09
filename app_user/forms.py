@@ -242,11 +242,11 @@ def recipe_add(request):
 # template
 '''
 <h1>Add Recipe</h1>
-<form action="." method="post">
+<form action="." method="POST">
     {% csrf_token %}
-    
+
     {{ form.as_p }}
-    
+
     <fieldset>
         <legend>Recipe Ingredient</legend>
         {{ ingredient_formset.management_form }}

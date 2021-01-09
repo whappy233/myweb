@@ -15,7 +15,7 @@
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
         <div class="layui-logo">
-            <a class="logo" href="{% url 'pro_list' %}">  
+            <a class="logo" href="">  
                 <h1 style="color: white;">
                     <strong>MrDoc</strong>
                     <span style="font-size: 14px;" class="layui-badge-rim">后台管理</span>
@@ -29,8 +29,8 @@
             </a>
             <dl class="layui-nav-child">
               <!-- <dd><a href="">基本资料</a></dd> -->
-              <dd><a href="{% url 'manage_overview' %}">个人中心</a></dd>
-              <dd><a href="{% url 'logout' %}">退出登录</a></dd>
+              <dd><a href="">个人中心</a></dd>
+              <dd><a href="">退出登录</a></dd>
             </dl>
           </li>
         </ul>
@@ -40,29 +40,29 @@
           <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
           <ul class="layui-nav layui-nav-tree"  lay-filter="test">
             <li class="layui-nav-item layui-nav-itemed">
-              <a href="{% url 'project_manage' %}"><i class="layui-icon layui-icon-list"></i> 文集管理</a>
+              <a href=""><i class="layui-icon layui-icon-list"></i> 文集管理</a>
             </li>
             <li class="layui-nav-item layui-nav-itemed">
-              <a href="{% url 'doc_manage' %}"><i class="layui-icon layui-icon-file-b"></i> 文档管理</a>
+              <a href=""><i class="layui-icon layui-icon-file-b"></i> 文档管理</a>
             </li>
               <li class="layui-nav-item layui-nav-itemed">
-              <a href="{% url 'doctemp_manage' %}"><i class="layui-icon layui-icon-template"></i> 文档模板管理</a>
+              <a href=""><i class="layui-icon layui-icon-template"></i> 文档模板管理</a>
             </li>
               {% if request.user.is_superuser %}
                <li class="layui-nav-item layui-nav-itemed">
-                  <a href="{% url 'user_manage' %}"><i class="layui-icon layui-icon-user"></i> 用户管理</a>
+                  <a href=""><i class="layui-icon layui-icon-user"></i> 用户管理</a>
                </li>
               <li class="layui-nav-item layui-nav-itemed">
-                  <a href="{% url 'register_code_manage' %}"><i class="layui-icon layui-icon-engine"></i> 注册码管理</a>
+                  <a href=""><i class="layui-icon layui-icon-engine"></i> 注册码管理</a>
                </li>
               <li class="layui-nav-item layui-nav-itemed">
-                  <a href="{% url 'sys_setting' %}"><i class="layui-icon layui-icon-set-sm"></i> 站点设置</a>
+                  <a href=""><i class="layui-icon layui-icon-set-sm"></i> 站点设置</a>
                </li>
               <li class="layui-nav-item layui-nav-itemed">
-                <a href="http://mrdoc.zmister.com/project-7/" target="_blank"><i class="layui-icon layui-icon-tips"></i> 配置手册</a>
+                <a href="" target="_blank"><i class="layui-icon layui-icon-tips"></i> 配置手册</a>
               </li>
               <li class="layui-nav-item layui-nav-itemed">
-                <a href="http://mrdoc.zmister.com/project-54/" target="_blank"><i class="layui-icon layui-icon-help"></i> 使用手册</a>
+                <a href="" target="_blank"><i class="layui-icon layui-icon-help"></i> 使用手册</a>
               </li>
               {% endif %}
           </ul>

@@ -5,7 +5,7 @@
 {% block content %}
 <h1>修改密码</h1>
 <div class="form-wrapper">
-    <form method="post" action="" enctype="multipart/form-data">
+    <form method="POST" action="" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.username }}
         <div class="fieldWrapper">
