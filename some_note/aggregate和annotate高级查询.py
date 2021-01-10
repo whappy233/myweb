@@ -98,6 +98,9 @@ Hobby.objects.annotate(student_num=Count('student')).order_by('-student_num')[:5
 # 按学生名字分组，统计每个学生的爱好数量
 Student.objects.values('name').annotate(Count('hobbies'))
 
+# 速查询数据表字段重复条目
+Student.objects.values('first_name').annotate(name_count=Count('first_name')).filter(name_count__gt=1)
+
 # 你还可以使用values方法从annotate返回的数据集里提取你所需要的字段，如下所示:
 # 按学生名字分组，统计每个学生的爱好数量。
 Student.objects.annotate(hobby_count=Count('hobbies')).values('name', 'hobby_count')

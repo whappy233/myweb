@@ -1,6 +1,15 @@
 {% extends "base.html" %}
-
 {% block content %}
+{% load blog_tags %}
+{% load cache %}
+
+
+{% cache 500 monthly_archive %}
+<h3>归档</h3>
+{% show_monthly_archive %}
+{% endcache %}
+
+
 
 <h3>月度归档 {{year_month.0}}年{{year_month.1}}月</h3>
 

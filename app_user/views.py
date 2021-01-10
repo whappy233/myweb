@@ -66,10 +66,13 @@ def register(request):
             password = form.cleaned_data['password2']
             # 使用内置User自带create_user方法创建用户，不需要使用save()
             user = User.objects.create_user(username=username, password=password, email=email)
-            # 在创建User时同时创建与之关联的UserProfile对象
-            user_profile = UserProfile(user=user)
+
+            # 1.通过 signals, 在创建 User 对象实例时也创建 UserProfile 对象实例
+            # 2.或在创建User时同时创建与之关联的UserProfile对象
+            # user_profile = UserProfile(user=user)
             # 如果直接使用objects.create()方法后不需要使用save()
-            user_profile.save()
+            # user_profile.save()
+
             return redirect("app_user:login")
     else:
         form = RegistrationForm()

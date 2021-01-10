@@ -83,7 +83,7 @@ class ArticleCreateView(CreateView):
 
     # Associate form.instance.user with self.request.user
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        form.instance.author = self.request.user  # 初始化表单数据
         # print(form.cleaned_data)
         return super().form_valid(form)
 
