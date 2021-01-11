@@ -35,7 +35,7 @@ def create_user(sender, instance, created, **kwargs):
 
 
 
-
+# 例子:
 # 利用Django信号实现不同模型的联动更新
 # 我们有一个 Profile 模型，与User模型是一对一的关系。
 # 我们希望创建 User 对象实例时也创建 Profile 对象实例，而使用 post_save 更新 User 对象时不创建新的 Profile 对象。
@@ -72,13 +72,13 @@ def save_user_profile(sender, instance, **kwargs):
 # 当一个app的与信号相关的自定义监听函数很多时，此时models.py代码将变得非常臃肿。
 # 一个更好的方式把所以自定义的信号监听函数集中放在app对应文件夹下的signals.py文件里，便于后期集中维护。
 
-# 假如我们有个account的app，包含了User和Pofile模型，我们不仅需要在account文件夹下新建signals.py，
-# 还需要修改account文件下apps.py和__init__.py，以导入创建的信号监听函数。
+# 假如我们有个 app_user 的app，包含了User和Pofile模型，我们不仅需要在app_user文件夹下新建signals.py，
+# 还需要修改 app_user 文件下apps.py和__init__.py，以导入创建的信号监听函数。
 
-# account/signals.py
+# app_user/signals.py
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import User, Profile
+from app_user.models import User, Profile
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
   if created:
@@ -87,13 +87,13 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
-# account/apps.py
+# app_user/apps.py
 from django.apps import AppConfig
-class AccountConfig(AppConfig):
-    name = 'account'
+class AppUserConfig(AppConfig):
+    name = 'app_user'
 
     def ready(self):
-        import account.signals
+        import app_user.signals
 
-# account/__init__.py
-default_app_config = 'account.apps.AccountConfig'
+# app_user/__init__.py
+default_app_config = 'app_user.apps.AppUserConfig'

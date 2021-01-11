@@ -117,7 +117,8 @@ permission2 = Permission.objects.create(
     name='能评论文章',
     content_type=content_type,
 )
-# 当你使用python manage.py migrate命令后，你会发现Django admin的user permissions栏又多了两个可选权限
+
+# 使用 migrate 命令的时候，view_task将会被添加到默认的权限集合中
 
 
 
@@ -203,5 +204,5 @@ myuser.groups.clear()
 
 # Django自带权限机制的不足
 # Django自带的权限机制是针对模型的，这就意味着一个用户如果对Article模型有change的权限，那么该用户获得对所有文章对象进行修改的权限。
-# 如果我们希望实现对单个文章对象的权限管理，我们需要借助于第三方库比如django guardian
+# 如果我们希望实现对单个文章对象的权限管理，我们需要借助于第三方库比如 django-guardian
 

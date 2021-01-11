@@ -48,8 +48,6 @@ class Photo(models.Model):
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建日期')
     is_delete = models.BooleanField(default=False)
 
-
-
     class Meta:
         verbose_name='相片'
         verbose_name_plural = verbose_name

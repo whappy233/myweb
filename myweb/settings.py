@@ -1,6 +1,5 @@
 import os
 
-
 # 返回工程路径(myweb)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,14 +22,17 @@ SITE_ID = 1  # 设置站点ID
 # 在这里添加APP
 # Application definition
 INSTALLED_APPS = [
-    'django.contrib.admin',  # 管理员站点
-    'django.contrib.auth',  # 认证授权系统
+    'django.contrib.admin',         # 管理员站点
+    'django.contrib.auth',          # 认证授权系统
     'django.contrib.contenttypes',  # 内容类型框架
-    'django.contrib.sessions',  # 会话框架
-    'django.contrib.messages',  # 消息框架
-    'django.contrib.staticfiles',  # 管理静态文件的框架
+    'django.contrib.sessions',      # 会话框架
+    'django.contrib.messages',      # 消息框架
+    'django.contrib.staticfiles',   # 管理静态文件的框架
 
-    'django.contrib.humanize',
+    'django.contrib.humanize',      # 数字,日期人性化格式
+    'django.contrib.sites',         # 网站地图App1
+    'django.contrib.sitemaps',      # 网站地图App2
+    # 'django.contrib.postgres',
 
     'app_user.apps.AppUserConfig',
     'app_blog.apps.AppBlogConfig',
@@ -38,14 +40,10 @@ INSTALLED_APPS = [
     'app_gallery.apps.AppGalleryConfig',
     'app_admin.apps.AppAdminConfig',
 
-    'django.contrib.sites',  # 网站地图App1
-    'django.contrib.sitemaps',  # 网站地图App2
-    # 'django.contrib.postgres',
-
-    'taggit',  # 第三方标签管理器
-    'imagekit', # 第三方缩略图应用 pip install django-imagekit
-    'ckeditor', # 第三方富文本编辑器 pip install django-ckeditor==6.0.0
-    'ckeditor_uploader', # 第三方富文本编辑器_文件上传组件
+    'taggit',                       # 第三方标签管理器
+    'imagekit',                     # 第三方缩略图应用 pip install django-imagekit
+    'ckeditor',                     # 第三方富文本编辑器 pip install django-ckeditor==6.0.0
+    'ckeditor_uploader',            # 第三方富文本编辑器_文件上传组件
 
 ]
 
@@ -55,9 +53,17 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # 在视图函数执行前向每个接收到的user对象添加HttpRequest属性，表示当前登录的用户
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'app_user.middleware.front_user_middleware',
+    'app_user.middleware.FrontUserMiddleware',
+
+    # 全站缓存
+    # 'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.common.CommonMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware'
 
     # 'django.middleware.http.SetRemoteAddrFromForwardedFor',  #  当部署在负载平衡proxy(如nginx)上, 该中间件用于获取用户实际的 ip 地址
     # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', '')  # 获取真实ip

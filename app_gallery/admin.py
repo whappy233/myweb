@@ -6,14 +6,14 @@ from django.core.files.base import ContentFile
 from .models import Gallery, Photo
 from .forms import GalleryForm
 from uuid import uuid4
+from django.utils.html import format_html
 
 
 @admin.register(Gallery)
 class GalleryModelAdmin(admin.ModelAdmin):
     form = GalleryForm
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ('title', 'thumb', 'is_visible',
-                    'create_date', 'mod_date', 'slug', 'is_delete')
+    list_display = ('title', 'is_visible', 'create_date', 'mod_date', 'slug', 'is_delete', 'show_thumb_img')
     list_filter = ('create_date',)
     ordering = ['-mod_date']
 
@@ -33,38 +33,53 @@ class GalleryModelAdmin(admin.ModelAdmin):
         if form.is_valid():
             gallery = form.save()
             # 将 zip 文件解压, 添加到相册中 , 并重命名文件
-            if form.cleaned_data['zip'] is not None:
-                zip = zipfile.ZipFile(form.cleaned_data['zip'])
-                for filename in sorted(zip.namelist()):
-                    try:
-                        file_name = os.path.basename(filename)
-                        if not file_name:
-                            continue
+            try:
+                if form.cleaned_data['zip'] is not None:
+                    zip = zipfile.ZipFile(form.cleaned_data['zip'])
+                    for filename in sorted(zip.namelist()):
+                        try:
+                            file_name = os.path.basename(filename)
+                            if not file_name:
+                                continue
 
-                        data = zip.read(filename)
-                        contentfile = ContentFile(data)
+                            data = zip.read(filename)
+                            contentfile = ContentFile(data)
 
-                        img = Photo()
-                        img.gallery = gallery
-                        filename = '{0}{1}.jpg'.format(
-                            gallery.slug[:8], str(uuid.uuid4())[-13:])
-                        img.alt = filename
-                        img.image.save(filename, contentfile)
+                            img = Photo()
+                            img.gallery = gallery
+                            filename = '{0}{1}.jpg'.format(
+                                gallery.slug[:8], str(uuid.uuid4())[-13:])
+                            img.alt = filename
+                            img.image.save(filename, contentfile)
 
-                        img.thumb.save(
-                            'thumb-{0}'.format(filename), contentfile)
-                        img.save()
-                    except Exception as e:
-                        print('ERROR: ')
-                        print(e)
-                zip.close()
+                            img.thumb.save(
+                                'thumb-{0}'.format(filename), contentfile)
+                            img.save()
+                        except Exception as e:
+                            print('ERROR: ')
+                            print(e)
+                    zip.close()
+            except:
+                pass
             super().save_model(request, obj, form, change)
+
+    def form_valid(self, form):
+        # form.instance.author = self.request.user  # 初始化表单数据
+        print(20*'*')
+        print(form.cleaned_data)
+        return super().form_valid(form)
+
+    def show_thumb_img(self, obj):
+        '''展示封面'''
+        url = obj.thumb.url
+        return format_html(f'<img style="width:20%;height:20%" src="{url}"></img>')
+    show_thumb_img.short_description = '封面'  # 设置表头
+
 
 
 @admin.register(Photo)
 class PhotoModelAdmin(admin.ModelAdmin):
-    list_display = ('alt', 'image', 'gallery', 'thumb',
-                    'create_date', 'is_delete')
+    list_display = ('alt', 'gallery', 'create_date', 'is_delete', 'show_thumb_img')
     list_filter = ('gallery', 'create_date')
     exclude = ['thumb']
     ordering = ['-create_date']
@@ -81,3 +96,9 @@ class PhotoModelAdmin(admin.ModelAdmin):
                            form.cleaned_data['image'])
             img.save()
             super().save_model(request, obj, form, change)
+
+    def show_thumb_img(self, obj):
+        '''展示缩略图'''
+        url = obj.thumb.url
+        return format_html(f'<img style="width:20%;height:20%" src="{url}"></img>')
+    show_thumb_img.short_description = '缩略图'  # 设置表头

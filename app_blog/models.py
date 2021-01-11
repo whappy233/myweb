@@ -15,7 +15,8 @@ from .cn_taggit import CnTaggedItem
 class PublishedManage(models.Manager):
     def get_queryset(self):
         # 修改管理器的初始 QuerySet
-        return super(PublishedManage, self).get_queryset().filter(status='p')
+        # 状态为发布且发布时间小于现在的blog
+        return super(PublishedManage, self).get_queryset().filter(publish__lte=timezone.now(), status='p')
 
 # 在默认管理器上增加方法
 class aaa(models.Manager):

@@ -22,8 +22,12 @@
 #     },
 # ]
 
-from datetime import datetime
 
-# 得到语言设置
+from django.utils import timezone
 def carlos(request):
-    return {'Carlos': f'这是一个全局context(Carlos), {datetime.today()}'}
+    username = request.user.username
+    html = f'''
+    <i data-toggle="tooltip" title="这是一个全局context" data-placement="right">
+    当前用户:({username}){timezone.now()}
+    </i>'''
+    return {'Carlos': html}

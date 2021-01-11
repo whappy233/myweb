@@ -147,6 +147,7 @@ class ArticleAdmin(admin.ModelAdmin):
     show_tags.short_description = '标签'  # 设置表头
 
 
+
 # admin.site.register(Category, CategoryAdmin)  # 注册方式1
 @admin.register(Category)  # 注册方式2（使用包装）
 class CategoryAdmin(admin.ModelAdmin):

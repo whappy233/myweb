@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+
+
 {% block content %}
 <h3>相册</h3>
 {% if page_obj %}
@@ -13,7 +15,7 @@
         <img src="{{ gallery.thumb.url }}" class="responsive-img dpg-album-image" title="{{gallery_title}}" />
       </a>
       <div>
-        <span>{% if gallery_title|length > 7 %}{{gallery_title|truncatechars:7}}...{% else %}{{gallery_title}}{% endif %}</span>
+        <span>{{ gallery_title|truncatechars:7}}{% if gallery_title|length > 7 %}...{% endif %}</span>
         <span style="float: right;">{{gallery.photos.count}}张</span>
         <p style="margin: 0;">{{ gallery.mod_date |date:"Y-m-j H:i:s" }}</p>
       </div>

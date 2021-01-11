@@ -11,7 +11,6 @@ register = template.Library()
 # 自定义模板标签 过滤器
 # 在使用自定义模板标签 和过滤器时 应该在模板中首先在开头引入 {% load xxxx %}
 
-
 '''
 自定义模板标签 
 ------------------------------------------------------------------------------------
@@ -140,3 +139,4 @@ def chinese_date_format(value):
 @register.filter(name='add_description')
 def add_description(value, args):
     return "{} ({})".format(value, args)
+

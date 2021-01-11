@@ -1,0 +1,45 @@
+Django中使用AJAX发送POST请求时如何通过CSRF认证？
+
+<!-- 1. 第一种方式直接在发送数据中加入csrfmiddlewaretoken -->
+<script>
+    $("#btn").on("click", function () {
+        $.ajax({
+            url: "/some_url/",
+            type: "POST",
+            data: {
+                csrfmiddlewaretoken: {{ csrf_token }}, //写在模板中，才会被渲染
+            },
+        success: function (data) {
+        }
+        })
+    })
+</script>
+
+<!-- 2.通过jquery选择器获取csrfmiddlewaretoken -->
+<script>
+    $("#btn").on("click", function () {
+        $.ajax({
+            url: "/some_url/",
+            type: "POST",
+            data: {
+                csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
+            },
+            success: function (data) {
+            }
+        })
+    })
+</script>
+
+<!-- 3. 使用jquery.cookie.js调用请求头cookie中的csrftoken -->
+<script src="/static/jquery.cookie.js"></script>
+<script>
+    $("#btn").on("click", function () {
+        $.ajax({
+            url: "/some_url/",
+            type: "POST",
+            headers: { "X-CSRFToken": $.cookie('csrftoken') },
+            data: $("#f1").serialize()
+        }
+        )
+    })
+</script>

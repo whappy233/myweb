@@ -131,6 +131,8 @@ CACHES = {
         }
     }
 }
+REDIS_TIMEOUT=7*24*60*60  # 可以设置缓存默认过期时间（非必须)
+
 from django_redis import get_redis_connection  # 视图中连接并操作
 conn = get_redis_connection("default")
 
