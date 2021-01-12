@@ -21,7 +21,7 @@ class GalleryListView(ListView):
 # 相册详细
 # 使用基于类的视图时，需要按如下方法使用method_decorator的这个装饰器。其作用是把类伪装成函数，然后再应用login_required这个装饰器
 # 或者在url中使用 re_path('xxx', login_required(views.GalleryDetail.as_view()), name='gallery_detail'),
-@method_decorator(login_required, name='dispatch')
+@method_decorator(login_required, name='dispatch')  # dispatch 表示所有请求，因为所有请求都先经过dispatch
 class GalleryDetail(DetailView):
     model = Gallery
     template_name = 'app_gallery/gallery_detail.html'  # 使用自定义模板渲染

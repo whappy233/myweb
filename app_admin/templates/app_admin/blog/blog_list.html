@@ -4,7 +4,11 @@
 
 <div>
     <div style="display: inline-block;">
-        <h3>所有文章</h3>
+        {% if search %}
+        <h3>搜索关键字: "{{ search }}" 找到{% if page_obj %}{{ page_obj.paginator.count }}{% else %} 0 {% endif %}个结果</h3>
+        {% else %}
+        <h3>所有文章 共{% if page_obj %}{{ page_obj.paginator.count }}{% else %} 0 {% endif %}篇</h3>
+        {% endif %}
     </div>
     <div style="float: right;">
         <a href="{% url 'app_admin:create_blog' %}">
@@ -13,10 +17,9 @@
     </div>
 </div>
 
-<form action="{% url 'app_blog:article_search' %}" role="search" method="get">
-    {% csrf_token %}
+<form action="" role="search" method="get">
     <div class="input-group col-md-12">
-        <input type="text" name="q" id="q" class="form-control" placeholder="搜索文章">
+        <input type="text" name="search" id="q" class="form-control" value="{{ search|default:'' }}" placeholder="搜索文章">
         <span class="input-group-btn">
             <button class="btn btn-default form-control" type="submit" value="submit">
                 <span class="glyphicon glyphicon-search"></span>
@@ -24,7 +27,6 @@
         </span>
     </div>
 </form>
-
 
 <table class="table table-striped">
     <thead>

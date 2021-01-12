@@ -39,7 +39,6 @@ class UserProfile(models.Model):
                 return result[0].verified
         return False
 
-
     @property
     def img_url(self):
         if self.photo and hasattr(self.photo, 'url'):

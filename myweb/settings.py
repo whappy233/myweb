@@ -11,9 +11,8 @@ SECRET_KEY = 'jh*9r+p97rvldfkdnm6yvnm(m&ws$x)=squ!=rlu5s(uilhj+g'
 # Django文档建议不直接在settings.py里输入字符串
 # SECRET_KEY= os.environ['SECRET_KEY']
 
-
 # 不要在生产环境打开 debug 开关
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '*']
 
@@ -44,7 +43,6 @@ INSTALLED_APPS = [
     'imagekit',                     # 第三方缩略图应用 pip install django-imagekit
     'ckeditor',                     # 第三方富文本编辑器 pip install django-ckeditor==6.0.0
     'ckeditor_uploader',            # 第三方富文本编辑器_文件上传组件
-
 ]
 
 # 中间件
@@ -82,9 +80,15 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',   # 在模板中可以直接使用request对象
+                'django.contrib.auth.context_processors.auth',  # 在模板里面可以直接使用user，perms对象
+                'django.contrib.messages.context_processors.messages',  # 在模板里面可以直接使用message对象
+
+                # 其他
+                # django.template.context_processors.i18n   在模板里面可以直接使用s ettings 的 LANGUAGES 和 LANGUAGE_CODE
+                # django.template.context_processors.media  可以在模板里面使用 settings 的 MEDIA_URL 参数
+                # django.template.context_processors.csrf   给模板标签 {% csrf_token %} 提供 token 值，默认总是开启。
+                # django.template.context_processors.tz     可以在模板里面使用 TIME_ZONE 参数
 
                 # 自定义模版全局变量 Carlos (默认变量)
                 'myweb.contexts.carlos',
@@ -116,7 +120,6 @@ DATABASES = {
     }
 }
 
-
 # 缓存
 CACHES = {
     'default': {
@@ -133,10 +136,8 @@ CACHES = {
 }
 
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -154,7 +155,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
-
 LANGUAGE_CODE = 'zh-hans'
 
 TIME_ZONE = 'Asia/Shanghai'  # 设置时区

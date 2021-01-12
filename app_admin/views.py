@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-
+from django.db.models import Q
 
 from app_blog.models import Article, Category, Comment
 from app_user.models import UserProfile
@@ -19,7 +19,7 @@ from .forms import ArticleCreateForm
 
 
 # user_manage/
-@method_decorator(superuser_only('app_user:login'), name='dispatch')
+@method_decorator(superuser_only('app_user:login'), name='dispatch')  # dispatch 表示所有请求，因为所有请求都先经过dispatch
 class AdminUserListView(ListView):
     '''用户列表'''
     paginate_by = 10
@@ -52,7 +52,17 @@ class AdminArticleListView(ListView):
     template_name = 'app_admin/blog/blog_list.html'
 
     def get_queryset(self):
-        return Article.objects.all().order_by('-publish')
+        obj = Article.objects.all().order_by('-publish')
+        self.search_key__ = self.request.GET.get('search')
+        if self.search_key__:
+            obj = obj.filter(Q(title__icontains=self.search_key__)|Q(body__icontains=self.search_key__))
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search'] = self.search_key__
+        return context
+
 
     # def get(self, request, *args, **kwargs):
 

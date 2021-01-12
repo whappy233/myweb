@@ -18,6 +18,28 @@
     <p>博客共有 {{ page_obj.paginator.count }} 篇 </p>
     {% endif %}
 
+    {% if form %}
+    <form method="get" action="">
+        {{ form }}
+        <input type="submit" value="Search" />
+    </form>
+    <div id="result"></div>
+    {% endif %}
+
+    {% if result_list %}
+    <p>共找到 {{ result_list | length }} 条记录。</p>
+    <ul>
+        {% for article in result_list %}
+        <li>
+            <a href="{{ article.get_absolute_url }}">
+                {{ article.title }}
+            </a>
+            {{ article.pub_date | date:"Y-m-j" }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
     {% for article in page_obj %}
         <h4>
             <a href="{{article.get_absolute_url}}"> {{ article.title }} </a>
@@ -54,3 +76,22 @@
 
 {% endblock content %}
 
+{% block javascript %}
+<script>
+    $("#id_keyword").bind('input propertychange', function () {
+        var keyword = $(this).val();
+        $.ajax({
+            url: '/ajax/search/',
+            data: {
+                'keyword': keyword
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                $("#result").html("<p>正在实时查询...共" + data.count + "条记录</p>")
+            },
+
+        });
+    });
+</script>
+{% endblock %}

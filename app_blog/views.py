@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
-from django.contrib.postgres.search import (SearchQuery, SearchRank,
-                                            SearchVector, TrigramSimilarity)
+
 from django.core import paginator
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator  # 分页
@@ -20,29 +19,43 @@ from .forms import CommentForm, EmailArticleForm, SearchForm
 from .models import Article, Category, Comment
 
 
-# 类视图
-# 所有文章
-# django 中的通用视图 ListView 将所选页面传递到变量 page_obj 中
-# path('', views.ArticleListView.as_view(), name='article_list')
+# 所有文章 (类视图)
 class ArticleListView(ListView):
-    queryset = Article.published.all()  # === model = Article
-    # model = Article
     # context_object_name = 'page_obj'  # 设置上下文变量
     paginate_by = 3  # 3个一页 生成 page_obj 对象
     # template_name = 'app_blog/article_list.html'  # 视图默认的模板名称是: 模型名小写_list.html
 
+    def get_queryset(self):
+        self.tag__ = None
+        obj = Article.published.all()
+        tag_slug = self.kwargs.get('tag_slug')
+        self.author_name__ = author_name = self.kwargs.get('author_name')
+        keyword = self.request.GET.get('keyword', None)
+
+        if tag_slug:
+            self.tag__ = tag = get_object_or_404(Tag, slug=tag_slug)
+            obj = obj.filter(tags__in=[tag])
+        if author_name:
+            obj = obj.filter(author__username=author_name)
+        if keyword:
+            obj = obj.filter(Q(title__icontains=keyword)|Q(body__icontains=keyword))
+
+        return obj
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['form'] = SearchForm()
         context['section'] = 'blog'
+        context['tag'] = self.tag__
+        context['name'] = self.author_name__
         return context
 
 
-# 函数视图
+# 所有文章 (函数视图)
 @login_required
 def article_list(request, tag_slug=None, author_name=None):
     object_list = Article.published.all()  # 自定义的管理器published(只显示published 的文章)
     tag = None
-    print(20*'^')
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
         object_list = object_list.filter(tags__in=[tag])
@@ -76,7 +89,6 @@ def article_list(request, tag_slug=None, author_name=None):
 
 
 # 文章详情
-# path('<int:year>/<int:month>/<int:day>/<slug:article>/', views.article_detail, name='article_detail')
 class ArticleDetailView(DetailView):
     '''文章详细'''
     model = Article
@@ -223,44 +235,14 @@ def article_share(request, article_id):
     return render(request, 'app_blog/share.html', context)
 
 
-# Search
-def article_search(request):
-    form = SearchForm()
-    query = None
-    results = []
-    if 'query' in request.GET:
-        form = SearchForm(request.GET)
-        if form.is_valid():
-            query = form.cleaned_data['query']
-            # 普通搜索排序
-            # results = Article.objects.annotate(search=SearchVector('title', 'body')).filter(search=query)
-            # ------------------------------------------------------------------------------------------
-            # 搜索相关性排序
-            # search_vector = SearchVector('title', 'body')
-            # search_query = SearchQuery(query)
-            # results = Article.objects.annotate(search=search_vector, rank=SearchRank(search_vector, search_query)
-            #                                 ).filter(search=search_query).order_by('-rank')
-            # ------------------------------------------------------------------------------------------
-            # 加权查询
-            # A,B,C,D权值分别为1.0, 0.4, 0.2, 0.1
-            # title 使用权值A:1.0, body 使用权值B:0.4
-            # search_vector = SearchVector('title', weight='A') + SearchVector('body', weight='B')
-            # search_query = SearchQuery(query)
-            # rank__gte=0.3 : 仅显示大于0.3 的结果
-            # results = Article.objects.annotate(rank=SearchRank(search_vector, search_query)
-            #                                 ).filter(rank__gte=0.3).order_by('-rank')
-            # ------------------------------------------------------------------------------------------
-            # 三元搜索
-            results = Article.objects.annotate(similarity=TrigramSimilarity('title', query),
-                                            ).filter(similarity__gt=0.3).order_by('-similarity')
-
-    context = {
-        'form': form,
-        'query': query,
-        'results': results,
-        'section': 'blog'
-    }
-    return render(request, 'app_blog/search.html', context)
+# 搜索实时反馈
+def ajax_search(request):
+    count = 0
+    if request.method == 'GET':
+        keyword = request.GET.get('keyword', None)
+        if keyword:
+            count = Article.published.filter(Q(title__icontains=keyword)|Q(body__icontains=keyword)).count()
+    return JsonResponse({'count': count, })
 
 
 # ajax 测试

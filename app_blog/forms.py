@@ -34,4 +34,4 @@ class CommentForm(forms.ModelForm):
 
 # 创建搜索表单
 class SearchForm(forms.Form):
-    query = forms.CharField(max_length=100)
+    keyword = forms.CharField(max_length=100)

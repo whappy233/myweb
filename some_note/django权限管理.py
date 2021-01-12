@@ -65,7 +65,7 @@ from django.http import Http404
 
 # 只有已登录且有添加产品权限的用户才能创建产品
 # permission_required(perm, login_url=None, raise_exception=False)
-@method_decorator(login_required, name='dispatch')
+@method_decorator(login_required, name='dispatch')  # dispatch 表示所有请求，因为所有请求都先经过dispatch
 @method_decorator(permission_required('app_blog.add_article', raise_exception=True), name='dispatch')
 class ProductCreate(CreateView):
     ...

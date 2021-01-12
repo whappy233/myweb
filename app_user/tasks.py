@@ -29,3 +29,8 @@ def XXX():  # 耗时任务
         time.sleep(1)
     print('ok')
     return '100'
+
+# 当我们使用 @app.task 装饰器定义我们的异步任务时，那么这个任务依赖于根据项目名myproject生成的Celery实例
+# 然而我们在进行Django开发时为了保证每个app的可重用性，
+# 我们经常会在每个app文件夹下编写异步任务，这些任务并不依赖于具体的Django项目名。
+# 使用 @shared_task 装饰器能让我们避免对某个项目名对应 Celery 实例的依赖，使app的可移植性更强

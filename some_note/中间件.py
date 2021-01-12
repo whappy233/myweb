@@ -62,6 +62,13 @@ def front_user_middleware(get_response):
 
 # 2. 类实现中间件
 from django.contrib.auth.models import User
+from django.utils.decorators import decorator_from_middleware, decorator_from_middleware_with_args
+# decorator_from_middleware 该方法将一个Middleware类转变为一个装饰器，可以用于单个视图函数上。
+# decorator_from_middleware_with_args 与上一方法作用相同，只不过支持传递额外的参数
+# cache_page = decorator_from_middleware_with_args(CacheMiddleware)
+# @cache_page(3600)
+# def my_view(request):
+#     pass
 class FrontUserMiddleware(object):
     def __init__(self, get_response):
         # 执行一些初始代码

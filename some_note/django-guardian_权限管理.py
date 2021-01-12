@@ -16,8 +16,9 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend', # 这是Django默认的
     'guardian.backends.ObjectPermissionBackend', # 这是guardian的
 ) 
-# 注意:
-# 一旦我们将django-guardian配置进我们的项目，
+
+# 创建guardian的数据库表
+python manage.py migrate
 # 当我们调用migrate命令将会创建一个匿名用户的实例（名为AnonymousUser ）。
 # guardian 的匿名用户与 Django 的匿名用户不同。
 # Django匿名用户在数据库中没有条目，但是Guardian匿名用户有。这意味着以下代码将返回意外的结果。
@@ -96,11 +97,43 @@ from guardian.shortcuts import get_perms
 # 也可以使用 get_user_perms 获得直接分配权限给用户（而不是从它的超级用户权限或组成员资格继承的权限）。
 # 同样的, get_group_perms 仅返回其是通过用户组的权限。
 
-# get_objects_for_user
-# 有时候我们需要根据特定的用户，对象的类型和提供的全新来获取对象列表，例如
+# 根据对象和权限获取用户  ---------------------------------------------------------------------
+# get_users_with_perms  (get_groups_with_perms)
+from guardian.shortcuts import get_users_with_perms
+get_users_with_perms(task)
+# <QuerySet [<User: zzz>, <User: xxx>, <User: ccc>]>  所有具有权限的用户
+
+# 想让superuser用户也包含在内，可以设置参数with_superusers=True
+get_users_with_perms(task, with_superusers=True)
+
+# 要查看用户具有的权限，可以设置参数attach_perms=True
+get_users_with_perms(task, with_superusers=True, attach_perms=True)
+# {
+#     <User: admin>: ['commontask_change', 'commontask_run', 'commontask_select'], 
+#     <User: xxx>: ['commontask_run','commontask_select'], 
+#     <User: ccc>: ['commontask_change', 'commontask_run'], 
+#     <User: zzz>: ['commontask_select']
+# }
+
+# 如果我们仅想查看具有某个权限的用户，可以设置only_with_perms_in参数，例如我们只想查看对象所有具有commontask_change权限的用户
+get_users_with_perms(task, with_superusers=True, only_with_perms_in=['commontask_change'])
+# <QuerySet [<User: admin@163.com>, <User: qa@ops-coffee.cn>]>
+
+# 默认情况下用户所数组如果具有权限的话也会返回，例如上边的我们把用户xxx加入到了group，
+# 然后给group赋予了权限，那么用户也就具有了相应的权限，如果我们只想查看直接赋予用户的权限，
+# 而并非间接通过group取得的权限用户列表，我们可以设置参数with_group_users=False，此参数默认为True
+get_users_with_perms(task, with_superusers=True, with_group_users=False)
+
+
+# 根据用户和权限获取对象  ---------------------------------------------------------------------
+# get_objects_for_user  (get_objects_for_group)
 from guardian.shortcuts import get_objects_for_user
 get_objects_for_user(jack, 'app_name.change_task')  # --> <QuerySet [<Task: Task object>]>
 get_objects_for_user(jack, 'app_name.view_task')  # --> <QuerySet []>
+get_objects_for_user(jack, ['engine.commontask_run', 'engine.commontask_change'])
+
+# 如果想要仅满足列表中的任意一个权限，可以添加第三个参数any_perm=True
+get_objects_for_user(jack, ['engine.commontask_run', 'engine.commontask_change'], any_perm=True)
 
 # ObjectPermissionChecker
 # guardian.core.ObjectPermissionChecker 用于检查特定对象的用户/组的权限。
@@ -109,10 +142,36 @@ from guardian.core import ObjectPermissionChecker
 checker = ObjectPermissionChecker(joe)
 checker.has_perm('view_task', task)  # --> True or False
 
-# 使用装饰器
+
+# 使用装饰器  ---------------------------------------------------------------------
 # django-guardian随附两个装饰器，这可能有助于简单的对象权限检查，
 # 但请记住，在装饰视图被调用之前，这些装饰器会触发数据库——这意味着如果在视图中进行类似的查找，
 # 那么最可能的一个（或更多，取决于查找）会发生额外的数据库查询。
+from guardian.decorators import permission_required
+from django.http import HttpResponse
+@permission_required('engine.commontask_change')
+def commontask_update_view(request):
+    return HttpResponse('Hello')
+# 当仅有一个权限参数时，则与django默认的permission_required装饰器无疑，表示用户是否具有整个model的commontask_change权限
+# 但在guardian的permission_required装饰器还支持第二个参数，
+# 参数类型为一个元组，类似这样(CommonTask, 'id', 'pk')，用来指定具体的对象，
+# 其中CommonTask为model，id为model的字段，pk为view中用户传入的具体参数，id与pk为对应关系，
+# 大概的查询逻辑就是CommonTask.objects.get(id=pk)，判断用户对此对象是否有CommonTask的权限，示例代码如下
+@permission_required('engine.commontask_change', (CommonTask, 'id', 'pk'))
+def commontask_delete_view(request, pk):
+    if request.method == 'POST':
+        try:
+            _data = CommonTask.objects.get(id=int(pk))
+            _data.delete()
+            return JsonResponse({'state': 1, 'message': '删除成功!'})
+        except Exception as e:
+            return JsonResponse({'state': 0, 'message': 'Error: ' + str(e)})
+    else:
+        return JsonResponse({"state": 0, "message": "Request method '%s' not supported" % request.method.upper()})
+
+# permission_required还接收以下几个参数：login_url、redirect_field_name、return_403、return_404、accept_global_perms，
+# 其中 accept_global_perms 参数表示是否检查用户的全局权限，如果指定了特定对象，且设置了 accept_global_perms=False 则只检查对象权限，
+# 不检查全局权限，accept_global_perms默认为False
 
 
 # 3.3.3 在模板中使用
@@ -129,6 +188,9 @@ checker.has_perm('view_task', task)  # --> True or False
 # 3.4 移除对象权限
 # 使用guardian.shortcuts.remove_perm()来移除权限
 remove_perm("veiw_task", joe, task)  # --> (0, {'guardian.UserObjectPermission': 0})
+# 以下例子会清除用户 zxcv 对 CommonTask 表下所有对象 engine.commontask_run 的权限
+remove_perm('engine.commontask_run', User.objects.get(username='zxcv'), CommonTask.objects.all())
+remove_perm('engine.commontask_run', User.objects.get(username='zxcv'))  # 与上面效果相同
 
 
 # 3.5 孤儿对象许可

@@ -9,12 +9,11 @@ from django.views.generic import ListView
 from app_blog.models import Article
 from django.utils import timezone
 class IndexView(ListView):
-  template_name = 'blog/article_list.html'
-  context_object_name = 'latest_articles'
-
-  # 希望只展示作者自己发表的文章列表且按文章发布时间逆序排列
-  def get_queryset(self):
-    return Article.objects.filter(author = self.request.user).order_by('-pub_date')
+    template_name = 'blog/article_list.html'
+    context_object_name = 'latest_articles'
+    # 希望只展示作者自己发表的文章列表且按文章发布时间逆序排列
+    def get_queryset(self):
+        return Article.objects.filter(author = self.request.user).order_by('-pub_date')
 
 
 '''get_context_data()'''
@@ -23,13 +22,13 @@ from django.views.generic import ListView
 from app_blog.models import Article
 from django.utils import timezone
 class IndexView(ListView):
-  queryset = Article.objects.all().order_by("-pub_date")
-  template_name = 'blog/article_list.html'
-  context_object_name = 'latest_articles'
-  def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
-    context['now'] = timezone.now() #只有这行代码有用
-    return context
+    queryset = Article.objects.all().order_by("-pub_date")
+    template_name = 'blog/article_list.html'
+    context_object_name = 'latest_articles'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now() #只有这行代码有用
+        return context
 
 
 '''get_object()方法'''
@@ -42,15 +41,37 @@ from django.http import Http404
 from app_blog.models import Article
 from django.utils import timezone
 class ArticleDetailView(DetailView):
-  queryset = Article.objects.all().order_by("-pub_date")
-  template_name = 'blog/article_detail.html'
-  context_object_name = 'article'
+    queryset = Article.objects.all().order_by("-pub_date")
+    template_name = 'blog/article_detail.html'
+    context_object_name = 'article'
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        if obj.author != self.request.user:
+            raise Http404()
+        return obj
 
-  def get_object(self, queryset=None):
-      obj = super().get_object(queryset=queryset)
-      if obj.author != self.request.user:
-          raise Http404()
-      return obj
+
+from django.http import JsonResponse
+from django.views import View
+class OrderView(View):
+    """登陆后可以访问"""
+    def get(self, request, *args, **kwargs):
+        # 打印用户jwt信息
+        print(request.user_info)
+        return JsonResponse({'data': '订单列表'})
+
+    def post(self, request, *args, **kwargs):
+        print(request.user_info)
+        return JsonResponse({'data': '添加订单'})
+
+    def put(self, request, *args, **kwargs):
+        print(request.user_info)
+        return JsonResponse({'data': '修改订单'})
+
+    def delete(self, request, *args, **kwargs):
+        print(request.user_info)
+        return JsonResponse({'data': '删除订单'})
+
 
 
 
@@ -94,36 +115,30 @@ class RestaurantCreate(CreateView):
 
 # template
 '''
-  {% extends "myrestaurants/base.html" %}
-
-  {% block content %}
-
-  <form action="" method="POST" enctype="multipart/form-data" >
-    {% csrf_token %}
-
-    {% for hidden_field in form.hidden_fields %}
-    {{ hidden_field }}
-  {% endfor %}
-
-  {% if form.non_field_errors %}
-    <div class="alert alert-danger" role="alert">
-      {% for error in form.non_field_errors %}
-        {{ error }}
-      {% endfor %}
-    </div>
-  {% endif %}
-
-  {% for field in form.visible_fields %}
-    <div class="form-group">
-      {{ field.label_tag }}
-      {{ field }}
-      {% if field.help_text %}
-        <small class="form-text text-muted">{{ field.help_text }}</small>
-      {% endif %}
-    </div>
-  {% endfor %}
-    <input type="submit" value="提交"/>
-  </form>
-
-  {% endblock %}
+    {% extends "myrestaurants/base.html" %}
+    {% block content %}
+    <form action="" method="POST" enctype="multipart/form-data" >
+        {% csrf_token %}
+        {% for hidden_field in form.hidden_fields %}
+        {{ hidden_field }}
+    {% endfor %}
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+        {% for error in form.non_field_errors %}
+            {{ error }}
+        {% endfor %}
+        </div>
+    {% endif %}
+    {% for field in form.visible_fields %}
+        <div class="form-group">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.help_text %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+        {% endif %}
+        </div>
+    {% endfor %}
+        <input type="submit" value="提交"/>
+    </form>
+    {% endblock %}
 '''
