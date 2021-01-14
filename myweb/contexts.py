@@ -34,6 +34,9 @@
 # 2. 返回值必须是个字典 
 # 3, 使用前需要在 settings 的 context_processors 里申明
 
+# 内容处理器在所有使用 RequestContext 的请求中执行。
+# 如果需要访问数据库，最好创建自定义模板标签，而不是使用内容处理器
+
 # 全局上下文处理器提供的变量优先级高于单个视图函数给单个模板传递的变量。
 # 这意味着全局上下文处理器提供的变量可能会覆盖你视图函数中自定义的本地变量，
 # 因此请注意避免本地变量名与全局上下文处理器提供的变量名称重复
@@ -42,6 +45,7 @@
 # from django.template import RequestContext
 # high_priority_context = RequestContext(request)
 # high_priority_context.push({"my_name": "Adrian"})
+
 
 
 from django.utils.safestring import mark_safe

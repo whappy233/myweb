@@ -101,16 +101,32 @@ WSGI_APPLICATION = 'myweb.wsgi.application'
 
 # 数据库 mysql
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+# 'django.db.backends.postgresql'
+# 'django.db.backends.mysql'
+# 'django.db.backends.sqlite3'
+# 'django.db.backends.oracle
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
 #         'NAME': 'blog',
 #         'USER': 'root',
 #         'PASSWORD': '********',
-#         'port': '3306',
-#         'host': 'localhost',
+#         'PORT': '3306',
+#         'HOST': 'localhost',
+#         # 'CONN_MAX_AGE': 0,  # 数据库连接的生命周期，默认为0请求结束时关闭数据库，设置为None无限持久连接
+#         # 设置mysql启用严格模式, 不指定会有警告信息
+#         # 'OPTIONS': {'init_command':"SET sql_mode='STRICT_TRANS_TABLES'"},
+#         # TIME_ZONE：设置时区
+#         # DISABLE_SERVER_SIDE_CURSORS：True时禁用服务器端游标
 #     }
 # }
+# migrate管理命令会同时在每一个数据库上运行，默认情况下它在default数据库上运行 ，
+# 可以通过选项 --database 来指定需要同步的数据库。如不指定会同步到default数据库上.
+# python manage.py migrate   #同步默认数据库
+# python manage.py migrate --database=db1
+# python manage.py migrate --database=db2
+
+
 
 # sqlite
 DATABASES = {
@@ -225,7 +241,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # 引擎（默认）
 SESSION_COOKIE_NAME = "sessionid"  # Session的cookie保存在浏览器上时的key，
 SESSION_COOKIE_PATH = "/"  # Session的cookie保存的路径（默认）
 SESSION_COOKIE_DOMAIN = None  # Session的cookie保存的域名（默认）
-SESSION_COOKIE_SECURE = False  # 是否Https传输cookie（默认）
+SESSION_COOKIE_SECURE = False  # 是否只有HTTPS连接才能发送cookie
 SESSION_COOKIE_HTTPONLY = True  # 是否Session的cookie只支持http传输（默认）
 SESSION_COOKIE_AGE = 60 * 30  # Session的cookie失效日期（30min）（默认）
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # 是否关闭浏览器使得Session过期（默认）

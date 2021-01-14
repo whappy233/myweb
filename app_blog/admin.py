@@ -36,7 +36,7 @@ class TitleKeywordFilter(admin.SimpleListFilter):
 # admin.site.register(Article, ArticleAdmin)  # 注册方式1
 @admin.register(Article)  # 注册方式2（使用包装）
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ['show_tags', 'title', 'author', 'created', 'publish', 'updated', 'status', 'is_delete', 'slug']  # 显示字段
+    list_display = ['id', 'show_tags', 'title', 'author', 'created', 'publish', 'updated', 'status', 'is_delete', 'slug']  # 显示字段
     search_fields = ['title', 'body']  # 搜索字段
     list_filter = [TitleKeywordFilter, 'publish', 'created', 'updated', 'status']  # 过滤字段
     prepopulated_fields = {'slug':('title',)}  # 自动生成slug, 根据title填充slug

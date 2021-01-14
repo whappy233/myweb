@@ -26,7 +26,7 @@ def article_list(request):
     return render(request, 'blog/article_list.html', {'articles': articles, })
 
 # 获取id=13的文章对象同时，获取其相关category信息
-Article.objects.select_related('category').get(id=13)
+Article.objects.select_related('category').get(id=6)
 
 # 获取id=13的文章对象同时，获取其相关作者名字信息
 Article.objects.select_related('author__name').get(id=13)
