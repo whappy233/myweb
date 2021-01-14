@@ -16,6 +16,9 @@ from .utils import create_validate_code as CheckCode
 from .utils import crop_image, generate_vcode, send_email
 
 
+# from app_common.decorators import check_honeypot, honeypot_exempt
+
+
 class CustomBackend(ModelBackend):
     """
     实现用户名邮箱手机号登录
@@ -79,6 +82,7 @@ def register(request):
     return render(request, 'app_user/registration.html', {'form': form, 'message': message})
 
 # 登录
+# @check_honeypot(field_name='12223')
 def login(request):
     '''登录'''
     # 第三步
@@ -213,19 +217,20 @@ def profile(request):
     if request.method == 'POST':
         user_form = UserEditForm(data=request.POST, instance=request.user)
         profile_form = ProfileEditForm(data=request.POST, files=request.FILES, instance=request.user.profile)
-
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
             message = '信息修改成功'
         else:
-            message = '修改失败'
-    try:
-        user_form = UserEditForm(instance=request.user)  # 初始化表单
-        profile_form = ProfileEditForm(instance=request.user.profile)
-    except Exception as e:
-        err_info = f'ERROR Info: {e}<br>请检查是否关联了UserProfile(OneToOneField)'
-        return HttpResponse(err_info)
+            info = profile_form.errors.get_json_data()
+            message = '修改失败: ' + ''.join(l['message'] for i in info.values() for l in i)
+    else:
+        try:
+            user_form = UserEditForm(instance=request.user)  # 初始化表单
+            profile_form = ProfileEditForm(instance=request.user.profile)
+        except Exception as e:
+            err_info = f'ERROR Info: {e}<br>请检查是否关联了UserProfile(OneToOneField)'
+            return HttpResponse(err_info)
 
     return render(request, 'app_user/profile.html',
                   context={

@@ -26,6 +26,21 @@ def front_user_middleware(get_response):
     return middleware
 
 
+import time
+class StatsMiddleware(object):
+    def __init__(self, get_response):
+        # 执行一些初始代码 
+        self.get_response = get_response
+
+    def __call__(self,request):
+        request.start_time = time.time()
+        response = self.get_response(request)
+        total = time.time() - request.start_time
+        response["X-total-time"] = int(total * 1000)
+        return response
+
+
+
 # 2. 类实现中间件
 from django.contrib.auth.models import User
 class FrontUserMiddleware(object):
@@ -52,6 +67,7 @@ class FrontUserMiddleware(object):
         print('response到达浏览器之前执行的代码...')
 
         return response
+
 
 
 # 3. 即将被遗弃的一个中间件的定义方法≥

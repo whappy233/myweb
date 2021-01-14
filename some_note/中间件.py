@@ -50,13 +50,73 @@ def front_user_middleware(get_response):
         else:
             request.front_user = None  # 避免以后用户没有登录的情况下报错
 
+        # 当请求从浏览器发送到服务器时, 将调用 response = get_response(request) 该行之前的所有内容。
+        # 当响应从服务器返回到浏览器时, 将调用 response = get_response(request) 此行之后的所有内容
+
         # 在调用视图（和随后的中间件）之前，将为每个请求执行的代码。
+        # 请求在到达视图前执行的代码
         response = get_response(request)
+        # 响应在返回给客户端前执行的代码
         # 调用视图后将为每个请求/响应执行的代码
 
         print('response到达浏览器之前执行的代码...')
         return response
 
+    return middleware
+
+
+# 检查处理请求的整个过程需要多长时间
+import time
+import datetime
+def timing(get_response):
+    def middleware(request):
+        request.current_time = datetime.datetime.now()
+        t1 = time.time()
+        response = get_response(request)
+        t2 = time.time()
+        print("TOTAL_TIME:", (t2 - t1))
+        return response
+    return middleware
+
+
+def simple_middleware(get_response):
+    def middleware(request):
+        # 这个方法什么也没做，我们只需要异常处理
+        return get_response(request)
+
+    def process_exception(request, exception):
+        # Do something useful with the exception
+        pass
+
+    middleware.process_exception = process_exception
+    return middleware
+
+
+import requests
+from django.http import HttpResponse
+# Previous imports and timing middleware should remain unchanged
+def stackoverflow(get_response):
+    def middleware(request):
+        # 这个方法什么也没做，我们只需要异常处理
+        return get_response(request)
+
+    def process_exception(request, exception):
+        url = 'https://api.stackexchange.com/2.2/search'
+        params = {
+            'site': 'stackoverflow',
+            'order': 'desc',
+            'sort': 'votes',
+            'pagesize': 3,
+            'tagged': 'python;django',
+            'intitle': str(exception),
+        }
+        response = requests.get(url, params=params)
+        html = ''
+        for question in response.json()['items']:
+            html += '<h2><a href="{link}">{title}</a></h2>'.format(**question)
+        return HttpResponse(html)
+
+    middleware.process_exception = process_exception
     return middleware
 
 
@@ -93,6 +153,23 @@ class FrontUserMiddleware(object):
         print('response到达浏览器之前执行的代码...')
 
         return response
+
+    def process_exception(self, request, exception):
+        url = 'https://api.stackexchange.com/2.2/search'
+        params = {
+            'site': 'stackoverflow',
+            'order': 'desc',
+            'sort': 'votes',
+            'pagesize': 3,
+            'tagged': 'python;django',
+            'intitle': str(exception),
+        }
+        response = requests.get(url, params=params)
+        html = ''
+        for question in response.json()['items']:
+            html += '<h2><a href="{link}">{title}</a></h2>'.format(**question)
+        return HttpResponse(html)
+
 
 
 

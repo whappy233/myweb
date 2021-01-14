@@ -12,7 +12,7 @@ SECRET_KEY = 'jh*9r+p97rvldfkdnm6yvnm(m&ws$x)=squ!=rlu5s(uilhj+g'
 # SECRET_KEY= os.environ['SECRET_KEY']
 
 # 不要在生产环境打开 debug 开关
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '*']
 
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'app_sheet.apps.AppSheetConfig',
     'app_gallery.apps.AppGalleryConfig',
     'app_admin.apps.AppAdminConfig',
+    'app_common.apps.AppCommonConfig',
 
     'taggit',                       # 第三方标签管理器
     'imagekit',                     # 第三方缩略图应用 pip install django-imagekit
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 
 # 中间件
 MIDDLEWARE = [
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'app_user.middleware.StatsMiddleware',
     'app_user.middleware.front_user_middleware',
     'app_user.middleware.FrontUserMiddleware',
 
@@ -181,9 +184,11 @@ USE_L10N = True  # 默认False，以本地化格式显示数字和时间
 
 USE_TZ = False  # 默认值True。若使用了本地时间，必须设为False
 
+
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
 STATIC_URL = '/static/'
 if DEBUG:
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
@@ -213,8 +218,9 @@ AUTHENTICATION_BACKENDS = ('app_user.views.CustomBackend',)
 
 # CkEditor 富文本编辑器配置
 CKEDITOR_UPLOAD_PATH = 'blog_uploads/'  # 文件上传文件夹  media/blog_uploads/
-CKEDITOR_JQUERY_URL ='https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js'
 CKEDITOR_IMAGE_BACKEND = 'pillow'
+CKEDITOR_THUMBNAIL_SIZE = (300, 300)
+CKEDITOR_IMAGE_QUALITY = 40
 CKEDITOR_ALLOW_NONIMAGE_FILES = False
 CKEDITOR_BROWSE_SHOW_DIRS = True
 CKEDITOR_RESTRICT_BY_USER = False  # 如果为True /media/blog_uploads/用户名/ 

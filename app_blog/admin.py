@@ -51,7 +51,7 @@ class ArticleAdmin(admin.ModelAdmin):
     empty_value_display = '<span>-</span>'  # 字段值为空时显示的文本(可为纯文本,可为html)
     # admin_order_field = ('title', 'updated')  # 设置需要排序的字段
     list_per_page = 20  # 每页显示条目数
-    list_editable = ('status',)  # 设置可编辑字段
+    list_editable = ('status', 'is_delete')  # 设置可编辑字段
     date_hierarchy = 'publish'  # 按日期月份筛选
     list_display_links = ['title', 'author']  # 设置带连接的字段
 
@@ -147,7 +147,6 @@ class ArticleAdmin(admin.ModelAdmin):
     show_tags.short_description = '标签'  # 设置表头
 
 
-
 # admin.site.register(Category, CategoryAdmin)  # 注册方式1
 @admin.register(Category)  # 注册方式2（使用包装）
 class CategoryAdmin(admin.ModelAdmin):
@@ -160,9 +159,10 @@ class CategoryAdmin(admin.ModelAdmin):
 # admin.site.register(Comment)  # 注册方式1
 @admin.register(Comment)  # 注册方式2（使用包装）
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'article', 'body', 'created', 'updated', 'active']  # 显示字段
+    list_display = ['name', 'email', 'body', 'created', 'content_type', 'object_id', 'active']  # 显示字段
     search_fields = ['name', 'email', 'body']  # 搜索字段
-    list_filter = ['created', 'updated', 'active']  # 过滤器
+    list_filter = ['created', 'active']  # 过滤器
+    list_editable = ['active']
     # raw_id_fields = ['article',]  # 下拉框改为微件
 
 

@@ -27,6 +27,13 @@ class UserProfile(models.Model):
 
     class Meta:
         verbose_name = 'User Profile'
+        constraints = [ #  添加约束
+            models.UniqueConstraint(fields=['telephone'], name='unique_phone'),  # 唯一约束
+            # 条件约束确保一个模型实例只有满足一定的规则条件后才被创建，不满足条件的数据不会存入到数据库。
+            # 下例增加了一个对员工年龄的约束，只有大于18岁的才能注册
+            # models.CheckConstraint(check=models.Q(age__gte=18), name='age_gte_18')
+        ]
+
 
     def __str__(self):
         return self.user.username

@@ -1,4 +1,4 @@
-# Django项目设置全局的模版变量
+'''Django项目设置全局的模版变量'''
 
 # settings.py文件中，在 TEMPLATES 中添加刚才写的方法引用
 # TEMPLATES = [

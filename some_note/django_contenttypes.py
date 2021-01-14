@@ -2,7 +2,13 @@
 # Django ContentTypes是一个非常有用的框架，主要用来创建模型间的通用关系(generic relation).
 
 
+# 1. ContentType实例提供的接口:
+#     ContentType.model_class()  获取当前ContentType类型所代表的模型类
+#     ContentType.get_object_for_this_type()  使用当前ContentType类型所代表的模型类做一次get查询
 
+# 2. ContentType管理器(manager)提供的接口:
+#     ContentType.objects.get_for_id() 通过id寻找ContentType类型，这个跟传统的get方法的区别就是它跟get_for_model共享一个缓存，因此更为推荐。
+#     ContentType.objects.get_for_model() 通过model或者model的实例来寻找ContentType类型
 
 
 
@@ -38,9 +44,9 @@ class Comment(models.Model):
     author = models.ForeignKey(User)
     body = models.TextField(blank=True)
 
-    content_type = models.ForeignKey(ContentType)               # step1 内容类型，代表了模型的名字(比如Article, Picture)
+    content_type = models.ForeignKey(ContentType, on_delete=None)               # step1 内容类型，代表了模型的名字(比如Article, Picture)
     object_id = models.PositiveIntegerField()                   # step2 传入对象的id
-    content_object = GenericForeignKey(content_type, object_id) # step3 传入的实例化对象，其包含两个属性content_type和object_id
+    content_object = GenericForeignKey('content_type', 'object_id') # step3 传入的实例化对象，其包含两个属性content_type和object_id
 
 
 # 1. 不在模型设置 GenericRelation(用于反向关系查询)字段 的情况下, 按如下代码建立评论关系。

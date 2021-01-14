@@ -2,8 +2,11 @@ import base64
 
 from ckeditor_uploader.fields import RichTextUploadingField  # 富文本编辑器
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import (GenericForeignKey,
+                                                GenericRelation)
+
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.db.models import base
 from django.urls import reverse
 from django.utils import timezone
 from taggit.managers import TaggableManager  # 第三方标签应用
@@ -81,7 +84,10 @@ class Article(models.Model):
     created = models.DateTimeField('创建时间', auto_now_add=True)
     updated = models.DateTimeField('更新时间', auto_now=True)
     status = models.CharField('文章状态', max_length=10, choices=STATUS_CHOICES, default='d')
-    is_delete = models.BooleanField(default=False)
+    is_delete = models.BooleanField('是否不可见', default=False)
+
+    # contenttypes
+    comments = GenericRelation('Comment')  # 该字段不会存储于数据库中(用于反向关系查询)
 
     objects = models.Manager()  # 默认管理器
     # objects = aaa()   # 在默认管理器上增加了方法
@@ -146,21 +152,19 @@ class Article(models.Model):
         if self.status == 'p' and self.publish is None:
             self.publish = timezone.now()
 
+
 # 评论模型
 class Comment(models.Model):
     '''评论模型'''
-    # related_name 可对对应关系属性进行命名(指定反向关系名称)(从Article到Comment),
-    # 如果未定义,Django将使用模型名称_set的形式如:article.comment_set.all()
-    # comment.article检索评论对象的帖子
-    # article.comments.all()检索某文章的全部评论
-    article = models.ForeignKey(Article, on_delete=models.CASCADE,
-                             related_name='comments', verbose_name='关联文章')  # 多对一
     name = models.CharField(max_length=80, verbose_name='名字')
-    email = models.EmailField(verbose_name='邮箱')
+    email = models.EmailField(verbose_name='邮箱', blank=True)
     body = models.TextField(verbose_name='评论')
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
-    updated = models.DateTimeField(auto_now=True, verbose_name='更新时间')
     active = models.BooleanField(default=True, verbose_name='是否有效')  # 隐式删除
+
+    content_type = models.ForeignKey(ContentType, on_delete=None, verbose_name='内容类型')   # step1 内容类型，代表了模型的名字(比如Article, Picture)
+    object_id = models.PositiveIntegerField('关联对象的ID')                       # step2 传入对象的id
+    content_object = GenericForeignKey('content_type', 'object_id') # step3 传入的实例化对象，其包含两个属性content_type和object_id
 
     class Meta:
         ordering = ('created',)
@@ -168,4 +172,4 @@ class Comment(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return '来自 {} 下 {} 的评论'.format(self.article, self.name)
+        return f'(关联的模型: {self.content_type}, 对应ID: {self.object_id})'

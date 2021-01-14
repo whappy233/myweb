@@ -8,8 +8,6 @@ from django.core.exceptions import ValidationError
 import re
 
 
-
-
 # 用户注册
 class RegistrationForm(forms.Form):
 
@@ -102,6 +100,16 @@ class PwdChangeForm(forms.Form):
 
 
 
+# 自定义手机号验证
+def mobile_validate(value):
+    mobile_re = re.compile(r'^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$')
+    if not mobile_re.match(value):
+        raise ValidationError('手机号码格式错误')
+# mobile = forms.CharField(validators=[mobile_validate, ], error_messages={'required': u'手机不能为空'},
+#                             widget=forms.TextInput(attrs={'class': "form-control", 'placeholder': u'手机号码'}))
+
+
+
 # 用户信息编辑(User)
 class UserEditForm(forms.ModelForm):
     class Meta:
@@ -114,22 +122,6 @@ class UserEditForm(forms.ModelForm):
                 'email': '邮箱',
                 }
 
-# 自定义手机号验证
-def mobile_validate(value):
-    mobile_re = re.compile(r'^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$')
-    if not mobile_re.match(value):
-        raise ValidationError('手机号码格式错误')
-
-#  mobile = forms.CharField(validators=[mobile_validate, ],
-#                             error_messages={'required': u'手机不能为空'},
-#                             widget=forms.TextInput(attrs={
-#                                 'class': "form-control",
-#                                 'placeholder': u'手机号码'})
-#                         )
-
-
-
-
 
 # 用户信息编辑(UserProfile)
 class ProfileEditForm(forms.ModelForm):
@@ -138,19 +130,22 @@ class ProfileEditForm(forms.ModelForm):
         fields = ('org', 'telephone')
 
         widgets = {
-                    'org': forms.Textarea(attrs={'cols': 19, 'rows': 1, 'class': '自定义样式'}),  # 关键是这一行
-                }
+            'org': forms.Textarea(attrs={'cols': 19, 'rows': 1, 'class': '自定义样式'}),
+            'telephone': forms.TextInput(attrs={'type' : 'number','class' : 'your_class', 'max_length': 6, 'placeholder': u'手机号码'})
+        }
         labels = {
-                'org': 'ORG',
-                }
+            'org': 'ORG',
+            'telephone': '666'
+        }
         help_texts = {
-                'org': ('Some useful help text.'),
-                }
+            'org': ('Some useful help text.'),
+        }
         error_messages = {
-                'org': {
-                    'max_length': ("This writer's org is too long."),
-                    },
-                }
+            'org': {
+                'max_length': ("This writer's org is too long."),
+            },
+        }
+
 
 # 用户头像表单
 class UserPhotoUploadForm(forms.Form):
@@ -162,6 +157,23 @@ class UserPhotoUploadForm(forms.Form):
             # print('文件类型只能是: png,jpg,jpeg,gif')
             raise forms.ValidationError('文件类型只能是: png,jpg,jpeg,gif')
         return photo_file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # formset_factory ---------------------------------------------------------------------
 # 有的时候用户需要在1个页面上使用多个表单，比如一次性提交添加多本书的信息，这时我们可以使用formset。这是一个表单的集合

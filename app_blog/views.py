@@ -124,18 +124,19 @@ class ArticleDetailView(DetailView):
     def post(self, request, *args, **kwargs):
         message = ''
         self.object = article = self.get_object()
-        has_commented = request.session.get('has_commented', False)
-        if not has_commented:
+        has_commented = request.session.get('has_commented', None)
+        if (not has_commented) or (has_commented!=article.id):
             comment_form = CommentForm(data=request.POST)  # 提交表单
             if comment_form.is_valid():
                 # 创建表单连接的模型实例(commit=False, 不会立即保存到数据库中),save()方法仅适用于ModelsForm
                 new_comment = comment_form.save(commit=False)
-                new_comment.article = article
+                new_comment.content_object = article
                 new_comment.save()
-                request.session['has_commented'] = True
+                request.session['has_commented'] = article.id
+                request.session.set_expiry(300)
                 return redirect(article.get_absolute_url())
         else:
-            message = '你已经评论过了'
+            message = '你已经评论过了, 五分钟后可再次评论.'
 
         context = self.get_context_data()
         context.update({'message': message,})
