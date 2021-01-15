@@ -163,7 +163,7 @@ class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     active = models.BooleanField(default=True, verbose_name='是否有效')  # 隐式删除
 
-    content_type = models.ForeignKey(ContentType, on_delete=None, verbose_name='内容类型')   # step1 内容类型，代表了模型的名字(比如Article, Picture)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name='内容类型')   # step1 内容类型，代表了模型的名字(比如Article, Picture)
     object_id = models.PositiveIntegerField('关联对象的ID')                       # step2 传入对象的id
     content_object = GenericForeignKey('content_type', 'object_id') # step3 传入的实例化对象，其包含两个属性content_type和object_id
 

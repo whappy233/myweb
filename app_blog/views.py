@@ -33,11 +33,11 @@ class ArticleListView(ListView):
     # template_name = 'app_blog/article_list.html'  # 视图默认的模板名称是: 模型名小写_list.html
 
     def get_queryset(self):
-        self.tag__ = None
+        self.tag__ = self.author_name__ = self.search_keyword = None
         obj = Article.published.all()
         tag_slug = self.kwargs.get('tag_slug')
         self.author_name__ = author_name = self.kwargs.get('author_name')
-        keyword = self.request.GET.get('keyword', None)
+        self.search_keyword = keyword = self.request.GET.get('keyword', None)
 
         if tag_slug:
             self.tag__ = tag = get_object_or_404(Tag, slug=tag_slug)
@@ -55,6 +55,7 @@ class ArticleListView(ListView):
         context['section'] = 'blog'
         context['tag'] = self.tag__
         context['name'] = self.author_name__
+        context['keyword'] = self.search_keyword
         return context
 
 
