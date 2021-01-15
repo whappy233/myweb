@@ -13,6 +13,7 @@ from taggit.managers import TaggableManager  # 第三方标签应用
 
 from .cn_taggit import CnTaggedItem
 
+from uuid import uuid4
 
 # 自定义的管理器
 class PublishedManage(models.Manager):
@@ -134,10 +135,10 @@ class Article(models.Model):
     # 重写save方法
     def save(self, *args, **kwargs):
         if not self.slug:
-            slug = base64.urlsafe_b64encode(
-                self.title.encode()).decode().rstrip('=')
+            # slug = base64.urlsafe_b64encode(self.title.encode()).decode().rstrip('=')
             # print(base64.urlsafe_b64decode(
             #     slug + '=' * (4 - len(slug) % 4)).decode())  # 解码
+            slug = uuid4().hex[:10]
             self.slug = slug
         super().save(*args, **kwargs)
 

@@ -18,8 +18,15 @@ from taggit.models import Tag  # 导入标签模型
 from .forms import CommentForm, EmailArticleForm, SearchForm
 from .models import Article, Category, Comment
 
+from loguru import logger
+# @logger.catch()
+# logger.info('侧边时从V型许星程嘘嘘')
+# logger.exception('boonnononono')
+
+
 
 # 所有文章 (类视图)
+@method_decorator(logger.catch(), name='dispatch')
 class ArticleListView(ListView):
     # context_object_name = 'page_obj'  # 设置上下文变量
     paginate_by = 3  # 3个一页 生成 page_obj 对象
@@ -118,6 +125,7 @@ class ArticleDetailView(DetailView):
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset=queryset)
+        
         obj.viewed()
         return obj
 

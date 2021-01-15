@@ -57,11 +57,11 @@ if article_list:  # 在这里缓存了查询结果
 # Example 9: Good
 article_list = Article.objects.filter(title__contains="django").values('title')
 if article_list:
-    print(article.title)
+    print(article_list.title)
 
 article_list = Article.objects.filter(title__contains="django").values_list('id', 'title')
 if article_list:
-    print(article.title)
+    print(article_list.title)
 
 
 

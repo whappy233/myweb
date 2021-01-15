@@ -1,0 +1,8 @@
+2021-01-15 09:10:25.595 | INFO     | app_blog.views:get_context_data:48 - 侧边时从V型许星程嘘嘘
+2021-01-15 09:10:27.336 | INFO     | app_blog.views:get_context_data:48 - 侧边时从V型许星程嘘嘘
+2021-01-15 09:11:37.796 | INFO     | app_blog.views:get_context_data:48 - 侧边时从V型许星程嘘嘘
+2021-01-15 09:11:37.796 | ERROR    | app_blog.views:get_context_data:49 - boonnononono
+NoneType: None
+2021-01-15 09:11:38.450 | INFO     | app_blog.views:get_context_data:48 - 侧边时从V型许星程嘘嘘
+2021-01-15 09:11:38.450 | ERROR    | app_blog.views:get_context_data:49 - boonnononono
+NoneType: None

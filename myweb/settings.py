@@ -1,4 +1,6 @@
 import os
+from loguru import logger
+
 
 # 返回工程路径(myweb)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -18,7 +20,6 @@ ALLOWED_HOSTS = ['localhost', '*']
 
 SITE_ID = 1  # 设置站点ID
 
-# 在这里添加APP
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',         # 管理员站点
@@ -48,7 +49,6 @@ INSTALLED_APPS = [
 
 # 中间件
 MIDDLEWARE = [
-
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -57,9 +57,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    # 'app_user.middleware.front_user_middleware',
+    # 'app_user.middleware.FrontUserMiddleware',
     'app_user.middleware.StatsMiddleware',
-    'app_user.middleware.front_user_middleware',
-    'app_user.middleware.FrontUserMiddleware',
 
     # 全站缓存
     # 'django.middleware.cache.UpdateCacheMiddleware',
@@ -130,7 +130,6 @@ WSGI_APPLICATION = 'myweb.wsgi.application'
 # python manage.py migrate --database=db2
 
 
-
 # sqlite
 DATABASES = {
     'default': {
@@ -138,6 +137,12 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# 日志文件配置
+LOG_DIR = os.path.join(BASE_DIR,'log')
+if not os.path.exists(LOG_DIR): os.makedirs(LOG_DIR)
+logger.add(os.path.join(LOG_DIR, 'error.log'), rotation='1 days', retention='30 days', encoding='utf-8')
+
 
 # 缓存
 CACHES = {
@@ -153,7 +158,6 @@ CACHES = {
         # 'KEY_FUNCTION': '对应的函数名'   # 生成key的函数（默认函数会生成为：【前缀:版本:key】）
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -175,25 +179,17 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 LANGUAGE_CODE = 'zh-hans'
-
 TIME_ZONE = 'Asia/Shanghai'  # 设置时区
-
 USE_I18N = True  # 默认为True，是否启用自动翻译系统
-
 USE_L10N = True  # 默认False，以本地化格式显示数字和时间
-
 USE_TZ = False  # 默认值True。若使用了本地时间，必须设为False
-
-
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 STATIC_URL = '/static/'
-if DEBUG:
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+if DEBUG: STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+else: STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # 媒体文件
 MEDIA_URL = '/media/'
@@ -243,6 +239,8 @@ CKEDITOR_CONFIGS = {
     }
 }
 
+
+# session 会话配置
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # 引擎（默认）
 SESSION_COOKIE_NAME = "sessionid"  # Session的cookie保存在浏览器上时的key，
 SESSION_COOKIE_PATH = "/"  # Session的cookie保存的路径（默认）

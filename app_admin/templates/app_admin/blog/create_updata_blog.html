@@ -3,7 +3,12 @@
 {% block content %}
 
 
-<h3>添加新文章</h3>
+<h3>{% if is_updata %}
+    修改文章
+    {% else %}
+    添加新文章
+    {% endif %}
+</h3>
 
 <form method="POST" class="form-horizontal" role="form" action="">
     {% csrf_token %}

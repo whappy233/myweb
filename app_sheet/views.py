@@ -7,6 +7,6 @@ def index(request):
     return render(request, 'app_sheet/xx.html')
     # return HttpResponse('sqwdwed')
 
-def updata(request):
+def update(request):
     print(10*'*')
     return HttpResponse('fff')

@@ -33,12 +33,20 @@ class StatsMiddleware(object):
         self.get_response = get_response
 
     def __call__(self,request):
-        request.start_time = time.time()
         response = self.get_response(request)
-        total = time.time() - request.start_time
-        response["X-total-time"] = int(total * 1000)
+        return response
+        # response["X-total-time"] = int(total * 1000)
+
+    def process_view(self, request, view_func, view_args, view_kwargs):
+        print(789456123456789523)
+        return None
+
+    def process_response(self, request, response):
+        print(11111111111111111111)
         return response
 
+    def process_request(self, request):
+        print(4444444444444444444)
 
 
 # 2. 类实现中间件

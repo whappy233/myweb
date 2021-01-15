@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<h5>
+    确认删除 {{article.title}} ?
+</h5>
+    
+<button id="delete" class="btn btn-danger">Yes</button>
+<button id="no" class="btn btn-info">No</button>
+<p id="info" ></p>
+{% csrf_token %}
+{% endblock %}
+
+
+
+
+{% block javascript %}
+<script>
+    $(function(){
+        let id = "{{article.id}}",
+            csrfmiddlewaretoken = $('[name="csrfmiddlewaretoken"]').val(),
+            slug = "{{article.slug}}";
+        var time = 3, result='';
+        let data = {'id': id, 'slug': slug, 'csrfmiddlewaretoken': csrfmiddlewaretoken}
+
+        $('#delete').on('click', function(){
+            $.post('', data, function(data){
+                console.log(6666)
+                setInterval(function(){
+                    if (time == 0){
+                        window.location.replace("{% url 'app_admin:blog_list' %}")
+                    }
+                    $('#info').text(`${data['info']} ${time}s 后跳转`);
+                    time--;
+                }, 1000)
+            })
+        });
+        $('#no').on('click', function(){
+            window.location.replace("{% url 'app_admin:blog_list' %}")
+        })
+    })
+</script>
+{% endblock %}

@@ -12,7 +12,7 @@
     </div>
     <div style="float: right;">
         <a href="{% url 'app_admin:create_blog' %}">
-            <button class='btn btn-info'>+</button>
+            <button class='btn btn-info'>新建+</button>
         </a>
     </div>
 </div>
@@ -31,6 +31,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>Check</th>
             <th>标题</th>
             <th>类别</th>
             <th>发布日期</th>
@@ -43,19 +44,25 @@
         {% if page_obj %}
         {% for article in page_obj %}
         <tr>
+            <td class="form-group">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="{{article.id}}">
+                    <label class="custom-control-label" for="{{article.id}}"></label>
+                </div>
+            </td>
+
             <td>{{ article.title }}</td>
             <td>{{ article.category.name }}</td>
             <td>{{ article.publish | date:"Y-m-d" | default:"-" }}</td>
 
             {% if article.publish %}
             <td><a href="{{ article.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">☺︎</span></a></td>
-            <td><a href="{{ article.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">✎</span></a></td>
-            <td><a href="{{ article.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">✗</span></a></td>
             {% else %}
             <td>-</td>
-            <td>-</td>
-            <td>-</td>
             {% endif %}
+            <td><a href="{% url 'app_admin:update_article' article.id article.slug %}"><span class="glyphicon glyphicon-eye-open">✎</span></a></td>
+            <td><a href="{% url 'app_admin:delete_article' article.id article.slug %}"><span class="glyphicon glyphicon-eye-open">✗</span></a></td>
+
         </tr>
         {% endfor %}
         {% else %}

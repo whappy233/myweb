@@ -6,12 +6,16 @@ from app_admin import views
 app_name = 'app_admin'
 
 urlpatterns = [
-    path('user_manage/', views.AdminUserListView.as_view(), name='user_manage'),  # 用户管理
+
+    path('', views.index, name='index'),  # 用户管理
+
+    path('user/', views.AdminUserListView.as_view(), name='user_list'),  # 用户管理
 
     # path('create_user/',views.admin_create_user,name="create_user"), # 新建用户
     # path('del_user/',views.admin_del_user,name='del_user'), # 删除用户
     # path('change_pwd',views.admin_change_pwd,name="change_pwd"), # 管理员修改用户密码
     # path('modify_pwd',views.change_pwd,name="modify_pwd"), # 普通用户修改密码
+
     # path('project_manage/',views.admin_project,name='project_manage'), # 文集管理
     # path('project_role_manage/<int:pro_id>/',views.admin_project_role,name="admin_project_role"), # 管理文集权限
     # path('doc_manage/',views.admin_doc,name='doc_manage'), # 文档管理
@@ -22,6 +26,8 @@ urlpatterns = [
     # path('send_email_vcode/',views.send_email_vcode,name='send_email_vcode'), # 忘记密码发送邮件验证码
     # path('admin_register_code/',views.admin_register_code,name='register_code_manage'), # 注册邀请码管理
 
-    path('blog/', views.AdminArticleListView.as_view(), name='blog_list'),  # 所有文章列表
-    path('create_blog/', views.ArticleCreateView.as_view(), name='create_blog'),  # 创建文章
+    path('blog/', views.AdminArticleListView.as_view(), name='blog_list'),      # 所有文章
+    path('blog/create', views.ArticleCreateView.as_view(), name='create_blog'), # 创建文章
+    path('blog/update/<int:id>/<slug:slug>', views.ArticleUpdateView.as_view(), name='update_article'),  # 修改文章
+    path('blog/delete/<int:id>/<slug:slug>', views.ArticleDeleteView.as_view(), name='delete_article'),  # 删除文章(逻辑删除)
 ]
