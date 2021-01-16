@@ -151,12 +151,16 @@ def create_validate_code(size:tuple=(120, 30),
     def create_strs():
         '''绘制验证码字符'''
         c_chars = get_chars()
-        strs = ' %s ' % ' '.join(c_chars)  # 每个字符前后以空格隔开
+        # strs = ' %s ' % ' '.join(c_chars)  # 每个字符前后以空格隔开
         font = ImageFont.truetype(font_type, font_size)
-        font_width, font_height = font.getsize(strs)
-        draw.text(((width - font_width) / 3, (height - font_height) / 3),
-                strs, font=font, fill=random_color())
+        # font_width, font_height = font.getsize(strs)
+        # draw.text(((width - font_width) / 3, (height - font_height) / 3), strs, font=font, fill=random_color())
+
+        for t in range(4):
+            a = c_chars[t]
+            draw.text((5+25*t,  2), a, font=font, fill=random_color())
         return ''.join(c_chars)
+
 
     width, height = size  # 宽， 高
     img = Image.new(mode, size, random_color())  # 创建图形
@@ -167,6 +171,7 @@ def create_validate_code(size:tuple=(120, 30),
     if draw_points:
         create_points()
     strs = create_strs()
+    del draw
 
     # 图形扭曲参数
     params = [1 - float(random.randint(1, 2)) / 100,
@@ -177,6 +182,7 @@ def create_validate_code(size:tuple=(120, 30),
 
     img = img.transform(size, Image.PERSPECTIVE, params)  # 创建扭曲
     img = img.filter(ImageFilter.EDGE_ENHANCE_MORE)  # 滤镜，边界加强（阈值更大）
+    
 
     print(strs)
     return img, strs

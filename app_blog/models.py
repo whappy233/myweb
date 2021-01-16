@@ -69,15 +69,15 @@ class Category(models.Model):
 class Article(models.Model):
     '''文章模型'''
     STATUS_CHOICES = (('d', '草稿'), ('p', '发布'),)
+    COMMENT_STATUS = (('o', '打开'), ('c', '关闭'),)
     tags = TaggableManager(blank=True, through=CnTaggedItem)  # 添加标签管理器
     title = models.CharField('标题', max_length=250)
     # slug 字段用于 URL 中，仅包含字母数字下划线以及连字符。根据 slug 字段，可对博客构建具有良好外观和 SEO 友好的 URL。
     # 使用 unique_for_date 参数可采用发布日期与 slug 对帖子构建URL
     slug = models.SlugField('slug', max_length=250, unique_for_date='publish', blank=True)
-    # related_name 指定反向关系名称(从User到Article)
-    users_like = models.ManyToManyField(User, related_name='blog_liked', blank=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_articles', verbose_name='作者')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='blog_articles', verbose_name='分类', blank=False, null=False)
+    author = models.ForeignKey('User', on_delete=models.CASCADE, related_name='blog_articles', verbose_name='作者')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='blog_articles', verbose_name='分类', blank=False, null=False)
+    users_like = models.ManyToManyField('User', related_name='blog_liked', blank=True)
 
     body = RichTextUploadingField('正文')
     views = models.PositiveIntegerField('阅读次数', default=0)
@@ -85,7 +85,10 @@ class Article(models.Model):
     created = models.DateTimeField('创建时间', auto_now_add=True)
     updated = models.DateTimeField('更新时间', auto_now=True)
     status = models.CharField('文章状态', max_length=10, choices=STATUS_CHOICES, default='d')
-    is_delete = models.BooleanField('是否不可见', default=False)
+    is_delete = models.BooleanField('是否逻辑删除', default=False)
+
+    comment_status = models.CharField('评论状态', max_length=1, choices=COMMENT_STATUS, default='o')
+    article_order = models.IntegerField('排序,数字越大越靠前', blank=False, null=False, default=0)
 
     # contenttypes
     comments = GenericRelation('Comment')  # 该字段不会存储于数据库中(用于反向关系查询)

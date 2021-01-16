@@ -38,11 +38,9 @@ class StatsMiddleware(object):
         # response["X-total-time"] = int(total * 1000)
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        print(789456123456789523)
         return None
 
     def process_response(self, request, response):
-        print(11111111111111111111)
         return response
 
     def process_request(self, request):

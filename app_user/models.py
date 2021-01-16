@@ -34,7 +34,6 @@ class UserProfile(models.Model):
             # models.CheckConstraint(check=models.Q(age__gte=18), name='age_gte_18')
         ]
 
-
     def __str__(self):
         return self.user.username
 

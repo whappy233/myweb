@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include, re_path
 
+import xadmin
+
 # 添加网站地图
 from django.contrib.sitemaps.views import sitemap
 from app_blog.sitemaps import ArticleSitemap
@@ -12,6 +14,7 @@ from django.views.static import serve
 # 对应blog/urls 中的方法1
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('xadmin/', xadmin.site.urls),
     path('', include('app_blog.urls', namespace='app_blog')),
     path('user/', include('app_user.urls', namespace='app_uesr')),
     path('sheet/', include('app_sheet.urls', namespace='app_sheet')),  # sheet
