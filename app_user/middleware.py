@@ -1,7 +1,4 @@
-
-from django.template.response import TemplateResponse
-
-
+from loguru import logger
 # 1. 函数实现中间件
 from django.contrib.auth.models import User
 def front_user_middleware(get_response):
@@ -14,7 +11,8 @@ def front_user_middleware(get_response):
             try:
                 user = User.objects.get(pk=user_id)
                 request.front_user = user
-            except:
+            except Exception as e:
+                logger.error(e)
                 request.front_user = None  # 避免发生异常时front_user对象没有绑定成功，从而在视图中发生报错
         else:
             request.front_user = None  # 避免以后用户没有登录的情况下报错
@@ -39,8 +37,11 @@ class StatsMiddleware(object):
         s = time.time()
         response = self.get_response(request)
         o = time.time() - s
-        if isinstance(response, TemplateResponse):
+        try:
             response.content = response.content.replace(b'<!!LOAD_TIMES!!>', str(o)[:5].encode())
+        except:
+            logger.error(f'不支持的 content 类型: "{type(response)}"')
+            print(f'不支持的 content 类型: "{type(response)}"')
         return response
         # response["X-total-time"] = int(total * 1000)
 

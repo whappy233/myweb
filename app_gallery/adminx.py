@@ -8,6 +8,8 @@ from .models import Gallery, Photo
 from .forms import GalleryForm
 from django.utils.html import format_html
 import xadmin
+from loguru import logger
+
 
 class GalleryModelAdmin:
     form = GalleryForm
@@ -61,6 +63,7 @@ class GalleryModelAdmin:
                             img.save()
                         except Exception as e:
                             print('ERROR: ')
+                            logger.error(e)
                             print(e)
                     zip.close()
             except:
