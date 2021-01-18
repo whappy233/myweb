@@ -32,7 +32,6 @@ INSTALLED_APPS = [
     'django.contrib.humanize',      # 数字,日期人性化格式
     'django.contrib.sites',         # 网站地图App1
     'django.contrib.sitemaps',      # 网站地图App2
-    # 'django.contrib.postgres',
 
     'app_user.apps.AppUserConfig',
     'app_blog.apps.AppBlogConfig',

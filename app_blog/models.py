@@ -75,9 +75,9 @@ class Article(models.Model):
     # slug 字段用于 URL 中，仅包含字母数字下划线以及连字符。根据 slug 字段，可对博客构建具有良好外观和 SEO 友好的 URL。
     # 使用 unique_for_date 参数可采用发布日期与 slug 对帖子构建URL
     slug = models.SlugField('slug', max_length=250, unique_for_date='publish', blank=True)
-    author = models.ForeignKey('User', on_delete=models.CASCADE, related_name='blog_articles', verbose_name='作者')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_articles', verbose_name='作者')
     category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='blog_articles', verbose_name='分类', blank=False, null=False)
-    users_like = models.ManyToManyField('User', related_name='blog_liked', blank=True)
+    users_like = models.ManyToManyField(User, related_name='blog_liked', blank=True)
 
     body = RichTextUploadingField('正文')
     views = models.PositiveIntegerField('阅读次数', default=0)

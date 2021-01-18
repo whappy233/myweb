@@ -33,7 +33,10 @@ class StatsMiddleware(object):
         self.get_response = get_response
 
     def __call__(self,request):
+        s = time.time()
         response = self.get_response(request)
+        o = time.time() - s
+        response.content = response.content.replace(b'<!!LOAD_TIMES!!>', str(o)[:5].encode())
         return response
         # response["X-total-time"] = int(total * 1000)
 
