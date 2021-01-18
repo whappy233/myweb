@@ -1,4 +1,7 @@
 
+from django.template.response import TemplateResponse
+
+
 # 1. 函数实现中间件
 from django.contrib.auth.models import User
 def front_user_middleware(get_response):
@@ -36,7 +39,8 @@ class StatsMiddleware(object):
         s = time.time()
         response = self.get_response(request)
         o = time.time() - s
-        response.content = response.content.replace(b'<!!LOAD_TIMES!!>', str(o)[:5].encode())
+        if isinstance(response, TemplateResponse):
+            response.content = response.content.replace(b'<!!LOAD_TIMES!!>', str(o)[:5].encode())
         return response
         # response["X-total-time"] = int(total * 1000)
 
