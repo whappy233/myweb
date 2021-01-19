@@ -7,7 +7,7 @@ from django.utils.html import format_html
 
 
 class ArticleAdmin:
-    list_display = ['id', 'show_tags', 'tags', 'title', 'author', 'created', 'publish', 'updated', 'status', 'is_delete', 'slug']  # 显示字段
+    list_display = ['id', 'show_tags', 'tags', 'category', 'title', 'author', 'created', 'publish', 'updated', 'status', 'is_delete', 'slug']  # 显示字段
     search_fields = ['title', 'body']  # 搜索字段
     list_filter = ['publish', 'created', 'updated', 'status']  # 过滤字段
     prepopulated_fields = {'slug':('title',)}  # 自动生成slug, 根据title填充slug

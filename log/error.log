@@ -206,3 +206,21 @@
 2021-01-19 19:24:54.027 | INFO     | app_blog.utils:news:34 - cache_decorator set cache:get_sub_categorys key:a35caf5616aebe518e5b13b38231a4fd
 2021-01-19 19:24:55.100 | INFO     | app_blog.utils:news:34 - cache_decorator set cache:get_sub_categorys key:376aade837ea891951c4c28891f9cdee
 2021-01-19 19:25:34.183 | INFO     | app_blog.utils:news:34 - cache_decorator set cache:get_sub_categorys key:b1c655d6e411a4f7191bc08d05bd0b34
+2021-01-19 22:14:36.617 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-19 22:15:03.072 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-19 22:15:03.978 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-19 22:15:03.980 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-19 22:15:03.981 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-19 22:15:03.986 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-19 22:15:03.990 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-19 22:15:03.990 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-19 22:15:39.728 | INFO     | app_blog.utils:news:34 - cache_decorator set cache:get_sub_categorys key:7abc9e23d6db143770cae93e8c933a21
+2021-01-19 22:15:41.771 | INFO     | app_blog.utils:news:34 - cache_decorator set cache:get_sub_categorys key:265a3eed50bd5dd37324631708c875fc
+2021-01-19 22:17:12.349 | INFO     | app_blog.utils:news:34 - cache_decorator set cache:get_sub_categorys key:08947d9b3feb4ef3dc50c3de94bde8b3
+2021-01-19 22:17:13.053 | INFO     | app_blog.utils:news:34 - cache_decorator set cache:get_sub_categorys key:e2ec2bcd5d18fca2d4da8c57fcd1f2b9
+2021-01-19 22:17:14.535 | INFO     | app_blog.utils:news:34 - cache_decorator set cache:get_sub_categorys key:e2ec2bcd5d18fca2d4da8c57fcd1f2b9
+2021-01-19 22:17:17.678 | INFO     | app_blog.utils:news:34 - cache_decorator set cache:get_sub_categorys key:96d17b0d55ab4d50b75e8682f25374c4
+2021-01-19 22:17:19.262 | INFO     | app_blog.utils:news:34 - cache_decorator set cache:get_sub_categorys key:08947d9b3feb4ef3dc50c3de94bde8b3
+2021-01-19 22:17:20.819 | INFO     | app_blog.utils:news:34 - cache_decorator set cache:get_sub_categorys key:08947d9b3feb4ef3dc50c3de94bde8b3
+2021-01-19 22:17:30.064 | INFO     | app_blog.utils:news:34 - cache_decorator set cache:get_sub_categorys key:08947d9b3feb4ef3dc50c3de94bde8b3
+2021-01-19 22:17:30.732 | INFO     | app_blog.utils:news:34 - cache_decorator set cache:get_sub_categorys key:08947d9b3feb4ef3dc50c3de94bde8b3
