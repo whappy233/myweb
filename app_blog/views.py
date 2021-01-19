@@ -161,14 +161,9 @@ class CategoryDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        if self.object.has_child():
-            articles = Article.objects.filter()
-            categories = self.object.category_set.all()  # 所有子类目
-            for category in categories:
-                queryset = Article.objects.filter(category=category.id).order_by('-publish')
-                articles.union(queryset)
-        else:
-            articles = Article.objects.filter(category=self.object.id).order_by('-publish')
+        categories = self.object.get_sub_categorys()
+        a = '|'.join(f'Q(category={i.id})' for i in categories)
+        articles = Article.published.filter(eval(a))
 
         paginator = Paginator(articles, 3)
         page = self.request.GET.get('page')
@@ -182,7 +177,7 @@ class CategoryDetailView(DetailView):
 # 月度归档(某月的列表)
 def month_archive(request, year, month):
     '''月度归档'''
-    articles = Article.objects.filter(status='p', publish__year=year, publish__month=month).order_by('-publish')
+    articles = Article.published.filter(publish__year=year, publish__month=month).order_by('-publish')
     paginator = Paginator(articles, 3)
     page = request.GET.get('page')
     page_obj = paginator.get_page(page)
@@ -201,7 +196,7 @@ def blog_like(request):
     print(action)
     if blog_id and action:
         try:
-            blog = Article.objects.get(id=blog_id)
+            blog = Article.published.get(id=blog_id)
             if action == 'like':
                 blog.users_like.add(request.user)
             else:

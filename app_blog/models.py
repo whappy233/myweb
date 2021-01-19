@@ -12,8 +12,9 @@ from django.utils import timezone
 from taggit.managers import TaggableManager  # 第三方标签应用
 
 from .cn_taggit import CnTaggedItem
-
+from .utils import cache_decorator
 from uuid import uuid4
+
 
 # 自定义的管理器
 class PublishedManage(models.Manager):
@@ -21,6 +22,7 @@ class PublishedManage(models.Manager):
         # 修改管理器的初始 QuerySet
         # 状态为发布且发布时间小于现在的blog
         return super(PublishedManage, self).get_queryset().filter(publish__lte=timezone.now(), status='p')
+
 
 # 在默认管理器上增加方法
 class aaa(models.Manager):
@@ -31,6 +33,7 @@ class aaa(models.Manager):
             a = None
         return  a
 
+
 # 文章分类
 class Category(models.Model):
     """文章分类"""
@@ -38,7 +41,7 @@ class Category(models.Model):
     slug = models.SlugField('slug', max_length=40, blank=True)
     # category.parent_category  判断是否有父类别
     parent_category = models.ForeignKey(  # 自关联
-        'self', verbose_name="父级分类", blank=True, null=True, on_delete=models.CASCADE)
+        'self', verbose_name="父级分类", blank=True, null=True, on_delete=models.CASCADE, related_name='child_category')
 
     def __str__(self):
         return self.name
@@ -48,8 +51,37 @@ class Category(models.Model):
 
     # 判断是否有子类别
     def has_child(self):
-        if self.category_set.all().count() > 0:
+        # 反向查询
+        if self.child_category.all().count() > 0:
             return True
+        return False
+
+    @cache_decorator(60 * 60 * 10)
+    def get_category_tree(self):
+        """递归获得分类目录的父级"""
+        categorys = []
+        def parse(category):
+            categorys.append(category)
+            if category.parent_category:
+                parse(category.parent_category)
+        parse(self)
+        return categorys
+
+    @cache_decorator(60 * 60 * 10)
+    def get_sub_categorys(self):
+        """获得当前分类目录所有子集"""
+        categorys = []
+        all_categorys = Category.objects.all()
+        def parse(category):
+            if category not in categorys:
+                categorys.append(category)
+            childs = all_categorys.filter(parent_category=category)
+            for child in childs:
+                if category not in categorys:
+                    categorys.append(child)
+                parse(child)
+        parse(self)
+        return categorys
 
     class Meta:
         ordering = ['name']
@@ -64,6 +96,7 @@ class Category(models.Model):
             #     slug + '=' * (4 - len(slug) % 4)).decode())  # 解码
             self.slug = slug
         super().save(*args, **kwargs)
+
 
 # 文章模型
 class Article(models.Model):
@@ -132,7 +165,7 @@ class Article(models.Model):
     def get_absolute_url(self):  # 构建URL
         # <int:year>/<int:month>/<int:day>/<slug:slug>/
         # /2020/1/10/markdown/
-        a = [self.publish.year, self.publish.month, self.publish.day, self.slug]
+        a = [self.publish.year, self.publish.month, self.publish.day, self.slug, self.id]
         return reverse('app_blog:article_detail', args=a)
 
     # 重写save方法
@@ -167,7 +200,7 @@ class Comment(models.Model):
     active = models.BooleanField(default=True, verbose_name='是否有效')  # 隐式删除
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name='内容类型')   # step1 内容类型，代表了模型的名字(比如Article, Picture)
-    object_id = models.PositiveIntegerField('关联对象的ID')                       # step2 传入对象的id
+    object_id = models.PositiveIntegerField('关联对象的ID')  # step2 传入对象的id
     content_object = GenericForeignKey('content_type', 'object_id') # step3 传入的实例化对象，其包含两个属性content_type和object_id
 
     class Meta:

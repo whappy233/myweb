@@ -14,7 +14,7 @@ urlpatterns = [
 
     path('category/<slug:slug>/', views.CategoryDetailView.as_view(), name='category_detail'),  # 分组下的文章列表
 
-    path('detail/<int:year>/<int:month>/<int:day>/<slug:slug>/', views.ArticleDetailView.as_view(), name='article_detail'),  # 文章详情
+    path('detail/<int:year>/<int:month>/<int:day>/<slug:slug>/<int:id>', views.ArticleDetailView.as_view(), name='article_detail'),  # 文章详情
 
     path('archive/<int:year>/<int:month>/', views.month_archive, name='month_archive'),  #  月度归档 (某月的列表)
 

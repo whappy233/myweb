@@ -122,7 +122,7 @@ xadmin.site.register(Article, ArticleAdmin)
 
 
 class CategoryAdmin:
-    list_display = ['name', 'parent_category', 'slug']
+    list_display = ['id', 'name', 'parent_category', 'slug']
     prepopulated_fields = {'slug':('name',)}  # 自动生成slug, 根据name填充slug
     search_fields = ['name',]
     ordering = ['parent_category'] 
@@ -130,7 +130,7 @@ xadmin.site.register(Category, CategoryAdmin)
 
 
 class CommentAdmin:
-    list_display = ['name', 'email', 'body', 'created', 'content_type', 'object_id', 'active']  # 显示字段
+    list_display = ['id', 'name', 'email', 'body', 'created', 'content_type', 'object_id', 'active']  # 显示字段
     search_fields = ['name', 'email', 'body']  # 搜索字段
     list_filter = ['created', 'active']  # 过滤器
     list_editable = ['active']
