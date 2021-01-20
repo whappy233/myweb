@@ -36,12 +36,34 @@ ol {
     line-height:1.5;
 }
 
+.dropdown {
+    display: inline;
+}
+.dropdown, .dropleft, .dropright, .dropup {
+    position: relative;
+}
+
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: .25rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+}
+
+
 #header {
     padding:10px 100px;
     font-size:14px;
     background:#12c064;
     color:#fff;
-    border-bottom:4px solid #1cdf78;
+    /* border-bottom:4px solid #1cdf78; */
     overflow:auto;
     position: sticky;
     top: 0px;

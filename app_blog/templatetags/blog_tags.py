@@ -3,13 +3,15 @@ import markdown
 from django import template
 from django.db.models import Count
 from django.utils.safestring import mark_safe  # 标记为安全的html
-
+from django.template.defaultfilters import stringfilter
 from ..models import Article
 
 register = template.Library()
 
 # 自定义模板标签 过滤器
 # 在使用自定义模板标签 和过滤器时 应该在模板中首先在开头引入 {% load xxxx %}
+
+
 
 '''
 自定义模板标签 
@@ -121,8 +123,16 @@ class FormatTimeNode(template.Node):
 # { 使用 '|' 前的值}
 # 过滤器 (转换为makedown)  {{ article.body| markdown }}
 @register.filter(name='markdown')
-def markdown_format(text):
-    return mark_safe(markdown.markdown(text))
+def markdown_format(content):
+    '''markdown 格式化'''
+    return mark_safe(markdown.markdown(content))
+
+@register.filter(is_safe=True)
+@stringfilter
+def custom_markdown(content):
+    '''markdown 格式化'''
+    from app_blog.utils import CommonMarkdown
+    return mark_safe(CommonMarkdown.get_markdown(content))
 
 
 import datetime

@@ -62,7 +62,8 @@
 
         </p>
         {% comment %} {{ article.body|truncatewords:10|linebreaks }} {% endcomment %}
-        {{ article.body|markdown|truncatewords_html:30 }}
+        {% comment %} {{ article.body|markdown:10|linebreaks }} {% endcomment %}
+        {{ article.body|custom_markdown|truncatewords_html:30 }}
     {% endfor %}
 
     {# 从 paginator.html 引入分页模板  #}

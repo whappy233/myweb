@@ -1,6 +1,6 @@
 import os
 from loguru import logger
-
+from django.utils import timezone
 
 # 返回工程路径(myweb)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -42,8 +42,10 @@ INSTALLED_APPS = [
 
     'taggit',                       # 第三方标签管理器
     'imagekit',                     # 第三方缩略图应用 pip install django-imagekit
-    'ckeditor',                     # 第三方富文本编辑器 pip install django-ckeditor==6.0.0
-    'ckeditor_uploader',            # 第三方富文本编辑器_文件上传组件
+    # 'ckeditor',                     # 第三方富文本编辑器 pip install django-ckeditor==6.0.0
+    # 'ckeditor_uploader',            # 第三方富文本编辑器_文件上传组件
+
+    'mdeditor',                     # 第三方富文本编辑器
 
     # xadmin 模块
     'xadmin',
@@ -219,32 +221,66 @@ AUTHENTICATION_BACKENDS = ('app_user.views.CustomBackend',)
 
 
 # CkEditor 富文本编辑器配置
-CKEDITOR_UPLOAD_PATH = 'blog_uploads/'  # 文件上传文件夹  media/blog_uploads/
-CKEDITOR_IMAGE_BACKEND = 'pillow'
-CKEDITOR_THUMBNAIL_SIZE = (300, 300)
-CKEDITOR_IMAGE_QUALITY = 40
-CKEDITOR_ALLOW_NONIMAGE_FILES = False
-CKEDITOR_BROWSE_SHOW_DIRS = True
-CKEDITOR_RESTRICT_BY_USER = False  # 如果为True /media/blog_uploads/用户名/ 
-CKEDITOR_RESTRICT_BY_DATE = True  # /media/blog_uploads/用户名(CKEDITOR_RESTRICT_BY_USER 如果为True)/年/月/日/文件名
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': (['Source', '-',  'Preview', '-', ],
-                    ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Print', 'SpellChecker', ],
-                    ['Undo', 'Redo', '-', 'Find', 'Replace', '-', 'SelectAll', 'RemoveFormat', '-',
-                     "CodeSnippet", 'Subscript', 'Superscript'],
-                    ['NumberedList', 'BulletedList', '-', 'Blockquote'],
-                    ['Link', 'Unlink', ],
-                    ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', ],
-                    ['Format', 'Font', 'FontSize', 'TextColor', 'BGColor', ],
-                    ['Bold', 'Italic', 'Underline', 'Strike', ],
-                    ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-                    ),
-        'extraPlugins': 'codesnippet',
-        'width': 'auto',
+# CKEDITOR_UPLOAD_PATH = 'blog_uploads/'  # 文件上传文件夹  media/blog_uploads/
+# CKEDITOR_IMAGE_BACKEND = 'pillow'
+# CKEDITOR_THUMBNAIL_SIZE = (300, 300)
+# CKEDITOR_IMAGE_QUALITY = 40
+# CKEDITOR_ALLOW_NONIMAGE_FILES = False
+# CKEDITOR_BROWSE_SHOW_DIRS = True
+# CKEDITOR_RESTRICT_BY_USER = False  # 如果为True /media/blog_uploads/用户名/ 
+# CKEDITOR_RESTRICT_BY_DATE = True  # /media/blog_uploads/用户名(CKEDITOR_RESTRICT_BY_USER 如果为True)/年/月/日/文件名
+# CKEDITOR_CONFIGS = {
+#     'default': {
+#         'toolbar': (['Source', '-',  'Preview', '-', ],
+#                     ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Print', 'SpellChecker', ],
+#                     ['Undo', 'Redo', '-', 'Find', 'Replace', '-', 'SelectAll', 'RemoveFormat', '-',
+#                      "CodeSnippet", 'Subscript', 'Superscript'],
+#                     ['NumberedList', 'BulletedList', '-', 'Blockquote'],
+#                     ['Link', 'Unlink', ],
+#                     ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', ],
+#                     ['Format', 'Font', 'FontSize', 'TextColor', 'BGColor', ],
+#                     ['Bold', 'Italic', 'Underline', 'Strike', ],
+#                     ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+#                     ),
+#         'extraPlugins': 'codesnippet',
+#         'width': 'auto',
+#     }
+# }
+
+# mdeditor 富文本编辑器配置
+if timezone.now().hour >= 18: 
+    _mdeditor_theme = 'dark'
+    _editor_theme = 'pastel-on-dark'
+else:
+    _mdeditor_theme = 'default'
+    _editor_theme = 'default'
+MDEDITOR_CONFIGS = {
+'default':{
+    'width': '90%',  # 自定义编辑框宽度
+    'heigth': 500,   # 自定义编辑框高度
+    'toolbar': ["undo", "redo", "|",
+                "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
+                "h1", "h2", "h3", "h5", "h6", "|", 
+                "list-ul", "list-ol", "hr", "|",
+                "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "goto-line", "|",
+                "help", "info", "||", 
+                "preview", "watch", "fullscreen"],  # 自定义编辑框工具栏
+    'image_folder': 'body_imgs',        # 图片保存文件夹名称
+    'upload_image_formats': ["jpg", "jpeg", "gif", "png", "bmp", "webp"],  # 图片上传格式类型
+    'theme': _mdeditor_theme,           # 编辑框主题 ，dark / default
+    'editor_theme': _editor_theme,      # edit区域主题，pastel-on-dark / default
+    'preview_theme': _mdeditor_theme,   # 预览区域主题， dark / default
+    'tex': True,                        # 是否开启 tex 图表功能
+    'emoji': True,                      # 是否开启表情功能
+    'watch': True,                      # 实时预览
+    'sequence': True,                   # 是否开启序列图功能
+    'flow_chart': True,                 # 是否开启流程图功能
+    'lineNumbers': True,                # 行号
+    'lineWrapping': False,              # 自动换行
+    'search_replace': True,             # 是否开启查找替换
+    'toolbar_autofixed': True,          # 工具栏是否吸顶
     }
 }
-
 
 # session 会话配置
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # 引擎（默认）

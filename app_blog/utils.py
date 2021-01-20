@@ -1,9 +1,11 @@
 from hashlib import md5
 
-import mistune
 from django.contrib.sites.models import Site
 from django.core.cache import cache
 from loguru import logger
+
+
+import mistune
 from mistune import escape, escape_link
 from pygments import highlight
 from pygments.formatters import html
@@ -42,6 +44,8 @@ def cache_decorator(expiration=3 * 60):
     return wrapper
 
 
+
+# markdown -------------------------------------------------------------
 def block_code(text, lang, inlinestyles=False, linenos=False):
     '''markdown代码高亮'''
     if not lang:
@@ -57,12 +61,10 @@ def block_code(text, lang, inlinestyles=False, linenos=False):
     except BaseException:
         return f'<pre class="{lang}"><code>{mistune.escape(text)}</code></pre>\n'
 
-
 @cache_decorator()
 def get_current_site():
     site = Site.objects.get_current()
     return site
-
 
 class BlogMarkDownRenderer(mistune.Renderer):
     '''markdown渲染'''
@@ -94,7 +96,6 @@ class BlogMarkDownRenderer(mistune.Renderer):
             return f'<a href="{link}" {nofollow}>{text}</a>'
         title = escape(title, quote=True)
         return f'<a href="{link}" title="{title}" {nofollow}>{text}</a>'
-
 
 class CommonMarkdown():
     @staticmethod

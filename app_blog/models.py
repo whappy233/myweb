@@ -1,6 +1,8 @@
 import base64
 
-from ckeditor_uploader.fields import RichTextUploadingField  # 富文本编辑器
+from ckeditor_uploader.fields import RichTextUploadingField  # 富文本编辑器 ckeditor
+from mdeditor.fields import MDTextField  # 富文本编辑器 mdeditor
+
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import (GenericForeignKey,
                                                 GenericRelation)
@@ -112,7 +114,8 @@ class Article(models.Model):
     category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='blog_articles', verbose_name='分类', blank=False, null=False)
     users_like = models.ManyToManyField(User, related_name='blog_liked', blank=True)
 
-    body = RichTextUploadingField('正文')
+    # body = RichTextUploadingField('正文')
+    body = MDTextField('正文')
     views = models.PositiveIntegerField('阅读次数', default=0)
     publish = models.DateTimeField('发布时间', default=timezone.now, null=True, blank=True)
     created = models.DateTimeField('创建时间', auto_now_add=True)

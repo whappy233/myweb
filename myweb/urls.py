@@ -24,7 +24,8 @@ urlpatterns = [
     re_path(r'^media/(?P<path>.*)', serve, {'document_root': settings.MEDIA_ROOT}),  # 媒体文件
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),  # 静态文件
 
-    path('ckeditor/', include('ckeditor_uploader.urls')),
+    # path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('mdeditor/', include('mdeditor.urls')),  # mdeditor 富文本
 
     path('sitemap.xml', sitemap, {'sitemaps':{'articles':ArticleSitemap}}, name='django.contrib.sitemaps.views.sitemap'),  # 网站地图
 ] # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

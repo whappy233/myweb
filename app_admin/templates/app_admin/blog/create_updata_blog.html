@@ -13,7 +13,7 @@
 <form method="POST" class="form-horizontal" role="form" action="">
     {% csrf_token %}
 
-    {{ form.media }} {# 使用{{ form.media }}调入ckeditor静态文件 #}
+    {{ form.media }} {# 使用{{ form.media }}调入ckeditor/mdeditor 静态文件 #}
 
     {% for hidden_field in form.hidden_fields %}
     {{ hidden_field }}

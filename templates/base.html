@@ -19,34 +19,56 @@
 <body>
     {# head 头 #}
     <div id="header">
-        <span class="logo"><a href="{% url 'app_blog:article_list' %}">浩瀚星海</a></span>
-        <ul class="menu">
-            <li {% ifequal section "blog" %}class="selected" {% endifequal %}>
-                <a href="{% url 'app_blog:article_list' %}">Blog</a>
-            </li>
-            <li {% ifequal section "gallery" %}class="selected" {% endifequal %}>
-                <a href="{% url 'app_gallery:gallery_list' %}">Gallery</a>
-            </li>
-            <li {% ifequal section "sheet" %}class="selected" {% endifequal %}>
-                <a href="{% url 'app_sheet:index' %}">Sheet</a>
-            </li>
-        </ul>
+        <div class="d-flex align-items-center">
+            <div class="logo">
+                <a href="{% url 'app_blog:article_list' %}">浩瀚星海</a>
+            </div>
+            <div class="pr-3">
+                <div class="avatar avatar-sm avatar-state-warning">
+                    <ul class="menu">
+                        <li {% ifequal section "blog" %}class="selected" {% endifequal %}>
+                            <a href="{% url 'app_blog:article_list' %}">Blog</a>
+                        </li>
+                        <li {% ifequal section "gallery" %}class="selected" {% endifequal %}>
+                            <a href="{% url 'app_gallery:gallery_list' %}">Gallery</a>
+                        </li>
+                        <li {% ifequal section "sheet" %}class="selected" {% endifequal %}>
+                            <a href="{% url 'app_sheet:index' %}">Sheet</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="ml-auto">
+                <ul class="menu nav align-items-center">
+                    {% if request.user.is_authenticated %} {# 当用户被验证 #}
+                    <li class="d-sm-inline d-none">
+                        <img src="{{request.user.profile.photo.url}}" class="rounded-circle dropdown-toggle" 
+                        data-toggle="dropdown" style="width: 2rem;height: 2rem;" alt="image">
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{% url 'app_user:profile' %}">修改信息</a>
+                            <a class="dropdown-item" href="{% url 'app_user:change_pw' %}">修改密码</a>
+                            <a class="dropdown-item" href="{% url 'app_user:logout' %}">退出登陆</a>
+                            {% if request.user.is_superuser %}
+                            <a class="dropdown-item" href="{% url 'app_admin:index' %}">ADMIN</a>
+                            <a class="dropdown-item" href="/xadmin">XADMIN</a>
+                            {% endif %}
+                        </div>
+                    </li>
+                    <li class="d-sm-inline d-none">
+                        <a href="{% url 'app_admin:create_blog' %}">新建文章</a>
+                    </li>
+                    {% else %}
+                    <li class="d-sm-inline d-none">
+                        <a href="{% url 'app_user:login' %}">登陆</a>
+                    </li>
+                    <li class="mobile-chat-close-btn">
+                        <a href="{% url 'app_user:register' %}">注册</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
 
-        <span class="user">
-            {% if request.user.is_authenticated %} {# 当用户被验证 #}
-            Hello
-            <a href="{% url 'app_user:profile' %}" title="修改信息">{{ request.user }}, </a>
-            <a href="{% url 'app_user:logout' %}">退出登陆</a>
-            <a href="{% url 'app_user:change_pw' %}">修改密码</a>
-            {% if request.user.is_superuser %}
-            <a href="{% url 'app_admin:index' %}">ADMIN</a>
-            <a href="/xadmin">XADMIN</a>
-            {% endif %}
-            {% else %}
-            <a href="{% url 'app_user:login' %}">登陆</a>
-            <a href="{% url 'app_user:register' %}">注册</a>
-            {% endif %}
-        </span>
     </div>
 
     {# 主体 #}

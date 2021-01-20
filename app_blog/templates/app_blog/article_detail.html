@@ -19,8 +19,7 @@
     <span class='tags'>
         标签:
         {% for tag in tages %}
-        <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">
-            {{ tag.name }}</a>
+        <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
         {% if not forloop.last %} , {% endif %}
         {% endfor %}
     </span><br>
@@ -31,10 +30,15 @@
         <span id="count">👍 {{ total_likes }}</span>
     </a>
     {% endwith %}
+    </br>
+    {% if request.user == article.author or request.user.is_superuser %}
+    <a href="{% url 'app_admin:update_article' article.id article.slug %}">修改✎</a>
+    {% endif %}
 </p>
 
 {% comment %} {{ article.body| linebreaks }} {% endcomment %}
-{{ article.body|markdown}}
+{% comment %} {{ article.body|markdown}}{% endcomment %}
+{{ article.body|custom_markdown}}
 
 <p><a href="{% url 'app_blog:article_share' article.id %}"> 分享文章 </a></p>
 

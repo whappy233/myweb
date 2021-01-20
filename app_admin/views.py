@@ -25,10 +25,8 @@ def index(request):
 
 # 所有文章列表
 # blog/
-
 @method_decorator(superuser_only('app_user:login'), name='dispatch')  # 超级管理员验证
 @method_decorator(login_required, name='dispatch')  # 此页面需要登录
-@method_decorator(permission_required('app_blog.delete_article', 'app_blog:article_list'), name='dispatch')  # 此页面需要验证权限
 class AdminArticleListView(ListView):
     '''文章列表'''
     paginate_by = 10
@@ -98,12 +96,14 @@ class ArticleUpdateView(Common, UpdateView):
         return context
 
     def form_valid(self, form):
-        # form.instance.author = self.request.user
+        if not self.request.user.is_superuser:
+            self.success_url = self.object.get_absolute_url()  # 成功后跳转地址
         return super(UpdateView, self).form_valid(form)
 
 
 # 删除文章
 @method_decorator(login_required, name='dispatch')
+@method_decorator(permission_required('app_blog.delete_article', 'app_blog:article_list'), name='dispatch')  # 此页面需要验证权限
 class ArticleDeleteView(DeleteView):
     '''删除文章'''
     queryset = Article.objects.all()
