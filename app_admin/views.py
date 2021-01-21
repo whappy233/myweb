@@ -19,7 +19,7 @@ from .forms import ArticleCreateForm
 
 
 
-@method_decorator(superuser_only('app_user:login'), name='dispatch')  # 超级管理员验证
+@superuser_only('app_user:login')# 超级管理员验证
 def index(request):
     return render(request, 'app_admin/index.html')
 

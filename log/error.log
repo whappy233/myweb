@@ -73,3 +73,13 @@
 2021-01-21 19:33:03.222 | INFO     | myweb.utils:news:69 - cache_decorator set cache:get_current_site key:d9260b104422e05635e0a27b7d814e04
 2021-01-21 19:33:18.324 | INFO     | app_user.views:register_result:66 - validation
 2021-01-21 19:33:22.714 | INFO     | app_user.views:register_result:66 - validation
+2021-01-21 21:46:16.438 | INFO     | app_user.views:register_result:66 - register
+2021-01-21 21:46:16.438 | INFO     | myweb.utils:news:69 - cache_decorator set cache:get_current_site key:31490e4a919d474217249ee6d7eedb03
+2021-01-21 21:46:44.329 | INFO     | app_user.views:register_result:66 - validation
+2021-01-21 21:49:36.511 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-21 22:03:45.625 | INFO     | app_user.views:register_result:66 - register
+2021-01-21 22:03:45.627 | INFO     | myweb.utils:news:69 - cache_decorator set cache:get_current_site key:6404ed3e06b39791d9e82b9f97d6d237
+2021-01-21 22:04:09.144 | INFO     | app_user.views:register_result:66 - register
+2021-01-21 22:04:09.144 | INFO     | myweb.utils:news:69 - cache_decorator set cache:get_current_site key:6404ed3e06b39791d9e82b9f97d6d237
+2021-01-21 22:04:27.491 | INFO     | app_user.views:register_result:66 - validation
+2021-01-21 22:04:36.904 | INFO     | app_user.views:register_result:66 - validation

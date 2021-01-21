@@ -36,8 +36,9 @@ class RegisterForm(UserCreationForm):
 
     def clean_check_code(self):
         checkcode = self.cleaned_data.get('check_code')
-        if checkcode.lower() != self._request.session['CheckCode'].lower():  # 验证验证码
-            raise forms.ValidationError("验证码错误")
+        if not settings.DEBUG:
+            if checkcode.lower() != self._request.session['CheckCode'].lower():  # 验证验证码
+                raise forms.ValidationError("验证码错误")
         return checkcode
 
     class Meta:
