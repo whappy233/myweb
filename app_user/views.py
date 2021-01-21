@@ -5,35 +5,35 @@ from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.http import HttpResponse, JsonResponse, Http404
+from django.http import HttpResponse, JsonResponse, Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-
+from django.views.generic.edit import FormView
 from .forms import (EditForm, LoginForm, ProfileEditForm, PwdChangeForm,
-                    RegistrationForm, UserEditForm, UserPhotoUploadForm)
-from .models import UserProfile
-from .utils import create_validate_code as CheckCode
-from .utils import crop_image, generate_vcode, send_email
-
+                    UserEditForm, UserPhotoUploadForm, RegisterForm)
+from app_user.models import UserProfile
+from app_user.utils import crop_image, generate_vcode, send_email, create_validate_code as CheckCode
+from myweb.utils import get_current_site, get_md5
+from django.conf import settings
+from loguru import logger
 
 # from app_common.decorators import check_honeypot, honeypot_exempt
 
 
-class CustomBackend(ModelBackend):
-    """
-    实现用户名邮箱手机号登录
-    """
 
+# 自定义验证后端
+class CustomBackend(ModelBackend):
+    """实现用户名邮箱手机号登录"""
     def authenticate(self, request, username=None, password=None, **kwargs):
         try:
             # 不希望用户存在两个，get只能有一个。两个是get失败的一种原因 Q为使用并集查询
-            user = User.objects.get(Q(username=username) | Q(
-                email=username) | Q(profile__telephone=username))
+            user = User.objects.get(Q(username=username) | Q(email=username) | Q(profile__telephone=username))
             # UserProfile继承的AbstractUser中有def check_password(self, raw_password):
             if user.check_password(password):
                 return user
         except Exception as e:
             return None
+
 
 # 返回验证码图片
 def check_code(request):
@@ -48,38 +48,81 @@ def check_code(request):
     except Exception as e:
         return HttpResponse("请求异常：{}".format(repr(e)))
 
+
+
+def user_result(request):
+    type = request.GET.get('type')
+    id = request.GET.get('id')
+
+    user = get_object_or_404(User, id=id)
+    logger.info(type)
+    if user.is_active:
+        return redirect('/')
+    if type and type in ['register', 'validation']:
+        if type == 'register':
+            content = f'恭喜您注册成功，一封验证邮件已经发送到您 {user.email} 的邮箱，请验证您的邮箱后登录本站。'
+            title = '注册成功'
+        else:
+            c_sign = get_md5(get_md5(settings.SECRET_KEY + str(user.id)))
+            sign = request.GET.get('sign')
+            if sign != c_sign:
+                return HttpResponseForbidden()
+            user.is_active = True
+            user.save()
+            content = '恭喜您已经成功的完成邮箱验证，您现在可以使用您的账号来登录本站。'
+            title = '验证成功'
+        return render(request, 'app_user/result.html', {'title': title, 'content': content})
+    else:
+        return redirect('/')
+
+
+
 # 注册
-def register(request):
-    '''注册'''
-    # 如果登录用户访问注册页面，跳转到首页
-    if request.user.is_authenticated:
-        return redirect('app_blog:article_list')
+class RegisterView(FormView):
+    form_class = RegisterForm
+    template_name = 'app_user/registration.html'
 
-    message = ''
-    if request.method == 'POST':
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('app_blog:article_list')
+        return super(RegisterView, self).get(request, *args, **kwargs)
 
-        form = RegistrationForm(request.POST)
-        checkcode = request.POST.get("check_code")
-        if checkcode.lower() != request.session['CheckCode'].lower():  # 验证验证码
-            message = "验证码错误"
+    def get_form_kwargs(self):
+        '''给 Form 表单传递额外的参数'''
+        kwargs = super(RegisterView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
-        elif form.is_valid():
-            username = form.cleaned_data['username']
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password2']
+    def form_valid(self, form):
+        if form.is_valid():
+            user = form.save(False)
+            user.is_active = False
+            user.save(True)
+
+            site = get_current_site().domain
+            sign = get_md5(get_md5(settings.SECRET_KEY + str(user.id)))
+            if settings.DEBUG: site = '127.0.0.1:8000'
+            path = reverse('app_user:result')
+            url = f"http://{site}{path}?type=validation&id={user.id}&sign={sign}"
+            content = f'<p>请点击下面链接验证您的邮箱</p><a href="{url}" rel="bookmark">{url}</a>再次感谢您！<br />如果上面链接无法打开，请将此链接复制至浏览器。{url}'
+            print(content)
+            send_email(to_email=user.email, vcode_str=content)
+            url =f"{reverse('app_user:result')}?type=register&id={user.id}"
+            return redirect(url)
+
+            # username = form.cleaned_data['username']
+            # email = form.cleaned_data['email']
+            # password = form.cleaned_data['password2']
             # 使用内置User自带create_user方法创建用户，不需要使用save()
-            user = User.objects.create_user(username=username, password=password, email=email)
-
+            # User.objects.create_user(username=username, password=password, email=email)
             # 1.通过 signals, 在创建 User 对象实例时也创建 UserProfile 对象实例
             # 2.或在创建User时同时创建与之关联的UserProfile对象
             # user_profile = UserProfile(user=user)
             # 如果直接使用objects.create()方法后不需要使用save()
             # user_profile.save()
+            return redirect("app_user:login")  # 注册成功, 跳转到登录
+        return self.render_to_response({'form': form})
 
-            return redirect("app_user:login")
-    else:
-        form = RegistrationForm()
-    return render(request, 'app_user/registration.html', {'form': form, 'message': message})
 
 # 登录
 # @check_honeypot(field_name='12223')

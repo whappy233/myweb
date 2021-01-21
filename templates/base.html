@@ -44,14 +44,14 @@
                     <li class="d-sm-inline d-none">
                         <img src="{{request.user.profile.photo.url}}" class="rounded-circle dropdown-toggle" 
                         data-toggle="dropdown" style="width: 2rem;height: 2rem;" alt="image">
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu" style="background: #12c064;">
                             <a class="dropdown-item" href="{% url 'app_user:profile' %}">修改信息</a>
                             <a class="dropdown-item" href="{% url 'app_user:change_pw' %}">修改密码</a>
-                            <a class="dropdown-item" href="{% url 'app_user:logout' %}">退出登陆</a>
                             {% if request.user.is_superuser %}
                             <a class="dropdown-item" href="{% url 'app_admin:index' %}">ADMIN</a>
                             <a class="dropdown-item" href="/xadmin">XADMIN</a>
                             {% endif %}
+                            <a class="dropdown-item" href="{% url 'app_user:logout' %}">退出登陆</a>
                         </div>
                     </li>
                     <li class="d-sm-inline d-none">

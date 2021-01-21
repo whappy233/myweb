@@ -6,52 +6,43 @@ from .utils import email_check
 from .models import UserProfile
 from django.core.exceptions import ValidationError
 import re
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 
 # 用户注册
-class RegistrationForm(forms.Form):
+class RegisterForm(UserCreationForm):
+    '''注册表单'''
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)  # 传递额外的参数, 并在调用构造函数之前从 kwargs 中删除额外的参数
+        super(RegisterForm, self).__init__(*args, **kwargs)
 
-    username = forms.CharField(label='用户名', required=True, max_length=20, min_length=6,
-                               error_messages={
-                                   'required': '用户名不能为空',
-                                   'max_length': '用户名长度不得超过20个字符',
-                                   'min_length': '用户名长度不得少于6个字符',
-                               })
-    email = forms.EmailField(label='邮箱')
-    password1 = forms.CharField(label='密码', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='再次输入密码', widget=forms.PasswordInput)
-    check_code = forms.CharField(
-        label='验证码', widget=forms.TextInput(attrs={'placeholder': '不区分大小写'}))
+        self.fields['username'].widget = forms.widgets.TextInput(attrs={"class": "form-control"})
+        self.fields['email'].widget = forms.widgets.EmailInput(attrs={"class": "form-control"})
+        self.fields['password1'].widget = forms.widgets.PasswordInput(attrs={"class": "form-control"})
+        self.fields['password2'].widget = forms.widgets.PasswordInput(attrs={"class": "form-control"})
 
-    def clean_username(self):
-        username = self.cleaned_data.get('username')
-        filter_result = User.objects.filter(username__exact=username)
-        if len(filter_result) > 0:
-            raise forms.ValidationError("用户名已存在.")
-        return username
+        # 添加额外的字段 initial="默认值"
+        # self.fields['extra_field'].initial ="harvard"
+        self.fields['check_code'] = forms.CharField(label='验证码', widget=forms.TextInput(attrs={'placeholder': '不区分大小写', "class": "form-control"}))
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if email_check(email):
-            filter_result = User.objects.filter(email__exact=email)
-            if len(filter_result) > 0:
-                raise forms.ValidationError("邮箱已存在。")
+            if User.objects.filter(email=email).exists():
+                raise forms.ValidationError("邮箱已存在")
         else:
-            raise forms.ValidationError("请检查邮箱格式。")
+            raise forms.ValidationError("请检查邮箱格式")
         return email
 
-    def clean_password1(self):
-        password1 = self.cleaned_data.get('password1', '')
-        if len(password1) < 6:
-            raise forms.ValidationError("密码太短。")
-        return password1
+    def clean_check_code(self):
+        checkcode = self.cleaned_data.get('check_code')
+        if checkcode.lower() != self.request.session['CheckCode'].lower():  # 验证验证码
+            raise forms.ValidationError("验证码错误")
+        return checkcode
 
-    def clean_password2(self):
-        password1 = self.cleaned_data.get('password1')
-        password2 = self.cleaned_data.get('password2')
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("两次密码不一致。")
-        return password2
+    class Meta:
+        model = User
+        fields = ("username", "email")
 
 
 # 用户登录

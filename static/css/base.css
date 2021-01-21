@@ -64,7 +64,7 @@ ol {
     background:#12c064;
     color:#fff;
     /* border-bottom:4px solid #1cdf78; */
-    overflow:auto;
+    /* overflow:auto; */
     position: sticky;
     top: 0px;
     z-index: 999;

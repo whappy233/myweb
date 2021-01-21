@@ -48,14 +48,18 @@
                 <tr>
                     <td>{{ form.check_code.label_tag }}</td>
                     <td>{{ form.check_code }}</td>
-                    <td><img src="{% url 'app_user:check_code' %}" onclick="ChangeCode(this);"></td>
+                    <td>
+                        <img src="{% url 'app_user:check_code' %}" onclick="ChangeCode(this);">
+                    </td>
                 </tr>
             </table>
         </div>
 
         <div class="button-wrapper submit">
-            {% if message %}
-                <p style="color: rgb(242, 58, 105);">{{ message }}</p>
+            {% if form.check_code.errors %}
+            {% for error in form.check_code.errors %}
+            <p style="color: rgb(242, 58, 105);">{{ error|escape }}</p>
+            {% endfor %}
             {% endif %}
             <input type="submit" value="Register" />
             <a style="margin: 16px;" href="{% url 'app_user:login' %}">已有有账号? 去登录➡️</a>

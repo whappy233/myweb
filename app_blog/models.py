@@ -14,7 +14,7 @@ from django.utils import timezone
 from taggit.managers import TaggableManager  # 第三方标签应用
 
 from .cn_taggit import CnTaggedItem
-from .utils import cache_decorator
+from myweb.utils import cache_decorator
 from uuid import uuid4
 
 

@@ -22,7 +22,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     photo = models.ImageField('头像', upload_to=user_directory_path, blank=True, default=os.path.join("users", "default.png"))
     org = models.CharField('组织', max_length=128, blank=True)
-    telephone = models.CharField('手机号', max_length=50, blank=True)
+    telephone = models.CharField('手机号', max_length=50, blank=True, null=True)
     mod_date = models.DateTimeField('最近修改', auto_now=True)
 
     class Meta:
@@ -36,14 +36,6 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
-
-    # 验证邮箱是否验证过
-    def account_verified(self):
-        if self.user.is_authenticated:
-            result = EmailAddress.objects.filter(email=self.user.email)
-            if len(result):
-                return result[0].verified
-        return False
 
     @property
     def img_url(self):

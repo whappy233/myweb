@@ -1,1 +1,14 @@
 2021-01-20 19:57:29.906 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-21 09:16:18.427 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-21 09:17:01.367 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-21 09:26:25.191 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-21 11:14:08.726 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-21 11:17:50.811 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-21 11:20:00.333 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-21 11:33:18.038 | INFO     | myweb.utils:news:35 - cache_decorator set cache:get_current_site key:a13bf1e7a56369f4727daf53e3c75cf9
+2021-01-21 11:47:11.524 | INFO     | myweb.utils:news:35 - cache_decorator set cache:get_current_site key:3f084e6d40360914023ee9850d00bd4b
+2021-01-21 11:47:11.532 | INFO     | app_user.views:user_result:58 - register
+2021-01-21 11:48:45.770 | INFO     | myweb.utils:news:35 - cache_decorator set cache:get_current_site key:3463c778ab9a239688d63ae99a35ae2c
+2021-01-21 11:48:45.779 | INFO     | app_user.views:user_result:58 - register
+2021-01-21 11:49:13.785 | INFO     | app_user.views:user_result:58 - validation
+2021-01-21 11:49:24.669 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
