@@ -1,21 +1,29 @@
 import io
 
+from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+
 from django.db.models import Q
-from django.http import HttpResponse, JsonResponse, Http404, HttpResponseForbidden
+from django.http import (HttpResponse, HttpResponseForbidden, JsonResponse)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic.edit import FormView
-from .forms import (EditForm, LoginForm, ProfileEditForm, PwdChangeForm,
-                    UserEditForm, UserPhotoUploadForm, RegisterForm)
-from app_user.models import UserProfile
-from app_user.utils import crop_image, generate_vcode, send_email, create_validate_code as CheckCode
-from myweb.utils import get_current_site, get_md5
-from django.conf import settings
+
 from loguru import logger
+
+from myweb.utils import get_current_site, get_md5, GenerateEncrypted
+from app_user.models import UserProfile
+from app_user.utils import create_validate_code as CheckCode
+from app_user.utils import crop_image, generate_vcode, send_email
+
+from .forms import (EditForm, LoginForm, RegisterForm, ProfileEditForm,
+                    PwdChangeForm, UserEditForm, UserPhotoUploadForm)
 
 # from app_common.decorators import check_honeypot, honeypot_exempt
 
@@ -49,35 +57,46 @@ def check_code(request):
         return HttpResponse("请求异常：{}".format(repr(e)))
 
 
-
-def user_result(request):
+# 注册成功发送验证邮件以及邮箱验证
+def register_result(request):
+    '''注册成功以及邮箱验证'''
     type = request.GET.get('type')
     id = request.GET.get('id')
-
     user = get_object_or_404(User, id=id)
     logger.info(type)
-    if user.is_active:
-        return redirect('/')
+    if user.is_active: return redirect('/')
+
     if type and type in ['register', 'validation']:
         if type == 'register':
+            site = get_current_site().domain
+            sign = GenerateEncrypted.encode({'id':user.id})
+            if settings.DEBUG: site = '127.0.0.1:8000'
+            path = reverse('app_user:register_result')
+            url = f"http://{site}{path}?type=validation&id={user.id}&sign={sign}"
+            text = f'<p>请点击下面链接验证您的邮箱</p><a href="{url}" rel="bookmark">{url}</a>'
+            print(text)
+            send_email(to_email=user.email, vcode_str=text)
             content = f'恭喜您注册成功，一封验证邮件已经发送到您 {user.email} 的邮箱，请验证您的邮箱后登录本站。'
             title = '注册成功'
+            return render(request, 'app_user/register_result.html', {'title': title, 'content': content})
         else:
-            c_sign = get_md5(get_md5(settings.SECRET_KEY + str(user.id)))
             sign = request.GET.get('sign')
-            if sign != c_sign:
-                return HttpResponseForbidden()
-            user.is_active = True
-            user.save()
-            content = '恭喜您已经成功的完成邮箱验证，您现在可以使用您的账号来登录本站。'
-            title = '验证成功'
-        return render(request, 'app_user/result.html', {'title': title, 'content': content})
+            if sign:
+                data = GenerateEncrypted.decode(sign)
+                if data:
+                    if data.get('id', -1) == user.id:
+                        user.is_active = True
+                        user.save(update_fields=['is_active'])
+                        content = '恭喜您完成邮箱验证，您现在可以使用您的账号来登录本站。'
+                        title = '验证成功'
+                        return render(request, 'app_user/register_result.html', {'title': title, 'content': content})
+            return HttpResponseForbidden()
     else:
         return redirect('/')
 
 
-
 # 注册
+@method_decorator(never_cache, name='dispatch')
 class RegisterView(FormView):
     form_class = RegisterForm
     template_name = 'app_user/registration.html'
@@ -90,7 +109,7 @@ class RegisterView(FormView):
     def get_form_kwargs(self):
         '''给 Form 表单传递额外的参数'''
         kwargs = super(RegisterView, self).get_form_kwargs()
-        kwargs['request'] = self.request
+        kwargs['_request'] = self.request
         return kwargs
 
     def form_valid(self, form):
@@ -98,16 +117,7 @@ class RegisterView(FormView):
             user = form.save(False)
             user.is_active = False
             user.save(True)
-
-            site = get_current_site().domain
-            sign = get_md5(get_md5(settings.SECRET_KEY + str(user.id)))
-            if settings.DEBUG: site = '127.0.0.1:8000'
-            path = reverse('app_user:result')
-            url = f"http://{site}{path}?type=validation&id={user.id}&sign={sign}"
-            content = f'<p>请点击下面链接验证您的邮箱</p><a href="{url}" rel="bookmark">{url}</a>再次感谢您！<br />如果上面链接无法打开，请将此链接复制至浏览器。{url}'
-            print(content)
-            send_email(to_email=user.email, vcode_str=content)
-            url =f"{reverse('app_user:result')}?type=register&id={user.id}"
+            url =f"{reverse('app_user:register_result')}?type=register&id={user.id}"
             return redirect(url)
 
             # username = form.cleaned_data['username']
@@ -120,12 +130,14 @@ class RegisterView(FormView):
             # user_profile = UserProfile(user=user)
             # 如果直接使用objects.create()方法后不需要使用save()
             # user_profile.save()
-            return redirect("app_user:login")  # 注册成功, 跳转到登录
+
         return self.render_to_response({'form': form})
 
 
 # 登录
 # @check_honeypot(field_name='12223')
+@never_cache
+@sensitive_post_parameters('password')  # 记录未处理的异常时将password隐藏
 def login(request):
     '''登录'''
     # 第三步
@@ -150,11 +162,7 @@ def login(request):
     message = ''
     if request.method == 'POST':
 
-        form = LoginForm(request.POST)
-        checkcode = request.POST.get("check_code")
-        # if checkcode.lower() != request.session['CheckCode'].lower():  # 验证验证码
-        #     message = "验证码错误"
-
+        form = LoginForm(request.POST, _request=request)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
@@ -164,9 +172,10 @@ def login(request):
                     auth.login(request, user)
                     return redirect(next)
                 else:
-                    message = '用户被禁用！'
+                    url =f"{reverse('app_user:register_result')}?type=register&id={user.id}"
+                    message = f'账户未激活, 请激活后再登录.<a href="{url}"> 点击发送激活链接到邮箱({user.email})</a>'
             else:
-                message = '密码错误。请重试。'
+                message = '密码错误。请重试'
     else:
         form = LoginForm()
     return render(request, 'app_user/login.html', {'form': form, 'message': message})

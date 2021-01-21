@@ -15,11 +15,9 @@
                 <tr>
                     <td>{{ form.username.label_tag }}</td>
                     <td>{{ form.username }}</td>
-                    {% if form.username.errors %}
                     {% for error in form.username.errors %}
                         <td class="errorlist">{{ error|escape }}</td>
                     {% endfor %}
-                    {% endif %}
                 </tr>
                 <tr>
                     <td>{{ form.password.label_tag }}</td>
@@ -35,8 +33,12 @@
 
         <div class="button-wrapper submit">
             {% if message %}
-                <p style="color: rgb(242, 58, 105);">{{ message }}</p>
+            <p style="color: rgb(242, 58, 105);">{{ message|safe }}</p>
             {% endif %}
+            {% for error in form.check_code.errors %}
+            <p style="color: rgb(242, 58, 105);">{{ error|escape }}</p>
+            {% endfor %}
+
             <input type="submit" value="Login"/>
             <a style="margin: 16px;" href="{% url 'app_user:register' %}">还没有账号? 去注册➡️</a>
             <a style="margin: 16px;" href="{% url 'app_user:forget_pwd' %}">忘记密码?</a>

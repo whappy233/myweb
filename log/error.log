@@ -12,3 +12,64 @@
 2021-01-21 11:48:45.779 | INFO     | app_user.views:user_result:58 - register
 2021-01-21 11:49:13.785 | INFO     | app_user.views:user_result:58 - validation
 2021-01-21 11:49:24.669 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-21 15:33:33.576 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-21 16:08:22.070 | INFO     | myweb.utils:news:35 - cache_decorator set cache:get_current_site key:35f24eafeebced2023023f1d9d43678b
+2021-01-21 16:10:41.965 | INFO     | myweb.utils:news:35 - cache_decorator set cache:get_current_site key:7054c316fc189a7072cc9d8bf14bd841
+2021-01-21 16:10:41.973 | INFO     | app_user.views:register_result:67 - register
+2021-01-21 16:11:36.460 | INFO     | myweb.utils:news:35 - cache_decorator set cache:get_current_site key:43a229ee514a3c741652e66f38ae2702
+2021-01-21 16:11:36.468 | INFO     | app_user.views:register_result:67 - register
+2021-01-21 16:11:48.632 | INFO     | app_user.views:register_result:67 - validation
+2021-01-21 16:24:07.500 | INFO     | app_user.views:register_result:67 - validation
+2021-01-21 16:26:29.986 | INFO     | app_user.views:register_result:67 - register
+2021-01-21 16:28:46.071 | INFO     | myweb.utils:news:35 - cache_decorator set cache:get_current_site key:5a675a7f9d3ddd5e9fb1db4b2a7eee6b
+2021-01-21 16:28:46.080 | INFO     | app_user.views:register_result:67 - register
+2021-01-21 16:28:57.384 | INFO     | app_user.views:register_result:67 - validation
+2021-01-21 16:29:51.676 | INFO     | myweb.utils:news:35 - cache_decorator set cache:get_current_site key:5a675a7f9d3ddd5e9fb1db4b2a7eee6b
+2021-01-21 16:29:51.684 | INFO     | app_user.views:register_result:67 - register
+2021-01-21 16:30:31.202 | INFO     | app_user.views:register_result:67 - validation
+2021-01-21 16:30:59.654 | INFO     | app_user.views:register_result:67 - validation
+2021-01-21 16:31:00.765 | INFO     | app_user.views:register_result:67 - validation
+2021-01-21 16:48:27.245 | INFO     | app_user.views:register_result:67 - register
+2021-01-21 16:54:38.428 | INFO     | myweb.utils:news:35 - cache_decorator set cache:get_current_site key:5eec667dfcdf50586cd6233e942ffa89
+2021-01-21 16:54:38.436 | INFO     | app_user.views:register_result:67 - register
+2021-01-21 17:03:29.548 | INFO     | myweb.utils:news:35 - cache_decorator set cache:get_current_site key:537dde5c85372840232717b91d655303
+2021-01-21 17:03:29.556 | INFO     | app_user.views:register_result:67 - register
+2021-01-21 17:11:05.341 | INFO     | myweb.utils:news:35 - cache_decorator set cache:get_current_site key:3b21c0575b62f865592aab74fb913f01
+2021-01-21 17:26:45.645 | INFO     | myweb.utils:news:35 - cache_decorator set cache:get_current_site key:1d33174225cb0c7ab6068135604b1268
+2021-01-21 17:35:25.022 | INFO     | app_user.views:register_result:80 - register
+2021-01-21 17:35:25.023 | INFO     | myweb.utils:news:35 - cache_decorator set cache:get_current_site key:8b087fbbf9250f21b52d51aa0429d761
+2021-01-21 17:35:45.516 | INFO     | app_user.views:register_result:80 - validation
+2021-01-21 17:39:13.869 | INFO     | app_user.views:register_result:80 - register
+2021-01-21 17:39:13.870 | INFO     | myweb.utils:news:35 - cache_decorator set cache:get_current_site key:21da2098f991e62a4307df1aac98708d
+2021-01-21 17:39:37.592 | INFO     | app_user.views:register_result:80 - register
+2021-01-21 17:39:37.593 | INFO     | myweb.utils:news:35 - cache_decorator set cache:get_current_site key:21da2098f991e62a4307df1aac98708d
+2021-01-21 17:55:56.138 | INFO     | app_user.views:register_result:81 - register
+2021-01-21 17:55:56.139 | INFO     | myweb.utils:news:98 - cache_decorator set cache:get_current_site key:ca0efd9c8135eaab4cdb8cd53db2482b
+2021-01-21 17:55:56.961 | INFO     | app_user.views:register_result:81 - register
+2021-01-21 17:55:56.961 | INFO     | myweb.utils:news:98 - cache_decorator set cache:get_current_site key:ca0efd9c8135eaab4cdb8cd53db2482b
+2021-01-21 17:56:24.154 | INFO     | app_user.views:register_result:81 - register
+2021-01-21 17:56:24.154 | INFO     | myweb.utils:news:98 - cache_decorator set cache:get_current_site key:ca0efd9c8135eaab4cdb8cd53db2482b
+2021-01-21 19:06:02.920 | INFO     | app_user.views:register_result:82 - register
+2021-01-21 19:06:02.920 | INFO     | myweb.utils:news:70 - cache_decorator set cache:get_current_site key:6171ecb23c50e117a6cd2a58adaed846
+2021-01-21 19:06:39.472 | INFO     | app_user.views:register_result:82 - validation
+2021-01-21 19:20:34.366 | INFO     | app_user.views:register_result:80 - register
+2021-01-21 19:20:34.367 | INFO     | myweb.utils:news:69 - cache_decorator set cache:get_current_site key:0748af0bc5bf4c9875a70db5f59d9525
+2021-01-21 19:21:08.116 | INFO     | app_user.views:register_result:80 - validation
+2021-01-21 19:22:34.173 | INFO     | app_user.views:register_result:80 - register
+2021-01-21 19:22:34.174 | INFO     | myweb.utils:news:69 - cache_decorator set cache:get_current_site key:3d9d54e91f0805584bdad002d3f9bc64
+2021-01-21 19:22:48.270 | INFO     | app_user.views:register_result:80 - validation
+2021-01-21 19:23:58.929 | INFO     | app_user.views:register_result:80 - validation
+2021-01-21 19:24:41.814 | INFO     | app_user.views:register_result:80 - validation
+2021-01-21 19:24:47.716 | INFO     | app_user.views:register_result:80 - validation
+2021-01-21 19:25:06.094 | INFO     | app_user.views:register_result:80 - validation
+2021-01-21 19:25:44.028 | INFO     | app_user.views:register_result:80 - validation
+2021-01-21 19:26:08.230 | INFO     | app_user.views:register_result:80 - validation
+2021-01-21 19:27:06.530 | INFO     | app_user.views:register_result:80 - validation
+2021-01-21 19:27:16.405 | INFO     | app_user.views:register_result:80 - validation
+2021-01-21 19:28:25.945 | INFO     | app_user.views:register_result:80 - validation
+2021-01-21 19:32:31.267 | INFO     | app_user.views:register_result:66 - register
+2021-01-21 19:32:31.268 | INFO     | myweb.utils:news:69 - cache_decorator set cache:get_current_site key:d9260b104422e05635e0a27b7d814e04
+2021-01-21 19:33:03.222 | INFO     | app_user.views:register_result:66 - register
+2021-01-21 19:33:03.222 | INFO     | myweb.utils:news:69 - cache_decorator set cache:get_current_site key:d9260b104422e05635e0a27b7d814e04
+2021-01-21 19:33:18.324 | INFO     | app_user.views:register_result:66 - validation
+2021-01-21 19:33:22.714 | INFO     | app_user.views:register_result:66 - validation

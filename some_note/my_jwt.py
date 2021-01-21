@@ -52,7 +52,6 @@ class Jwt():
 
     @staticmethod
     def b64encode(j_s):
-
         return base64.urlsafe_b64encode(j_s).replace(b'=', b'')
 
     @staticmethod

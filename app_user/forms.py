@@ -7,13 +7,13 @@ from .models import UserProfile
 from django.core.exceptions import ValidationError
 import re
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-
+from django.conf import settings
 
 # 用户注册
 class RegisterForm(UserCreationForm):
     '''注册表单'''
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)  # 传递额外的参数, 并在调用构造函数之前从 kwargs 中删除额外的参数
+        self._request = kwargs.pop('_request', None)  # 传递额外的参数, 并在调用构造函数之前从 kwargs 中删除额外的参数
         super(RegisterForm, self).__init__(*args, **kwargs)
 
         self.fields['username'].widget = forms.widgets.TextInput(attrs={"class": "form-control"})
@@ -36,7 +36,7 @@ class RegisterForm(UserCreationForm):
 
     def clean_check_code(self):
         checkcode = self.cleaned_data.get('check_code')
-        if checkcode.lower() != self.request.session['CheckCode'].lower():  # 验证验证码
+        if checkcode.lower() != self._request.session['CheckCode'].lower():  # 验证验证码
             raise forms.ValidationError("验证码错误")
         return checkcode
 
@@ -47,17 +47,27 @@ class RegisterForm(UserCreationForm):
 
 # 用户登录
 class LoginForm(forms.Form):
-    username = forms.CharField(label='用户名', max_length=20, min_length=6,
-                               widget=forms.TextInput(attrs={
-                                   'placeholder': '用户名 手机号 邮箱'
-                               }))
+    '''用户登录'''
+
+    username = forms.CharField(label='用户名', max_length=20, min_length=6, widget=forms.TextInput(attrs={'placeholder': '用户名 手机号 邮箱'}))
     password = forms.CharField(label='密码', widget=forms.PasswordInput)
-    check_code = forms.CharField(
-        label='验证码', widget=forms.TextInput(attrs={'placeholder': '不区分大小写'}))
+    check_code = forms.CharField(label='验证码', widget=forms.TextInput(attrs={'placeholder': '不区分大小写'}))
+
+    def __init__(self, *args, **kwargs):
+        self._request = kwargs.pop('_request', None)  # 传递额外的参数, 并在调用构造函数之前从 kwargs 中删除额外的参数
+        super(LoginForm, self).__init__(*args, **kwargs)
+
+    def clean_check_code(self):
+        checkcode = self.cleaned_data.get('check_code')
+        if not settings.DEBUG:
+            if checkcode.lower() != self._request.session['CheckCode'].lower():  # 验证验证码
+                raise forms.ValidationError("验证码错误")
+        return checkcode
 
 
 # 修改密码
 class PwdChangeForm(forms.Form):
+    '''修改密码'''
     username = forms.CharField(widget=forms.HiddenInput)
     old_pw = forms.CharField(label='旧密码', widget=forms.PasswordInput)
     pw1 = forms.CharField(label='新密码', widget=forms.PasswordInput)
@@ -100,9 +110,9 @@ def mobile_validate(value):
 #                             widget=forms.TextInput(attrs={'class': "form-control", 'placeholder': u'手机号码'}))
 
 
-
 # 用户信息编辑(User)
 class UserEditForm(forms.ModelForm):
+    '''用户信息编辑(User)'''
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email')
@@ -116,6 +126,7 @@ class UserEditForm(forms.ModelForm):
 
 # 用户信息编辑(UserProfile)
 class ProfileEditForm(forms.ModelForm):
+    '''用户信息编辑(UserProfile)'''
     class Meta:
         model = UserProfile
         fields = ('org', 'telephone')
@@ -140,6 +151,7 @@ class ProfileEditForm(forms.ModelForm):
 
 # 用户头像表单
 class UserPhotoUploadForm(forms.Form):
+    '''用户头像表单'''
     photo_file = forms.ImageField()
 
     def clean_photo_file(self):
