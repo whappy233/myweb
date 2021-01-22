@@ -1,10 +1,8 @@
-from uuid import uuid4
-
 from django.contrib import admin
 from django.utils import timezone
 from django.utils.html import format_html
-
-from .models import Article, Category, Comment
+from django.urls import reverse
+from .models import Article, Category
 
 
 # 自定义 list_filter
@@ -33,10 +31,13 @@ class TitleKeywordFilter(admin.SimpleListFilter):
             return queryset.filter(title__icontains='django')
 
 
+# 文章
 # admin.site.register(Article, ArticleAdmin)  # 注册方式1
 @admin.register(Article)  # 注册方式2（使用包装）
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ['id', 'show_tags', 'title', 'author', 'created', 'publish', 'updated', 'status', 'is_delete', 'slug']  # 显示字段
+    list_display = ['id', 'show_tags', 'title', 'link_to_userinfo', 
+                    'link_to_categoryinfo', 'publish', 'updated', 
+                    'status', 'is_delete', 'slug', 'comment_status']  # 显示字段
     search_fields = ['title', 'body']  # 搜索字段
     list_filter = [TitleKeywordFilter, 'publish', 'created', 'updated', 'status']  # 过滤字段
     prepopulated_fields = {'slug':('title',)}  # 自动生成slug, 根据title填充slug
@@ -51,13 +52,29 @@ class ArticleAdmin(admin.ModelAdmin):
     empty_value_display = '<span>-</span>'  # 字段值为空时显示的文本(可为纯文本,可为html)
     # admin_order_field = ('title', 'updated')  # 设置需要排序的字段
     list_per_page = 20  # 每页显示条目数
-    list_editable = ('status', 'is_delete')  # 设置可编辑字段
+    list_editable = ('status', 'is_delete', 'comment_status')  # 设置可编辑字段
     date_hierarchy = 'publish'  # 按日期月份筛选
-    list_display_links = ['title', 'author']  # 设置带连接的字段
+    list_display_links = ['title',]  # 设置带连接的字段
+
+    # admin/accounts/bloguser/2/change/
+    # 链接到用户信息
+    def link_to_userinfo(self, obj):
+        info = (obj.author._meta.app_label, obj.author._meta.model_name)
+        link = reverse('admin:%s_%s_change' % info, args=(obj.author.id,))
+        return format_html(u'<a href="%s">%s</a>' %(link, obj.author.username))
+    link_to_userinfo.short_description = '用户'
+
+    # 链接到分类信息
+    def link_to_categoryinfo(self, obj):
+        info = (obj.category._meta.app_label, obj.category._meta.model_name)
+        link = reverse('admin:%s_%s_change' % info, args=(obj.category.id,))
+        return format_html(u'<a href="%s">%s</a>' %(link, obj.category.name))
+    link_to_categoryinfo.short_description = '分类'
 
     actions = ['make_published', 'make_published_false', 
                 'make_delete_true', 'make_delete_false', 
-                'action_func']  # 自定义actions
+                'action_func','close_article_commentstatus',
+                'open_article_commentstatus']  # 自定义actions
 
     def make_published(self, request, queryset):
         # 注意: 此操作不会触发模型的 clean 方法!
@@ -89,6 +106,15 @@ class ArticleAdmin(admin.ModelAdmin):
             # do_something(obj)
             pass
     action_func.short_description = "对批量选择进行某些操作"
+
+    def close_article_commentstatus(self, request, queryset):
+        queryset.update(comment_status='c')
+    close_article_commentstatus.short_description = '关闭文章评论'
+
+    def open_article_commentstatus(self, request, queryset):
+        queryset.update(comment_status='o')
+    open_article_commentstatus.short_description = '打开文章评论'
+
 
     # 重写了 get_actions 方法，只给了用户名为 891953720 批量删除对象的权限。
     # 如果用户名不为 891953720,我们把 delete_selected 动作从下拉菜单中删除
@@ -147,6 +173,7 @@ class ArticleAdmin(admin.ModelAdmin):
     show_tags.short_description = '标签'  # 设置表头
 
 
+# 分类
 # admin.site.register(Category, CategoryAdmin)  # 注册方式1
 @admin.register(Category)  # 注册方式2（使用包装）
 class CategoryAdmin(admin.ModelAdmin):
@@ -154,16 +181,3 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug':('name',)}  # 自动生成slug, 根据name填充slug
     search_fields = ['name',]
     ordering = ['parent_category'] 
-
-
-# admin.site.register(Comment)  # 注册方式1
-@admin.register(Comment)  # 注册方式2（使用包装）
-class CommentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'body', 'created', 'content_type', 'object_id', 'active']  # 显示字段
-    search_fields = ['name', 'email', 'body']  # 搜索字段
-    list_filter = ['created', 'active']  # 过滤器
-    list_editable = ['active']
-    # raw_id_fields = ['article',]  # 下拉框改为微件
-
-
-

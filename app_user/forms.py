@@ -66,6 +66,10 @@ class LoginForm(forms.Form):
         return checkcode
 
 
+
+
+
+
 # 修改密码
 class PwdChangeForm(forms.Form):
     '''修改密码'''

@@ -1,22 +1,19 @@
+from app_blog.models import Article
 from django.contrib.auth.decorators import (login_required,
                                             permission_required,
                                             user_passes_test)
 from django.contrib.auth.models import User
-from django.http.response import Http404, HttpResponse, JsonResponse
+from django.db.models import Q
+from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
-from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
-from django.views.generic import DetailView, ListView
+from django.views.generic import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from django.db.models import Q
 
-from app_blog.models import Article, Category, Comment
-from app_user.models import UserProfile
 from .decorators import superuser_only
 from .forms import ArticleCreateForm
-
 
 
 @superuser_only('app_user:login')# 超级管理员验证

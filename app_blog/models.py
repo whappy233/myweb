@@ -4,10 +4,8 @@ from ckeditor_uploader.fields import RichTextUploadingField  # 富文本编辑�
 from mdeditor.fields import MDTextField  # 富文本编辑器 mdeditor
 
 from django.contrib.auth.models import User
-from django.contrib.contenttypes.fields import (GenericForeignKey,
-                                                GenericRelation)
+from django.contrib.contenttypes.fields import GenericRelation
 
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -16,7 +14,7 @@ from taggit.managers import TaggableManager  # 第三方标签应用
 from .cn_taggit import CnTaggedItem
 from myweb.utils import cache_decorator
 from uuid import uuid4
-
+from app_comments.models import Comments
 
 # 自定义的管理器
 class PublishedManage(models.Manager):
@@ -127,7 +125,7 @@ class Article(models.Model):
     article_order = models.IntegerField('排序,数字越大越靠前', blank=False, null=False, default=0)
 
     # contenttypes
-    comments = GenericRelation('Comment')  # 该字段不会存储于数据库中(用于反向关系查询)
+    comments = GenericRelation(Comments)  # 该字段不会存储于数据库中(用于反向关系查询)
 
     objects = models.Manager()  # 默认管理器
     # objects = aaa()   # 在默认管理器上增加了方法
@@ -166,8 +164,8 @@ class Article(models.Model):
 
     # 标准 urls
     def get_absolute_url(self):  # 构建URL
-        # <int:year>/<int:month>/<int:day>/<slug:slug>/
-        # /2020/1/10/markdown/
+        # <int:year>/<int:month>/<int:day>/<slug:slug>/self.id/
+        # /2020/1/10/markdown/3
         a = [self.publish.year, self.publish.month, self.publish.day, self.slug, self.id]
         return reverse('app_blog:article_detail', args=a)
 
@@ -192,24 +190,3 @@ class Article(models.Model):
         if self.status == 'p' and self.publish is None:
             self.publish = timezone.now()
 
-
-# 评论模型
-class Comment(models.Model):
-    '''评论模型'''
-    name = models.CharField(max_length=80, verbose_name='名字')
-    email = models.EmailField(verbose_name='邮箱', blank=True)
-    body = models.TextField(verbose_name='评论')
-    created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
-    active = models.BooleanField(default=True, verbose_name='是否有效')  # 隐式删除
-
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name='内容类型')   # step1 内容类型，代表了模型的名字(比如Article, Picture)
-    object_id = models.PositiveIntegerField('关联对象的ID')  # step2 传入对象的id
-    content_object = GenericForeignKey('content_type', 'object_id') # step3 传入的实例化对象，其包含两个属性content_type和object_id
-
-    class Meta:
-        ordering = ('created',)
-        verbose_name = '评论'
-        verbose_name_plural = verbose_name
-
-    def __str__(self):
-        return f'(关联的模型: {self.content_type}, 对应ID: {self.object_id})'

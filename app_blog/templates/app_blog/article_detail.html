@@ -52,22 +52,18 @@
 <div>
     {# with 标签可以将某个值赋予到新的变量中,对于避免数据库访问或者多次访问开销交的的方法十分有用 #}
     {% with comments.count as total_comments %}
-    {% ifnotequal total_comments 0 %}
-    <h2> 有 {{ total_comments }} 条评论 </h2>
-    {% endifnotequal %}
+    <h2> {{ total_comments }} 条评论 </h2>
+    {% if total_comments != 0 %}
+    <ol class="commentlist">
+        {% query comments parent_comment=None as parent_comments %}
+        {% for comment_item in parent_comments %}
+            {% with 0 as depth %}
+                {% include "app_comments/comment_item_tree.html" %}
+            {% endwith %}
+        {% endfor %}
+    </ol>
+    {% endif %}
     {% endwith %}
-
-    {% for comment in comments %}
-    <div>
-        <p class="info">
-            {{ forloop.counter }}#: {{ comment.name }}
-            <i>评论日期:{{ comment.created }}</i>
-        </p>
-        {{ comment.body|linebreaks }}
-    </div>
-    {% empty %}
-    <p>还没有评论,快来抢板凳吧!</p>
-    {% endfor %}
 </div>
 
 <button id="btn1">点击发送ajax</button>
@@ -76,15 +72,23 @@
 {% if message %}
 <p>{{message}}</p>
 {% else %}
-<h2>添加评论</h2>
-<form action='.' method='POST'>
-    <table>
-        {{comment_form.as_table}}
-    </table>
-    {% csrf_token %}
-    <p><input type='submit' vaule='Add comment'></p>
-
-</form>
+    {% if article.comment_status == "o" %}
+    <h2 id="comment">添加评论 </h2>
+    <a id="cancel_reply" href="javascript:void(0)" onclick="cancel_reply()" hidden>取消回复</a>
+        {% if request.user.is_authenticated %}
+        <form action='' method='POST'>
+            {% csrf_token %}
+            <table>
+                {{comment_form.as_table}}
+            </table>
+            <p><input type='submit' vaule='Add comment'></p>
+        </form>
+        {% else %}
+        <p>您还没有登录，请您登<a href="{% url 'app_user:login' %}?next={{ article.get_absolute_url }}">登录</a>后发表评论。</p>
+        {% endif %}
+    {% else %}
+    文章关闭了评论
+    {% endif %}
 {% endif %}
 
 {% endblock content %}
@@ -93,6 +97,20 @@
 
 <script src="{% static 'js/jquery.cookie_1.4.1.min.js' %}"></script>
 <script>
+
+    function do_reply(parentid) {
+        let username = $("#username").text().trim();
+        $('#id_parent_comment').val(parentid);
+        $('#comment').text(`回复@${username}`);
+        $('#cancel_reply').attr('hidden', false);
+    }
+    
+    function cancel_reply() {
+        $('#id_parent_comment').val('');
+        $('#comment').text('添加评论');
+        $('#cancel_reply').attr('hidden', true);
+    }
+
 
     // 按钮点击异步请求
     $('#btn1').on('click', function () {

@@ -1,13 +1,16 @@
 import xadmin
-from django.contrib import admin
-from django.contrib.auth.models import User
-from app_blog.models import Article, Category, Comment
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import format_html
 
+from app_blog.models import Article, Category
 
+
+# 文章
 class ArticleAdmin:
-    list_display = ['id', 'show_tags', 'tags', 'category', 'title', 'author', 'created', 'publish', 'updated', 'status', 'is_delete', 'slug']  # 显示字段
+    list_display = ['id', 'show_tags', 'tags', 'link_to_categoryinfo', 
+                    'title', 'link_to_userinfo', 'created', 'publish', 
+                    'updated', 'status', 'is_delete', 'slug', 'comment_status']  # 显示字段
     search_fields = ['title', 'body']  # 搜索字段
     list_filter = ['publish', 'created', 'updated', 'status']  # 过滤字段
     prepopulated_fields = {'slug':('title',)}  # 自动生成slug, 根据title填充slug
@@ -22,13 +25,29 @@ class ArticleAdmin:
     empty_value_display = '<span>-</span>'  # 字段值为空时显示的文本(可为纯文本,可为html)
     # admin_order_field = ('title', 'updated')  # 设置需要排序的字段
     list_per_page = 20  # 每页显示条目数
-    list_editable = ('status', 'is_delete')  # 设置可编辑字段
+    list_editable = ('status', 'is_delete', 'comment_status')  # 设置可编辑字段
     date_hierarchy = 'publish'  # 按日期月份筛选
-    list_display_links = ['title', 'author']  # 设置带连接的字段
+    list_display_links = ['title',]  # 设置带连接的字段
+
+    # admin/accounts/bloguser/2/change/
+    # 链接到用户信息
+    def link_to_userinfo(self, obj):
+        info = (obj.author._meta.app_label, obj.author._meta.model_name)
+        link = reverse('admin:%s_%s_change' % info, args=(obj.author.id,))
+        return format_html(u'<a href="%s">%s</a>' %(link, obj.author.username))
+    link_to_userinfo.short_description = '用户'
+
+    # 链接到分类信息
+    def link_to_categoryinfo(self, obj):
+        info = (obj.category._meta.app_label, obj.category._meta.model_name)
+        link = reverse('admin:%s_%s_change' % info, args=(obj.category.id,))
+        return format_html(u'<a href="%s">%s</a>' %(link, obj.category.name))
+    link_to_categoryinfo.short_description = '分类'
 
     actions = ['make_published', 'make_published_false', 
                 'make_delete_true', 'make_delete_false', 
-                'action_func']  # 自定义actions
+                'action_func', 'close_article_commentstatus',
+                'open_article_commentstatus']  # 自定义actions
 
     def make_published(self, request, queryset):
         # 注意: 此操作不会触发模型的 clean 方法!
@@ -44,14 +63,24 @@ class ArticleAdmin:
     def make_delete_true(self, request, queryset):
         # 注意: 此操作不会触发模型的 clean 方法!
         queryset.update(is_delete=True)
-
     make_delete_true.short_description = "逻辑删除-是"
 
     def make_delete_false(self, request, queryset):
         # 注意: 此操作不会触发模型的 clean 方法!
         queryset.update(is_delete=False)
-
     make_delete_false.short_description = "逻辑删除-否"
+
+    def close_article_commentstatus(self, request, queryset):
+        queryset.update(comment_status='c')
+    close_article_commentstatus.short_description = '关闭文章评论'
+
+    def open_article_commentstatus(self, request, queryset):
+        queryset.update(comment_status='o')
+    open_article_commentstatus.short_description = '打开文章评论'
+
+
+
+
 
     # 对批量选择进行某些操作
     # 如果想对queryset中的对象一个一个修改或导出
@@ -117,24 +146,13 @@ class ArticleAdmin:
         else:
             return format_html('<span style="color:red;">文章{}无标签</span>', obj.id,)
     show_tags.short_description = '标签'  # 设置表头
-
 xadmin.site.register(Article, ArticleAdmin)
 
-
+# 分类
 class CategoryAdmin:
     list_display = ['id', 'name', 'parent_category', 'slug']
     prepopulated_fields = {'slug':('name',)}  # 自动生成slug, 根据name填充slug
     search_fields = ['name',]
     ordering = ['parent_category'] 
 xadmin.site.register(Category, CategoryAdmin)
-
-
-class CommentAdmin:
-    list_display = ['id', 'name', 'email', 'body', 'created', 'content_type', 'object_id', 'active']  # 显示字段
-    search_fields = ['name', 'email', 'body']  # 搜索字段
-    list_filter = ['created', 'active']  # 过滤器
-    list_editable = ['active']
-    # raw_id_fields = ['article',]  # 下拉框改为微件
-xadmin.site.register(Comment, CommentAdmin)
-
 

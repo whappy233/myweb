@@ -24,6 +24,19 @@ def total_articles():  # 定义标签
     return Article.published.count()
 
 
+# 在模板执行 queryset 查询
+@register.simple_tag
+def query(qs, **kwargs):
+    """ 
+    {% query books author=author as mybooks %}
+    {% for book in mybooks %}
+    ...
+    {% endfor %}
+    """
+    return qs.filter(**kwargs)
+
+
+
 # 最多评论
 @register.simple_tag
 def get_most_commented_articles(count=5):
@@ -149,4 +162,3 @@ def chinese_date_format(value):
 @register.filter(name='add_description')
 def add_description(value, args):
     return "{} ({})".format(value, args)
-

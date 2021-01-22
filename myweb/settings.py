@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'app_gallery.apps.AppGalleryConfig',
     'app_admin.apps.AppAdminConfig',
     'app_common.apps.AppCommonConfig',
+    'app_comments.apps.AppCommentsConfig',
 
     'taggit',                       # 第三方标签管理器
     'imagekit',                     # 第三方缩略图应用 pip install django-imagekit

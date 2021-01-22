@@ -181,6 +181,7 @@ def login(request):
     return render(request, 'app_user/login.html', {'form': form, 'message': message})
 
 # 修改密码
+@never_cache
 @login_required
 def change_pw(request):
     '''修改密码'''

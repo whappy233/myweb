@@ -1,6 +1,6 @@
 # 表单
 from django import forms
-from .models import Comment, Article
+from .models import Article
 
 
 # 邮件分享表单
@@ -16,20 +16,6 @@ class EmailArticleForm(forms.Form):
         if len(comments) < 10:
             raise forms.ValidationError('不足20字')
         return comments
-
-
-# 评论表单
-# 从模型中创建表单(ModelForm)
-# 当从模型中创建表单时，仅需指定使用哪一个模型创建 Meta 类中的表单
-# 该方式以动态方法构建表单
-class CommentForm(forms.ModelForm):
-    class Meta:
-        model = Comment
-        fields = ('name', 'email', 'body')  # 通知表单只创建哪些字段
-        # exclude = (,) # 不创建的字段
-        # widgets = {
-        #     'name': forms.TextInput(attrs={'disabled': 'disabled'}),
-        # }
 
 
 # 创建搜索表单

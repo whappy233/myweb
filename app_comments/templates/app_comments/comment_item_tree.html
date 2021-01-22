@@ -1,0 +1,39 @@
+{% load blog_tags %}
+
+<li id="comment-{{ comment_item.pk }}" style="margin-left: {% widthratio depth 1 3 %}rem">
+    <div id="div-comment-{{ comment_item.pk }}">
+        <div>
+            <img alt="" src="{{ comment_item.author.profile.photo.url }}" style="width: 2rem;height: 2rem;border-radius: 1rem">
+            <cite>
+                <a rel="nofollow" id="username"
+                    {% if comment_item.author.is_superuser %}
+                    href="{% url 'app_blog:article_list_by_author' comment_item.author %}" 
+                    {% else %} 
+                    href="#"
+                    {% endif %}>
+                    {{ comment_item.author.username }}
+                </a>
+            </cite>
+            <span>:</span>
+        </div>
+        <div>
+            {{ comment_item.created }}
+        </div>
+        <p>{{ comment_item.body |escape|custom_markdown }}</p>
+
+        <div class="reply">
+            <a rel="nofollow" href="javascript:void(0)"
+                onclick="do_reply({{ comment_item.pk }})">
+                回复
+            </a>
+        </div>
+    </div>
+</li>
+{% query comments parent_comment=comment_item as cc_comments %}
+{% for cc in cc_comments %}
+{% with comment_item=cc template_name="app_comments/comment_item_tree.html" %}
+{% with depth=depth|add:1 %}
+{% include template_name %}
+{% endwith %}
+{% endwith %}
+{% endfor %}

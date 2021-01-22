@@ -5,18 +5,19 @@ from django.core import paginator
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator  # 分页
 from django.db.models import Count, Q
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
 from django.views.generic import DetailView, ListView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from taggit.models import Tag  # 导入标签模型
 
-from .forms import CommentForm, EmailArticleForm, SearchForm
-from .models import Article, Category, Comment
+from .forms import EmailArticleForm, SearchForm
+from .models import Article, Category
+
+from app_comments.forms import CommentForm
+
 
 from loguru import logger
 # @logger.catch()
@@ -105,7 +106,7 @@ class ArticleDetailView(DetailView):
         context = super().get_context_data(**kwargs)
 
         message = ''
-        comments = self.object.comments.filter(active=True)  # 查询所有评论
+        comments = self.object.comments.filter(is_active=True)  # 查询所有评论
         # 相似文章
         article_tags_ids = self.object.tags.values_list('id', flat=True)  # 当前帖子的 Tag ID 列表
         # 获取包含此标签或分组的全部帖子,排除自身
@@ -126,7 +127,6 @@ class ArticleDetailView(DetailView):
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset=queryset)
-        
         obj.viewed()
         return obj
 
@@ -137,10 +137,11 @@ class ArticleDetailView(DetailView):
         if (not has_commented) or (has_commented!=article.id):
             comment_form = CommentForm(data=request.POST)  # 提交表单
             if comment_form.is_valid():
-                # 创建表单连接的模型实例(commit=False, 不会立即保存到数据库中),save()方法仅适用于ModelsForm
-                new_comment = comment_form.save(commit=False)
-                new_comment.content_object = article
-                new_comment.save()
+                cd = comment_form.cleaned_data
+                comment = comment_form.save(commit=False)
+                comment.author = request.user
+                comment.content_object = article
+                comment.save(True)
                 request.session['has_commented'] = article.id
                 request.session.set_expiry(300)
                 return redirect(article.get_absolute_url())
@@ -149,7 +150,6 @@ class ArticleDetailView(DetailView):
 
         context = self.get_context_data()
         context.update({'message': message,})
-
         return render(request, 'app_blog/article_detail.html', context)
 
 
@@ -187,13 +187,11 @@ def month_archive(request, year, month):
 
 
 # 点👍 +1
-@login_required
+# @login_required
 @require_http_methods(["POST"])  # 只接受 POST 方法
 def blog_like(request):
     blog_id = request.POST.get('id')
     action = request.POST.get('action')
-    print(blog_id)
-    print(action)
     if blog_id and action:
         try:
             blog = Article.published.get(id=blog_id)
@@ -203,7 +201,9 @@ def blog_like(request):
                 blog.users_like.remove(request.user)
             count = blog.users_like.count()
             return JsonResponse({'status':'ok', 'count': count})
-        except:
+        except Exception as e:
+            print(e)
+            logger.error('')
             pass
     return JsonResponse({'status':'fail'})
 
