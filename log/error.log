@@ -1,6 +1,0 @@
-2021-01-22 18:33:29.003 | INFO     | app_user.views:register_result:66 - register
-2021-01-22 18:33:29.004 | INFO     | myweb.utils:news:69 - cache_decorator set cache:get_current_site key:58c19dfdd57fb6c41325f79d6dd4031b
-2021-01-22 18:33:39.364 | INFO     | app_user.views:register_result:66 - register
-2021-01-22 18:33:39.364 | INFO     | myweb.utils:news:69 - cache_decorator set cache:get_current_site key:58c19dfdd57fb6c41325f79d6dd4031b
-2021-01-22 18:33:47.772 | INFO     | app_user.views:register_result:66 - validation
-2021-01-22 18:34:19.250 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"

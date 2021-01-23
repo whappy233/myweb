@@ -47,7 +47,9 @@ class ArticleAdmin(admin.ModelAdmin):
     actions_on_top = True   # 执行动作的位置
     # actions_on_bottom = False
     ordering = ['author']  # 默认排序
-    # fields = ['title', 'slug', 'author', 'body', 'publish', 'status']  # 在详细编辑页面的显示字段
+    fields = ['tags', 'title', 'author', 'category', 'body',
+            'publish', 'status', 'is_delete', 'slug', 'views', 
+            'comment_status', 'article_order', 'users_like']
 
     empty_value_display = '<span>-</span>'  # 字段值为空时显示的文本(可为纯文本,可为html)
     # admin_order_field = ('title', 'updated')  # 设置需要排序的字段
@@ -59,6 +61,15 @@ class ArticleAdmin(admin.ModelAdmin):
     # admin/accounts/bloguser/2/change/
     # 链接到用户信息
     def link_to_userinfo(self, obj):
+        print(20*'++')
+
+        from django.apps import apps
+        print(20*'+')
+        cc = apps.get_model(app_label='app_blog', model_name='Article')
+        print(cc)
+
+
+        print(obj._meta.app_label)
         info = (obj.author._meta.app_label, obj.author._meta.model_name)
         link = reverse('admin:%s_%s_change' % info, args=(obj.author.id,))
         return format_html(u'<a href="%s">%s</a>' %(link, obj.author.username))
@@ -135,6 +146,7 @@ class ArticleAdmin(admin.ModelAdmin):
     # 自定义显示表单的Choice字段
     # 下例中通过重写formfiled_for_choice_field方法给superuser多了一个选择
     # def formfield_for_choice_field(self, db_field, request, **kwargs):
+    #     print(db_field.name)
     #     if db_field.name == "status":
     #         kwargs['choices'] = (
     #             ('accepted', 'Accepted'),

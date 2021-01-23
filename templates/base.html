@@ -6,13 +6,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{% endblock%}</title>
+    <title>{% block title %}{% endblock title %}</title>
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
     <link href="{% static 'css/base.css' %}" rel="stylesheet">
     <link href="{% static 'bootstrap_4.5.0/css/bootstrap.min.css' %}" rel="stylesheet">
 
     {% block css_file %}
-    {% endblock %}
+    {% endblock css_file %}
 
 </head>
 
@@ -42,8 +42,8 @@
                 <ul class="menu nav align-items-center">
                     {% if request.user.is_authenticated %} {# 当用户被验证 #}
                     <li class="d-sm-inline d-none">
-                        <img src="{{request.user.profile.photo.url}}" class="rounded-circle dropdown-toggle" 
-                        data-toggle="dropdown" style="width: 2rem;height: 2rem;" alt="image">
+                        <img src="{{request.user.profile.photo.url}}" class="rounded-circle dropdown-toggle"
+                            data-toggle="dropdown" style="width: 2rem;height: 2rem;" alt="image">
                         <div class="dropdown-menu" style="background: #12c064;">
                             <a class="dropdown-item" href="{% url 'app_user:profile' %}">修改信息</a>
                             <a class="dropdown-item" href="{% url 'app_user:change_pw' %}">修改密码</a>
@@ -74,22 +74,33 @@
     {# 主体 #}
     <div id="content">
         {{Carlos}}{# 全局tag #}
-        <p id="totle_time"></p>
-
         {% block content %}
-        {% endblock %}
+        {% endblock content %}
     </div>
 
-    {# 侧边 #}
-    <div id='sidebar'>
-        {% block sidebar %}
-        {% endblock %}
-    </div>
+    {# 底栏 #}
+    <footer class="footinfo">
+        {% block footer %}
+        <div style="text-align: center">
+            Copyright©&nbsp;2021&nbsp;
+            <a href="/" target="blank">浩瀚星海</a>
+            &nbsp;|&nbsp;
+            <a href="/sitemap.xml" title="SiteMap" target="_blank">SiteMap</a>
+            &nbsp;|&nbsp;
+            <a href="{% url 'app_blog:article_feed' %}" title="RSS Feed" target="_blank">订阅博客</a>
+        </div>
+        <div style="text-align: center">
+            Powered by
+            <a href="https://www.djangoproject.com/" rel="nofollow" target="blank">Django</a>
+            &nbsp;|&nbsp;
+            本页面加载耗时:<!!LOAD_TIMES!!>s
+        </div>
+        {% endblock footer %}
+    </footer>
 
-    本页面加载耗时:<!!LOAD_TIMES!!>s
 
     {% block css_style %}
-    {% endblock %}
+    {% endblock css_style %}
 
 
     <script src="{% static 'jquery_v3.5.1/jquery-3.5.1.min.js' %}"></script>
@@ -97,9 +108,48 @@
     <script src="{% static 'bootstrap_4.5.0/js/bootstrap.min.js' %}"></script>
     <script>
         $('[data-toggle="tooltip"]').tooltip();// Tooltip
+
+        var rocket = $('#rocket');
+        $(window).on('scroll', debounce(slideTopSet, 300));
+        function debounce(func, wait) {
+            var timeout;
+            return function () {
+                clearTimeout(timeout);
+                timeout = setTimeout(func, wait);
+            };
+        }; 
+        function slideTopSet() {
+            var top = $(document).scrollTop();
+            if (top > 200) {
+                rocket.addClass('show');
+            } else {
+                rocket.removeClass('show');
+            }
+        };
+        $(document).on('click', '#rocket', function (event) {
+            rocket.addClass('move');
+            $('body, html').animate({
+                scrollTop: 0
+            }, 800);
+        });
+        $(document).on('animationEnd', function () {
+            setTimeout(function () {
+                rocket.removeClass('move');
+            }, 400);
+        });
+        $(document).on('webkitAnimationEnd', function () {
+            setTimeout(function () {
+                rocket.removeClass('move');
+            }, 400);
+        });
+
+
+
+
     </script>
+
     {% block javascript %}
-    {% endblock %}
+    {% endblock javascript %}
 
 
 </body>

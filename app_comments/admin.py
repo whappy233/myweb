@@ -1,19 +1,27 @@
 from django.contrib import admin
-from .models import Comments
-from django.shortcuts import reverse
+from django.urls import reverse
 from django.utils.html import format_html
+
+from .models import Comments
 
 
 # admin.site.register(Comments)  # 注册方式1
 @admin.register(Comments)  # 注册方式2（使用包装）
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'body', 'link_to_userinfo', 'link_to_article', 'content_type', 'object_id', 'created', 'is_active']  # 显示字段
+    list_display = ['id', 'body', 'link_to_userinfo', 'link_to_article', 'created_time', 'is_active']  # 显示字段
     search_fields = ['author', 'body', 'content_object']  # 搜索字段
-    list_filter = ['created', 'is_active']  # 过滤器
+    list_filter = ['created_time', 'is_active']  # 过滤器
     list_editable = ['is_active']
     actions = ['disable_commentstatus', 'enable_commentstatus']
     list_display_links = ('body',) # 可点击的项
     # raw_id_fields = ['article',]  # 下拉框改为微件
+
+
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     if db_field.name == 'content_type':
+    #         print(db_field.get_choices())
+    #         db_field.choices = [(16, '文章')]
+    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def disable_commentstatus(self, request, queryset):
         '''禁用评论'''
@@ -38,6 +46,7 @@ class CommentAdmin(admin.ModelAdmin):
     def link_to_article(self, obj):
         info = (obj.content_object._meta.app_label, obj.content_object._meta.model_name)
         link = reverse('admin:%s_%s_change' % info, args=(obj.content_object.id,))
-        return format_html(u'<a href="%s">%s</a>' % (link, obj.content_object.title))
-    link_to_article.short_description = '关联对象'
+        text= f'({"/".join(info)}: {obj.content_object.id}) {obj.content_object.title}'
+        return format_html(u'<a href="%s">%s</a>' % (link, text))
+    link_to_article.short_description = '关联对象详情'
 

@@ -1,34 +1,35 @@
 {% load blog_tags %}
+{% load humanize %} 
 
-<li id="comment-{{ comment_item.pk }}" style="margin-left: {% widthratio depth 1 3 %}rem">
-    <div id="div-comment-{{ comment_item.pk }}">
+<div class="comment " style="margin-left: {% widthratio depth 1 3 %}rem">
+    <div class="row">
         <div>
-            <img alt="" src="{{ comment_item.author.profile.photo.url }}" style="width: 2rem;height: 2rem;border-radius: 1rem">
-            <cite>
-                <a rel="nofollow" id="username"
-                    {% if comment_item.author.is_superuser %}
-                    href="{% url 'app_blog:article_list_by_author' comment_item.author %}" 
-                    {% else %} 
-                    href="#"
-                    {% endif %}>
-                    {{ comment_item.author.username }}
+            <img src="{{ comment_item.author.profile.photo.url }}" alt="user_image" class="img-responsive">
+        </div>
+        <div class="comment-content col-md-10">
+            <p>{{ comment_item.body |escape|custom_markdown }}</p>
+            <div class="comment_footer small mute">
+                <span>By&nbsp;&nbsp;
+                    {% with comment_item.author as user %}
+                    {% if article.author == user %}
+                        <span class="badge badge-success">&nbsp;作者</span>
+                    {% else %}
+                    {{ user }}
+                    {% endif %}
+                    {% endwith %}
+                </span>
+                &nbsp;&nbsp;&nbsp;On&nbsp;&nbsp;
+                <em>{{ comment_item.created|naturaltime }}</em>&nbsp;&nbsp;
+                <a class="text-info" rel="nofollow" href="javascript:void(0)" 
+                    onclick="do_reply({{ comment_item.pk }}, '{{ comment_item.author.username }}')">
+                    回复
                 </a>
-            </cite>
-            <span>:</span>
-        </div>
-        <div>
-            {{ comment_item.created }}
-        </div>
-        <p>{{ comment_item.body |escape|custom_markdown }}</p>
-
-        <div class="reply">
-            <a rel="nofollow" href="javascript:void(0)"
-                onclick="do_reply({{ comment_item.pk }})">
-                回复
-            </a>
+            </div>
+            <br>
         </div>
     </div>
-</li>
+</div>
+
 {% query comments parent_comment=comment_item as cc_comments %}
 {% for cc in cc_comments %}
 {% with comment_item=cc template_name="app_comments/comment_item_tree.html" %}

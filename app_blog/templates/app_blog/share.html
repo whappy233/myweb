@@ -3,14 +3,10 @@
 {% extends 'app_blog/base_blog.html' %}
 
 {% block title %}
-    {% if sent %}
-        分享成功
-    {% else %}
-        分享 "{{ article.title }}"
-    {% endif %}
+    {% if sent %}分享成功{% else %}分享 "{{ article.title }}"{% endif %}
 {% endblock title %}
 
-{% block content %}
+{% block blog_content_main %}
     {% if sent %}
         <h3>邮件分享成功 ！</h3>
         <p>"{{ article.title }}" 成功分享给了  {{ form.cleaned_data.to }} ！ </p>
@@ -22,25 +18,21 @@
                 {{ form.as_table }}     {# 方式一 #}
             </table>
 
-
             {% comment %} 
                 {{form.as_p}}           {# 方式二 #}
-
                 {% for f in form %}     {# 方式三 #}
                     <div>
                         {{f.errors}}
                         {{f.label_tag}}{{f}}
                     </div>
                 {% endfor %} 
-
                 <ul>{{ form.as_ul }}</ul>   {# 方式四 #}
             {% endcomment %}
-
 
             {% csrf_token %}
             <input type='submit' vaule='Send_email'>
         </form>
     {% endif %}
-{% endblock content %}
+{% endblock blog_content_main %}
 
 

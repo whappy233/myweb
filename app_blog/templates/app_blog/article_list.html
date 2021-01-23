@@ -7,7 +7,7 @@
 
 {% block title %}浩瀚星海{% endblock title %}
 
-{% block content %}
+{% block blog_content_main %}
     {% if name %}
     <h1>{{ name }} 的所有文章</h1>
     <p>共 {{ page_obj.paginator.count }} 篇 </p>
@@ -21,18 +21,6 @@
     <p>博客共有 {{ page_obj.paginator.count }} 篇 </p>
     {% endif %}
     {% endif %}
-
-    {% if form %}
-    <div style="margin-bottom: 2.5rem;">
-        <form method="get" action="" class="form-inline">
-            <input id="search" type="text" name="keyword" value="{{keyword|default_if_none:''}}" placeholder="搜索">
-            <input type="submit" value="Search" />
-        </form>
-        <div id="result"></div>
-    </div>
-    {% endif %}
-
-
 
     {% for article in page_obj %}
         <h4>
@@ -69,24 +57,4 @@
     {# 从 paginator.html 引入分页模板  #}
     {% include 'pagination.html' with page_obj=page_obj %}
 
-{% endblock content %}
-
-{% block javascript %}
-<script>
-    $("#id_keyword").bind('input propertychange', function () {
-        var keyword = $(this).val();
-        $.ajax({
-            url: '/ajax/search/',
-            data: {
-                'keyword': keyword
-            },
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                $("#result").html("<p>正在实时查询...共" + data.count + "条记录</p>")
-            },
-
-        });
-    });
-</script>
-{% endblock %}
+{% endblock blog_content_main %}

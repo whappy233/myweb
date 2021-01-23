@@ -8,5 +8,6 @@ class CommentForm(forms.ModelForm):
         model = Comments
         fields = ['body', 'parent_comment']
         widgets = {
-            'parent_comment': forms.HiddenInput
+            'body': forms.Textarea(attrs={'placeholder':'支持MarkDown'}),
+            'parent_comment': forms.HiddenInput()
         }

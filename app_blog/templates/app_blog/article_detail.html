@@ -8,7 +8,7 @@
 {{ article.title }}
 {% endblock title %}
 
-{% block content %}
+{% block blog_content_main %}
 <h1> {{ article.title }} </h1>
 <p class='date'>
     作者 : <a href="{% url 'app_blog:article_list_by_author' article.author %}"> {{ article.author }}</a><br>
@@ -54,14 +54,14 @@
     {% with comments.count as total_comments %}
     <h2> {{ total_comments }} 条评论 </h2>
     {% if total_comments != 0 %}
-    <ol class="commentlist">
+    <div class="commentlist">
         {% query comments parent_comment=None as parent_comments %}
         {% for comment_item in parent_comments %}
             {% with 0 as depth %}
                 {% include "app_comments/comment_item_tree.html" %}
             {% endwith %}
         {% endfor %}
-    </ol>
+    </div>
     {% endif %}
     {% endwith %}
 </div>
@@ -90,16 +90,14 @@
     文章关闭了评论
     {% endif %}
 {% endif %}
+{% endblock blog_content_main %}
 
-{% endblock content %}
 
 {% block javascript %}
-
 <script src="{% static 'js/jquery.cookie_1.4.1.min.js' %}"></script>
 <script>
 
-    function do_reply(parentid) {
-        let username = $("#username").text().trim();
+    function do_reply(parentid, username) {
         $('#id_parent_comment').val(parentid);
         $('#comment').text(`回复@${username}`);
         $('#cancel_reply').attr('hidden', false);
@@ -174,4 +172,4 @@
     });
 
 </script>
-{% endblock %}
+{% endblock javascript %}
