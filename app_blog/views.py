@@ -12,7 +12,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
 from django.views.generic import DetailView, ListView
 from taggit.models import Tag  # 导入标签模型
-
+from django import forms
 from .forms import EmailArticleForm, SearchForm
 from .models import Article, Category
 
@@ -105,7 +105,6 @@ class ArticleDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        message = ''
         comments = self.object.comments.filter(is_active=True)  # 查询所有评论
         # 相似文章
         article_tags_ids = self.object.tags.values_list('id', flat=True)  # 当前帖子的 Tag ID 列表
@@ -114,13 +113,20 @@ class ArticleDetailView(DetailView):
         similar_articles = similar_articles.annotate(same_tags=Count('tags'), some_category=Count('category')).order_by('-same_tags', '-publish')[:4]
 
         comment_form = CommentForm()
+        user = self.request.user
+        if user.is_authenticated and not user.is_anonymous and user.email and user.username:
+            comment_form.fields.update({
+                'email': forms.CharField(widget=forms.HiddenInput()),
+                'name': forms.CharField(widget=forms.HiddenInput()),
+            })
+            comment_form.fields["email"].initial = user.email
+            comment_form.fields["name"].initial = user.username
 
         context.update({
             'comments': comments,
             'comment_form': comment_form,
             'similar_articles': similar_articles,
             'section': 'blog',
-            'message': message,
         })
 
         return context
@@ -129,28 +135,6 @@ class ArticleDetailView(DetailView):
         obj = super().get_object(queryset=queryset)
         obj.viewed()
         return obj
-
-    def post(self, request, *args, **kwargs):
-        message = ''
-        self.object = article = self.get_object()
-        has_commented = request.session.get('has_commented', None)
-        if (not has_commented) or (has_commented!=article.id):
-            comment_form = CommentForm(data=request.POST)  # 提交表单
-            if comment_form.is_valid():
-                cd = comment_form.cleaned_data
-                comment = comment_form.save(commit=False)
-                comment.author = request.user
-                comment.content_object = article
-                comment.save(True)
-                request.session['has_commented'] = article.id
-                request.session.set_expiry(300)
-                return redirect(article.get_absolute_url())
-        else:
-            message = '你已经评论过了, 五分钟后可再次评论.'
-
-        context = self.get_context_data()
-        context.update({'message': message,})
-        return render(request, 'app_blog/article_detail.html', context)
 
 
 # 分组下的文章列表

@@ -11,12 +11,6 @@ from django.core.cache import cache
 from loguru import logger
 
 
-def get_md5(str):
-    '''字符串转MD5'''
-    m = md5(str.encode('utf-8'))
-    return m.hexdigest()
-
-
 
 class GenerateEncrypted:
     @staticmethod

@@ -1,0 +1,7 @@
+<form action="{% url 'app_comments:postcomment' obj.pk %}" method="post" id="commentform" class="comment-form">
+    {% csrf_token %}
+    <table>
+        {{form.as_table}}
+    </table>
+    <p><input type='submit' vaule='Add comment'></p>
+</form>

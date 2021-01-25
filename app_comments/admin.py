@@ -17,12 +17,6 @@ class CommentAdmin(admin.ModelAdmin):
     # raw_id_fields = ['article',]  # 下拉框改为微件
 
 
-    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
-    #     if db_field.name == 'content_type':
-    #         print(db_field.get_choices())
-    #         db_field.choices = [(16, '文章')]
-    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
     def disable_commentstatus(self, request, queryset):
         '''禁用评论'''
         queryset.update(is_active=False)

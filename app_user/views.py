@@ -17,7 +17,7 @@ from django.views.generic.edit import FormView
 
 from loguru import logger
 
-from myweb.utils import get_current_site, get_md5, GenerateEncrypted
+from myweb.utils import get_current_site, GenerateEncrypted
 from app_user.models import UserProfile
 from app_user.utils import create_validate_code as CheckCode
 from app_user.utils import crop_image, generate_vcode, send_email
