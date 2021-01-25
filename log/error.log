@@ -3,3 +3,14 @@
 2021-01-25 10:54:02.479 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
 2021-01-25 11:53:06.546 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
 2021-01-25 11:53:13.189 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-25 21:38:06.988 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-25 21:38:43.350 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-25 22:16:09.606 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-25 22:44:36.837 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'type'>"
+2021-01-25 22:45:12.481 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.Http404'>"
+2021-01-25 22:47:49.140 | ERROR    | app_comments.views:ajax_delete_comment:87 - 不允许GET请求!
+2021-01-25 22:50:10.330 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-25 22:50:49.032 | INFO     | app_user.views:register_result:66 - register
+2021-01-25 22:50:49.032 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:04c4e1c9545b044bccd528834e644b1c
+2021-01-25 22:50:55.865 | INFO     | app_user.views:register_result:66 - validation
+2021-01-25 22:51:04.317 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"

@@ -1,3 +1,4 @@
+from django.http.response import Http404
 from django.shortcuts import render
 from django import forms
 from django.views.generic.edit import FormView
@@ -5,8 +6,9 @@ from app_comments.forms import CommentForm
 from app_blog.models import Article
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth import get_user_model
-
-
+from django.http import JsonResponse
+from app_blog.models import Article
+from loguru import logger
 
 class CommentPostView(FormView):
     form_class = CommentForm
@@ -66,4 +68,21 @@ class CommentPostView(FormView):
 
 
 def ajax_delete_comment(request):
-    pass
+
+    if request.method == 'POST':
+        # <QueryDict: {
+        # 'comment_id': ['9'], 
+        # 'obj_id': ['9'], 
+        # 'csrfmiddlewaretoken': ['b1km5IExy4nQUZzQul2mGiAFQzThh6OvkRYn8fKeK6TUB6DwCRiryiPwbbbMZpab']}>
+        comment_id = request.POST.get('comment_id')
+        obj_id = request.POST.get('obj_id')
+        try:
+            article = Article.objects.get(pk=obj_id)
+            commnet = article.comments.get(pk=comment_id)
+            commnet.delete()
+            return JsonResponse({'status':200})
+        except Exception as e:
+            print(e)
+        return JsonResponse({'status':500})
+    logger.error('不允许GET请求!')
+    raise Http404()

@@ -24,7 +24,9 @@
                     onclick="do_reply({{ comment_item.pk }}, '{{ comment_item.author.username }}')">
                     回复
                 </a>&nbsp;&nbsp;
+                {% if request.user.is_superuser or request.user == comment_item.author %}
                 <a href="javascript:void(0)" title="删除评论" onclick="delete_comment({{comment_item.pk }}, {{obj.id}})">🗑</a>
+                {% endif %}
             </div>
             <br>
         </div>

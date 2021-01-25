@@ -69,7 +69,6 @@
 <button id="btn1">点击发送ajax</button>
 <p id="pp1"></p>
 
-
 {% if article.comment_status == "o" %}
 <h2 id="comments">添加评论 </h2>
 <a id="cancel_reply" href="javascript:void(0)" onclick="cancel_reply()" hidden>取消回复</a>
@@ -106,13 +105,15 @@
             url: '{% url "app_comments:ajax_delete_comment" %}',
             data: {
                 'comment_id':comment_id,
-                'obj_id':comment_id
+                'obj_id':obj_id,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
             },
             type: 'post',
             dataType: 'json',
             success: function (data) {
                 if (data['status']==200){
-                    $(`#div-comment-${comment_id}`).empty()
+                    $(`#div-comment-${comment_id}`).remove();
+                    console.log('删除成功!')
                 }
             }
         });
