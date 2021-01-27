@@ -29,7 +29,7 @@ post_save.connect(create_user, sender=User)
 # 在实际应用中一个更常用的方式是使用 @receiver 装饰器实现发送者与监听函数的连接，如下所示。
 # @receiver(post_save, sender=User) 读起来的意思就是监听 User 模型发出的 post_save 信号。
 @receiver(post_save, sender=User)
-def create_user(sender, instance, created, **kwargs):
+def create_user(sender, instance, created, raw, using, update_fields, **kwargs):
     if created:
         print("New user created!")
 

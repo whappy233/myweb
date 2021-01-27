@@ -8,11 +8,11 @@ from .feeds import LatestArticlesFeed
 
 app_name = 'app_blog'  # 定义应用程序命名空间
 urlpatterns = [
-    path('', views.ArticleListView.as_view(), name='article_list'),   # 使用类视图
-    path('author/<str:author_name>', views.ArticleListView.as_view(), name='article_list_by_author'),  # 某个作者下的所有文章
-    re_path(r'^tags/(?P<tag_slug>[-\w]+)/$', views.ArticleListView.as_view(), name='article_list_by_tag'),  # 某个标签下的所有文章
+    path('', views.IndexView.as_view(), name='article_list'),   # 使用类视图
+    path('author/<str:author_name>', views.AuthorDetailView.as_view(), name='article_list_by_author'),  # 某个作者下的所有文章
+    re_path(r'^tags/(?P<tag_slug>[-\w]+)/$', views.TagDetailView.as_view(), name='article_list_by_tag'),  # 某个标签下的所有文章
 
-    path('category/<slug:slug>/', views.CategoryDetailView.as_view(), name='category_detail'),  # 分组下的文章列表
+    path('category/<slug:category_slug>/', views.CategoryDetailView.as_view(), name='category_detail'),  # 分组下的文章列表
 
     path('detail/<int:year>/<int:month>/<int:day>/<slug:slug>/<int:id>', views.ArticleDetailView.as_view(), name='article_detail'),  # 文章详情
 

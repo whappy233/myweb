@@ -6,7 +6,7 @@
         <div>
             <img src="{{ comment_item.author.profile.photo.url }}" alt="user_image" class="img-responsive">
         </div>
-        <div class="comment-content col-md-10">
+        <div class="comment-content col-md-10" id="comment-content-{{ comment_item.pk }}">
             <p>{{ comment_item.body |escape|custom_markdown }}</p>
             <div class="comment_footer small mute">
                 <span>By&nbsp;&nbsp;
@@ -24,7 +24,7 @@
                     onclick="do_reply({{ comment_item.pk }}, '{{ comment_item.author.username }}')">
                     回复
                 </a>&nbsp;&nbsp;
-                {% if request.user.is_superuser or request.user == comment_item.author %}
+                {% if request.user.is_superuser %}
                 <a href="javascript:void(0)" title="删除评论" onclick="delete_comment({{comment_item.pk }}, {{obj.id}})">🗑</a>
                 {% endif %}
             </div>

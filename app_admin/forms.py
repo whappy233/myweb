@@ -1,6 +1,6 @@
-from django import forms
 from app_blog.models import Article
 from ckeditor_uploader.widgets import CKEditorUploadingWidget  # 富文本编辑器 ckeditor 表单小部件
+from django import forms
 from mdeditor.widgets import MDEditorWidget  # 富文本编辑器 mdeditor 表单小部件
 from taggit.forms import TagWidget  # 第三方标签小部件
 

@@ -2,6 +2,12 @@ import os
 from loguru import logger
 from django.utils import timezone
 
+
+def env_to_bool(env, default):
+    str_val = os.environ.get(env)
+    return default if str_val is None else str_val == 'True'
+
+
 # 返回工程路径(myweb)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -154,19 +160,39 @@ logger.add(os.path.join(LOG_DIR, 'error.log'), rotation='1 days', retention='30 
 
 
 # 缓存
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.dummy.DummyCache', # 引擎 (开发调试缓存)
+#         'TIMEOUT': 300, # 缓存超时时间（默认300，None表示永不过期，0表示立即过期）
+#         'OPTIONS':{
+#             'MAX_ENTRIES': 300, # 最大缓存个数（默认300）                                      
+#             'CULL_FREQUENCY': 3, # 缓存到达最大个数之后，剔除缓存个数的比例，即：1/CULL_FREQUENCY（默认3）                                   
+#         },
+#         'KEY_PREFIX': '',  # 缓存key的前缀（默认空）
+#         'VERSION': 1, # 缓存key的版本（默认1）
+#         # 'KEY_FUNCTION': '对应的函数名'   # 生成key的函数（默认函数会生成为：【前缀:版本:key】）
+#     }
+# }
+
+CACHE_CONTROL_MAX_AGE = 2592000
+# cache setting
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache', # 引擎 (开发调试缓存)
-        'TIMEOUT': 300, # 缓存超时时间（默认300，None表示永不过期，0表示立即过期）
-        'OPTIONS':{
-            'MAX_ENTRIES': 300, # 最大缓存个数（默认300）                                      
-            'CULL_FREQUENCY': 3, # 缓存到达最大个数之后，剔除缓存个数的比例，即：1/CULL_FREQUENCY（默认3）                                   
-        },
-        'KEY_PREFIX': '',  # 缓存key的前缀（默认空）
-        'VERSION': 1, # 缓存key的版本（默认1）
-        # 'KEY_FUNCTION': '对应的函数名'   # 生成key的函数（默认函数会生成为：【前缀:版本:key】）
+        # 此缓存使用 python-memcached 模块连接 memcache
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': os.environ.get('DJANGO_MEMCACHED_LOCATION') or '127.0.0.1:11211',
+        'KEY_PREFIX': 'djangoblog', # 缓存key的前缀（默认空）
+        'TIMEOUT': 60 * 60 * 10  # 10小时
+    } if env_to_bool('DJANGO_MEMCACHED_ENABLE', False) else {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'TIMEOUT': 10800,
+        'LOCATION': 'unique-snowflake',
     }
 }
+
+
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -218,7 +244,9 @@ LOGOUT_URL = 'app_user:logout'   # 用户重定向并实现退出登陆的URL
 # EMAIL_USE_SSL = False             是否采用隐式 TLS 安全连接
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # 输出到 Shell
-AUTHENTICATION_BACKENDS = ('app_user.views.CustomBackend',)
+
+# 自定义验证后端,实现用户名邮箱手机号登录
+AUTHENTICATION_BACKENDS = ('app_user.user_login_backend.CustomBackend',)
 
 
 # CkEditor 富文本编辑器配置

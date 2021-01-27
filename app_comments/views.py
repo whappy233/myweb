@@ -1,14 +1,16 @@
-from django.http.response import Http404
-from django.shortcuts import render
+
 from django import forms
-from django.views.generic.edit import FormView
-from app_comments.forms import CommentForm
-from app_blog.models import Article
-from django.shortcuts import redirect, get_object_or_404
+from django.apps import apps
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
-from app_blog.models import Article
+from django.http.response import Http404
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic.edit import FormView
 from loguru import logger
+from .forms import CommentForm
+
+
+
 
 class CommentPostView(FormView):
     form_class = CommentForm
@@ -16,14 +18,20 @@ class CommentPostView(FormView):
 
     def get(self, request, *args, **kwargs):
         article_id = self.kwargs['article_id']
-        article = get_object_or_404(Article, id=article_id)
+
+        model_class = apps.get_model('app_blog', 'article')
+
+        article = get_object_or_404(model_class, id=article_id)
         url = article.get_absolute_url()
         return redirect(url + "#comments")
 
     def form_invalid(self, form):
         '''如果表单无效，则呈现无效表单'''
         article_id = self.kwargs['article_id']
-        article = Article.objects.get(pk=article_id)
+
+        model_class = apps.get_model('app_blog', 'article')
+
+        article = model_class.objects.get(pk=article_id)
         user = self.request.user
         if user.is_authenticated:
             form.fields.update({
@@ -41,7 +49,10 @@ class CommentPostView(FormView):
     def form_valid(self, form):
         """提交的数据验证合法后的逻辑"""
         article_id = self.kwargs['article_id']
-        article = Article.objects.get(pk=article_id)
+
+        model_class = apps.get_model('app_blog', 'article')
+
+        article = model_class.objects.get(pk=article_id)
         has_commented = self.request.session.get('has_commented', None)
         if (not has_commented) or (has_commented!=article_id):
 
@@ -77,7 +88,9 @@ def ajax_delete_comment(request):
         comment_id = request.POST.get('comment_id')
         obj_id = request.POST.get('obj_id')
         try:
-            article = Article.objects.get(pk=obj_id)
+            model_class = apps.get_model('app_blog', 'article')
+
+            article = model_class.objects.get(pk=obj_id)
             commnet = article.comments.get(pk=comment_id)
             commnet.delete()
             return JsonResponse({'status':200})

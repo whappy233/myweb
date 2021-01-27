@@ -33,6 +33,7 @@
     </br>
     {% if request.user == article.author or request.user.is_superuser %}
     <a href="{% url 'app_admin:update_article' article.id article.slug %}">修改✎</a>
+    <a href="{{ article.get_admin_url }}">admin中编辑</a>
     {% endif %}
 </p>
 
@@ -42,12 +43,8 @@
 
 <p><a href="{% url 'app_blog:article_share' article.id %}"> 分享文章 </a></p>
 
-<h2>相似文章</h2>
-{% for article in similar_articles %}
-<p><a href="{{ article.get_absolute_url }}"> {{ article.title }}</a></p>
-{% empty %}
-没有相似文章推荐
-{% endfor %}
+
+{% similar_articles article %}
 
 <div>
     {# with 标签可以将某个值赋予到新的变量中,对于避免数据库访问或者多次访问开销交的的方法十分有用 #}
@@ -66,20 +63,22 @@
     {% endwith %}
 </div>
 
-<button id="btn1">点击发送ajax</button>
-<p id="pp1"></p>
 
 {% if article.comment_status == "o" %}
-<h2 id="comments">添加评论 </h2>
-<a id="cancel_reply" href="javascript:void(0)" onclick="cancel_reply()" hidden>取消回复</a>
-{% if request.user.is_authenticated %}
-    {% include "app_comments/post_comment.html" with obj=article form=comment_form %}
-{% else %}
-<p>您还没有登录，请您登<a href="{% url 'app_user:login' %}?next={{ article.get_absolute_url }}">登录</a>后发表评论。</p>
-{% endif %}
+<h4 id="comments">添加评论 </h4>
+<div id='respond'>
+    {% if request.user.is_authenticated %}
+        {% include "app_comments/post_comment.html" with obj=article form=comment_form %}
+    {% else %}
+    <p>您还没有登录，请您登<a href="{% url 'app_user:login' %}?next={{ article.get_absolute_url }}">登录</a>后发表评论。</p>
+    {% endif %}
+</div>
 {% else %}
 文章关闭了评论
 {% endif %}
+
+<button id="btn1">点击发送ajax</button>
+<p id="pp1"></p>
 
 {% endblock blog_content_main %}
 
@@ -90,14 +89,15 @@
 
     function do_reply(parentid, username) {
         $('#id_parent_comment').val(parentid);
-        $('#comments').text(`回复@${username}`);
-        $('#cancel_reply').attr('hidden', false);
+        $('#cancel_comment').show();
+        $("#commentform").appendTo($("#comment-content-" + parentid));
     }
     
     function cancel_reply() {
         $('#id_parent_comment').val('');
         $('#comments').text('添加评论');
-        $('#cancel_reply').attr('hidden', true);
+        $('#cancel_comment').hide();
+        $("#commentform").appendTo($("#respond"));
     }
 
     function delete_comment(comment_id, obj_id){

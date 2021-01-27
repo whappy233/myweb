@@ -1,16 +1,193 @@
-2021-01-25 09:16:56.920 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-01-25 09:51:02.870 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-01-25 10:54:02.479 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-01-25 11:53:06.546 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-01-25 11:53:13.189 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-01-25 21:38:06.988 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-01-25 21:38:43.350 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-01-25 22:16:09.606 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-01-25 22:44:36.837 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'type'>"
-2021-01-25 22:45:12.481 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.Http404'>"
-2021-01-25 22:47:49.140 | ERROR    | app_comments.views:ajax_delete_comment:87 - 不允许GET请求!
-2021-01-25 22:50:10.330 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-01-25 22:50:49.032 | INFO     | app_user.views:register_result:66 - register
-2021-01-25 22:50:49.032 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:04c4e1c9545b044bccd528834e644b1c
-2021-01-25 22:50:55.865 | INFO     | app_user.views:register_result:66 - validation
-2021-01-25 22:51:04.317 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-27 17:50:03.409 | INFO     | app_blog.views:get_queryset_from_cache:59 - 获取视图缓存, key:index_1
+2021-01-27 17:50:06.990 | INFO     | app_blog.models:comment_list:190 - 设置评论缓存:article_comments_2
+2021-01-27 17:50:07.007 | INFO     | app_blog.templatetags.blog_tags:similar_articles:71 - 设置相似文章缓存:similar_articles_2
+2021-01-27 17:50:09.801 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, key:index_1
+2021-01-27 17:50:12.053 | INFO     | app_blog.models:comment_list:190 - 设置评论缓存:article_comments_2
+2021-01-27 17:50:12.065 | INFO     | app_blog.templatetags.blog_tags:similar_articles:64 - 获取相似文章缓存:similar_articles_2
+2021-01-27 17:50:14.680 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, key:index_1
+2021-01-27 17:50:16.125 | INFO     | app_blog.models:comment_list:190 - 设置评论缓存:article_comments_2
+2021-01-27 17:50:16.137 | INFO     | app_blog.templatetags.blog_tags:similar_articles:64 - 获取相似文章缓存:similar_articles_2
+2021-01-27 17:50:18.628 | INFO     | app_blog.models:comment_list:190 - 设置评论缓存:article_comments_1
+2021-01-27 17:50:18.644 | INFO     | app_blog.templatetags.blog_tags:similar_articles:71 - 设置相似文章缓存:similar_articles_1
+2021-01-27 17:50:24.565 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, key:index_1
+2021-01-27 17:50:31.739 | INFO     | app_blog.views:get_queryset_from_cache:59 - 获取视图缓存, key:index_1
+2021-01-27 17:50:32.534 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, key:index_1
+2021-01-27 17:50:33.038 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, key:index_1
+2021-01-27 17:50:33.653 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, key:index_1
+2021-01-27 17:51:28.082 | INFO     | app_blog.views:get_queryset_from_cache:59 - 获取视图缓存, key:index_1
+2021-01-27 17:51:29.500 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, key:index_1
+2021-01-27 17:52:37.293 | INFO     | app_blog.views:get_queryset_from_cache:59 - 获取视图缓存, key:IndexView_1
+2021-01-27 17:52:40.535 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, key:IndexView_1
+2021-01-27 17:53:53.230 | INFO     | app_blog.views:get_queryset_from_cache:59 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 17:53:56.189 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 17:53:57.149 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 17:53:57.925 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 17:54:59.562 | INFO     | app_blog.views:get_queryset_from_cache:59 - 设置视图缓存, KEY: View: IndexView Page: 1
+2021-01-27 17:55:20.892 | INFO     | app_blog.views:get_queryset_from_cache:59 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 17:55:21.570 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 17:55:22.137 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 17:55:22.634 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 17:55:23.641 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 17:55:24.794 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 18:13:49.936 | INFO     | app_blog.views:get_queryset_from_cache:59 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 18:13:53.056 | INFO     | app_blog.views:get_queryset_from_cache:59 - 设置视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 18:14:06.413 | INFO     | app_blog.views:get_queryset_from_cache:59 - 设置视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 18:14:42.952 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 18:14:43.881 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 18:15:19.661 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 18:15:20.480 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 18:15:26.637 | INFO     | app_blog.models:comment_list:190 - 设置评论缓存:article_comments_2
+2021-01-27 18:15:26.655 | INFO     | app_blog.templatetags.blog_tags:similar_articles:71 - 设置相似文章缓存:similar_articles_2
+2021-01-27 18:15:27.681 | INFO     | app_blog.views:get_queryset_from_cache:59 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 18:15:29.304 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 18:15:31.575 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 18:15:44.581 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 18:15:45.340 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 18:15:45.771 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 18:15:47.057 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 18:23:35.220 | INFO     | app_blog.views:get_queryset_from_cache:59 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 18:23:42.015 | INFO     | app_blog.views:get_queryset_from_cache:59 - 设置视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 18:23:46.810 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 18:23:47.579 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 18:23:50.018 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 18:23:53.013 | INFO     | app_blog.views:get_queryset_from_cache:59 - 设置视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 18:23:56.689 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 18:26:02.812 | INFO     | app_blog.views:get_queryset_from_cache:59 - 设置视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 18:26:05.296 | INFO     | app_blog.views:get_queryset_from_cache:59 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 18:26:06.540 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 18:26:08.215 | INFO     | app_blog.views:get_queryset_from_cache:59 - 设置视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 18:26:09.685 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:7c10e706b8d76e04d19f26188f37b959
+2021-01-27 18:26:10.908 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 18:26:12.090 | INFO     | app_blog.models:comment_list:190 - 设置评论缓存:article_comments_2
+2021-01-27 18:26:12.108 | INFO     | app_blog.templatetags.blog_tags:similar_articles:71 - 设置相似文章缓存:similar_articles_2
+2021-01-27 18:26:12.947 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 18:26:14.678 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 18:26:15.676 | INFO     | app_blog.views:get_queryset_from_cache:54 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 18:39:07.820 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 18:39:09.876 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 18:49:16.787 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 18:50:13.171 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 18:50:14.743 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:ae4d406383804a0339560e29af7bdb17
+2021-01-27 18:57:53.411 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:d0f7e90880ad41cbf4352254f596dd47
+2021-01-27 18:57:53.414 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: CategoryDetailView_sdfg_1
+2021-01-27 18:57:54.452 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_sdfg_1
+2021-01-27 18:57:55.763 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_sdfg_1
+2021-01-27 18:58:05.223 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 18:58:09.740 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_sdfg_1
+2021-01-27 18:58:17.373 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 18:58:23.649 | INFO     | app_blog.models:comment_list:190 - 设置评论缓存:article_comments_2
+2021-01-27 18:58:23.667 | INFO     | app_blog.templatetags.blog_tags:similar_articles:71 - 设置相似文章缓存:similar_articles_2
+2021-01-27 18:58:25.844 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_sdfg_1
+2021-01-27 18:58:47.088 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_sdfg_1
+2021-01-27 18:58:47.762 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_sdfg_1
+2021-01-27 18:58:49.627 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_sdfg_1
+2021-01-27 18:58:50.317 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 18:58:51.386 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_sdfg_1
+2021-01-27 18:58:52.250 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 18:58:53.435 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_sdfg_1
+2021-01-27 18:59:26.663 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:6c1ca085e963f4cbe9ed3fa27814ddfd
+2021-01-27 18:59:26.667 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: CategoryDetailView_sdfg_1
+2021-01-27 18:59:27.200 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_sdfg_1
+2021-01-27 19:00:52.653 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 19:00:55.000 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:ced1698b9dd11946e7263df001325529
+2021-01-27 19:00:55.002 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:00:58.870 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:02:34.194 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:02:45.477 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:02:46.887 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:02:47.720 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:02:48.263 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:02:53.021 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:02:53.815 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:02:55.730 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 19:02:58.618 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:fb92d4ea0f40c64c6582ed5eb43a5823
+2021-01-27 19:02:58.621 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: CategoryDetailView_django_1
+2021-01-27 19:03:01.311 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 19:03:02.280 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:03:48.698 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:03:49.390 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:03:49.861 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:03:50.250 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:03:50.586 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:03:50.916 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:03:54.753 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:03:54.845 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-01-27 19:04:02.941 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 19:04:08.703 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:8c37720c2964f76067d60458976242a2
+2021-01-27 19:04:08.706 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: CategoryDetailView_django_1
+2021-01-27 19:04:13.071 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:5a4c9d7307054d68d79ff41f3b2a75bd
+2021-01-27 19:04:13.073 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:05:57.545 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 19:05:59.395 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:4df5507651d831ce72f26429c0362fb9
+2021-01-27 19:05:59.398 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: CategoryDetailView_django_1
+2021-01-27 19:06:01.226 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:62d66bb950eb5e9300b415b84ecafb29
+2021-01-27 19:06:01.228 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:06:02.595 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 19:06:03.714 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:06:04.442 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:06:05.546 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:06:06.141 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 19:06:06.995 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_django_1
+2021-01-27 19:06:08.799 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 19:06:09.877 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_django_1
+2021-01-27 19:06:10.650 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 19:06:12.086 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 19:06:12.929 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_django_1
+2021-01-27 19:06:13.761 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 19:10:29.562 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 19:10:30.573 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 19:10:32.080 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 19:10:33.093 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 19:10:33.940 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 19:10:34.821 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 19:10:35.804 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 19:10:36.871 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:487116bfd3c2baa1a03706c20058168f
+2021-01-27 19:10:36.874 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: CategoryDetailView_django_1
+2021-01-27 19:10:38.134 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 19:10:44.062 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 19:10:45.014 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:43b840c8978f11e8c8918a5fa6ac9358
+2021-01-27 19:10:45.016 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:10:51.322 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 19:10:52.790 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 19:11:36.898 | INFO     | app_blog.models:comment_list:190 - 设置评论缓存:article_comments_1
+2021-01-27 19:11:36.915 | INFO     | app_blog.templatetags.blog_tags:similar_articles:71 - 设置相似文章缓存:similar_articles_1
+2021-01-27 19:11:38.267 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 19:11:39.770 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 19:11:41.820 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:9fb09a92ba7ea6931fd9dd930bac7de9
+2021-01-27 19:11:41.822 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:12:41.391 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 19:12:43.690 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 19:12:44.493 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 19:12:45.842 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 19:12:48.169 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:aa86b3121c49a24dbabede9194fb3e80
+2021-01-27 19:12:48.172 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: CategoryDetailView_django_1
+2021-01-27 19:12:50.482 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 19:12:52.442 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_django_1
+2021-01-27 19:12:53.553 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:d4fa2e210825dc70d2522884357b676e
+2021-01-27 19:12:53.556 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: CategoryDetailView_wxpython_1
+2021-01-27 19:12:55.016 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 19:12:56.903 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 19:13:43.372 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 19:13:44.130 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 19:13:45.893 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 19:13:47.542 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_django_1
+2021-01-27 19:13:48.709 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 19:14:38.219 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 19:14:38.994 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 19:14:56.598 | INFO     | app_blog.models:comment_list:190 - 设置评论缓存:article_comments_1
+2021-01-27 19:14:56.614 | INFO     | app_blog.templatetags.blog_tags:similar_articles:71 - 设置相似文章缓存:similar_articles_1
+2021-01-27 19:15:09.001 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 19:15:18.160 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: IndexView_1
+2021-01-27 19:17:18.102 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 19:17:27.365 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:c729de4a2db3d101130911120cfd54f6
+2021-01-27 19:17:27.368 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: CategoryDetailView_django_1
+2021-01-27 19:17:30.302 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 19:17:33.077 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: AuthorDetailView_891953720_1
+2021-01-27 19:17:35.723 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: CategoryDetailView_django_1
+2021-01-27 19:17:36.395 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: TagDetailView_ncv_1
+2021-01-27 19:22:35.860 | INFO     | app_blog.models:comment_list:190 - 设置评论缓存:article_comments_2
+2021-01-27 19:22:35.877 | INFO     | app_blog.templatetags.blog_tags:similar_articles:71 - 设置相似文章缓存:similar_articles_2
+2021-01-27 19:31:37.882 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 19:34:05.939 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 19:34:14.280 | INFO     | app_blog.views:get_queryset_from_cache:57 - 设置视图缓存, KEY: IndexView_1
+2021-01-27 19:34:20.511 | INFO     | app_blog.views:get_queryset_from_cache:52 - 获取视图缓存, KEY: IndexView_1

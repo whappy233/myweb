@@ -1,10 +1,12 @@
 
 import markdown
 from django import template
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.utils.safestring import mark_safe  # 标记为安全的html
 from django.template.defaultfilters import stringfilter
 from ..models import Article
+from myweb.utils import cache
+from loguru import logger
 
 register = template.Library()
 
@@ -26,14 +28,14 @@ def total_articles():  # 定义标签
 
 # 在模板执行 queryset 查询
 @register.simple_tag
-def query(qs, **kwargs):
+def query(queryset, **kwargs):
     """ 
     {% query books author=author as mybooks %}
     {% for book in mybooks %}
     ...
     {% endfor %}
     """
-    return qs.filter(**kwargs)
+    return queryset.filter(**kwargs)
 
 
 
@@ -49,6 +51,27 @@ def get_most_commented_articles(count=5):
 def show_latest_articles(count=5):
     latest_articles = Article.published.order_by('-publish')[:count]
     return {'latest_articles':latest_articles}
+
+
+
+
+# 相似文章
+@register.inclusion_tag('app_blog/include_tag/similar_articles.html')
+def similar_articles(obj, count=5):
+    cache_key = f'similar_articles_{obj.id}'
+    value = cache.get(cache_key)
+    if value:
+        logger.info(f'获取相似文章缓存:{cache_key}')
+    else:
+        article_tags_ids = obj.tags.values_list('id', flat=True)  # 当前帖子的 Tag ID 列表
+        # 获取包含此标签或分组的全部帖子,排除自身
+        articles = Article.published.filter(Q(tags__in=article_tags_ids) | Q(category=obj.category)).exclude(id=obj.id)
+        value = articles.annotate(same_tags=Count('tags'), some_category=Count('category')).order_by('-same_tags', '-publish')[:count]
+        cache.set(cache_key, value, 60 * 100)
+        logger.info(f'设置相似文章缓存:{cache_key}')
+
+    return {'similar_articles': value}
+
 
 
 # 月度归档 (返回模板)

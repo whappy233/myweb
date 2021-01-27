@@ -8,19 +8,16 @@
 {% block title %}浩瀚星海{% endblock title %}
 
 {% block blog_content_main %}
-    {% if name %}
-    <h1>{{ name }} 的所有文章</h1>
+    {% if page_type %}
+    <h4>{{ page_type }}: {{tag_name}}</h4>
     <p>共 {{ page_obj.paginator.count }} 篇 </p>
-    {% elif tag %}
-    <h1>{{ tag.name }} 标签下的所有文章</h1>
-    <p>共 {{ page_obj.paginator.count }} 篇 </p>
-    {% else %}
-    {% if keyword %}
+    {% elif keyword %}
     <p>搜索到 {{ page_obj.paginator.count }} 条记录。</p>
     {% else %}
+    <h4>所有文章</h4>
     <p>博客共有 {{ page_obj.paginator.count }} 篇 </p>
     {% endif %}
-    {% endif %}
+
 
     {% for article in page_obj %}
         <h4>

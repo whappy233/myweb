@@ -1,34 +1,203 @@
+from app_comments.forms import CommentForm
+from django import forms
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
-
 from django.core import paginator
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator  # 分页
-from django.db.models import Count, Q
+from django.db.models import Q
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
 from django.views.generic import DetailView, ListView
+from loguru import logger
 from taggit.models import Tag  # 导入标签模型
-from django import forms
+from myweb.utils import cache
 from .forms import EmailArticleForm, SearchForm
 from .models import Article, Category
 
-from app_comments.forms import CommentForm
 
-
-from loguru import logger
-# @logger.catch()
-# logger.info('侧边时从V型许星程嘘嘘')
-# logger.exception('boonnononono')
-
-
-
-# 所有文章 (类视图)
-@method_decorator(logger.catch(), name='dispatch')
 class ArticleListView(ListView):
+    template_name = 'blog/article_list.html'  # 视图默认的模板名称是: 模型名小写_list.html
+    context_object_name = 'article_list'  # 设置上下文变量
+
+    page_type = ''
+    paginate_by = 5  # 每页obj的数目 生成 page_obj 对象
+    page_kwarg = 'page'  # get 请求页码的参数 /?page=2
+
+    def get_view_cache_key(self):
+        return self.request.get['page']  # 当前页码
+
+    @property
+    def page_number(self):
+        '''返回当前请求的页码'''
+        page_kwarg = self.page_kwarg
+        page = self.kwargs.get(page_kwarg) or self.request.GET.get(page_kwarg) or 1
+        return page
+
+    def get_queryset_cache_key(self):
+        """ 子类重写.获得queryset的缓存key """
+        raise NotImplementedError()
+
+    def get_queryset_data(self):
+        """ 子类重写.获取queryset的数据 """
+        raise NotImplementedError()
+
+    def get_queryset_from_cache(self, cache_key):
+        """ 缓存页面数据 """ 
+        value = cache.get(cache_key)
+        if value:
+            logger.info(f'获取视图缓存, KEY: {cache_key}')
+            return value
+        else:
+            article_list = self.get_queryset_data()
+            cache.set(cache_key, article_list)
+            logger.info(f'设置视图缓存, KEY: {cache_key}')
+            return article_list
+
+    def get_queryset(self):
+        """ 从缓存获取数据 """
+        key = self.get_queryset_cache_key()
+        value = self.get_queryset_from_cache(key)
+        return value
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticleListView, self).get_context_data(**kwargs)
+        context['section'] = 'blog'
+        context['form'] = SearchForm()
+        return context
+
+# 文章列表
+@method_decorator(logger.catch(), name='dispatch')
+class IndexView(ArticleListView):
+
+    def get_queryset_data(self):
+        article_list = Article.published.all()
+        return article_list
+
+    def get_queryset_cache_key(self):
+        cache_key = f'{__class__.__name__}_{self.page_number}'
+        return cache_key
+
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        return context
+
+# 某个标签下的文章
+class TagDetailView(ArticleListView):
+    page_type = '分类标签归档'
+
+    def get_queryset_data(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        self.name = tag_name = tag.name
+        article_list = Article.published.filter(tags__name=tag_name)
+        return article_list
+
+    def get_queryset_cache_key(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        self.name = tag_name = tag.name
+        cache_key = f'{__class__.__name__}_{tag_name}_{self.page_number}'
+        return cache_key
+
+    def get_context_data(self, **kwargs):
+        context = super(TagDetailView, self).get_context_data(**kwargs)
+        context['page_type'] = AuthorDetailView.page_type
+        context['tag_name'] = self.name
+        return context
+
+# 某个作者下的文章
+class AuthorDetailView(ArticleListView):
+    page_type = '作者文章归档'
+
+    def get_queryset_cache_key(self):
+        author_name = self.kwargs['author_name']
+        cache_key = f'{__class__.__name__}_{author_name}_{self.page_number}'
+        return cache_key
+
+    def get_queryset_data(self):
+        author_name = self.kwargs['author_name']
+        article_list = Article.published.filter(author__username=author_name)
+        return article_list
+
+    def get_context_data(self, **kwargs):
+        context = super(AuthorDetailView, self).get_context_data(**kwargs)
+        context['page_type'] = AuthorDetailView.page_type
+        context['tag_name'] = self.kwargs['author_name']
+        return context
+
+# 某个分类下的文章
+class CategoryDetailView(ArticleListView):
+
+    page_type = "分类目录归档"
+
+    def get_queryset_data(self):
+        slug = self.kwargs['category_slug']
+        category = get_object_or_404(Category, slug=slug)
+        self.category_name = category.name
+
+        # category_names = list(map(lambda c: c.name, category.get_sub_categorys()))
+        # article_list = Article.published.filter(category__name__in=category_names)
+
+        a = '|'.join(f'Q(category={i.id})' for i in category.get_sub_categorys())
+        article_list = Article.published.filter(eval(a))
+
+        return article_list
+
+    def get_queryset_cache_key(self):
+        slug = self.kwargs['category_slug']
+        category = get_object_or_404(Category, slug=slug)
+        self.category_name = category.name
+        cache_key = f'{__class__.__name__}_{self.category_name}_{self.page_number}'
+        return cache_key
+
+    def get_context_data(self, **kwargs):
+        context = super(CategoryDetailView, self).get_context_data(**kwargs)
+        context['page_type'] = CategoryDetailView.page_type
+        context['tag_name'] = self.category_name
+        return context
+
+
+# 文章详情
+class ArticleDetailView(DetailView):
+    '''文章详细'''
+    model = Article
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        comment_form = CommentForm()
+        user = self.request.user
+        if user.is_authenticated and not user.is_anonymous and user.email and user.username:
+            comment_form.fields.update({
+                'email': forms.CharField(widget=forms.HiddenInput()),
+                'name': forms.CharField(widget=forms.HiddenInput()),
+            })
+            comment_form.fields["email"].initial = user.email
+            comment_form.fields["name"].initial = user.username
+
+        comments = self.object.comment_list()
+        context.update({
+            'comments': comments,
+            'comment_form': comment_form,
+            'section': 'blog',
+        })
+
+        return context
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        obj.viewed()
+        self.object = obj
+        return obj
+
+
+# 文章列表 (类视图) Old
+@method_decorator(logger.catch(), name='dispatch')
+class ArticleListView_old(ListView):
     # context_object_name = 'page_obj'  # 设置上下文变量
     paginate_by = 3  # 3个一页 生成 page_obj 对象
     # template_name = 'app_blog/article_list.html'  # 视图默认的模板名称是: 模型名小写_list.html
@@ -58,6 +227,21 @@ class ArticleListView(ListView):
         context['name'] = self.author_name__
         context['keyword'] = self.search_keyword
         return context
+
+
+# 月度归档(某月的列表)
+def month_archive(request, year, month):
+    '''月度归档'''
+    articles = Article.published.filter(publish__year=year, publish__month=month).order_by('-publish')
+    paginator = Paginator(articles, 3)
+    page = request.GET.get('page')
+    page_obj = paginator.get_page(page)
+    context = {
+        'page_obj': page_obj, 
+        'paginator': paginator, 
+        'is_paginated': True, 
+        'year_month': (year, month)}
+    return render(request, 'app_blog/month_archive.html', context)
 
 
 # 所有文章 (函数视图)
@@ -95,79 +279,6 @@ def article_list(request, tag_slug=None, author_name=None):
     }
 
     return render(request, 'app_blog/article_list.html', context)
-
-
-# 文章详情
-class ArticleDetailView(DetailView):
-    '''文章详细'''
-    model = Article
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        comments = self.object.comments.filter(is_active=True)  # 查询所有评论
-        # 相似文章
-        article_tags_ids = self.object.tags.values_list('id', flat=True)  # 当前帖子的 Tag ID 列表
-        # 获取包含此标签或分组的全部帖子,排除自身
-        similar_articles = Article.published.filter(Q(tags__in=article_tags_ids) | Q(category=self.object.category)).exclude(id=self.object.id)
-        similar_articles = similar_articles.annotate(same_tags=Count('tags'), some_category=Count('category')).order_by('-same_tags', '-publish')[:4]
-
-        comment_form = CommentForm()
-        user = self.request.user
-        if user.is_authenticated and not user.is_anonymous and user.email and user.username:
-            comment_form.fields.update({
-                'email': forms.CharField(widget=forms.HiddenInput()),
-                'name': forms.CharField(widget=forms.HiddenInput()),
-            })
-            comment_form.fields["email"].initial = user.email
-            comment_form.fields["name"].initial = user.username
-
-        context.update({
-            'comments': comments,
-            'comment_form': comment_form,
-            'similar_articles': similar_articles,
-            'section': 'blog',
-        })
-
-        return context
-
-    def get_object(self, queryset=None):
-        obj = super().get_object(queryset=queryset)
-        obj.viewed()
-        return obj
-
-
-# 分组下的文章列表
-class CategoryDetailView(DetailView):
-    '''分组下的文章列表'''
-    model = Category
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        categories = self.object.get_sub_categorys()
-        a = '|'.join(f'Q(category={i.id})' for i in categories)
-        articles = Article.published.filter(eval(a))
-
-        paginator = Paginator(articles, 3)
-        page = self.request.GET.get('page')
-        page_obj = paginator.get_page(page)
-        context['page_obj'] = page_obj
-        context['is_paginated'] = True
-        context['section'] = 'blog'
-        return context
-
-
-# 月度归档(某月的列表)
-def month_archive(request, year, month):
-    '''月度归档'''
-    articles = Article.published.filter(publish__year=year, publish__month=month).order_by('-publish')
-    paginator = Paginator(articles, 3)
-    page = request.GET.get('page')
-    page_obj = paginator.get_page(page)
-    
-    context = {'page_obj': page_obj, 'paginator': paginator, 'is_paginated': True, 'year_month': (year, month)}
-    return render(request, 'app_blog/month_archive.html', context)
 
 
 # 点👍 +1

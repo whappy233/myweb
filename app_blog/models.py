@@ -12,9 +12,12 @@ from django.utils import timezone
 from taggit.managers import TaggableManager  # 第三方标签应用
 
 from .cn_taggit import CnTaggedItem
-from myweb.utils import cache_decorator
+from myweb.utils import cache_decorator, cache
 from uuid import uuid4
 from app_comments.models import Comments
+
+from loguru import logger
+
 
 # 自定义的管理器
 class PublishedManage(models.Manager):
@@ -168,6 +171,26 @@ class Article(models.Model):
         # /2020/1/10/markdown/3
         a = [self.publish.year, self.publish.month, self.publish.day, self.slug, self.id]
         return reverse('app_blog:article_detail', args=a)
+
+    def get_admin_url(self):
+        '''获取 admin 的文章编辑界面'''
+        info = (self._meta.app_label, self._meta.model_name)
+        return reverse('admin:%s_%s_change' % info, args=(self.pk,))
+
+    def comment_list(self):
+        '''获取对应文章的所有评论'''
+        cache_key = f'article_comments_{self.id}'
+        value = cache.get(cache_key)
+        if value:
+            logger.info(f'获取评论缓存:{cache_key}')
+            return value
+        else:
+            comments = self.comments.filter(is_active=True)  # 查询所有评论
+            cache.set(cache_key, comments, 60 * 100)
+            logger.info(f'设置评论缓存:{cache_key}')
+            return comments
+
+
 
     # 重写save方法
     def save(self, *args, **kwargs):

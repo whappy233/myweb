@@ -1,0 +1,8 @@
+<h4>相似文章</h4>
+{% for article in similar_articles %}
+<p>
+    <a href="{{ article.get_absolute_url }}"> {{ article.title }}</a>
+</p>
+{% empty %}
+没有相似文章推荐
+{% endfor %}

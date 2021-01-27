@@ -57,7 +57,60 @@ ol {
     border: 0;
 }
 
+#commentform {
+    margin-bottom: 20px;
+    padding: 10px 20px 20px;
+    border-radius: 4px;
+    background-color: #e5e5e5;
+}
 
+#commentform p.comment-form-author {
+    float: left;
+    width: 48%
+}
+
+#commentform p.comment-form-email {
+    float: right;
+    width: 48%
+}
+
+#commentform p.comment-form-url,#commentform p.comment-form-comment {
+    clear: both
+}
+
+#commentform label {
+    display: block;
+    padding: 6px 0;
+    font-weight: 600
+}
+
+#commentform input[type="text"],#commentform textarea {
+    max-width: 100%;
+    width: 100%
+}
+
+#commentform textarea {
+    height: 100px
+}
+
+#commentform p.form-submit {
+    margin-top: 10px
+}
+
+.cancel-comment {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
+}
+#cancel-comment-reply-link {
+    float: right;
+    bottom: 26px;
+    right: 20px;
+    font-size: 12px;
+    color: #999;
+}
 #header {
     padding:5px 50px;
     font-size:14px;
@@ -213,7 +266,7 @@ input[type=submit], a.button {
     font-weight:bold;
     background:#12c064;
     color:#fff;
-    padding:10px 20px;
+    /* padding:10px 20px; */
     font-size:14px;
     text-transform:uppercase;
 }

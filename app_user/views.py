@@ -2,45 +2,26 @@ import io
 
 from django.conf import settings
 from django.contrib import auth
-from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
-from django.db.models import Q
-from django.http import (HttpResponse, HttpResponseForbidden, JsonResponse)
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic.edit import FormView
-
 from loguru import logger
+from myweb.utils import GenerateEncrypted, get_current_site
 
-from myweb.utils import get_current_site, GenerateEncrypted
 from app_user.models import UserProfile
 from app_user.utils import create_validate_code as CheckCode
 from app_user.utils import crop_image, generate_vcode, send_email
 
-from .forms import (EditForm, LoginForm, RegisterForm, ProfileEditForm,
-                    PwdChangeForm, UserEditForm, UserPhotoUploadForm)
+from .forms import (EditForm, LoginForm, ProfileEditForm, PwdChangeForm,
+                    RegisterForm, UserEditForm, UserPhotoUploadForm)
 
 # from app_common.decorators import check_honeypot, honeypot_exempt
-
-
-
-# 自定义验证后端
-class CustomBackend(ModelBackend):
-    """实现用户名邮箱手机号登录"""
-    def authenticate(self, request, username=None, password=None, **kwargs):
-        try:
-            # 不希望用户存在两个，get只能有一个。两个是get失败的一种原因 Q为使用并集查询
-            user = User.objects.get(Q(username=username) | Q(email=username) | Q(profile__telephone=username))
-            # UserProfile继承的AbstractUser中有def check_password(self, raw_password):
-            if user.check_password(password):
-                return user
-        except Exception as e:
-            return None
 
 
 # 返回验证码图片
