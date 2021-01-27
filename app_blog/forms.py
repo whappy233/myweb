@@ -20,4 +20,4 @@ class EmailArticleForm(forms.Form):
 
 # 创建搜索表单
 class SearchForm(forms.Form):
-    keyword = forms.CharField(max_length=100 ,required=False)
+    q = forms.CharField(max_length=100 ,required=False)

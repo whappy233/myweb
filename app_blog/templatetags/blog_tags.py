@@ -38,24 +38,33 @@ def query(queryset, **kwargs):
     return queryset.filter(**kwargs)
 
 
-
-# 最多评论
+# 最多评论 cache
 @register.simple_tag
 def get_most_commented_articles(count=5):
-    return Article.published.annotate(total_comments=Count('comments')).order_by('-total_comments')[:count]
+    cache_key = 'most_commented_articles'
+    # x = lambda:Article.published.annotate(total_comments=Count('comments')).order_by('-total_comments')[:count]
+    # article_list = cache.get_or_set(cache_key, x, 60*100)
+    article_list = cache.get(cache_key)
+    if article_list:
+        logger.info(f'获取最多评论缓存:{cache_key}')
+    else:
+        article_list = Article.published.annotate(total_comments=Count('comments')).filter(total_comments__gt=0).order_by('-total_comments')[:count]
+        cache.set(cache_key, article_list, 60 * 100)
+        logger.info(f'设置最多评论缓存:{cache_key}')
+        cache.get_or_set(cache_key, article_list)
+    return article_list
 
 
-# 最近更新 (返回模板)
+# 最近更新 (返回模板) cache
 'inclusion_tag (处理数据并返回模板)   {% show_latest_articles 5 %}'
 @register.inclusion_tag('app_blog/include_tag/latest_articles.html')  # 指定利用返回值显示的模板
 def show_latest_articles(count=5):
-    latest_articles = Article.published.order_by('-publish')[:count]
+    x = lambda: Article.published.order_by('-publish')[:count]
+    latest_articles = cache.get_or_set('latest_articles', x, 60*100)
     return {'latest_articles':latest_articles}
 
 
-
-
-# 相似文章
+# 相似文章 cache
 @register.inclusion_tag('app_blog/include_tag/similar_articles.html')
 def similar_articles(obj, count=5):
     cache_key = f'similar_articles_{obj.id}'

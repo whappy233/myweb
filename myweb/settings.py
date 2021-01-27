@@ -66,7 +66,9 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware', # 缓存整个站点, 必须放在列表首位
     'django.middleware.common.CommonMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware', # 缓存整个站点, 必须在最后一位
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # 在视图函数执行前向每个接收到的user对象添加HttpRequest属性，表示当前登录的用户
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -182,7 +184,7 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': os.environ.get('DJANGO_MEMCACHED_LOCATION') or '127.0.0.1:11211',
         'KEY_PREFIX': 'djangoblog', # 缓存key的前缀（默认空）
-        'TIMEOUT': 60 * 60 * 10  # 10小时
+        'TIMEOUT': 15,
     } if env_to_bool('DJANGO_MEMCACHED_ENABLE', False) else {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'TIMEOUT': 10800,

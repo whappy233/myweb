@@ -61,12 +61,16 @@ class ArticleListView(ListView):
         """ 从缓存获取数据 """
         key = self.get_queryset_cache_key()
         value = self.get_queryset_from_cache(key)
+        q = self.request.GET.get('q', None)
+        if q:
+            value = value.filter(Q(title__icontains=q)|Q(body__icontains=q))
         return value
 
     def get_context_data(self, **kwargs):
         context = super(ArticleListView, self).get_context_data(**kwargs)
         context['section'] = 'blog'
         context['form'] = SearchForm()
+        context['keyword'] = self.request.GET.get('q', None)
         return context
 
 # 文章列表
@@ -159,7 +163,6 @@ class CategoryDetailView(ArticleListView):
         context['page_type'] = CategoryDetailView.page_type
         context['tag_name'] = self.category_name
         return context
-
 
 # 文章详情
 class ArticleDetailView(DetailView):
