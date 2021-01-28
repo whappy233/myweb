@@ -54,9 +54,9 @@
 
             <td>{{ article.title }}</td>
             <td>{{ article.category.name }}</td>
-            <td>{{ article.publish | date:"Y-m-d" | default:"-" }}</td>
+            <td>{{ article.pub_time | date:"Y-m-d" | default:"-" }}</td>
 
-            {% if article.publish %}
+            {% if article.pub_time %}
             <td><a href="{{ article.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">☺︎</span></a></td>
             {% else %}
             <td>-</td>

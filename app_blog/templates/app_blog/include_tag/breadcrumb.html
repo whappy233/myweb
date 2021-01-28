@@ -1,0 +1,10 @@
+<div class="breadcrumb">
+    {% for name,url in names %}
+    <div>
+        <a href="{{ url }}">
+            <span> {{ name }}</span>
+        </a>&nbsp;&rsaquo;
+    </div>
+    {% endfor %}
+    {{ title }}
+</div>

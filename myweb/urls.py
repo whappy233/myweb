@@ -11,6 +11,10 @@ from django.conf import settings
 from django.views.static import serve
 
 
+sitemaps = {
+    'articles': ArticleSitemap,
+    }
+
 # 对应blog/urls 中的方法1
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +32,7 @@ urlpatterns = [
     # path('ckeditor/', include('ckeditor_uploader.urls')),
     path('mdeditor/', include('mdeditor.urls')),  # mdeditor 富文本
 
-    path('sitemap.xml', sitemap, {'sitemaps':{'articles':ArticleSitemap}}, name='django.contrib.sitemaps.views.sitemap'),  # 网站地图
+    path('sitemap.xml', sitemap, {'sitemaps':sitemaps}, name='django.contrib.sitemaps.views.sitemap'),  # 网站地图
+
 ] # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

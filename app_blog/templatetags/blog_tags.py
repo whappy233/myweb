@@ -1,11 +1,12 @@
 
+from django.db.models.query_utils import refs_expression
 import markdown
 from django import template
 from django.db.models import Count, Q
 from django.utils.safestring import mark_safe  # 标记为安全的html
 from django.template.defaultfilters import stringfilter
 from ..models import Article
-from myweb.utils import cache
+from myweb.utils import cache, get_current_site
 from loguru import logger
 
 register = template.Library()
@@ -38,9 +39,19 @@ def query(queryset, **kwargs):
     return queryset.filter(**kwargs)
 
 
+# 类型检查
+@register.filter(is_safe=True)
+def istype(obj, typename):
+    try:
+        res = obj.__class__.__name__ == typename
+    except:
+        res = False
+    return res
+
+
 # 最多评论 cache
-@register.simple_tag
-def get_most_commented_articles(count=5):
+@register.inclusion_tag('app_blog/include_tag/most_commented_articles.html')  # 指定利用返回值显示的模板
+def most_commented_articles(count=5):
     cache_key = 'most_commented_articles'
     # x = lambda:Article.published.annotate(total_comments=Count('comments')).order_by('-total_comments')[:count]
     # article_list = cache.get_or_set(cache_key, x, 60*100)
@@ -51,59 +62,54 @@ def get_most_commented_articles(count=5):
         article_list = Article.published.annotate(total_comments=Count('comments')).filter(total_comments__gt=0).order_by('-total_comments')[:count]
         cache.set(cache_key, article_list, 60 * 100)
         logger.info(f'设置最多评论缓存:{cache_key}')
-        cache.get_or_set(cache_key, article_list)
-    return article_list
-
+    return {'articles': article_list}
 
 # 最近更新 (返回模板) cache
 'inclusion_tag (处理数据并返回模板)   {% show_latest_articles 5 %}'
 @register.inclusion_tag('app_blog/include_tag/latest_articles.html')  # 指定利用返回值显示的模板
 def show_latest_articles(count=5):
-    x = lambda: Article.published.order_by('-publish')[:count]
+    x = lambda: Article.published.order_by('-pub_time')[:count]
     latest_articles = cache.get_or_set('latest_articles', x, 60*100)
-    return {'latest_articles':latest_articles}
+    return {'articles':latest_articles}
 
+# 归档 (返回模板)
+@register.inclusion_tag('app_blog/include_tag/article_archives.html')
+def article_archives():
+    #按日期逆序排序
+    articles = Article.published.order_by('-pub_time')
+    return {'articles': articles}
 
 # 相似文章 cache
 @register.inclusion_tag('app_blog/include_tag/similar_articles.html')
 def similar_articles(obj, count=5):
-    cache_key = f'similar_articles_{obj.id}'
-    value = cache.get(cache_key)
-    if value:
-        logger.info(f'获取相似文章缓存:{cache_key}')
+    if isinstance(obj, Article):
+        cache_key = f'similar_articles_{obj.id}'
+        value = cache.get(cache_key)
+        if value:
+            logger.info(f'获取相似文章缓存:{cache_key}')
+        else:
+            article_tags_ids = obj.tags.values_list('id', flat=True)  # 当前帖子的 Tag ID 列表
+            # 获取包含此标签或分组的全部帖子,排除自身
+            articles = Article.published.filter(Q(tags__in=article_tags_ids) | Q(category=obj.category)).exclude(id=obj.id)
+            value = articles.annotate(same_tags=Count('tags'), some_category=Count('category')).order_by('-same_tags', '-pub_time')[:count]
+            cache.set(cache_key, value, 60 * 100)
+            logger.info(f'设置相似文章缓存:{cache_key}')
     else:
-        article_tags_ids = obj.tags.values_list('id', flat=True)  # 当前帖子的 Tag ID 列表
-        # 获取包含此标签或分组的全部帖子,排除自身
-        articles = Article.published.filter(Q(tags__in=article_tags_ids) | Q(category=obj.category)).exclude(id=obj.id)
-        value = articles.annotate(same_tags=Count('tags'), some_category=Count('category')).order_by('-same_tags', '-publish')[:count]
-        cache.set(cache_key, value, 60 * 100)
-        logger.info(f'设置相似文章缓存:{cache_key}')
+        value = None
 
-    return {'similar_articles': value}
+    return {'articles': value}
 
-
-
-# 月度归档 (返回模板)
-@register.inclusion_tag('app_blog/include_tag/monthly_archive_list.html')
-def show_monthly_archive():
-    #按日期逆序排序
-    articles = Article.objects.filter(status='p').order_by('-publish')
-    rows = []
-    if articles:
-        #获取最大和最小年份, 缩小归档时间范围
-        max_year = articles[0].publish.year
-        min_year = articles[len(articles)-1].publish.year
-        #按年和月循环，排除空月份，生成子一个字典列表
-        # 利用for循环查询最大年份和最小年份间每年的12个月中是否有文章发表
-        for year in range(max_year, min_year-1, -1):
-            for month in range(12, 0, -1):
-                total = Article.objects.filter(publish__year=year, publish__month=month).count()
-                if total > 0:
-                    # 由年份、月份和和文章数量构建成的字典插入列表
-                    rows.append({"year": year, "month": month, "total": total})
-                else:
-                    continue
-    return {'rows': rows}
+# 获得文章面包屑
+@register.inclusion_tag('app_blog/include_tag/breadcrumb.html')
+def load_breadcrumb(article):
+    """获得文章面包屑"""
+    names = article.get_category_tree()
+    names.append(('浩瀚星海', '/'))
+    names = names[::-1]
+    return {
+        'names': names,
+        'title': article.title
+    }
 
 
 # 在设置 takes_context=True 后, 可以直接使用 context 里的变量.

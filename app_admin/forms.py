@@ -17,7 +17,7 @@ from taggit.forms import TagWidget  # 第三方标签小部件
 class ArticleCreateForm(forms.ModelForm):
     class Meta:
         model = Article
-        exclude = ['author', 'views', 'slug', 'publish', 'is_delete', 'users_like']
+        exclude = ['author', 'views', 'slug', 'pub_time', 'is_delete', 'users_like']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             # 'body': CKEditorUploadingWidget(attrs={'class': 'form-control'}),

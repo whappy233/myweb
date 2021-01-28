@@ -31,7 +31,7 @@ class AdminArticleListView(ListView):
     template_name = 'app_admin/blog/blog_list.html'
 
     def get_queryset(self):
-        obj = Article.objects.filter(is_delete=False).order_by('-publish')
+        obj = Article.objects.filter(is_delete=False).order_by('-pub_time')
         self.search_key__ = self.request.GET.get('search')
         if self.search_key__:
             obj = obj.filter(Q(title__icontains=self.search_key__)|Q(body__icontains=self.search_key__))
@@ -47,9 +47,9 @@ class AdminArticleListView(ListView):
 
     #     show_publish = self.request.GET.get('draft')
     #     if show_publish:
-    #         articles = Article.objects.filter(status='p').order_by('-publish')
+    #         articles = Article.objects.filter(status='p').order_by('-pub_time')
     #     else:
-    #         articles = Article.objects.filter(status='d').order_by('-publish')
+    #         articles = Article.objects.filter(status='d').order_by('-pub_time')
     #     paginator = Paginator(articles, 5)
     #     page = self.request.GET.get('page')
     #     page_obj = paginator.get_page(page)

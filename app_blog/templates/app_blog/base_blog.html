@@ -14,35 +14,31 @@
 
     {% block blog_content_sidebar %}
 
-    <div style="background-color: #12c064; padding: 50px;">
+    <div style="padding: 50px;">
         {% if form %}
         <div style="margin-bottom: 2.5rem;">
             <form method="get" action="" class="form-inline">
                 <input id="search" type="text" name="q" value="{{keyword|default_if_none:''}}" placeholder="搜索">
-                <input type="submit" value="搜索" />
+                <input type="submit" value="搜索"/>
             </form>
-            <div id="result"></div>
         </div>
         {% endif %}
     
         <p><a href="{% url 'app_blog:article_feed' %}">订阅博客</a></p>
-        <h6> 最近更新 </h6>
+        <p><a href="{% url 'app_blog:refresh' %}">刷新缓存</a></p>
+
+        <!-- 相似文章 -->
+        {% similar_articles article %}
+        <!-- 最近更新 -->
         {% show_latest_articles 5 %}
-    
+        <!-- 最多评论文章 -->
+        {% most_commented_articles %}
         {% cache 500 monthly_archive %}
-        <h6>归档</h6>
-        {% show_monthly_archive %}
+        <!-- 归档 -->
+        {% article_archives %}
         {% endcache %}
-    
-        <h6>最多评论文章</h6>
-        {% get_most_commented_articles as most_commented_articles %}
-        <ul>
-            {% for article in most_commented_articles %}
-            <li>
-                <a href="{{ article.get_absolute_url }}"> {{ article.title }} </a>
-            </li>
-            {% endfor %}
-        </ul>
+
+
     </div>
 
     <div id="rocket" class="move" title="点我返回顶部"></div>
@@ -53,22 +49,3 @@
 
 {% endblock content %}
 
-
-{% block javascript %}
-<script>
-    $("#search").bind('input propertychange', function () {
-        var keyword = $(this).val();
-        $.ajax({
-            url: '/ajax/search/',
-            data: {
-                'keyword': keyword
-            },
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                $("#result").html("<p>正在查询...共" + data.count + "条记录</p>")
-            },
-        });
-    });
-</script>
-{% endblock javascript %}

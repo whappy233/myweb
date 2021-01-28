@@ -1,8 +1,17 @@
-<h4>相似文章</h4>
-{% for article in similar_articles %}
-<p>
-    <a href="{{ article.get_absolute_url }}"> {{ article.title }}</a>
-</p>
-{% empty %}
-没有相似文章推荐
-{% endfor %}
+{% load blog_tags %}
+
+{# 相似文章模板 (由自定义标签返回) #}
+{% if articles|istype:'QuerySet' %}
+<h6>相似文章</h6>
+<ul>
+    {% for article in articles %}
+    <li>
+        <a href="{{ article.get_absolute_url }}">
+            {{ article.title }}
+        </a>
+    </li>
+    {% empty %}
+    <li>暂无</li>
+    {% endfor %}
+</ul>
+{% endif %}

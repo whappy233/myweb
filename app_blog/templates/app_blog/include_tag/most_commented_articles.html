@@ -1,7 +1,6 @@
-{# 最近更新模板 (由自定义标签返回) #}
-<h6>最近更新</h6>
+<h6>最多评论文章</h6>
 <ul>
-    {% for article in articles %}
+    {% for article in most_commented_articles %}
     <li>
         <a href="{{ article.get_absolute_url }}">
             {{ article.title }}

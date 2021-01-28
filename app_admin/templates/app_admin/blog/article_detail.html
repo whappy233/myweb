@@ -4,10 +4,10 @@
 
 <p>类别:
     {% if article.category.parent_category %}
-    <a href="{% url 'blog:category_detail' article.category.parent_category.slug %}">{{
+    <a href="{% url 'app_blog:category_detail' article.category.parent_category.slug %}">{{
         article.category.parent_category.name }}</a> /
     {% endif %}
-    <a href="{% url 'blog:category_detail' article.category.slug %}">{{ article.category }}</a>
+    <a href="{% url 'app_blog:category_detail' article.category.slug %}">{{ article.category }}</a>
 </p>
 
 

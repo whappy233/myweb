@@ -36,10 +36,10 @@ class TitleKeywordFilter(admin.SimpleListFilter):
 @admin.register(Article)  # 注册方式2（使用包装）
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ['id', 'show_tags', 'title', 'link_to_userinfo', 
-                    'link_to_categoryinfo', 'publish', 'updated', 
+                    'link_to_categoryinfo', 'pub_time', 'updated', 
                     'status', 'is_delete', 'slug', 'comment_status']  # 显示字段
     search_fields = ['title', 'body']  # 搜索字段
-    list_filter = [TitleKeywordFilter, 'publish', 'created', 'updated', 'status']  # 过滤字段
+    list_filter = [TitleKeywordFilter, 'pub_time', 'created', 'updated', 'status']  # 过滤字段
     prepopulated_fields = {'slug':('title',)}  # 自动生成slug, 根据title填充slug
     raw_id_fields = ['author',]  # 下拉框改为微件(多个外键使建议使用)
     filter_horizontal = ['users_like']  # 多对多
@@ -48,14 +48,14 @@ class ArticleAdmin(admin.ModelAdmin):
     # actions_on_bottom = False
     ordering = ['author']  # 默认排序
     fields = ['tags', 'title', 'author', 'category', 'body',
-            'publish', 'status', 'is_delete', 'slug', 'views', 
+            'pub_time', 'status', 'is_delete', 'slug', 'views', 
             'comment_status', 'article_order', 'users_like']
 
     empty_value_display = '<span>-</span>'  # 字段值为空时显示的文本(可为纯文本,可为html)
     # admin_order_field = ('title', 'updated')  # 设置需要排序的字段
     list_per_page = 20  # 每页显示条目数
     list_editable = ('status', 'is_delete', 'comment_status')  # 设置可编辑字段
-    date_hierarchy = 'publish'  # 按日期月份筛选
+    date_hierarchy = 'pub_time'  # 按日期月份筛选
     list_display_links = ['title',]  # 设置带连接的字段
 
     # admin/accounts/bloguser/2/change/
@@ -89,13 +89,13 @@ class ArticleAdmin(admin.ModelAdmin):
 
     def make_published(self, request, queryset):
         # 注意: 此操作不会触发模型的 clean 方法!
-        queryset.update(status='p', publish=timezone.now())
+        queryset.update(status='p', pub_time=timezone.now())
     make_published.short_description = "发布所选文章"
     make_published.allowed_permissions = ('change',)  #  要求只有change权限的管理人员才能更改文章发表状态
 
     def make_published_false(self, request, queryset):
         # 注意: 此操作不会触发模型的 clean 方法!
-        queryset.update(status='d', publish=None)
+        queryset.update(status='d', pub_time=None)
     make_published_false.short_description = "取消发布"
 
     def make_delete_true(self, request, queryset):

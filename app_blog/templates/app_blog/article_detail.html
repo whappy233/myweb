@@ -9,11 +9,11 @@
 {% endblock title %}
 
 {% block blog_content_main %}
+{% load_breadcrumb article %}
 <h1> {{ article.title }} </h1>
 <p class='date'>
-    作者 : <a href="{% url 'app_blog:article_list_by_author' article.author %}"> {{ article.author }}</a><br>
-    分组 : <a href="{% url 'app_blog:category_detail' article.category.slug %}"> {{ article.category }}</a><br>
-    发布于{{ article.publish | date:"Y-m-j" }} 浏览{{ article.views }}次<br>
+    本条目发布于 {{ article.pub_time | date:"Y-m-j" }} 浏览{{ article.views }}次。
+    作者是 : <a href="{% url 'app_blog:article_list_by_author' article.author %}"> {{ article.author }}</a><br>
     {% with article.tags.all as tages %}
     {% if tages %}
     <span class='tags'>
@@ -43,8 +43,6 @@
 
 <p><a href="{% url 'app_blog:article_share' article.id %}"> 分享文章 </a></p>
 
-
-{% similar_articles article %}
 
 <div>
     {# with 标签可以将某个值赋予到新的变量中,对于避免数据库访问或者多次访问开销交的的方法十分有用 #}

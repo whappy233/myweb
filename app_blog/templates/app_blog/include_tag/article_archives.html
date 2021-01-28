@@ -1,0 +1,24 @@
+{# 归档模板 (由自定义标签返回) #}
+<h6>文章归档</h6>
+<div class="entry-content">
+    {% regroup articles by pub_time.year as year_post_group %}
+    <ul>
+        {% for year in year_post_group %}
+        <li>{{ year.grouper }} 年
+            {% regroup year.list by pub_time.month as month_post_group %}
+            <ul>
+                {% for month in month_post_group %}
+                <li>{{ month.grouper }} 月
+                    <ul>
+                        {% for article in month.list %}
+                        <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+</div>

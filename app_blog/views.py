@@ -1,3 +1,4 @@
+from django.http.response import HttpResponse, HttpResponseForbidden
 from app_comments.forms import CommentForm
 from django import forms
 from django.contrib.auth.decorators import login_required, permission_required
@@ -7,7 +8,7 @@ from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator  # 分页
 from django.db.models import Q
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
@@ -24,11 +25,20 @@ class ArticleListView(ListView):
     context_object_name = 'article_list'  # 设置上下文变量
 
     page_type = ''
-    paginate_by = 5  # 每页obj的数目 生成 page_obj 对象
+    paginate_by = 10  # 每页obj的数目 生成 page_obj 对象
     page_kwarg = 'page'  # get 请求页码的参数 /?page=2
 
     def get_view_cache_key(self):
         return self.request.get['page']  # 当前页码
+
+    def paginate_queryset(self, queryset, page_size):
+        """如果需要，对查询集进行分页."""
+        paginator = self.get_paginator(
+            queryset, page_size, orphans=self.get_paginate_orphans(),
+            allow_empty_first_page=self.get_allow_empty())
+
+        page = paginator.get_page(self.page_number)
+        return (paginator, page, page.object_list, page.has_other_pages())
 
     @property
     def page_number(self):
@@ -74,7 +84,7 @@ class ArticleListView(ListView):
         return context
 
 # 文章列表
-@method_decorator(logger.catch(), name='dispatch')
+# @method_decorator(logger.catch(), name='dispatch')
 class IndexView(ArticleListView):
 
     def get_queryset_data(self):
@@ -198,55 +208,6 @@ class ArticleDetailView(DetailView):
         return obj
 
 
-# 文章列表 (类视图) Old
-@method_decorator(logger.catch(), name='dispatch')
-class ArticleListView_old(ListView):
-    # context_object_name = 'page_obj'  # 设置上下文变量
-    paginate_by = 3  # 3个一页 生成 page_obj 对象
-    # template_name = 'app_blog/article_list.html'  # 视图默认的模板名称是: 模型名小写_list.html
-
-    def get_queryset(self):
-        self.tag__ = self.author_name__ = self.search_keyword = None
-        obj = Article.published.all()
-        tag_slug = self.kwargs.get('tag_slug')
-        self.author_name__ = author_name = self.kwargs.get('author_name')
-        self.search_keyword = keyword = self.request.GET.get('keyword', None)
-
-        if tag_slug:
-            self.tag__ = tag = get_object_or_404(Tag, slug=tag_slug)
-            obj = obj.filter(tags__in=[tag])
-        if author_name:
-            obj = obj.filter(author__username=author_name)
-        if keyword:
-            obj = obj.filter(Q(title__icontains=keyword)|Q(body__icontains=keyword))
-
-        return obj
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = SearchForm()
-        context['section'] = 'blog'
-        context['tag'] = self.tag__
-        context['name'] = self.author_name__
-        context['keyword'] = self.search_keyword
-        return context
-
-
-# 月度归档(某月的列表)
-def month_archive(request, year, month):
-    '''月度归档'''
-    articles = Article.published.filter(publish__year=year, publish__month=month).order_by('-publish')
-    paginator = Paginator(articles, 3)
-    page = request.GET.get('page')
-    page_obj = paginator.get_page(page)
-    context = {
-        'page_obj': page_obj, 
-        'paginator': paginator, 
-        'is_paginated': True, 
-        'year_month': (year, month)}
-    return render(request, 'app_blog/month_archive.html', context)
-
-
 # 所有文章 (函数视图)
 @login_required
 def article_list(request, tag_slug=None, author_name=None):
@@ -338,16 +299,6 @@ def article_share(request, article_id):
     return render(request, 'app_blog/share.html', context)
 
 
-# 搜索实时反馈
-def ajax_search(request):
-    count = 0
-    if request.method == 'GET':
-        keyword = request.GET.get('keyword', None)
-        if keyword:
-            count = Article.published.filter(Q(title__icontains=keyword)|Q(body__icontains=keyword)).count()
-    return JsonResponse({'count': count, })
-
-
 # ajax 测试
 def ajax_test(request):
     if request.method == 'GET':
@@ -356,3 +307,18 @@ def ajax_test(request):
         if keyword:
             data = {'count': f'Carlos-{timezone.now()}', }
             return JsonResponse(data)
+
+
+@login_required
+def refresh_memcache(request):
+    try:
+        if request.user.is_superuser:
+            if cache and cache is not None:
+                cache.clear()
+            return redirect("app_blog:article_list")
+        else:
+            return HttpResponseForbidden()
+    except Exception as e:
+        logger.error(e)
+        return HttpResponse(e)
+
