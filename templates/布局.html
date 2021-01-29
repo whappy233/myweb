@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        .header {
+            height: 40px;
+            background-color: aquamarine;
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+        }
+        .main {
+            flex-grow: 1;
+            height: 500px;
+            background-color: rgb(218, 152, 152);
+        }
+        .left {
+            order: -1;
+            flex: 0 1 300px;
+            margin-right: 20px;
+            height: 500px;
+            background-color: rgb(196, 196, 255);
+        }
+        .right {
+            flex: 0 1 100px;
+            margin-left: 20px;
+            height: 500px;
+            background-color: rgb(223, 255, 223);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        66
+    </div>
+    <div class="container">
+        <div class="main">
+            <ul>
+                <li>888</li>
+                <li>888</li>
+                <li>888</li>
+            </ul>
+        </div>
+        <div class="left">
+            <ul>
+                <li>666</li>
+                <li>666</li>
+                <li>666</li>
+            </ul>
+        </div>
+        <div class="right"></div>
+    </div>
+</body>
+
+</html>

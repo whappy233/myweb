@@ -7,6 +7,16 @@ body {
     /* background-image: url('./img/background.jpeg'); */
 }
 
+.starlight{
+	width: 100%;
+	height: 100%;
+	position:relative;
+	padding:0;
+    margin:0;
+    overflow:hidden;
+}
+
+
 p {
     line-height: 1.8;
 }
@@ -116,9 +126,7 @@ ol {
     font-size:14px;
     background:#12c064;
     color:#fff;
-    /* border-bottom:4px solid #1cdf78; */
-    /* overflow:auto; */
-    position: sticky;
+    position: relative;
     top: 0px;
     z-index: 999;
 }
