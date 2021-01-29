@@ -7,12 +7,17 @@
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock title %}</title>
     <link href="{% static 'img/favicon.ico' %}" rel="shortcut icon" type="image/x-icon">
+    <link href="{% static 'css/open_font.css' %}" rel='stylesheet' type='text/css'>
     <link href="{% static 'css/base.css' %}" rel="stylesheet">
-    <link href="{% static 'bootstrap_4.5.0/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'fonts/FontAwesome/font-awesome.css' %}" rel="stylesheet">
 
-    <link rel="stylesheet" href="{% static 'assets/css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/animate.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/sina-nav.css' %}">
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootsnav.css' %}" rel="stylesheet">
+    <link href="{% static 'css/overwrite.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'skins/color.css' %}" rel="stylesheet">
+
 
     {% block css_file %}
     {% endblock css_file %}
@@ -20,81 +25,177 @@
 </head>
 
 <body class="starlight">
-    <nav class="sina-nav mobile-sidebar navbar-fixed" data-top="0">
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-default navbar-fixed white no-background bootsnav">
+
+        <!-- 顶部搜索-->
+        <div class="top-search">
+            <div class="container">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Search">
+                    <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+                </div>
+            </div>
+        </div>
+
         <div class="container">
-            <div class="extension-nav">
+            <!-- 属性导航 -->
+            <div class="attr-nav">
                 <ul>
-                    {% if request.user.is_authenticated %} {# 当用户被验证 #}
+                    <!-- 购物车 -->
                     <li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" >
-							<img src="{{request.user.profile.photo.url}}" style="width: 2rem;height: 2rem; border-radius:1rem">
-						</a>
-						<ul class="dropdown-menu shop-menu">
-							<li><a href="{% url 'app_user:profile' %}">修改信息</a></li>
-                            <li><a href="{% url 'app_user:change_pw' %}">修改密码</a></li>
-                            {% if request.user.is_superuser %}
-							<li><a href="{% url 'app_admin:index' %}">ADMIN</a></li>
-                            <li><a href="/xadmin">XADMIN</a></li>
-                            {% endif %}
-							<li><a href="{% url 'app_user:logout' %}">退出登陆</a></li>
-						</ul>
-					</li>
-                    <li><a href="{% url 'app_admin:create_blog' %}">新建文章</a></li>
-                    {% else %}
-                    <li><a href="{% url 'app_user:login' %}">登陆</a></li>
-                    <li><a href="{% url 'app_user:register' %}">注册</a></li>
-                    {% endif %}
-                    <li class="widget-bar-btn">
-                        <a href="#">
-                            <i class="fa fa-bars"></i>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-shopping-bag"></i>
+                            <span class="badge">3</span>
                         </a>
+                        <ul class="dropdown-menu cart-list">
+                            <li>
+                                <a href="#" class="photo">
+                                    <img src="{% static 'images/thumb/thumb01.jpg' %}" class="cart-thumb" alt="" />
+                                </a>
+                                <h6><a href="#">Delica omtantur </a></h6>
+                                <p>2x - <span class="price">$99.99</span></p>
+                            </li>
+                            <li>
+                                <a href="#" class="photo">
+                                    <img src="{% static 'images/thumb/thumb02.jpg' %}" class="cart-thumb" alt="" /></a>
+                                <h6><a href="#">Omnes ocurreret</a></h6>
+                                <p>1x - <span class="price">$33.33</span></p>
+                            </li>
+                            <li>
+                                <a href="#" class="photo">
+                                    <img src="{% static 'images/thumb/thumb03.jpg' %}" class="cart-thumb" alt="" /></a>
+                                <h6><a href="#">Agam facilisis</a></h6>
+                                <p>2x - <span class="price">$99.99</span></p>
+                            </li>
+                            <li class="total">
+                                <span class="pull-right"><strong>Total</strong>: $0.00</span>
+                                <a href="#" class="btn btn-default btn-cart">Cart</a>
+                            </li>
+                        </ul>
                     </li>
+                    <!-- 搜索按钮 -->
+                    <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
+                    <!-- more info -->
+                    <li class="side-menu"><a href="#"><i class="fa fa-bars"></i></a></li>
                 </ul>
             </div>
-            <div class="sina-nav-header">
+
+            <!-- logo -->
+            <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
                     <i class="fa fa-bars"></i>
                 </button>
-                <a class="sina-brand social-on" href="{% url 'app_blog:article_list' %}">
-                    <h2>浩瀚星海</h2>
-                    <p>Learn more techniques</p>
+                <a class="navbar-brand" href="#brand">
+                    <img src="{% static 'images/brand/logo-white.png' %}" class="logo logo-display" alt="">
+                    <img src="{% static 'images/brand/logo-black.png' %}" class="logo logo-scrolled" alt="">
                 </a>
             </div>
 
+            <!-- 包括导航链接、表单和其他内容 -->
             <div class="collapse navbar-collapse" id="navbar-menu">
-                <ul class="sina-menu" data-in="fadeInLeft" data-out="fadeInOut">
-                    <li class="dropdown">
-                        <a href="{% url 'app_blog:article_list' %}" class="dropdown-toggle"
-                            data-toggle="dropdown">Blog</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{% url 'app_blog:article_list' %}">All</a></li>
+                <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li class="dropdown megamenu-fw">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Megamenu</a>
+                        <ul class="dropdown-menu megamenu-content" role="menu">
+                            <li>
+                                <div class="row">
+                                    <div class="col-menu col-md-3">
+                                        <h6 class="title">Title Menu One</h6>
+                                        <div class="content">
+                                            <ul class="menu-col">
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                            </ul>
+                                        </div>
+                                    </div><!-- end col-3 -->
+                                    <div class="col-menu col-md-3">
+                                        <h6 class="title">Title Menu Two</h6>
+                                        <div class="content">
+                                            <ul class="menu-col">
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                            </ul>
+                                        </div>
+                                    </div><!-- end col-3 -->
+                                    <div class="col-menu col-md-3">
+                                        <h6 class="title">Title Menu Three</h6>
+                                        <div class="content">
+                                            <ul class="menu-col">
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-menu col-md-3">
+                                        <h6 class="title">Title Menu Four</h6>
+                                        <div class="content">
+                                            <ul class="menu-col">
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                                <li><a href="#">Custom Menu</a></li>
+                                            </ul>
+                                        </div>
+                                    </div><!-- end col-3 -->
+                                </div><!-- end row -->
+                            </li>
+                        </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdowns</a>
                         <ul class="dropdown-menu">
                             <li><a href="#">Custom Menu</a></li>
                             <li><a href="#">Custom Menu</a></li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown</a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sub Menu</a>
                                 <ul class="dropdown-menu">
                                     <li><a href="#">Custom Menu</a></li>
                                     <li><a href="#">Custom Menu</a></li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sub Menu</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Custom Menu</a></li>
+                                            <li><a href="#">Custom Menu</a></li>
+                                            <li><a href="#">Custom Menu</a></li>
+                                            <li><a href="#">Custom Menu</a></li>
+                                        </ul>
+                                    </li>
                                     <li><a href="#">Custom Menu</a></li>
                                 </ul>
                             </li>
                             <li><a href="#">Custom Menu</a></li>
+                            <li><a href="#">Custom Menu</a></li>
+                            <li><a href="#">Custom Menu</a></li>
+                            <li><a href="#">Custom Menu</a></li>
                         </ul>
                     </li>
-                </ul>
-                </li>
-                <li class="scroll"><a href="{% url 'app_gallery:gallery_list' %}">Gallery</a></li>
-                <li class="active scroll"><a href="#about">About</a></li>
+                    <li><a href="#">Portfolio</a></li>
+                    <li><a href="#">Contact Us</a></li>
                 </ul>
             </div>
         </div>
 
-        <div class="widget-bar">
-            <a href="#" class="close-widget-bar"><i class="fa fa-times"></i></a>
+        <!-- 侧边弹出栏 -->
+        <div class="side">
+            <a href="#" class="close-side"><i class="fa fa-times"></i></a>
             <div class="widget">
                 <h6 class="title">Custom Pages</h6>
                 <ul class="link">
@@ -117,6 +218,14 @@
             </div>
         </div>
     </nav>
+
+    <!-- Start Home -->
+    <div class="pageheader fixed-demo dark">
+        <div class="container">
+            <h2 class="title">顶部固定导航菜单（一）</h2>
+            <p>Navigation menu with fixed transparent</p>
+        </div>
+    </div>
 
     {# 主体 #}
     <div class="container">
@@ -155,10 +264,11 @@
 
     <script src="{% static 'jquery_v3.5.1/jquery-3.5.1.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
-    <script src="{% static 'bootstrap_4.5.0/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'starlight/starlight.js' %}"></script>
-    <script src="{% static 'assets/js/wow.min.js' %}"></script>
-    <script src="{% static 'assets/js/sina-nav.js' %}"></script>
+    <script src="{% static 'js/bootsnav.js' %}"></script>
+
+
 
     <script>
         $('[data-toggle="tooltip"]').tooltip();// Tooltip
