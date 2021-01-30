@@ -513,7 +513,7 @@ body.on-side .wrap-sticky nav.navbar.bootsnav.sticked{
     }
 
     nav.navbar.bootsnav ul.nav.navbar-right .dropdown-menu .dropdown-menu{
-        left: -200px;
+        left: 200px;
     }
     
     nav.navbar.bootsnav ul.nav > li > a{
@@ -560,20 +560,20 @@ body.on-side .wrap-sticky nav.navbar.bootsnav.sticked{
     }
     
     nav.navbar.bootsnav ul.navbar-right li.dropdown ul.dropdown-menu li a{
-        text-align: right;
+        text-align: left;
     }
     
     nav.navbar.bootsnav li.dropdown ul.dropdown-menu li.dropdown > a.dropdown-toggle:before{
         font-family: 'FontAwesome';
-        float: right;
+        /* float: left; */
         content: "\f105";
         margin-top: 0;
     }
     
     nav.navbar.bootsnav ul.navbar-right li.dropdown ul.dropdown-menu li.dropdown > a.dropdown-toggle:before{
         font-family: 'FontAwesome';
-        float: left;
-        content: "\f104";
+        float: right;
+        /* content: "\f104"; */
         margin-top: 0;
     }
     
@@ -697,9 +697,9 @@ body.on-side .wrap-sticky nav.navbar.bootsnav.sticked{
     =================================*/    
     .attr-nav > ul > li.dropdown ul.dropdown-menu{
         margin-top: 0;
-        margin-left: 55px;
+        /* margin-left: 55px; */
         width: 250px;
-        left: -250px;
+        /* left: -250px; */
     }
     
     /* Menu Center

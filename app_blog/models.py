@@ -62,11 +62,12 @@ class Category(models.Model):
     @cache_decorator(60 * 60 * 10)
     def get_category_tree(self):
         """递归获得分类目录的父级"""
+        print(20*'-')
         categorys = []
         def parse(category):
             categorys.append(category)
             if category.parent_category:
-                parse(category.parent_category)
+                return parse(category.parent_category)
         parse(self)
         return categorys
 
@@ -82,7 +83,7 @@ class Category(models.Model):
             for child in childs:
                 if category not in categorys:
                     categorys.append(child)
-                parse(child)
+                return parse(child)
         parse(self)
         return categorys
 

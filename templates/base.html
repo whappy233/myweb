@@ -43,38 +43,28 @@
             <!-- 属性导航 -->
             <div class="attr-nav">
                 <ul>
-                    <!-- 购物车 -->
+                    {% if request.user.is_authenticated %} {# 当用户被验证 #}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-shopping-bag"></i>
+                            <img src="{{request.user.profile.photo.url}}"
+                                style="width: 2rem;height: 2rem; border-radius:1rem">
                             <span class="badge">3</span>
                         </a>
-                        <ul class="dropdown-menu cart-list">
-                            <li>
-                                <a href="#" class="photo">
-                                    <img src="{% static 'images/thumb/thumb01.jpg' %}" class="cart-thumb" alt="" />
-                                </a>
-                                <h6><a href="#">Delica omtantur </a></h6>
-                                <p>2x - <span class="price">$99.99</span></p>
-                            </li>
-                            <li>
-                                <a href="#" class="photo">
-                                    <img src="{% static 'images/thumb/thumb02.jpg' %}" class="cart-thumb" alt="" /></a>
-                                <h6><a href="#">Omnes ocurreret</a></h6>
-                                <p>1x - <span class="price">$33.33</span></p>
-                            </li>
-                            <li>
-                                <a href="#" class="photo">
-                                    <img src="{% static 'images/thumb/thumb03.jpg' %}" class="cart-thumb" alt="" /></a>
-                                <h6><a href="#">Agam facilisis</a></h6>
-                                <p>2x - <span class="price">$99.99</span></p>
-                            </li>
-                            <li class="total">
-                                <span class="pull-right"><strong>Total</strong>: $0.00</span>
-                                <a href="#" class="btn btn-default btn-cart">Cart</a>
-                            </li>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'app_user:profile' %}">修改信息</a></li>
+                            <li><a href="{% url 'app_user:change_pw' %}">修改密码</a></li>
+                            {% if request.user.is_superuser %}
+                            <li><a href="{% url 'app_admin:index' %}">ADMIN</a></li>
+                            <li><a href="/xadmin">XADMIN</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'app_user:logout' %}">退出登陆</a></li>
                         </ul>
                     </li>
+                    <li><a href="{% url 'app_admin:create_blog' %}">新建文章</a></li>
+                    {% else %}
+                    <li><a href="{% url 'app_user:login' %}">登陆</a></li>
+                    <li><a href="{% url 'app_user:register' %}">注册</a></li>
+                    {% endif %}
                     <!-- 搜索按钮 -->
                     <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
                     <!-- more info -->
@@ -87,7 +77,7 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
                     <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="#brand">
+                <a class="navbar-brand" href="/" title="浩瀚星海 Carlos">
                     <img src="{% static 'images/brand/logo-white.png' %}" class="logo logo-display" alt="">
                     <img src="{% static 'images/brand/logo-black.png' %}" class="logo logo-scrolled" alt="">
                 </a>
@@ -96,99 +86,32 @@
             <!-- 包括导航链接、表单和其他内容 -->
             <div class="collapse navbar-collapse" id="navbar-menu">
                 <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li class="dropdown megamenu-fw">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Megamenu</a>
-                        <ul class="dropdown-menu megamenu-content" role="menu">
-                            <li>
-                                <div class="row">
-                                    <div class="col-menu col-md-3">
-                                        <h6 class="title">Title Menu One</h6>
-                                        <div class="content">
-                                            <ul class="menu-col">
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                            </ul>
-                                        </div>
-                                    </div><!-- end col-3 -->
-                                    <div class="col-menu col-md-3">
-                                        <h6 class="title">Title Menu Two</h6>
-                                        <div class="content">
-                                            <ul class="menu-col">
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                            </ul>
-                                        </div>
-                                    </div><!-- end col-3 -->
-                                    <div class="col-menu col-md-3">
-                                        <h6 class="title">Title Menu Three</h6>
-                                        <div class="content">
-                                            <ul class="menu-col">
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-menu col-md-3">
-                                        <h6 class="title">Title Menu Four</h6>
-                                        <div class="content">
-                                            <ul class="menu-col">
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                                <li><a href="#">Custom Menu</a></li>
-                                            </ul>
-                                        </div>
-                                    </div><!-- end col-3 -->
-                                </div><!-- end row -->
-                            </li>
-                        </ul>
-                    </li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdowns</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Blog</a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Custom Menu</a></li>
-                            <li><a href="#">Custom Menu</a></li>
+                            <li><a href="/">All</a></li>
+                            <li><a href="#">分类1</a></li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sub Menu</a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">分类2</a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Custom Menu</a></li>
-                                    <li><a href="#">Custom Menu</a></li>
+                                    <li><a href="#">子类1</a></li>
+                                    <li><a href="#">子类2</a></li>
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sub Menu</a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">子类3</a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="#">Custom Menu</a></li>
-                                            <li><a href="#">Custom Menu</a></li>
-                                            <li><a href="#">Custom Menu</a></li>
-                                            <li><a href="#">Custom Menu</a></li>
+                                            <li><a href="#">子子类1</a></li>
+                                            <li><a href="#">子子类2</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="#">Custom Menu</a></li>
+                                    <li><a href="#">子类4</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#">Custom Menu</a></li>
-                            <li><a href="#">Custom Menu</a></li>
-                            <li><a href="#">Custom Menu</a></li>
-                            <li><a href="#">Custom Menu</a></li>
+                            <li><a href="#">分类3</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Portfolio</a></li>
-                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="{% url 'app_gallery:gallery_list' %}">Gallery</a></li>
+                    <li><a href="#">Other</a></li>
+
                 </ul>
             </div>
         </div>
@@ -222,8 +145,8 @@
     <!-- Start Home -->
     <div class="pageheader fixed-demo dark">
         <div class="container">
-            <h2 class="title">顶部固定导航菜单（一）</h2>
-            <p>Navigation menu with fixed transparent</p>
+            <h2 class="title">浩瀚星海</h2>
+            <p>今天是个好日子</p>
         </div>
     </div>
 
@@ -231,9 +154,9 @@
     <div class="container">
         <div class="row">
             <div class="col-6 col-lg-12">
-            {{Carlos}}{# 全局tag #}
-            {% block content %}
-            {% endblock content %}
+                {{Carlos}}{# 全局tag #}
+                {% block content %}
+                {% endblock content %}
             </div>
         </div>
     </div>
@@ -267,7 +190,6 @@
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'starlight/starlight.js' %}"></script>
     <script src="{% static 'js/bootsnav.js' %}"></script>
-
 
 
     <script>
