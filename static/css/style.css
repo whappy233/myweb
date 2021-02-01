@@ -18,7 +18,7 @@ General
 }
 
 .section a{
-    color: #f43438;
+    color: #12c064;
 }
 
 .gray{
@@ -52,7 +52,7 @@ General
     left: 50%;
     margin-left: -50px;
     width: 100px;
-    border-bottom: solid 1px #f43438;
+    border-bottom: solid 1px #12c064;
 }
 
 .test-height{
@@ -62,15 +62,16 @@ General
 .pageheader{
     padding: 70px 0;
     background-image: url(../images/bg/brick-wall-dark.png);
-    background-color: #f43438;
+    background-color: #12c064;
 }
 
 .pageheader.fixed-demo{
     padding-top: 120px;
 }
 
+/* 背景色 */
 .pageheader.fixed-demo.dark{
-   background-color: #666 !important;
+   background-color: rgb(100, 100, 100) !important;
 }
 
 .pageheader.fixed-demo.white{
@@ -111,7 +112,7 @@ Home
 .section.home{
     padding: 100px 0;
     background-image: url(../images/bg/brick-wall-dark.png);
-    background-color: #f43438;
+    background-color: #12c064;
 }
 
 .section.home.dark{
@@ -238,8 +239,8 @@ ol.menu-demo li a{
 
 ol.menu-demo li a:focus,
 ol.menu-demo li a:hover{
-    background-color: #f43438;
-    border: solid 2px #f43438;
+    background-color: #12c064;
+    border: solid 2px #12c064;
     color: #fff;
     text-decoration: none;
 }
@@ -543,7 +544,7 @@ pre {
 }
 
 pre span{
-    color: #f43438;
+    color: #12c064;
 }
 
 @media (max-width:676px){

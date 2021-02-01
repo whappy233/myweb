@@ -62,7 +62,6 @@ class Category(models.Model):
     @cache_decorator(60 * 60 * 10)
     def get_category_tree(self):
         """递归获得分类目录的父级"""
-        print(20*'-')
         categorys = []
         def parse(category):
             categorys.append(category)
@@ -86,6 +85,24 @@ class Category(models.Model):
                 return parse(child)
         parse(self)
         return categorys
+
+
+    @staticmethod
+    def xx():
+        def parse(category):
+            childs = Category.objects.filter(parent_category=category)
+            for child in childs:
+                if not child.has_child():
+                    print({category.id:child.id})
+                else:
+                    return parse(child)
+
+        top = Category.objects.filter(parent_category=None)
+        for i in top:
+            print(i.id)
+            parse(i)
+
+
 
     class Meta:
         ordering = ['name']
@@ -219,4 +236,5 @@ class Article(models.Model):
             # raise ValidationError('草稿没有发布日期. 发布日期已清空。')
         if self.status == 'p' and self.pub_time is None:
             self.pub_time = timezone.now()
+
 

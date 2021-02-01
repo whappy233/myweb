@@ -1,4 +1,7 @@
 {% load static %}
+{% load blog_tags %}
+{% load cache %}
+
 
 <!DOCTYPE html>
 <html>
@@ -87,31 +90,15 @@
             <div class="collapse navbar-collapse" id="navbar-menu">
                 <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Blog</a>
+                        <a href="/" class="dropdown-toggle" data-toggle="dropdown">Blog</a>
                         <ul class="dropdown-menu">
-                            <li><a href="/">All</a></li>
-                            <li><a href="#">分类1</a></li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">分类2</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">子类1</a></li>
-                                    <li><a href="#">子类2</a></li>
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">子类3</a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#">子子类1</a></li>
-                                            <li><a href="#">子子类2</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">子类4</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#">分类3</a></li>
+                            {% cache 500 monthly_archive %}
+                            {% blog_category_menu %}
+                            {% endcache %}
                         </ul>
                     </li>
                     <li><a href="{% url 'app_gallery:gallery_list' %}">Gallery</a></li>
                     <li><a href="#">Other</a></li>
-
                 </ul>
             </div>
         </div>
@@ -150,7 +137,7 @@
         </div>
     </div>
 
-    {# 主体 #}
+    <!-- 主体 -->
     <div class="container">
         <div class="row">
             <div class="col-6 col-lg-12">
@@ -161,8 +148,7 @@
         </div>
     </div>
 
-
-    {# 底栏 #}
+    <!-- 底栏 -->
     <footer class="footinfo">
         {% block footer %}
         <div style="text-align: center">
@@ -190,7 +176,6 @@
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'starlight/starlight.js' %}"></script>
     <script src="{% static 'js/bootsnav.js' %}"></script>
-
 
     <script>
         $('[data-toggle="tooltip"]').tooltip();// Tooltip

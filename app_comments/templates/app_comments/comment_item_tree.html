@@ -19,7 +19,7 @@
                     {% endwith %}
                 </span>
                 &nbsp;&nbsp;&nbsp;On&nbsp;&nbsp;
-                <em>{{ comment_item.created|naturaltime }}</em>&nbsp;&nbsp;
+                <span>{{ comment_item.created_time|naturaltime }}</span>&nbsp;&nbsp;
                 <a class="text-info" rel="nofollow" href="javascript:void(0)" 
                     onclick="do_reply({{ comment_item.pk }}, '{{ comment_item.author.username }}')">
                     回复

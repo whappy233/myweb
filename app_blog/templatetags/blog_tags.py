@@ -5,7 +5,7 @@ from django import template
 from django.db.models import Count, Q
 from django.utils.safestring import mark_safe  # 标记为安全的html
 from django.template.defaultfilters import stringfilter
-from ..models import Article
+from ..models import Article, Category
 from myweb.utils import cache, get_current_site
 from loguru import logger
 
@@ -47,6 +47,17 @@ def istype(obj, typename):
     except:
         res = False
     return res
+
+
+# 博客分类层级
+@register.inclusion_tag('app_blog/include_tag/blog_category.html')
+def blog_category_menu():
+    '''博客分类层级'''
+    all_categorys = Category.objects.all()
+    top_categorys = all_categorys.filter(parent_category=None)
+    return {'all_categorys': all_categorys,
+            'top_categorys': top_categorys}
+
 
 
 # 最多评论 cache
