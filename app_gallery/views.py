@@ -24,8 +24,7 @@ class GalleryListView(ListView):
 @method_decorator(login_required, name='dispatch')  # dispatch 表示所有请求，因为所有请求都先经过dispatch
 class GalleryDetail(DetailView):
     model = Gallery
-    # template_name = 'app_gallery/gallery_detail.html'  # 使用自定义模板渲染
-    template_name = 'app_gallery/gallery_detail_new.html'  # 使用自定义模板渲染
+    template_name = 'app_gallery/gallery_detail.html'  # 使用自定义模板渲染
     def get_context_data(self, **kwargs):
 
         context = super().get_context_data(**kwargs)

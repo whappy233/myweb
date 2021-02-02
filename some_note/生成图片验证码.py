@@ -13,7 +13,7 @@ class Picture(object):
         # 创建Draw对象:
         draw = ImageDraw.Draw(im)
         # 创建Font对象:
-        font = ImageFont.truetype('/Users/tdesmtfa09/myweb/static/font/MONACO.TTF', 40)
+        font = ImageFont.truetype('/Users/tdesmtfa09/myweb/static/fonts/MONACO.TTF', 40)
 
         for i in range(0, 100):
             xy = (random.randrange(0, self.width), random.randrange(0, self.height))

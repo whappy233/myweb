@@ -1,58 +1,8 @@
-/* ==============================================================
-
-Template name : Bootsnav - Multi Purpose Header
-Categorie : Bootstrap Menu in CSS
-Author : adamnurdin01
-Version : v1.0.0
-Created : 02 Juni  2016
-Last update : 02 Juni  2016
-
-============================================================== */
-
 /*
 General
 =========================== */
-.section{
-    padding: 70px 0;
-    position: relative;
-}
-
-.section a{
-    color: #12c064;
-}
-
 .gray{
     background-color: #f9f9f9;
-}
-
-.section .heading{
-    text-align: center;
-    position: relative;
-    font-size: 16px;
-    margin-bottom: 70px;
-    letter-spacing: 1px;
-}
-
-.section .heading .title{
-    position: relative;
-    letter-spacing: 0;
-    font-weight: 600;
-    font-family: 'Microsoft YaHei';
-}
-
-.section .heading .title strong{
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.section .heading:before{
-    content: "";
-    position: absolute;
-    bottom: -30px;
-    left: 50%;
-    margin-left: -50px;
-    width: 100px;
-    border-bottom: solid 1px #12c064;
 }
 
 .test-height{
@@ -61,22 +11,7 @@ General
 
 .pageheader{
     padding: 70px 0;
-    background-image: url(../images/bg/brick-wall-dark.png);
-    background-color: #12c064;
-}
-
-.pageheader.fixed-demo{
-    padding-top: 120px;
-}
-
-/* 背景色 */
-.pageheader.fixed-demo.dark{
-   background-color: rgb(100, 100, 100) !important;
-}
-
-.pageheader.fixed-demo.white{
-    background-image: url(../images/bg/home2.jpg);
-   background-color: #fff !important;
+    background-image: url('/static/img/mountains_light_sun_sky_clouds_114136_2560x1080.jpg');
 }
 
 .pageheader .title{
@@ -92,15 +27,6 @@ General
     font-family: "Microsoft YaHei"
 }
 
-.pageheader.fixed-demo.white .title{
-    color: #3f3f3f !important;
-    text-shadow: 3px 3px 0px rgba(255,255,255,1);
-}
-
-.pageheader.fixed-demo.white p{
-    color: #6f6f6f;
-}
-
 hr{
     border: solid 2px #efefef;
     margin: 60px 0 50px;
@@ -109,53 +35,6 @@ hr{
 /*
 Home
 =========================== */
-.section.home{
-    padding: 100px 0;
-    background-image: url(../images/bg/brick-wall-dark.png);
-    background-color: #12c064;
-}
-
-.section.home.dark{
-    background-image: url(../images/bg/brick-wall-dark.png);
-    background-color: #fff;
-}
-
-.section.home .heading-home{
-    text-align: center;
-    position: relative;
-    z-index: 2;
-}
-
-.section.home .heading-home .title{
-    color: white;
-    margin-bottom: 5px;
-    font-weight: 900;
-    letter-spacing: 0;
-    text-transform: capitalize;
-    text-shadow: 6px 6px 0px rgba(0,0,0,0.2);
-    color: #fff;
-}
-
-.section.home .heading-home p{
-    margin-bottom: 0;
-    font-size: 16px;
-    letter-spacing: 1px;
-    color: #f0f0f0;
-}
-
-.section.home .overlay{
-    display: block;
-    position: absolute;
-    background-color: #000;
-    opacity: 0.6;
-    filter: alpha(opacity=60);
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-}
-
 .btn-home{
     border: solid 1px #fff;
     color: #fff !important;
@@ -539,9 +418,7 @@ pre {
     white-space: pre\9; /* IE7+ */
 }
 
-.section.gray pre{
-    background-color: #fff;
-}
+
 
 pre span{
     color: #12c064;
@@ -551,20 +428,5 @@ pre span{
     .wrap-affiliates{
         text-align: left;
         margin-top: 30px;
-    }
-}
-
-@media (max-width:480px){
-    .section.home .affiliates{
-        padding-left: 15px;
-    }
-    
-    .section.home .affiliates img{
-        display: block;
-        position: relative;
-        width: 100%;
-        top: 0;
-        left: 0;
-        margin-bottom: 15px;
     }
 }

@@ -1,9 +1,18 @@
 from django.db import models
+from django.db.models import Count
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFit
 from django.urls import reverse
 from django.utils.text import slugify
+from random import randint
 
+
+class PhotoManager(models.Manager):
+    def get_random_photo(self):
+        '''随机获取一张图片'''
+        count = self.aggregate(count=Count('id'))['count']
+        random_index = randint(0, count - 1)
+        return self.all()[random_index]
 
 
 # 相册
@@ -47,6 +56,8 @@ class Photo(models.Model):
     alt = models.CharField(max_length=255, default='', blank=True, verbose_name='描述')
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建日期')
     is_delete = models.BooleanField(default=False)
+
+    objects = PhotoManager()  # 自定义的管理器应在默认管理器的后面
 
     class Meta:
         verbose_name='相片'

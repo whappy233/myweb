@@ -6,7 +6,6 @@
 }
 
 body {
-	font-family: 'Roboto Mono', monospace;
 	font-size: 14px;
 	font-weight: 500;
 	color: #82888a;
@@ -81,7 +80,7 @@ main {
 
 .content--side {
 	position: relative;
-	z-index: 100;
+	z-index: 90;
 	width: 15vw;
 	min-width: 130px;
 	max-height: 100vh;
@@ -138,7 +137,7 @@ main {
 /* Header */
 .codrops-header {
 	position: relative;
-	z-index: 100;
+	z-index: 90;
 	display: flex;
 	align-items: center;
 	width: 100%;
@@ -198,7 +197,7 @@ main {
 	justify-content: space-between;
 	align-items: center;
 	height: 2.75em;
-	margin: 0 0 0 2.25em;
+	/* margin: 0 0 0 2.25em; */
 	text-align: center;
 	white-space: nowrap;
 	background: #1f2125;
@@ -339,6 +338,39 @@ main {
 .grid__img {
 	width: 100%;
 }
+
+
+.grid__item .img-description {
+    display: block;
+    background: rgba(0,0,0,.4);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    -webkit-transition: opacity .4s ease-in-out,-webkit-filter .4s ease-in-out;
+    -moz-transition: opacity .4s ease-in-out,-moz-filter .4s ease-in-out;
+    -ms-transition: opacity .4s ease-in-out,-ms-filter .4s ease-in-out;
+    -o-transition: opacity .4s ease-in-out,-o-filter .4s ease-in-out;
+    transition: opacity .4s ease-in-out,filter .4s ease-in-out;
+    text-align: center;
+    font-size: 14px;
+    will-change: opacity,filter,-webkit-filter,-moz-filter,-ms-filter,-o-filter;
+    color: #fff
+}
+
+.grid__item .img-description:hover {
+    opacity: 1;
+}
+
+.grid__item .img-description:before {
+    content: '';
+	height: 100%;
+    /* display: inline-block; */
+    /* vertical-align: middle;	 */
+}
+
 
 .grid__deco {
 	position: absolute;

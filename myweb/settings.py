@@ -41,7 +41,6 @@ INSTALLED_APPS = [
 
     'app_user.apps.AppUserConfig',
     'app_blog.apps.AppBlogConfig',
-    'app_sheet.apps.AppSheetConfig',
     'app_gallery.apps.AppGalleryConfig',
     'app_admin.apps.AppAdminConfig',
     'app_common.apps.AppCommonConfig',
