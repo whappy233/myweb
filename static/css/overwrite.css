@@ -1,90 +1,9 @@
-html,body {
-    width:100%;
-    height: auto;
-    margin:0;
-    padding:0;
-    overflow-x: hidden;
-}
-
-body {
-    font-family: 'Open Sans', sans-serif;
-    position: relative;
-	font-size:14px;
-	line-height:24px;
-	color:#6f6f6f;
-}
-
-a{
-    color: #6f6f6f;
-}
-
-a,
-a:active,
-a:focus,
-a:hover{
-	outline:none;
-	-webkit-transition: all 0.3s ease-in-out;
-	-moz-transition: all 0.3s ease-in-out;
-	-o-transition: all 0.3s ease-in-out;
-	-ms-transition: all 0.3s ease-in-out;
-	transition: all 0.3s ease-in-out;
-}
-
-a:hover{
-	text-decoration:underline;
-}
-
-h1, h2, h3, h4, h5, h6{
-	color:#3f3f3f;
-	margin:0 0 15px 0;
-    letter-spacing: 1px;
-    font-weight: bold;
-}
-
-h1{
-	font-size:48px;
-	line-height:52px;
-}
-
-h2{
-	font-size:36px;
-	line-height:48px;
-}
-
-h3{
-	font-size:30px;
-	line-height:36px;
-}
-
-h4{
-	font-size:24px;
-	line-height:30px;
-}
-
-h5{
-	font-size:18px;
-	line-height:24px;
-}
-
-h6{
-	font-size:14px;
-	line-height:18px;
-}
-
-p{
-	margin-bottom:20px;
-}
-
-.wrapper{
-    min-height: 800px;
-}
-
 /*
 Navbar
 =========================== */
 /* Navbar Atribute ------*/
 .attr-nav > ul > li > a{
-    padding: 18px 15px;
+    padding: 20px 15px;
 }
 
 ul.cart-list > li.total > .btn{
@@ -181,7 +100,7 @@ ul.cart-list > li.total > .btn{
     }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1023px) {
     /* Navbar General ------*/
     nav.navbar .navbar-brand{
         margin-top: 0;
@@ -368,7 +287,7 @@ nav.navbar-inverse.navbar-full .navbar-toggle{
         color: #3f3f3f;
     }
 }
-@media (max-width: 992px)  {
+@media (max-width: 1023px)  {
     nav.navbar.navbar-inverse .navbar-toggle{
         color: #eee;
         background-color: #222 !important;

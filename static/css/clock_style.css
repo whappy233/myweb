@@ -76,3 +76,9 @@
     font-size: 40px;
     vertical-align: top;
 }
+
+@media (max-width: 1000px) {
+    .clock {
+        display: none;
+    }
+}

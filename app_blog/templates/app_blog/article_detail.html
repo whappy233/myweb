@@ -1,49 +1,125 @@
 {# 文章详情 #}
+
+
 {% extends 'app_blog/base_blog.html' %}
 {% load static %}
 {% load blog_tags %}
 
+<!-- HTML Title -->
+{% block title %}{{ article.title }}{% endblock title %}
 
-{% block title %}
-{{ article.title }}
-{% endblock title %}
+
+<!-- Start Home -->
+{% block home %}
+<!-- 文章标题 -->
+<h1 class="title post_title"> {{ article.title }}</h1>
+<!-- Meta 信息 -->
+<div class="article-meta">
+    <!-- 发布时间 -->
+    <span class="item article-meta-time">
+        <time class="time" data-toggle="tooltip" data-placement="bottom" title="发布时间: {{ article.pub_time | date:'Y-m-j H:i' }}">
+            <i class="glyphicon glyphicon-time"></i>
+            {{ article.pub_time | date:"Y-m-j H:i" }}
+        </time>
+    </span>
+    <!-- 作者 -->
+    <span class="item article-meta-source" data-toggle="tooltip" data-placement="bottom" title="作者: {{ article.author }}">
+        <i class="glyphicon glyphicon-user"></i>
+        <a href="{% url 'app_blog:article_list_by_author' article.author %}">{{ article.author }}</a>
+    </span>
+    <!-- 分类 -->
+    <span class="item article-meta-category" data-toggle="tooltip" data-placement="bottom" title="分类: {{ article.category }}">
+        <i class="glyphicon glyphicon-list"></i>
+        <a href="{% url 'app_blog:category_detail' article.category.slug %}" title="">{{ article.category }}</a>
+    </span>
+    <!-- 标签 -->
+    {% with article.tags.all as tags%}
+    {% if tags %}
+    <span class="item article-meta-views" data-toggle="tooltip" data-placement="bottom" title="标签">
+        <i class="glyphicon glyphicon-tag"></i>
+        {% for tag in tags %}
+        <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">
+            {{ tag.name }}
+        </a>
+        {% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </span>
+    {% endif %}
+    {% endwith %}
+    <!-- 浏览量 -->
+    <span class="item article-meta-views" data-toggle="tooltip" data-placement="bottom" title="{{ article.views }} 人看过">
+        <i class="glyphicon glyphicon-eye-open"></i>
+        {{ article.views }}
+    </span>
+    <!-- 评论数 -->
+    <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="{{ article.comments.count }} 条评论">
+        <i class="glyphicon glyphicon-comment"></i>
+        {{ article.comments.count }}
+    </span>
+    <!-- 点赞数 -->
+    <span class="item article-meta-views" data-toggle="tooltip" data-placement="bottom" title="{{ article.users_like.count }} 点赞">
+        <i class="glyphicon glyphicon-heart"></i> 
+        {{ article.users_like.count }}
+    </span>
+    <!-- superuser -->
+    {% if request.user == article.author or request.user.is_superuser %}
+
+    <a class="comment" href="{% url 'app_admin:update_article' article.id article.slug %}">
+        <i class="glyphicon glyphicon-pencil"></i>修改</a>
+    <a class="comment" href="{{ article.get_admin_url }}">
+        <i class="glyphicon glyphicon-pencil"></i>admin中编辑</a>
+    {% endif %}
+
+
+
+
+</div>
+{% endblock home %}
+
 
 {% block blog_content_main %}
-{% load_breadcrumb article %}
-<h1> {{ article.title }} </h1>
-<p class='date'>
-    本条目发布于 {{ article.pub_time | date:"Y-m-j" }} 浏览{{ article.views }}次。
-    作者是 : <a href="{% url 'app_blog:article_list_by_author' article.author %}"> {{ article.author }}</a><br>
-    {% with article.tags.all as tages %}
-    {% if tages %}
-    <span class='tags'>
-        标签:
-        {% for tag in tages %}
-        <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
-        {% if not forloop.last %} , {% endif %}
-        {% endfor %}
-    </span><br>
-    {% endif %}
-    {% endwith %}
-    {% with total_likes=article.users_like.count users_like=article.users_like.all %}
-    <a href="#" data-id="{{ article.id }}" data-action="{% if request.user in users_like %}un{% endif %}like" class="like">
-        <span id="count">👍 {{ total_likes }}</span>
-    </a>
-    {% endwith %}
-    </br>
-    {% if request.user == article.author or request.user.is_superuser %}
-    <a href="{% url 'app_admin:update_article' article.id article.slug %}">修改✎</a>
-    <a href="{{ article.get_admin_url }}">admin中编辑</a>
-    {% endif %}
-</p>
 
-{% comment %} {{ article.body| linebreaks }} {% endcomment %}
-{% comment %} {{ article.body|markdown}}{% endcomment %}
+<!-- 面包屑导航 -->
+{% load_breadcrumb article %}
+
+<!-- 文章主体 -->
+<article class="article-content">
 {{ article.body|custom_markdown}}
+</article>
+
+<!-- 文章结尾 -->
+<div class="article-footer">
+    <span class="inner">未经允许不得转载</span>
+</div>
+
+<!-- 推荐列表 -->
+<div class="relates">
+    <div class="title"><h3>相关推荐</h3></div>
+    {% similar_articles article %}
+</div>
+
 
 <p><a href="{% url 'app_blog:article_share' article.id %}"> 分享文章 </a></p>
 
 
+<div class="title" id="comment">
+    <h3>评论 <small>抢沙发</small></h3>
+</div>
+
+<!-- 评论表单 -->
+{% if article.comment_status == "o" %}
+<div id='respond'>
+    {% if request.user.is_authenticated %}
+        {% include "app_comments/post_comment.html" with obj=article form=comment_form %}
+    {% else %}
+    <p>您还没有登录，请您登<a href="{% url 'app_user:login' %}?next={{ article.get_absolute_url }}">登录</a>后发表评论。</p>
+    {% endif %}
+</div>
+{% else %}
+文章关闭了评论
+{% endif %}
+
+<!-- 评论列表 -->
 <div>
     {# with 标签可以将某个值赋予到新的变量中,对于避免数据库访问或者多次访问开销交的的方法十分有用 #}
     {% with comments.count as total_comments %}
@@ -62,35 +138,24 @@
 </div>
 
 
-{% if article.comment_status == "o" %}
-<h4 id="comments">添加评论 </h4>
-<div id='respond'>
-    {% if request.user.is_authenticated %}
-        {% include "app_comments/post_comment.html" with obj=article form=comment_form %}
-    {% else %}
-    <p>您还没有登录，请您登<a href="{% url 'app_user:login' %}?next={{ article.get_absolute_url }}">登录</a>后发表评论。</p>
-    {% endif %}
-</div>
-{% else %}
-文章关闭了评论
-{% endif %}
-
 <button id="btn1">点击发送ajax</button>
 <p id="pp1"></p>
 
 {% endblock blog_content_main %}
 
 
-{% block javascript %}
+{% block script %}
 <script src="{% static 'js/jquery.cookie_1.4.1.min.js' %}"></script>
 <script>
 
+    // 回复评论
     function do_reply(parentid, username) {
         $('#id_parent_comment').val(parentid);
         $('#cancel_comment').show();
         $("#commentform").appendTo($("#comment-content-" + parentid));
     }
-    
+
+    // 取消回复
     function cancel_reply() {
         $('#id_parent_comment').val('');
         $('#comments').text('添加评论');
@@ -98,6 +163,7 @@
         $("#commentform").appendTo($("#respond"));
     }
 
+    // 删除评论
     function delete_comment(comment_id, obj_id){
         $.ajax({
             url: '{% url "app_comments:ajax_delete_comment" %}',
@@ -117,8 +183,6 @@
         });
     }
 
-
-
     // 按钮点击异步请求
     $('#btn1').on('click', function () {
         $.ajax({
@@ -134,11 +198,13 @@
         });
     });
 
+    // 获取csrftoken
     var csrftoken = $.cookie('csrftoken');
     function csrfSafeMethod(method) {
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
 
+    // 点赞
     $(document).ready(function () {
         $('a.like').click(function (e) {
             e.preventDefault();
@@ -181,4 +247,4 @@
     });
 
 </script>
-{% endblock javascript %}
+{% endblock script %}

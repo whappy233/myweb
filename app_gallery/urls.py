@@ -10,4 +10,5 @@ urlpatterns = [
     path('', views.GalleryListView.as_view(), name='gallery_list'),   # 使用类视图
     # path('detail/<int:pk>/<str:slug>/', views.GalleryDetail.as_view(), name='gallery_detail'),
     re_path(r'^detail/(?P<pk>\d+)/(?P<slug>[-\w]+)/$', views.GalleryDetail.as_view(), name='gallery_detail'),
+    re_path(r'^get_random_background/(?P<size>\(\d+, \d+\))/(?P<box>\(\d+,\d+,\d+,\d+\))/(?P<r>\d+)$', views.get_random_background, name='get_random_background'),
 ]

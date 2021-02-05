@@ -1,49 +1,370 @@
-{% extends 'base.html' %}
+{# Blog base #}
+
+
 {% load static %}
 {% load blog_tags %}
+{% load gallery_tags %}
 {% load cache %}
 
+<!doctype html>
+<html lang="zh-CN">
 
-{% block content %}
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}浩瀚星海{% endblock title %}</title>
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <link rel="apple-touch-icon-precomposed" href="{% static 'app_blog/new/images/icon/icon.png' %}">
 
-<div class="content-main">
-    {% block blog_content_main %}
-    {% endblock blog_content_main %}
-</div>
-<div class="content-sidebar">
+    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/new/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/new/css/nprogress.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/new/css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/new/css/font-awesome.min.css' %}">
 
-    {% block blog_content_sidebar %}
+    <link href="{% static 'css/bootsnav.css' %}" rel="stylesheet">
+    <link href="{% static 'css/overwrite.css' %}" rel="stylesheet">
+    <link href="{% static 'css/skins/color.css' %}" rel="stylesheet">
 
-    <div style="padding: 50px;">
-        {% if form %}
-        <div style="margin-bottom: 2.5rem;">
-            <form method="get" action="" class="form-inline">
-                <input id="search" type="text" name="q" value="{{keyword|default_if_none:''}}" placeholder="搜索">
-                <input type="submit" value="搜索"/>
-            </form>
+    <!-- Clock -->
+    <link href="{% static 'css/jquery.flipbox.css' %}" rel="stylesheet">
+    <link href="{% static 'css/clock_style.css' %}" rel="stylesheet">
+
+    <script src="{% static 'app_blog/new/js/jquery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'app_blog/new/js/nprogress.js' %}"></script>
+    <script src="{% static 'app_blog/new/js/jquery.lazyload.min.js' %}"></script>
+
+    {% block css_style %}
+    {% endblock css_style %}
+</head>
+
+<body class="user-select">
+
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-default navbar-fixed white no-background bootsnav">
+
+        <!-- 顶部搜索-->
+        <div class="top-search">
+            <div class="container">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Search">
+                    <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+                </div>
+            </div>
         </div>
-        {% endif %}
-    
-        <p><a href="{% url 'app_blog:article_feed' %}">订阅博客</a></p>
-        <p><a href="{% url 'app_blog:refresh' %}">刷新缓存</a></p>
 
-        <!-- 相似文章 -->
-        {% similar_articles article %}
-        <!-- 最近更新 -->
-        {% show_latest_articles 5 %}
-        <!-- 最多评论文章 -->
-        {% most_commented_articles %}
-        {% cache 500 monthly_archive %}
-        <!-- 归档 -->
-        {% article_archives %}
-        {% endcache %}
+        <div class="container">
+            <!-- 属性导航 -->
+            <div class="attr-nav">
+                <ul>
+                    {% if request.user.is_authenticated %} {# 当用户被验证 #}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="{{request.user.profile.photo.url}}"
+                                style="width: 2rem;height: 2rem; border-radius:1rem">
+                            <span class="badge">3</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'app_user:profile' %}">修改信息</a></li>
+                            <li><a href="{% url 'app_user:change_pw' %}">修改密码</a></li>
+                            {% if request.user.is_superuser %}
+                            <li><a href="{% url 'app_admin:index' %}">ADMIN</a></li>
+                            <li><a href="/xadmin">XADMIN</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'app_user:logout' %}">退出登陆</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'app_admin:create_blog' %}">新建文章</a></li>
+                    {% else %}
+                    <li><a href="{% url 'app_user:login' %}">登陆</a></li>
+                    <li><a href="{% url 'app_user:register' %}">注册</a></li>
+                    {% endif %}
+                    <!-- 搜索按钮 -->
+                    <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
+                    <!-- more info -->
+                    <li class="side-menu"><a href="#"><i class="fa fa-bars"></i></a></li>
+                </ul>
+            </div>
 
+            <!-- logo -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="/" title="浩瀚星海 Carlos">
+                    <img src="{% static 'img/logo-white.png' %}" class="logo logo-display" alt="">
+                    <img src="{% static 'img/logo-black.png' %}" class="logo logo-scrolled" alt="">
+                </a>
+            </div>
 
+            <!-- 包括导航链接、表单和其他内容 -->
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+                    <li class="dropdown">
+                        <a href="/" class="dropdown-toggle" data-toggle="dropdown">Blog</a>
+                        <ul class="dropdown-menu">
+                            {% cache 500 monthly_archive %}
+                            {% blog_category_menu %}
+                            {% endcache %}
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'app_gallery:gallery_list' %}">Gallery</a></li>
+                    <li><a href="#">Other</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 侧边弹出栏 -->
+        <div class="side">
+            <a href="#" class="close-side"><i class="fa fa-times"></i></a>
+            <div class="widget">
+                <h6 class="title">Custom Pages</h6>
+                <ul class="link">
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Portfolio</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="widget">
+                <h6 class="title">Additional Links</h6>
+                <ul class="link">
+                    <li><a href="#">Retina Homepage</a></li>
+                    <li><a href="#">New Page Examples</a></li>
+                    <li><a href="#">Parallax Sections</a></li>
+                    <li><a href="#">Shortcode Central</a></li>
+                    <li><a href="#">Ultimate Font Collection</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Start Home -->
+    <div class="pageheader fixed-demo" style="background-image: url('data:image/png;base64,{% get_random_background 0.5 %}');">
+        <div class="container">
+            <div style="float: left; max-width: 700px;">
+                {% block home %}
+                <h2 class="title">浩瀚星海</h2>
+                {% endblock home %}
+            </div>
+
+            <div class="clock" style="float: right;">
+                <div class="time-box">
+                    <div class="time-side">0</div>
+                    <div class="time-side">1</div>
+                    <div class="time-side">2</div>
+                    <div class="time-side">3</div>
+                    <div class="time-side">4</div>
+                    <div class="time-side">5</div>
+                    <div class="time-side">6</div>
+                    <div class="time-side">7</div>
+                    <div class="time-side">8</div>
+                    <div class="time-side">9</div>
+                </div>
+                <div class="time-box">
+                    <div class="time-side">0</div>
+                    <div class="time-side">1</div>
+                    <div class="time-side">2</div>
+                    <div class="time-side">3</div>
+                    <div class="time-side">4</div>
+                    <div class="time-side">5</div>
+                    <div class="time-side">6</div>
+                    <div class="time-side">7</div>
+                    <div class="time-side">8</div>
+                    <div class="time-side">9</div>
+                </div>
+                <span>:</span>
+                <div class="time-box">
+                    <div class="time-side">0</div>
+                    <div class="time-side">1</div>
+                    <div class="time-side">2</div>
+                    <div class="time-side">3</div>
+                    <div class="time-side">4</div>
+                    <div class="time-side">5</div>
+                    <div class="time-side">6</div>
+                    <div class="time-side">7</div>
+                    <div class="time-side">8</div>
+                    <div class="time-side">9</div>
+                </div>
+                <div class="time-box">
+                    <div class="time-side">0</div>
+                    <div class="time-side">1</div>
+                    <div class="time-side">2</div>
+                    <div class="time-side">3</div>
+                    <div class="time-side">4</div>
+                    <div class="time-side">5</div>
+                    <div class="time-side">6</div>
+                    <div class="time-side">7</div>
+                    <div class="time-side">8</div>
+                    <div class="time-side">9</div>
+                </div>
+                <span>:</span>
+                <div class="time-box">
+                    <div class="time-side">0</div>
+                    <div class="time-side">1</div>
+                    <div class="time-side">2</div>
+                    <div class="time-side">3</div>
+                    <div class="time-side">4</div>
+                    <div class="time-side">5</div>
+                    <div class="time-side">6</div>
+                    <div class="time-side">7</div>
+                    <div class="time-side">8</div>
+                    <div class="time-side">9</div>
+                </div>
+                <div class="time-box">
+                    <div class="time-side">0</div>
+                    <div class="time-side">1</div>
+                    <div class="time-side">2</div>
+                    <div class="time-side">3</div>
+                    <div class="time-side">4</div>
+                    <div class="time-side">5</div>
+                    <div class="time-side">6</div>
+                    <div class="time-side">7</div>
+                    <div class="time-side">8</div>
+                    <div class="time-side">9</div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    {% endblock blog_content_sidebar %}
+    <!-- 主体 -->
+    <section class="container">
+        <div class="content-wrap">
+            <div class="content">
+                {% block blog_content_main %}
+                {% endblock blog_content_main %}
+            </div>
+        </div>
 
-</div>
+        <aside class="sidebar">
+            {% block blog_content_sidebar %}
+            <div class="fixed">
+                <div class="widget widget_search">
+                    <form class="navbar-form" action="/Search" method="post">
+                        <div class="input-group">
+                            <input type="text" name="keyword" class="form-control" size="35" placeholder="请输入关键字"
+                                maxlength="15" autocomplete="off">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                <div class="widget widget_sentence">
+                    <h3>每日一句</h3>
+                    <div class="widget-sentence-content">
+                        <h4>2016年01月05日星期二</h4>
+                        <p>Do not let what you cannot do interfere with what you can do.<br />
+                            别让你不能做的事妨碍到你能做的事。（John Wooden）</p>
+                    </div>
+                </div>
+            </div>
+            <div class="widget widget_hot">
+                <h3>热门文章</h3>
+                <ul>
+                    <li><a href=""><span class="thumbnail"><img class="thumb" data-original="images/excerpt.jpg"
+                                    src="images/excerpt.jpg" alt=""></span><span
+                                class="text">php如何判断一个日期的格式是否正确</span><span class="muted"><i
+                                    class="glyphicon glyphicon-time"></i> 2016-1-4 </span><span class="muted"><i
+                                    class="glyphicon glyphicon-eye-open"></i> 120</span></a></li>
+                    <li><a href=""><span class="thumbnail"><img class="thumb" data-original="images/excerpt.jpg"
+                                    src="images/excerpt.jpg" alt=""></span><span
+                                class="text">php如何判断一个日期的格式是否正确</span><span class="muted"><i
+                                    class="glyphicon glyphicon-time"></i> 2016-1-4 </span><span class="muted"><i
+                                    class="glyphicon glyphicon-eye-open"></i> 120</span></a></li>
+                    <li><a href=""><span class="thumbnail"><img class="thumb" data-original="images/excerpt.jpg"
+                                    src="images/excerpt.jpg" alt=""></span><span
+                                class="text">php如何判断一个日期的格式是否正确</span><span class="muted"><i
+                                    class="glyphicon glyphicon-time"></i> 2016-1-4 </span><span class="muted"><i
+                                    class="glyphicon glyphicon-eye-open"></i> 120</span></a></li>
+                    <li><a href=""><span class="thumbnail"><img class="thumb" data-original="images/excerpt.jpg"
+                                    src="images/excerpt.jpg" alt=""></span><span
+                                class="text">php如何判断一个日期的格式是否正确</span><span class="muted"><i
+                                    class="glyphicon glyphicon-time"></i> 2016-1-4 </span><span class="muted"><i
+                                    class="glyphicon glyphicon-eye-open"></i> 120</span></a></li>
+                    <li><a href=""><span class="thumbnail"><img class="thumb" data-original="images/excerpt.jpg"
+                                    src="images/excerpt.jpg" alt=""></span><span
+                                class="text">php如何判断一个日期的格式是否正确</span><span class="muted"><i
+                                    class="glyphicon glyphicon-time"></i> 2016-1-4 </span><span class="muted"><i
+                                    class="glyphicon glyphicon-eye-open"></i> 120</span></a></li>
+                </ul>
+            </div>
+            {% endblock blog_content_sidebar %}
+        </aside>
+    </section>
 
-{% endblock content %}
+    <!-- 底栏 -->
+    <footer class="footinfo">
+        {% block footer %}
+        <div style="text-align: center">
+            Copyright©&nbsp;2021&nbsp;
+            <a href="/" target="blank">浩瀚星海</a>
+            &nbsp;|&nbsp;
+            <a href="/sitemap.xml" title="SiteMap" target="_blank">SiteMap</a>
+            &nbsp;|&nbsp;
+            <a href="{% url 'app_blog:article_feed' %}" title="RSS Feed" target="_blank">订阅博客</a>
+        </div>
+        <div style="text-align: center">
+            Powered by
+            <a href="https://www.djangoproject.com/" rel="nofollow" target="_blank">Django</a>
+            &nbsp;|&nbsp;
+            本页面加载耗时:<!!LOAD_TIMES!!>s
+        </div>
+        {% endblock footer %}
+    </footer>
 
+
+    <script src="{% static 'app_blog/new/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'app_blog/new/js/jquery.ias.js' %}"></script>
+    <script src="{% static 'app_blog/new/js/scripts.js' %}"></script>
+
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootsnav.js' %}"></script>
+    <!-- Clock -->
+    <script src="{% static 'js/jquery.flipbox.js' %}"></script>
+    <!-- body 背景星星 -->
+    <script src="{% static 'js/starlight.js' %}"></script>
+    <!-- 背景图片鼠标移动 -->
+    <script src="{% static 'js/ios-parallax.js' %}"></script>
+
+
+    <script>
+        // Start Home ios-parallax背景图片鼠标移动
+        $('.pageheader').iosParallax({
+            movementFactor: 50, // 背景移动的速度
+            dampenFactor: 50  // 多大程度地抑制运动（越大速度越慢）
+        });
+
+        // Clock
+        $('.clock .time-box').flipbox({
+            vertical: true
+        });
+        function updateClock() {
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var seconds = now.getSeconds();
+            $('.clock .time-box:eq(0)').flipbox('jump', Math.floor(hours / 10));
+            $('.clock .time-box:eq(1)').flipbox('jump', hours % 10);
+            $('.clock .time-box:eq(2)').flipbox('jump', Math.floor(minutes / 10));
+            $('.clock .time-box:eq(3)').flipbox('jump', minutes % 10);
+            $('.clock .time-box:eq(4)').flipbox('jump', Math.floor(seconds / 10));
+            $('.clock .time-box:eq(5)').flipbox('jump', seconds % 10);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Tooltip
+        $('[data-toggle="tooltip"]').tooltip();  
+    </script>
+
+    {% block script %}
+    {% endblock script %}
+
+</body>
+
+</html>

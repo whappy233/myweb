@@ -101,7 +101,7 @@ class IndexView(ArticleListView):
 
 # 某个标签下的文章
 class TagDetailView(ArticleListView):
-    page_type = '分类标签归档'
+    page_type = '标签归档'
 
     def get_queryset_data(self):
         tag_slug = self.kwargs.get('tag_slug')
@@ -119,13 +119,13 @@ class TagDetailView(ArticleListView):
 
     def get_context_data(self, **kwargs):
         context = super(TagDetailView, self).get_context_data(**kwargs)
-        context['page_type'] = AuthorDetailView.page_type
+        context['page_type'] = TagDetailView.page_type
         context['tag_name'] = self.name
         return context
 
 # 某个作者下的文章
 class AuthorDetailView(ArticleListView):
-    page_type = '作者文章归档'
+    page_type = '作者归档'
 
     def get_queryset_cache_key(self):
         author_name = self.kwargs['author_name']
@@ -146,7 +146,7 @@ class AuthorDetailView(ArticleListView):
 # 某个分类下的文章
 class CategoryDetailView(ArticleListView):
 
-    page_type = "分类目录归档"
+    page_type = "分类归档"
 
     def get_queryset_data(self):
         slug = self.kwargs['category_slug']
