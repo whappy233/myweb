@@ -1,39 +1,49 @@
+{# Blog base #}
+
+
 {% load static %}
 {% load blog_tags %}
 {% load gallery_tags %}
 {% load cache %}
 
-
-<!DOCTYPE html>
-<html lang="zh">
+<!doctype html>
+<html lang="zh-CN">
 
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{% endblock title %}</title>
-    <link href="{% static 'img/favicon.ico' %}" rel="shortcut icon" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}浩瀚星海{% endblock title %}</title>
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <link rel="apple-touch-icon-precomposed" href="{% static 'app_blog/new/images/icon/icon.png' %}">
 
-    <link href="{% static 'css/base.css' %}" rel="stylesheet">
-
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'fonts/FontAwesome/font-awesome.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/new/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/new/css/nprogress.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/new/css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/new/css/font-awesome.min.css' %}">
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/new/css/default.css' %}">
 
     <link href="{% static 'css/bootsnav.css' %}" rel="stylesheet">
     <link href="{% static 'css/overwrite.css' %}" rel="stylesheet">
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
     <link href="{% static 'css/skins/color.css' %}" rel="stylesheet">
 
     <!-- Clock -->
     <link href="{% static 'css/jquery.flipbox.css' %}" rel="stylesheet">
     <link href="{% static 'css/clock_style.css' %}" rel="stylesheet">
 
-    {% block css_file %}
-    {% endblock css_file %}
+    <script src="{% static 'app_blog/new/js/jquery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'app_blog/new/js/nprogress.js' %}"></script>
+    <script src="{% static 'app_blog/new/js/jquery.lazyload.min.js' %}"></script>
 
+    {% block css_style %}
+    {% endblock css_style %}
 </head>
-{% block css_style %}
-{% endblock css_style %}
-<!-- <body class="starlight"> -->
-<body>
+
+<body class="starlight">
+<!-- <body class="user-select"> -->
+
     <!-- 导航栏 -->
     <nav class="navbar navbar-default navbar-fixed white no-background bootsnav">
 
@@ -136,11 +146,11 @@
     </nav>
 
     <!-- Start Home -->
-    {% url 'app_gallery:get_random_background' 0 0 as the_url %}
-    <!-- <div class="pageheader" style="background-image: url('{{the_url}}');"> -->
+    {% url 'app_gallery:get_random_background' 1920 1080 as the_url %}
+    <!-- <div class="pageheader fixed-demo" style="background-image: url('{{the_url}}');"> -->
     <div class="pageheader fixed-demo" style="background-image: url('{% static 'app_blog/new/images/pic.jpg' %}');">
         <div class="container">
-            <div style="float: left; max-width: 500px;">
+            <div style="float: left; max-width: 700px;">
                 {% block home %}
                 <h2 class="title">浩瀚星海</h2>
                 {% endblock home %}
@@ -227,14 +237,77 @@
     </div>
 
     <!-- 主体 -->
-    <div class="container">
-        <!-- <div class="row"> -->
-        <!-- {{Carlos}}{# 全局tag #} -->
-        {% block content %}
-        {% endblock content %}
-        <!-- </div> -->
-        <div id="rocket" class="move" title="点击返回顶部"></div>
-    </div>
+    <section class="container">
+        <div class="content-wrap">
+            <div class="content">
+                {% block blog_content_main %}
+                {% endblock blog_content_main %}
+            </div>
+        </div>
+
+        <!-- 侧边 -->
+        <aside class="sidebar">
+            {% block blog_content_sidebar %}
+            <div class="fixed">
+                <div class="widget widget_search">
+                    <form class="navbar-form" action="/Search" method="post">
+                        <div class="input-group">
+                            <input type="text" name="keyword" class="form-control" size="35" placeholder="请输入关键字"
+                                maxlength="15" autocomplete="off">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                <div class="widget widget_sentence">
+                    <h3>每日一句</h3>
+                    <div class="widget-sentence-content">
+                        <h4>2021年02月05日星期五</h4>
+                        <p>Do not let what you cannot do interfere with what you can do.<br />
+                            别让你不能做的事妨碍到你能做的事。（John Wooden）</p>
+                    </div>
+                </div>
+            </div>
+            {% url 'app_gallery:get_random_background' 220 150 as the_url %}
+            <div class="widget widget_hot">
+                <h3>热门文章</h3>
+                <ul>
+                    <li>
+                        <a href="">
+                            <span class="thumbnail">
+                                <img class="thumb" data-original="{{the_url}}" src="{{the_url}}" alt="">
+                            </span>
+                            <span class="text">php如何判断一个日期的格式是否正确</span>
+                            <span class="muted"><i class="glyphicon glyphicon-time"></i> 2021-01-05-4 </span>
+                            <span class="muted"><i class="glyphicon glyphicon-eye-open"></i> 120</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <span class="thumbnail">
+                                <img class="thumb" data-original="{{the_url}}" src="{{the_url}}" alt="">
+                            </span>
+                            <span class="text">php如何判断一个日期的格式是否正确</span>
+                            <span class="muted"><i class="glyphicon glyphicon-time"></i> 2021-01-05-4 </span>
+                            <span class="muted"><i class="glyphicon glyphicon-eye-open"></i> 120</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <span class="thumbnail">
+                                <img class="thumb" data-original="{{the_url}}" src="{{the_url}}" alt="">
+                            </span>
+                            <span class="text">php如何判断一个日期的格式是否正确</span>
+                            <span class="muted"><i class="glyphicon glyphicon-time"></i> 2021-01-05-4 </span>
+                            <span class="muted"><i class="glyphicon glyphicon-eye-open"></i> 120</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            {% endblock blog_content_sidebar %}
+        </aside>
+    </section>
 
     <!-- 底栏 -->
     <footer class="footinfo">
@@ -256,89 +329,56 @@
         {% endblock footer %}
     </footer>
 
-    <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
-    <script src="{% static 'js/popper.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/bootsnav.js' %}"></script>
 
+    <script src="{% static 'app_blog/new/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'app_blog/new/js/jquery.ias.js' %}"></script>
+    <script src="{% static 'app_blog/new/js/scripts.js' %}"></script>
+
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootsnav.js' %}"></script>
     <!-- Clock -->
     <script src="{% static 'js/jquery.flipbox.js' %}"></script>
-    <!-- body 背景星星 -->
-    <script src="{% static 'js/starlight.js' %}"></script>
     <!-- 背景图片鼠标移动 -->
     <script src="{% static 'js/ios-parallax.js' %}"></script>
-
-    {% block javascript %}
-    {% endblock javascript %}
+    
+    <!-- body 背景星星 -->
+    <!-- <script src="{% static 'js/starlight.js' %}"></script> -->
+    <!-- body 背景雪花 -->
+    <!-- <script src="{% static 'app_blog/new/js/snow.js' %}"></script> -->
 
     <script>
-        $(document).ready(function () {
-
-            // Start Home ios-parallax背景图片鼠标移动
-            $('.pageheader').iosParallax({
-                movementFactor: 50, // 背景移动的速度
-                dampenFactor: 50  // 多大程度地抑制运动（越大速度越慢）
-            });
-
-            // Clock
-            $('.clock .time-box').flipbox({
-                vertical: true
-            });
-            function updateClock() {
-                var now = new Date();
-                var hours = now.getHours();
-                var minutes = now.getMinutes();
-                var seconds = now.getSeconds();
-                $('.clock .time-box:eq(0)').flipbox('jump', Math.floor(hours / 10));
-                $('.clock .time-box:eq(1)').flipbox('jump', hours % 10);
-                $('.clock .time-box:eq(2)').flipbox('jump', Math.floor(minutes / 10));
-                $('.clock .time-box:eq(3)').flipbox('jump', minutes % 10);
-                $('.clock .time-box:eq(4)').flipbox('jump', Math.floor(seconds / 10));
-                $('.clock .time-box:eq(5)').flipbox('jump', seconds % 10);
-            }
-            setInterval(updateClock, 1000);
-            updateClock();
-
-            // Tooltip
-            $('[data-toggle="tooltip"]').tooltip();  
-
-            // 滚动到顶部
-            var rocket = $('#rocket');
-            $(window).on('scroll', debounce(slideTopSet, 300));
-            function debounce(func, wait) {
-                var timeout;
-                return function () {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(func, wait);
-                };
-            };
-            function slideTopSet() {
-                var top = $(document).scrollTop();
-                if (top > 200) {
-                    rocket.addClass('show');
-                } else {
-                    rocket.removeClass('show');
-                }
-            };
-            $(document).on('click', '#rocket', function (event) {
-                rocket.addClass('move');
-                $('body, html').animate({
-                    scrollTop: 0
-                }, 800);
-            });
-            $(document).on('animationEnd', function () {
-                setTimeout(function () {
-                    rocket.removeClass('move');
-                }, 400);
-            });
-            $(document).on('webkitAnimationEnd', function () {
-                setTimeout(function () {
-                    rocket.removeClass('move');
-                }, 400);
-            });
-
+        // Start Home ios-parallax背景图片鼠标移动
+        $('.pageheader').iosParallax({
+            movementFactor: 50, // 背景移动的速度
+            dampenFactor: 50  // 多大程度地抑制运动（越大速度越慢）
         });
+
+        // Clock
+        $('.clock .time-box').flipbox({
+            vertical: true
+        });
+        function updateClock() {
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var seconds = now.getSeconds();
+            $('.clock .time-box:eq(0)').flipbox('jump', Math.floor(hours / 10));
+            $('.clock .time-box:eq(1)').flipbox('jump', hours % 10);
+            $('.clock .time-box:eq(2)').flipbox('jump', Math.floor(minutes / 10));
+            $('.clock .time-box:eq(3)').flipbox('jump', minutes % 10);
+            $('.clock .time-box:eq(4)').flipbox('jump', Math.floor(seconds / 10));
+            $('.clock .time-box:eq(5)').flipbox('jump', seconds % 10);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Tooltip
+        $('[data-toggle="tooltip"]').tooltip();  
     </script>
 
+    {% block script %}
+    {% endblock script %}
+
 </body>
+
 </html>

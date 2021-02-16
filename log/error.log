@@ -1,424 +1,591 @@
-2021-02-05 16:13:27.881 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:14:00.874 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:25:12.267 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:25:15.702 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:25:16.487 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:25:16.577 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:25:30.083 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:25:30.256 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:25:30.263 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:27:00.192 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:27:00.394 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:27:02.288 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:27:02.415 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:27:05.265 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:27:05.447 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:27:05.464 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:28:27.359 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:28:27.579 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:29:00.692 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 16:29:00.802 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:73e5bad7f491fe1dfa586b7affec0b5e
-2021-02-05 16:29:00.802 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:845432f0ec22f83feebc8ab2bba86f03
-2021-02-05 16:29:01.025 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:29:03.456 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:29:03.591 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:29:04.728 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:29:05.001 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:29:05.013 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:29:51.687 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:29:51.906 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:29:54.765 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:29:55.006 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:29:55.028 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:30:38.603 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:30:38.738 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:30:55.317 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:30:55.473 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:31:00.197 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:31:00.330 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:31:28.812 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:31:28.982 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:32:32.700 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:32:32.847 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:32:51.266 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:32:51.441 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:33:31.244 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:33:31.375 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:33:32.543 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:33:32.767 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:33:46.110 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:33:46.220 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:34:25.983 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:34:26.096 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:36:20.490 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:36:20.623 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:37:28.812 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:37:28.941 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:37:29.945 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:37:52.547 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:37:52.684 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:38:02.958 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:38:36.624 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:38:36.769 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:39:01.243 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:39:41.494 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:39:41.625 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:39:43.392 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:39:59.185 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:42:00.486 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:42:00.611 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:42:11.628 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:42:17.976 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:42:18.158 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:42:18.174 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:42:48.663 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:42:48.782 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:43:23.511 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:43:23.647 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:43:52.736 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:43:52.857 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:44:30.783 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:44:30.919 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:44:56.734 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:44:56.841 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:45:14.890 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:46:01.478 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:46:01.625 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:46:29.364 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:46:30.300 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:46:30.411 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:46:45.026 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:46:47.354 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:46:47.444 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:47:07.783 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:47:07.954 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:47:08.834 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:47:09.054 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:47:39.159 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:47:39.268 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:48:06.575 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:48:06.675 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:48:09.120 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:48:09.235 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:48:09.818 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:48:09.921 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:48:40.926 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:49:42.972 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:49:43.957 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:49:44.059 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:50:07.780 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:50:38.338 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:50:38.438 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:51:24.097 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:51:38.540 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:51:38.640 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:51:39.514 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:51:39.605 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:51:57.891 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:51:57.988 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:51:59.951 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:52:00.771 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:52:17.080 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:52:24.666 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:52:25.538 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:52:26.106 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:52:27.017 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:52:27.115 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:53:14.450 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:53:38.511 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:53:38.633 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:53:54.167 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:54:08.893 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
-2021-02-05 16:54:08.955 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:54:08.974 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 16:54:12.521 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_1
-2021-02-05 16:54:12.537 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:6c65243ee5bcf870dcd7220ec2edbb49
-2021-02-05 16:54:12.537 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:8e22f4b2219d8f1a109cc766daff8708
-2021-02-05 16:54:57.874 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
-2021-02-05 16:54:59.520 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:58:20.986 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 16:58:21.079 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:2f805e20a5659a79984421e0931d44f9
-2021-02-05 16:58:21.079 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:c76be2f6820e3fc44f46f02a75ca4c12
-2021-02-05 16:58:21.163 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 16:59:57.177 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 16:59:57.199 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 16:59:57.316 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:00:10.655 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:00:10.678 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:01:00.150 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:01:00.172 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:02:06.814 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:02:06.839 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:02:13.785 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:02:13.816 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:06:41.860 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:06:41.894 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:06:50.255 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:06:50.277 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:09:32.831 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:09:32.855 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:09:35.280 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:09:35.302 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:09:55.963 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:09:55.984 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:10:01.855 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:10:01.876 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:11:31.864 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:11:31.890 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:13:12.760 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:13:12.783 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:14:21.427 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:14:21.451 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:16:25.987 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:16:26.018 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:16:27.204 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:16:27.232 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:16:28.121 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:16:28.143 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:16:32.034 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:16:32.059 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:16:32.258 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:16:32.268 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:16:58.377 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:16:58.404 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:16:58.560 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:21:38.908 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:21:38.957 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:21:39.279 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:22:12.469 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:22:12.498 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:22:12.765 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:22:12.785 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:22:23.807 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
-2021-02-05 17:22:23.894 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:22:23.896 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:22:23.916 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:22:23.924 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:22:30.314 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:22:30.337 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:22:30.459 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:22:33.990 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:22:41.251 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
-2021-02-05 17:22:41.367 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:22:41.370 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:22:41.393 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:22:43.663 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:22:43.684 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:22:46.337 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
-2021-02-05 17:22:46.395 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:22:46.407 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:22:46.417 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:22:47.959 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_1
-2021-02-05 17:22:47.974 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:3413101631fee4007e30434e4dbdba8c
-2021-02-05 17:22:47.974 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:02d6da322fe8f5678b5b8b54b53ed280
-2021-02-05 17:22:47.981 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_1
-2021-02-05 17:23:11.955 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: AuthorDetailView_891953720_1
-2021-02-05 17:23:12.089 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:23:12.101 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:23:12.115 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:23:27.026 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
-2021-02-05 17:23:27.084 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:23:27.101 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:23:27.113 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:23:27.117 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:23:27.984 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
-2021-02-05 17:23:28.049 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:23:31.289 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
-2021-02-05 17:23:31.350 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:23:33.144 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: AuthorDetailView_891953720_1
-2021-02-05 17:23:33.217 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:25:14.381 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:25:14.411 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:25:19.650 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:25:19.673 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:26:37.022 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:26:37.044 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:26:37.165 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:26:38.192 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:26:38.222 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:26:38.334 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:26:40.165 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:26:40.186 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:26:49.011 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:26:49.033 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:27:42.689 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:27:42.713 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:27:45.319 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:27:45.341 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:27:45.417 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:27:48.282 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:27:48.307 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:27:48.455 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:27:48.488 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:28:57.286 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:28:57.315 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:28:57.516 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:28:57.523 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:32:29.168 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:32:29.192 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:32:38.973 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:32:38.995 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:32:39.074 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:32:42.007 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:32:42.030 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 17:32:42.086 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:33:24.371 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
-2021-02-05 17:33:24.432 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:33:24.435 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:33:24.452 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:33:24.462 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:57:49.256 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:57:49.260 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:57:49.261 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:57:49.263 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:57:49.270 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:57:49.278 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:57:49.693 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:58:11.754 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
-2021-02-05 17:58:11.935 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:58:11.942 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:58:11.946 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:58:11.960 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 17:58:20.795 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 17:58:20.820 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:01:04.685 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:01:09.446 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
-2021-02-05 18:01:09.655 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:01:12.085 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 18:01:12.109 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:01:12.265 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:01:14.268 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:01:26.608 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:01:26.710 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:02:34.460 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:02:38.899 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:02:38.910 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:02:47.134 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 18:02:47.156 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:02:47.345 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:04:32.679 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
-2021-02-05 18:04:32.807 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:04:32.821 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:04:32.847 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:04:32.851 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:04:34.867 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 18:04:34.891 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:04:34.965 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:04:53.512 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
-2021-02-05 18:04:53.535 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:04:53.641 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:36:14.231 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:36:14.368 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:f64cd1d24cdb697b33976ee4ecc860fa
-2021-02-05 18:36:14.368 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:e3e1b70be757ccd28027f75fbed81d47
-2021-02-05 18:36:14.465 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:36:17.361 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:36:17.405 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:37:14.147 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:37:14.266 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:517c0ba1914c1ada27b6bad4aaca9f99
-2021-02-05 18:37:14.266 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:880e16816ba2d2ef558a25d55a19323b
-2021-02-05 18:37:14.348 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:37:14.491 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
-2021-02-05 18:50:05.788 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:50:05.919 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:6c7a4281de426c06b30e239119d739ad
-2021-02-05 18:50:05.920 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:3e62996d32e912ddd917fe577628500f
-2021-02-05 18:50:06.017 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:50:11.407 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:50:11.451 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:50:56.830 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:50:56.944 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:7124349677e89b8c82638fb098d9eb0a
-2021-02-05 18:50:56.945 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:6dc101c1733ba31dd7bd11be8c1df4e2
-2021-02-05 18:50:57.032 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:51:26.682 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:51:26.776 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:992dc3e710638e05f07979c73d8b9214
-2021-02-05 18:51:26.776 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:148d717d03741f58a652c77794b1ce4c
-2021-02-05 18:51:26.853 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:52:07.862 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:52:07.956 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:357055b032970e8f17d3d09aff647a79
-2021-02-05 18:52:07.956 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:d5fc54cdffebfb7bb6826fb85d151621
-2021-02-05 18:52:08.030 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:52:17.444 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:52:17.480 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:52:52.108 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:52:52.231 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:ac3cb16343db0f5613afbb3ecb07e302
-2021-02-05 18:52:52.231 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:3a9b40e5f6a7cafd3fc39dad4449feae
-2021-02-05 18:52:52.313 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:53:52.692 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:53:52.814 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:85cc07f021110e9e143dfb17e97c94a3
-2021-02-05 18:53:52.814 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:0c2faa315466771413f34d09818ad9bc
-2021-02-05 18:53:52.896 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:53:55.124 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:53:55.182 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:54:02.404 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:54:02.452 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:54:09.011 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:54:09.067 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:55:45.294 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:55:45.396 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:32b9c88141f3d3db38a294015f56cbc0
-2021-02-05 18:55:45.396 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:b4937ebdfbda5239d5d6e16b39164338
-2021-02-05 18:55:45.467 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:55:47.936 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:55:47.987 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:56:41.703 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:56:41.844 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:f52fabbeb7866a74c9c2beec166196fd
-2021-02-05 18:56:41.844 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:217bf177859ee8331e441cf5f123acfa
-2021-02-05 18:56:41.926 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:57:06.160 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:57:06.297 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:6d7e9f621a18f1970092aa82f45a4cd4
-2021-02-05 18:57:06.298 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:c2d126b7fcb696a6fe34b62fcf7f4341
-2021-02-05 18:57:06.372 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 18:58:48.792 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 18:58:48.908 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:6fc8cf0b10db7948b63ac5fc6d139984
-2021-02-05 18:58:48.908 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:f57447376d37d705a6964b00105fbedb
-2021-02-05 18:58:48.985 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 19:00:00.310 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 19:00:00.434 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:d546a90cc671556c4659726fc65938b2
-2021-02-05 19:00:00.435 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:e4fd4d960769799749f7c0f638514752
-2021-02-05 19:00:00.511 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 19:00:24.411 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 19:00:24.541 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:4ca4a5f78c6a5bd462e4690f6555ef12
-2021-02-05 19:00:24.541 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:42a445f672c0732212f598b98cde0712
-2021-02-05 19:00:24.615 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 19:01:59.880 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 19:02:00.002 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:ef3cd757ae26352d679cd17ff13d7889
-2021-02-05 19:02:00.003 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:f99c02a1895d9a0eed25207b3fc270dd
-2021-02-05 19:02:00.079 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 19:04:47.792 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 19:04:48.201 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:a55fd0027f4f27d114738b3a3eaa5bed
-2021-02-05 19:04:48.201 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:35251b56a14b543d0859df62f088220e
-2021-02-05 19:04:48.271 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 19:04:48.638 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 19:04:49.049 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 19:04:53.979 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 19:04:54.419 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 19:04:59.448 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 19:04:59.862 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 19:05:03.137 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
-2021-02-05 19:06:14.923 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
-2021-02-05 19:06:49.844 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
-2021-02-05 19:11:27.610 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
-2021-02-05 19:11:30.942 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 19:11:31.415 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:144bf036725fdc86ffa75b351c8fe09f
-2021-02-05 19:11:31.415 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:fd582535b7318ceda3adda66c372844c
-2021-02-05 19:11:31.497 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 19:11:35.326 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 19:11:35.670 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 19:11:42.186 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 19:11:42.573 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 19:12:18.876 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 19:12:19.333 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:24d953c585906c74e039b6f394707a1a
-2021-02-05 19:12:19.334 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:9f1931b6556e69e99feb2c24c6b4e62e
-2021-02-05 19:12:19.407 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 19:12:20.787 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
-2021-02-05 19:12:55.445 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
-2021-02-05 19:12:56.454 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
-2021-02-05 19:13:23.505 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
-2021-02-05 19:13:25.234 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
-2021-02-05 19:14:41.763 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
-2021-02-05 19:15:12.361 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
-2021-02-05 19:16:02.360 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
-2021-02-05 19:16:41.949 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 19:16:42.648 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:b734f1e2f748c59db434f29d19acf72e
-2021-02-05 19:16:42.649 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:e89e415130dbab4178a56bad366d067c
-2021-02-05 19:16:42.729 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
-2021-02-05 19:17:06.318 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
-2021-02-05 19:17:08.311 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 08:24:38.826 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 08:39:57.051 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 08:39:57.060 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 08:39:57.060 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 08:39:57.062 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 08:39:57.063 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 08:39:57.064 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:21:28.744 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 09:22:18.581 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:22:30.562 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:22:32.368 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:23:37.069 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 09:24:10.344 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:24:46.519 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
+2021-02-16 09:24:49.003 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:a1fe9197b93f0b1280e241b60f44ab66
+2021-02-16 09:24:49.004 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:d85fc4f718bfc3b0d51ddb1c444b2e5a
+2021-02-16 09:24:49.087 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 09:25:42.586 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:27:10.795 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:27:37.622 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:28:28.661 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:28:40.297 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:29:02.834 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:29:27.536 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:31:34.582 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:32:15.681 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:32:45.681 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:33:01.094 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:33:28.991 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:33:50.848 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:34:28.059 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:34:32.376 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:34:55.478 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:34:58.006 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:34:58.333 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:35:50.313 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:35:50.319 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:35:50.320 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:35:50.321 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:35:50.323 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:35:50.340 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:49:39.417 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 09:49:43.110 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:50:30.716 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:50:34.612 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:51:32.169 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:53:39.821 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 09:54:01.613 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:54:08.214 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:54:29.397 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:54:29.739 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:54:47.824 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:55:53.780 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:56:21.642 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:56:40.321 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:58:21.506 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:925d170eaefa6bea7204168e2a451bda
+2021-02-16 09:58:21.509 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: CategoryDetailView_Python_1
+2021-02-16 09:58:31.085 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:58:31.090 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:58:31.096 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:58:31.099 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:58:31.106 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:58:31.108 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 09:58:34.608 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 09:59:56.627 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 09:59:58.453 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
+2021-02-16 09:59:58.498 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:cbbd2d9220ea6ff15a25d8130fbeb80b
+2021-02-16 09:59:58.498 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:8ac5320f6f7a8559a538087197babce2
+2021-02-16 09:59:58.582 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 10:00:04.972 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
+2021-02-16 10:00:04.991 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 10:00:21.566 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.568 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.602 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.602 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.605 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.608 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.619 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.635 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.638 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.649 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.654 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.661 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.665 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.667 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.677 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.681 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.696 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.699 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.702 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.707 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.713 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.716 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.723 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.725 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.735 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.737 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.740 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.744 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:21.749 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 10:00:31.069 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 10:01:36.861 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 10:01:43.192 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 10:01:43.215 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 10:13:27.628 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 10:37:47.800 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 10:52:18.650 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 10:52:18.676 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:04:02.201 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
+2021-02-16 11:04:30.453 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:04:33.590 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
+2021-02-16 11:04:33.674 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:d49e3b654124fb0efa8f0a8547433651
+2021-02-16 11:04:33.675 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:8a31ce646082189a0331e319cbad5e5c
+2021-02-16 11:04:33.769 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:04:51.734 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:04:51.754 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:05:02.662 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:05:02.691 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:14:32.019 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 11:14:34.085 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:14:34.107 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:15:13.900 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:15:16.779 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:15:31.272 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:15:31.298 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:15:48.655 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:15:48.725 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:16:00.128 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:16:00.155 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:16:12.112 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:16:12.134 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:16:26.062 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:16:26.084 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:16:31.078 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:16:31.098 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:18:09.972 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:18:10.001 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:18:14.456 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:18:14.479 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:18:14.762 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 11:18:34.971 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:18:34.994 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:30:50.688 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:30:50.725 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:35:41.912 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 11:35:41.935 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 11:35:42.042 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 12:34:54.053 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 12:34:54.091 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 12:35:03.829 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 12:35:03.853 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 12:35:04.018 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 12:35:56.816 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 12:35:56.838 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 12:37:08.229 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 12:37:08.253 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 12:37:08.436 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 12:37:43.800 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 12:37:43.822 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 12:37:51.682 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 12:37:51.708 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 12:37:51.850 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 12:37:55.914 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 12:37:55.935 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 12:44:38.749 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
+2021-02-16 12:44:38.777 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 12:54:10.039 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 12:54:31.094 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_1
+2021-02-16 12:54:31.110 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:3370c02a3047f3d87c31af1afd70fc03
+2021-02-16 12:54:31.110 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:2eabdebccf15f498ccf7084cd1e8b083
+2021-02-16 12:54:31.119 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_1
+2021-02-16 12:55:00.109 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 12:56:14.215 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 12:56:14.239 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 12:56:24.739 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 12:56:28.527 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 12:56:28.550 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 12:56:49.679 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 12:56:49.720 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 13:08:23.666 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 13:08:25.739 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 13:08:25.839 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 13:08:30.041 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 13:08:30.065 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 13:12:05.356 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 13:12:05.388 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 13:12:05.573 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 13:13:04.726 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 13:13:04.750 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 13:17:05.511 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 13:17:05.539 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 13:17:38.294 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 13:17:38.319 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 13:18:00.365 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 13:39:19.140 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 13:39:19.174 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 13:46:34.820 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 13:46:38.790 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 13:46:38.815 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 13:47:09.080 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 13:47:09.106 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 13:49:30.227 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 13:50:28.892 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 13:51:11.891 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 13:51:18.626 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 13:51:18.818 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 13:57:37.124 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 13:57:43.141 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 13:58:06.601 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 13:58:42.818 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 13:58:42.843 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 13:58:47.237 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 13:58:51.230 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 13:59:18.151 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:06:50.153 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:07:09.281 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:07:11.615 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:07:30.055 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:08:01.990 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:08:47.508 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:09:01.220 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:12:20.869 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:13:44.059 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:14:02.826 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:14:17.074 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 14:14:17.100 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 14:14:24.509 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:18:12.971 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 14:20:21.116 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:22:30.209 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:22:46.976 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:22:58.191 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:23:18.822 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:26:29.741 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:28:15.979 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:28:45.094 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:30:05.387 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
+2021-02-16 14:30:05.411 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 14:34:11.343 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 14:34:11.351 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 14:34:11.352 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 14:34:11.354 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 14:34:11.357 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 14:34:11.361 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 14:35:35.799 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:36:06.902 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 14:36:16.328 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_5
+2021-02-16 14:36:16.410 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:1f36f8c7a1e405a3ea4ca22b140f9e6f
+2021-02-16 14:36:16.411 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:2219f3504ac769c561a38637af7b65cf
+2021-02-16 14:36:16.522 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_5
+2021-02-16 14:36:46.624 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:43:55.256 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:44:04.455 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:44:42.772 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:44:44.367 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_5
+2021-02-16 14:44:44.387 | INFO     | app_blog.templatetags.blog_tags:similar_articles:100 - 获取相似文章缓存:similar_articles_5
+2021-02-16 14:44:50.709 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:44:57.188 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:46:08.041 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:46:17.961 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:46:38.404 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:46:38.543 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 14:47:04.766 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:47:12.165 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:47:15.208 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:47:27.048 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:48:19.053 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_5
+2021-02-16 14:48:19.072 | INFO     | app_blog.templatetags.blog_tags:similar_articles:100 - 获取相似文章缓存:similar_articles_5
+2021-02-16 14:48:24.570 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:48:45.227 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 14:48:48.611 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:51:44.277 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:51:46.504 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:52:46.663 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
+2021-02-16 14:52:46.733 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:37285a77290a262b404e99df2630b551
+2021-02-16 14:52:46.733 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:01657e53c50ec0cd6fda4cf21d24e438
+2021-02-16 14:52:46.836 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 14:53:40.261 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:57:08.023 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:57:17.661 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:57:29.914 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:57:38.293 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:57:38.429 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 14:59:48.149 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:59:51.974 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 14:59:52.137 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 15:04:48.613 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:05:10.913 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:06:26.770 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 15:06:26.807 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 15:06:52.865 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 15:06:52.899 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 15:08:17.783 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 15:08:17.819 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 15:08:35.232 | INFO     | app_blog.models:comment_list:203 - 获取评论缓存:article_comments_4
+2021-02-16 15:08:35.265 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_4
+2021-02-16 15:08:54.343 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:09:29.881 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:09:39.758 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:09:40.020 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 15:13:59.831 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:16:04.243 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:16:06.499 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:16:25.852 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:16:28.070 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:16:35.774 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:17:12.577 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:17:52.750 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:18:02.601 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 15:18:02.606 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 15:18:02.610 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 15:18:02.619 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 15:18:02.622 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 15:18:02.625 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 15:18:05.849 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:27:13.687 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:27:37.763 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:28:07.868 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:28:10.676 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:28:25.749 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_1
+2021-02-16 15:28:25.767 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:5ea677035414f7f9d9b0b348ae3bfaf9
+2021-02-16 15:28:25.767 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:0acf0eaad513926c4a14b551fec95102
+2021-02-16 15:28:25.775 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_1
+2021-02-16 15:28:30.271 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:28:31.586 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_5
+2021-02-16 15:28:31.607 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:93516b92f2aa5988332b2f10b07efc7a
+2021-02-16 15:28:31.615 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_5
+2021-02-16 15:28:34.871 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:28:40.436 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_5
+2021-02-16 15:28:40.453 | INFO     | app_blog.templatetags.blog_tags:similar_articles:100 - 获取相似文章缓存:similar_articles_5
+2021-02-16 15:28:58.979 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_5
+2021-02-16 15:28:58.998 | INFO     | app_blog.templatetags.blog_tags:similar_articles:100 - 获取相似文章缓存:similar_articles_5
+2021-02-16 15:29:01.782 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:29:04.340 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:29:12.576 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 15:29:33.259 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_5
+2021-02-16 15:29:33.308 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:3b300b01075e72a1c563cee486ba38c3
+2021-02-16 15:29:33.308 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:7586cc44431e34a8a04bb043d9b924c5
+2021-02-16 15:29:33.314 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_5
+2021-02-16 15:29:57.235 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_5
+2021-02-16 15:29:57.253 | INFO     | app_blog.templatetags.blog_tags:similar_articles:100 - 获取相似文章缓存:similar_articles_5
+2021-02-16 15:29:58.916 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:30:15.923 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:31:11.186 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:32:09.711 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 15:44:20.805 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_5
+2021-02-16 15:44:20.890 | INFO     | app_blog.templatetags.blog_tags:similar_articles:100 - 获取相似文章缓存:similar_articles_5
+2021-02-16 15:49:48.445 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 16:26:45.204 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 16:28:14.780 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 16:35:58.571 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 16:36:00.881 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_5
+2021-02-16 16:36:00.900 | INFO     | app_blog.templatetags.blog_tags:similar_articles:100 - 获取相似文章缓存:similar_articles_5
+2021-02-16 16:36:23.280 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_5
+2021-02-16 16:36:23.299 | INFO     | app_blog.templatetags.blog_tags:similar_articles:100 - 获取相似文章缓存:similar_articles_5
+2021-02-16 16:41:23.651 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 16:41:50.341 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 16:42:25.367 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 16:42:29.477 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 16:42:54.545 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:25a8cda85f7684a396284dadb0e773e6
+2021-02-16 16:42:54.548 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: CategoryDetailView_Django_1
+2021-02-16 16:43:21.191 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 16:43:33.541 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 16:43:34.630 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 16:43:41.301 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:fc43378e4a5b71382a140928658ad5f3
+2021-02-16 16:43:41.304 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: CategoryDetailView_Python_1
+2021-02-16 16:43:55.104 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 16:44:56.025 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 16:44:56.042 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:fabc7f848b8775bc8e6a3a5d3b4d4208
+2021-02-16 16:44:56.042 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:7b8fb694fbfdb548d0be105e4aa87317
+2021-02-16 16:44:56.044 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:ee1073ba49b0cfd3926e7d50040f8a78
+2021-02-16 16:44:56.050 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_6
+2021-02-16 16:50:52.639 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:7910af5f1c2b6934005915e632c65581
+2021-02-16 16:50:52.643 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: CategoryDetailView_Python_1
+2021-02-16 16:50:52.747 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:83ac5526054d739011054cfc3d043c71
+2021-02-16 16:50:54.982 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 16:51:50.442 | INFO     | app_blog.views:get_queryset_from_cache:67 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 16:51:50.535 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:be429c372a54205f22f341778e0b8e80
+2021-02-16 16:51:57.332 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.334 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.350 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.355 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.364 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.366 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.367 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.369 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.372 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.384 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.387 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.425 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.430 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.430 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.440 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.455 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.460 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.463 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.467 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.474 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.478 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.485 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.494 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.496 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.498 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.502 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.514 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.521 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:51:57.529 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:52:04.281 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:52:04.283 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:52:04.285 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:52:05.743 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 16:52:07.232 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 16:52:09.161 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 16:52:09.180 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:3ac10c580c2abbf148904145b3945881
+2021-02-16 16:52:09.180 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:b2061565c88d28add22556f03d4c11e5
+2021-02-16 16:52:09.187 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_6
+2021-02-16 16:52:10.454 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 16:52:10.472 | INFO     | app_blog.templatetags.blog_tags:similar_articles:100 - 获取相似文章缓存:similar_articles_6
+2021-02-16 16:57:57.434 | INFO     | app_blog.views:get_queryset_from_cache:62 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 16:57:57.453 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:be429c372a54205f22f341778e0b8e80
+2021-02-16 17:13:13.853 | INFO     | app_blog.views:get_queryset_from_cache:69 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 17:13:13.952 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:3b57906e8fd3a39ba699753da65b8fc6
+2021-02-16 17:13:34.007 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 17:13:34.053 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:d049568e9a1146fdb5731e1015254860
+2021-02-16 17:13:34.053 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:eba6d83677a705cdc5b988e86ed2bf16
+2021-02-16 17:13:34.060 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_6
+2021-02-16 17:13:44.579 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 17:13:44.688 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:a1ab7661dd3bbbf4a798aca6bfa2724e
+2021-02-16 17:13:44.689 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:4cfd2fa43cab44a1f34c7bd9411b0b1a
+2021-02-16 17:13:44.710 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:247673b8565e56ef8a84d795b6305cf7
+2021-02-16 17:13:44.715 | INFO     | app_blog.templatetags.blog_tags:similar_articles:107 - 设置相似文章缓存:similar_articles_6
+2021-02-16 17:13:46.141 | INFO     | app_blog.views:get_queryset_from_cache:69 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 17:46:53.698 | INFO     | app_blog.views:get_queryset_from_cache:69 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 17:46:53.788 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:72c453c74f94f782df778ea0c9be9a07
+2021-02-16 17:49:06.724 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 17:49:38.314 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 17:49:45.517 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 17:50:07.298 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 17:50:55.064 | INFO     | app_blog.views:get_queryset_from_cache:69 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 17:50:55.140 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:165317b05db6f0c918a2523c1ae237a9
+2021-02-16 17:55:09.657 | INFO     | app_blog.views:get_queryset_from_cache:69 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 17:55:09.755 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:5cb9a27dd332576a2cf2e643d164a621
+2021-02-16 17:55:15.074 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 17:57:26.473 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:00:22.013 | INFO     | app_blog.views:get_queryset_from_cache:69 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 18:00:22.072 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:b731ff2dd4f82e1768611e6369bfc4a2
+2021-02-16 18:00:31.343 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:00:39.227 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:01:07.722 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:02:00.754 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:02:23.042 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:04:22.506 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:04:22.524 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:b731ff2dd4f82e1768611e6369bfc4a2
+2021-02-16 18:04:36.593 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:07:57.674 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:07:57.695 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:b731ff2dd4f82e1768611e6369bfc4a2
+2021-02-16 18:08:01.163 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:09:59.758 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:10:10.164 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:10:10.343 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 18:10:42.017 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:10:42.227 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 18:11:07.774 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:11:07.795 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:b731ff2dd4f82e1768611e6369bfc4a2
+2021-02-16 18:11:12.606 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:11:12.798 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 18:12:28.513 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:12:40.078 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:12:40.243 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 18:14:05.435 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:14:17.669 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:14:17.690 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:b731ff2dd4f82e1768611e6369bfc4a2
+2021-02-16 18:14:17.890 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 18:16:04.947 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:16:05.277 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 18:16:17.670 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:17:00.583 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:17:14.130 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:19:08.302 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:19:08.335 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:b731ff2dd4f82e1768611e6369bfc4a2
+2021-02-16 18:19:39.300 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:20:40.944 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:21:07.666 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:21:17.787 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:21:26.980 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:21:35.667 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:21:38.334 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:21:42.268 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:22:15.413 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:22:15.511 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:b731ff2dd4f82e1768611e6369bfc4a2
+2021-02-16 18:22:17.338 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:22:24.396 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:22:24.594 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 18:22:32.525 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:22:32.543 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:4db955e32e676e6d8147c59b4562db9f
+2021-02-16 18:22:32.543 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:ebaeee4d68e2583b06f49aef51e9029e
+2021-02-16 18:22:32.550 | INFO     | app_blog.templatetags.blog_tags:similar_articles:115 - 设置相似文章缓存:similar_articles_6
+2021-02-16 18:22:45.218 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:24:57.471 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:24:57.605 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:4d5b5e933233fb1f4fa7694a3344c954
+2021-02-16 18:24:57.606 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:6f5c2167b919e7441ad8222541e28fae
+2021-02-16 18:24:57.639 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:c8b411588f83b38466ad99304b8e83e4
+2021-02-16 18:24:57.646 | INFO     | app_blog.templatetags.blog_tags:similar_articles:115 - 设置相似文章缓存:similar_articles_6
+2021-02-16 18:29:44.828 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:29:44.931 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:89c61e536d98b392b41651b8f18da17c
+2021-02-16 18:29:44.931 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:f57cbf6246777751fd25585b840a656c
+2021-02-16 18:29:44.962 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:eaa716a5afe4bf4a531d64a74da7220e
+2021-02-16 18:29:44.968 | INFO     | app_blog.templatetags.blog_tags:similar_articles:115 - 设置相似文章缓存:similar_articles_6
+2021-02-16 18:30:21.132 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:30:21.154 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:30:22.096 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:30:22.114 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:30:22.971 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:30:22.990 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:30:23.674 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:30:23.690 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:30:25.364 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:30:25.381 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:30:31.986 | INFO     | app_blog.views:get_queryset_from_cache:69 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 18:31:37.163 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:31:39.349 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:31:39.368 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:32:24.769 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:32:27.289 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:32:27.307 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:32:43.075 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:32:43.094 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:33:17.708 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:33:17.724 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:eaa716a5afe4bf4a531d64a74da7220e
+2021-02-16 18:33:17.726 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:33:22.274 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_sub_categorys key:f907da09d41bd41b909765d90e057e05
+2021-02-16 18:33:22.278 | INFO     | app_blog.views:get_queryset_from_cache:69 - 设置视图缓存, KEY: CategoryDetailView_Python_1
+2021-02-16 18:33:24.952 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:33:24.970 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:34:47.059 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:34:47.083 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:35:20.357 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:35:20.379 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:35:25.738 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:35:25.758 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:39:09.626 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:39:09.651 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:eaa716a5afe4bf4a531d64a74da7220e
+2021-02-16 18:39:09.652 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:39:59.908 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:39:59.928 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:40:03.089 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:40:03.111 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:40:03.298 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-16 18:40:19.719 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:40:19.749 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:40:22.353 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:40:22.372 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:40:24.597 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:40:26.447 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:40:26.467 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:40:36.616 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:40:36.634 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:41:00.702 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:41:00.720 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:42:15.936 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:42:15.955 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:eaa716a5afe4bf4a531d64a74da7220e
+2021-02-16 18:42:15.957 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:44:19.776 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:44:19.803 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:44:28.093 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:44:35.090 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:44:35.108 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:45:13.916 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:45:13.934 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:45:31.506 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:45:31.526 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:eaa716a5afe4bf4a531d64a74da7220e
+2021-02-16 18:45:34.496 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_4
+2021-02-16 18:45:34.514 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:0e69122611516f7c66045c3f3f1e4f92
+2021-02-16 18:45:34.524 | INFO     | app_blog.templatetags.blog_tags:similar_articles:115 - 设置相似文章缓存:similar_articles_4
+2021-02-16 18:45:42.851 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-16 18:47:26.149 | INFO     | app_blog.views:get_queryset_from_cache:69 - 设置视图缓存, KEY: IndexView_1
+2021-02-16 18:47:26.204 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:b8ac9499c916eb89ad3245e6ff229d50
+2021-02-16 18:47:56.237 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:47:56.255 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:2c497feff2a1cf3a33ff0cfc369b7953
+2021-02-16 18:47:56.255 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_category_tree key:93a0abc8fee5a08d46f0b7f7363feef9
+2021-02-16 18:47:56.261 | INFO     | app_blog.templatetags.blog_tags:similar_articles:115 - 设置相似文章缓存:similar_articles_6
+2021-02-16 18:50:01.689 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:50:01.708 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:50:15.223 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:50:15.241 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:50:49.204 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:50:49.221 | INFO     | myweb.utils:news:63 - cache_decorator set cache:get_current_site key:b8ac9499c916eb89ad3245e6ff229d50
+2021-02-16 18:50:49.222 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:51:44.098 | INFO     | app_blog.models:comment_list:208 - 设置评论缓存:article_comments_6
+2021-02-16 18:51:44.117 | INFO     | app_blog.templatetags.blog_tags:similar_articles:108 - 获取相似文章缓存:similar_articles_6
+2021-02-16 18:52:07.152 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1

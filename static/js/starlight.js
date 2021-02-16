@@ -23,7 +23,7 @@ var user_configuration = {
 		"#B39DDB",
 	],
 	frequency:500,  			// 新一波新星弹出的频率（以毫秒为单位。更大==更长）
-	density:0.5,  				// 每波会弹出多少颗星星
+	density:10,  				// 每波会弹出多少颗星星
 	keep_lit:false,				// 恒星创建后是否消失
 	rotation:false,				// 恒星是否旋转通过其膨胀
 	coverage:1,					// 星星将在（0-1）中显示多少个元素区域

@@ -1,0 +1,92 @@
+{# 文章列表 #}
+
+
+{% extends 'app_blog/base_blog.html' %}
+{% load static %}
+{% load blog_tags %}
+{% load gallery_tags %}
+{% load humanize %}
+
+
+<!-- Start Home -->
+{% block home %}
+<h2 class="title">浩瀚星海</h2>
+{% if page_type %}
+<h4 style="color: white;">{{ page_type }}: {{tag_name}}</h4>
+<p>共 {{ page_obj.paginator.count }} 篇 </p>
+{% elif keyword %}
+<h4>搜索关键词:"{{ keyword }}"</h4>
+<p>搜索到 {{ page_obj.paginator.count }} 条记录。</p>
+{% else %}
+<h4 style="color: white;">所有文章</h4>
+<p>博客共有 {{ page_obj.paginator.count }} 篇 </p>
+{% endif %}
+{% endblock home %}
+
+
+{% block blog_content_main %}
+
+<!-- 轮播图 -->
+{% include 'app_blog/include_tag/carousel.html' %}
+
+<!-- 推荐 -->
+<article class="excerpt-minic excerpt-minic-index">
+    <h2><span class="red">【置顶】</span><a href="" title="">如何做事</a></h2>
+    <p class="note">
+        同时...
+    </p>
+</article>
+
+<!-- blog 列表 -->
+{% for article in page_obj %}
+<article class="excerpt">
+    <a class="focus" href="{{ article.get_absolute_url }}" title="{{ article.title }}">
+        <img class="thumb" data-original="{{the_url}}" src="{{the_url}}" alt="">
+    </a>
+    <header>
+        <a class="cat" href="{% url 'app_blog:category_detail' article.category.slug %}" rel="category tag">{{ article.category }}<i></i></a>
+        <h2><a href="{{ article.get_absolute_url }}" title="{{ article.title }}">{{article.title}}</a></h2>
+    </header>
+    <p class="meta">
+        <a class="time" href="{% url 'app_blog:article_list_by_author' article.author %}"><i
+                class="glyphicon glyphicon-user"></i>{{article.author}}</a>
+        <time class="time"><i class="glyphicon glyphicon-time"></i>{% format_time article.pub_time "%Y-%m-%d %H:%M" %}</time>
+        <span class="views"><i class="glyphicon glyphicon-eye-open"></i> {{ article.views }} views</span>
+        <span class="views"><i class="glyphicon glyphicon-heart"></i> {{ article.users_like.count }} likes</span>
+
+        {% with article.tags.all as tags%}
+        {% if tags %}
+        <span class="views">
+            <i class="glyphicon glyphicon-tag"></i>
+            {% for tag in tags %}
+            <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">
+                {{ tag.name }}
+            </a>
+            {% if not forloop.last %},{% endif %}
+            {% endfor %}
+        </span>
+        {% endif %}
+        {% endwith %}
+
+        {% if request.user == article.author or request.user.is_superuser %}
+        <a class="comment" href="{% url 'app_admin:update_article' article.id article.slug %}">
+            <i class="glyphicon glyphicon-pencil"></i>修改</a>
+        <a class="comment" href="{{ article.get_admin_url }}">
+            <i class="glyphicon glyphicon-pencil"></i>admin中编辑</a>
+        {% endif %}
+    </p>
+    <p class="note">
+        {% comment %} {{ article.body|truncatewords:10|linebreaks }} {% endcomment %}
+        {% comment %} {{ article.body|markdown:10|linebreaks }} {% endcomment %}
+        {{ article.body|custom_markdown|escape|truncatewords_html:10 }}
+    </p>
+</article>
+{% endfor %}
+
+<nav class="pagination" style="display: block;">
+    {# 从 paginator.html 引入分页模板 #}
+    {% include 'pagination.html' with page_obj=page_obj %}
+</nav>
+
+
+{% endblock blog_content_main %}
