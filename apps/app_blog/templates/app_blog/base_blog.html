@@ -534,19 +534,19 @@
         // Tooltip
         $('[data-toggle="tooltip"]').tooltip();  
 
+        function ajax_form_fail (form_ele, data) {
+            $("#login_form").removeClass('shake_effect');
+            setTimeout(function () {
+                $("#login_form").addClass('shake_effect')
+            }, 10);
+
+            let err_mag_ele = $(form_ele).children('.err-message')
+            err_mag_ele.html(data.msg)
+            err_mag_ele.removeClass('hidden')
+        }
+
         // 登录注册
 		function check_login() {
-
-			var login_fail = function(data) {
-				$("#login_form").removeClass('shake_effect');
-				setTimeout(function () {
-					$("#login_form").addClass('shake_effect')
-				}, 10);
-                let err_mag_ele = $('#login').prev('.err-message')
-                err_mag_ele.html(data.msg)
-                err_mag_ele.removeClass('hidden')
-			}
-
             $.ajax({
                 url: "{% url 'app_user:ajax_login' %}",
                 type: 'post',
@@ -560,23 +560,20 @@
                         location.reload();
                     }
                     else {
-                        login_fail(data);
+                        ajax_form_fail('.login-form', data);
                     }
                 },
                 error: function(xhr,status,error){
-                    login_fail({'msg':error});
+                    ajax_form_fail('.login-form', {'msg':error});
                 }
             })
 		}
         
 		function check_register() {
-
             // var username = $("#r_user_name").val();
 			// var password1 = $("#r_password").val();
 			// var password2 = $("#rr_password").val();
 			// var email = $("#r_email").val();
-
-
             $.ajax({
                 url: "{% url 'app_user:ajax_register' %}",
                 type: 'post',
@@ -585,21 +582,19 @@
                     username: $("#r_username").val(),
                     password1: $("#r_password").val(),
                     password2: $("#rr_password").val(),
-                    email: $("#r_email").val()
+                    email: $("#r_email").val(),
+                    check_code: '666'
                 },
                 success: function (data) {
                     if (data.status==200) {
-                        // location.reload();
-                        console.log(data)
+                        ajax_form_fail('.register-form', data);
                     }
                     else {
-                        // login_fail(data);
-                        console.log(data)
+                        ajax_form_fail('.register-form', data);
                     }
                 },
                 error: function(xhr,status,error){
-                    // login_fail({'msg':error});
-                    console.log(error)
+                    ajax_form_fail('.register-form', {'msg':error});
                 }
             })
 

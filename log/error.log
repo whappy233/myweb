@@ -861,3 +861,27 @@
 2021-02-18 17:37:03.259 | INFO     | myweb.utils:news:64 - cache_decorator set cache:get_current_site key:20842f052ee76b571304c0df5046473e
 2021-02-18 17:37:03.481 | INFO     | app_blog.templatetags.blog_tags:most_commented_articles:107 - 设置最多评论缓存:most_commented_articles
 2021-02-18 17:37:35.712 | INFO     | app_user.views:register_result:49 - validation
+2021-02-18 22:38:54.322 | INFO     | app_blog.views:get_queryset_from_cache:69 - 设置视图缓存, KEY: IndexView_1
+2021-02-18 22:38:55.703 | INFO     | app_blog.context_processors:seo_processor:18 - set processor cache.
+2021-02-18 22:38:55.761 | INFO     | app_blog.utils:get_blog_setting:89 - set cache get_blog_setting
+2021-02-18 22:38:56.332 | INFO     | myweb.utils:news:64 - cache_decorator set cache:get_current_site key:cee282f0157cf58180cab4635e6eb135
+2021-02-18 22:38:57.192 | INFO     | app_blog.templatetags.blog_tags:most_commented_articles:107 - 设置最多评论缓存:most_commented_articles
+2021-02-18 22:42:15.797 | INFO     | app_blog.views:get_queryset_from_cache:69 - 设置视图缓存, KEY: IndexView_1
+2021-02-18 22:42:16.099 | INFO     | app_blog.context_processors:seo_processor:18 - set processor cache.
+2021-02-18 22:42:16.107 | INFO     | app_blog.utils:get_blog_setting:89 - set cache get_blog_setting
+2021-02-18 22:42:16.247 | INFO     | myweb.utils:news:64 - cache_decorator set cache:get_current_site key:77556ddf3c6f1c438cdcbd8102c22397
+2021-02-18 22:42:16.587 | INFO     | app_blog.templatetags.blog_tags:most_commented_articles:107 - 设置最多评论缓存:most_commented_articles
+2021-02-18 22:43:13.023 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-18 22:43:13.101 | INFO     | app_blog.templatetags.blog_tags:most_commented_articles:103 - 获取最多评论缓存:most_commented_articles
+2021-02-18 22:43:13.205 | ERROR    | app_user.middleware:__call__:43 - 不支持的 content 类型: "<class 'django.http.response.FileResponse'>"
+2021-02-18 22:43:59.653 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-18 22:43:59.785 | INFO     | app_blog.templatetags.blog_tags:most_commented_articles:103 - 获取最多评论缓存:most_commented_articles
+2021-02-18 22:44:52.247 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-18 22:44:52.322 | INFO     | app_blog.templatetags.blog_tags:most_commented_articles:103 - 获取最多评论缓存:most_commented_articles
+2021-02-18 22:45:16.739 | INFO     | myweb.utils:news:64 - cache_decorator set cache:get_current_site key:40f3ef81bf4a75b9629e2a3a06b43810
+2021-02-18 22:45:55.708 | INFO     | app_blog.views:get_queryset_from_cache:69 - 设置视图缓存, KEY: IndexView_1
+2021-02-18 22:45:56.085 | INFO     | app_blog.context_processors:seo_processor:18 - set processor cache.
+2021-02-18 22:45:56.087 | INFO     | app_blog.utils:get_blog_setting:89 - set cache get_blog_setting
+2021-02-18 22:45:57.018 | INFO     | app_blog.templatetags.blog_tags:most_commented_articles:107 - 设置最多评论缓存:most_commented_articles
+2021-02-18 22:46:01.133 | INFO     | app_blog.views:get_queryset_from_cache:64 - 获取视图缓存, KEY: IndexView_1
+2021-02-18 22:46:01.248 | INFO     | app_blog.templatetags.blog_tags:most_commented_articles:103 - 获取最多评论缓存:most_commented_articles

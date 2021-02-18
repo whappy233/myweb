@@ -330,7 +330,52 @@ def ajax_login(request):
         return HttpResponseForbidden()
 
 
+
+
+
+
 def ajax_register(request):
+    if request.method == 'POST' and request.is_ajax():
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save(False)
+            user.is_active = False
+            user.save(True)
+
+            site = get_current_site().domain
+            sign = GenerateEncrypted.encode({'id':user.id})
+            if settings.DEBUG: site = '127.0.0.1:8000'
+            path = reverse('app_user:register_result')
+            url = f"http://{site}{path}?type=validation&id={user.id}&sign={sign}"
+            text = f'<p>请点击下面链接验证您的邮箱</p><a href="{url}" rel="bookmark">{url}</a>'
+            print(text)
+            send_email(to_email=user.email, vcode_str=text)
+            msg = f'恭喜您注册成功，一封验证邮件已经发送到您 {user.email} 的邮箱，请验证您的邮箱后登录本站'
+            return JsonResponse({'status':200, 'msg':msg})
+
+        else:
+            password1 = form.data['password1']
+            password2 = form.data['password2']
+            err_msg = []
+            for msg in form.errors.as_data():
+                if msg == 'email':
+                    err_msg.append("<p>请输入一个有效的 Email 地址</p>")
+                if msg == 'username':
+                    err_msg.append("<p>该用户名已被使用</p>")
+                if msg == 'password2' and password1 == password2:
+                    err_msg.append("<p>密码长度太短。密码必须包含至少 8 个字符</p>")
+                if msg == 'password2' and password1 != password2:
+                    err_msg.append("<p>两次密码不匹配</p>")
+
+            return JsonResponse({'status':400, 'msg':err_msg})
+    return JsonResponse({'status':400, 'msg':'FAIL'})
+
+
+
+
+
+
+def ajax_register_(request):
     if request.method == 'POST' and request.is_ajax():
         username = request.POST.get('username')
         password1 = request.POST.get('password1')
@@ -361,3 +406,4 @@ def ajax_register(request):
 
 
     return JsonResponse({'status':400, 'msg':'FAIL'})
+
