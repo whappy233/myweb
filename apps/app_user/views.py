@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -13,6 +13,8 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic.edit import FormView
 from loguru import logger
 from myweb.utils import GenerateEncrypted, get_current_site
+
+from .utils import email_check
 
 from app_user.models import UserProfile
 from app_user.utils import create_validate_code as CheckCode
@@ -303,3 +305,59 @@ def ajax_photo_upload(request):
     return redirect('app_user:profile')
 
 
+# ajax 登录
+def ajax_login(request):
+    if request.method == 'POST' and request.is_ajax():
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if password and username:
+            user = auth.authenticate(username=username, password=password)
+            if user:
+                if user.is_active:
+                    auth.login(request, user)
+                    return JsonResponse({'status':200,'msg':'登录成功'})
+                else:
+                    url =f"{reverse('app_user:register_result')}?type=register&id={user.id}"
+                    message = f'账户未激活, 请激活后再登录.<br><a href="{url}"> 点击发送激活链接到你的邮箱({user.email})</a>'
+                    return JsonResponse({'status':400,'msg':message})
+            else:
+                message = '密码错误。请重试'
+                return JsonResponse({'status':400,'msg':message})
+        else:
+            message = '密码错误。请重试'
+            return JsonResponse({'status':400,'msg':message})
+    else:
+        return HttpResponseForbidden()
+
+
+def ajax_register(request):
+    if request.method == 'POST' and request.is_ajax():
+        username = request.POST.get('username')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        email = request.POST.get('email')
+
+        if username and password1 and password2 and email:
+            if User.objects.filter(username=username).exists():
+                return JsonResponse({'status':400, 'msg': '用户已存在'})
+
+            if password1 != password2:
+                return JsonResponse({'status':400, 'msg': '两次密码不一致'})
+
+            if not email_check(email):
+                return JsonResponse({'status':400, 'msg': '邮箱格式不正确'})
+
+            user = User.objects.create_user(username=username, password=password1, email=email, is_active=False)
+            site = get_current_site().domain
+            sign = GenerateEncrypted.encode({'id':user.id})
+            if settings.DEBUG: site = '127.0.0.1:8000'
+            path = reverse('app_user:register_result')
+            url = f"http://{site}{path}?type=validation&id={user.id}&sign={sign}"
+            text = f'<p>请点击下面链接验证您的邮箱</p><a href="{url}" rel="bookmark">{url}</a>'
+            print(text)
+            send_email(to_email=user.email, vcode_str=text)
+            msg = '恭喜您注册成功，一封验证邮件已经发送到您 {email} 的邮箱，请验证您的邮箱后登录本站'
+            return JsonResponse({'status':200, 'msg':msg})
+
+
+    return JsonResponse({'status':400, 'msg':'FAIL'})

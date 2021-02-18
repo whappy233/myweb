@@ -9,6 +9,8 @@ import re
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.conf import settings
 
+from django.contrib.auth import password_validation
+
 # 用户注册
 class RegisterForm(UserCreationForm):
     '''注册表单'''

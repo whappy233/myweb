@@ -18,4 +18,6 @@ urlpatterns = [
     path('send_email_vcode/', views.send_email_vcode, name='send_email_vcode'),     # ajax 发送邮件验证码
     path('profile/ajax/photo/', views.ajax_photo_upload, name='ajax_photo_upload'), # ajax 上传头像
 
+    path('ajax_login/', views.ajax_login, name='ajax_login'), # ajax 登录
+    path('ajax_register/', views.ajax_register, name='ajax_register'), # ajax 注册
 ]
