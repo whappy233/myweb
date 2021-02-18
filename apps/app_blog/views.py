@@ -199,6 +199,8 @@ class ArticleDetailView(DetailView):
             'comments': comments,
             'comment_form': comment_form,
             'section': 'blog',
+            'next_article': self.object.next_article,
+            'prev_article': self.object.prev_article,
         })
 
         return context

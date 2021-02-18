@@ -1,6 +1,7 @@
 {% load blog_tags %}
-
 {# 相似文章模板 (由自定义标签返回) #}
+
+
 {% if articles|istype:'QuerySet' %}
 <ul>
     {% for article in articles %}
@@ -10,3 +11,5 @@
     {% endfor %}
 </ul>
 {% endif %}
+
+

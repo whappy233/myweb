@@ -27,7 +27,7 @@ SECRET_KEY = 'jh*9r+p97rvldfkdnm6yvnm(m&ws$x)=squ!=rlu5s(uilhj+g'
 # 不要在生产环境打开 debug 开关
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '*']
+ALLOWED_HOSTS = ['*']
 
 SITE_ID = 1  # 设置站点ID
 
@@ -116,6 +116,7 @@ TEMPLATES = [
 
                 # 自定义模版全局变量 Carlos (默认变量)
                 'myweb.contexts.carlos',
+                'app_blog.context_processors.seo_processor',
             ],
         },
     },

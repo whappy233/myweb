@@ -28,11 +28,35 @@ def get_carousel_list():
     return Carousel.objects.all()
 
 
+
+# 返回文章列表模板
+@register.inclusion_tag('app_blog/include_tag/article_list.html')
+def load_article_list(articles):
+    '''返回文章列表模板'''
+    return {'articles': articles}
+
+
+
 # 文章总数
 'simple_tag (处理数据并返回一个字符串或者给context设置或添加变量)  {% total_articles %}'
 @register.simple_tag(name='total_articles')  # 注册模板标签和过滤器, 默认使用函数名作为标签名字，也可自定义 @register.simple_tag(name='name')
 def total_articles():  # 定义标签
     return Article.published.count()
+
+
+
+@register.filter(is_safe=True)
+@stringfilter
+def truncatechars_content(content):
+    """
+    获得文章内容的摘要
+    :param content:
+    :return:
+    """
+    from django.template.defaultfilters import truncatechars_html
+    from ..utils import get_blog_setting
+    blogsetting = get_blog_setting()
+    return truncatechars_html(content, blogsetting.article_sub_length)
 
 
 # 在模板执行 queryset 查询
@@ -123,7 +147,9 @@ def similar_articles(obj, count=5):
 def load_breadcrumb(article):
     """获得文章面包屑"""
     names = article.get_category_tree()
-    names.append(('首页', '/'))
+    from ..utils import get_blog_setting
+    blogsetting = get_blog_setting()
+    names.append((blogsetting.sitename, '/'))
     names = names[::-1]
     return {
         'names': names,

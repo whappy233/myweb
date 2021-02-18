@@ -1,0 +1,52 @@
+{% load static %}
+{% load blog_tags %}
+
+{# blog 列表 #}
+
+{% url 'app_gallery:get_random_background' 220 150 as the_url %}
+{% for article in articles %}
+<article class="excerpt">
+    <a class="focus" href="{{ article.get_absolute_url }}" title="{{ article.title }}">
+        <img class="thumb" data-original="{{the_url}}" src="{{the_url}}" alt="">
+    </a>
+    <header>
+        <a class="cat" href="{% url 'app_blog:category_detail' article.category.slug %}" rel="category tag">{{ article.category }}<i></i></a>
+        <h2><a href="{{ article.get_absolute_url }}" title="{{ article.title }}">{{article.title}}</a></h2>
+    </header>
+    <p class="meta">
+        <a class="time" href="{% url 'app_blog:article_list_by_author' article.author %}"><i class="glyphicon glyphicon-user"></i> {{article.author}}</a>
+        <time class="time"><i class="glyphicon glyphicon-time"></i> {% format_time article.pub_time "%Y-%m-%d %H:%M" %}</time>
+        <span class="views" data-toggle="tooltip" data-placement="top" title="{{ article.views }} 人浏览过"><i class="glyphicon glyphicon-eye-open"></i> {{ article.views }}</span>
+        <span class="views" data-toggle="tooltip" data-placement="top" title="{{ article.users_like.count }} 点赞"><i class="glyphicon glyphicon-heart"></i> {{ article.users_like.count }}</span>
+        <a class="time" href="{{article.get_absolute_url}}#comment" data-toggle="tooltip" data-placement="top" title="{{ article.comments.count }} 条评论"><i class="glyphicon glyphicon-comment"></i> {{ article.comments.count }}</a>
+
+        {% with article.tags.all as tags%}
+        {% if tags %}
+        <span class="views">
+            <i class="glyphicon glyphicon-tag"></i>
+            {% for tag in tags %}
+            <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">
+                {{ tag.name }}
+            </a>
+            {% if not forloop.last %},{% endif %}
+            {% endfor %}
+        </span>
+        {% endif %}
+        {% endwith %}
+
+        {% if request.user == article.author or request.user.is_superuser %}
+        <a class="comment" href="{% url 'app_admin:update_article' article.id article.slug %}">
+            <i class="glyphicon glyphicon-pencil"></i>修改</a>
+        <a class="comment" href="{{ article.get_admin_url }}">
+            <i class="glyphicon glyphicon-pencil"></i>admin中编辑</a>
+        {% endif %}
+    </p>
+    <p class="note">
+        {% comment %} {{ article.body|truncatewords:10|linebreaks }} {% endcomment %}
+        {% comment %} {{ article.body|markdown:10|linebreaks }} {% endcomment %}
+        {{ article.body|custom_markdown|truncatechars_content }}
+    </p>
+</article>
+{% empty %}
+<div class="card"><p>暂时没有文章!</p></div>
+{% endfor %}

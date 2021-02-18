@@ -101,11 +101,12 @@ $("#gotop").click(function () {
 
 //图片延时加载
 $("img.thumb").lazyload({
-    placeholder: "/Home/images/occupying.png",
-    effect: "fadeIn"
+    placeholder: "/static/app_blog/new/images/occupying.png",
+    effect: "fadeIn",
 });
+
 $(".single .content img").lazyload({
-    placeholder: "images/occupying.png",
+    placeholder: "/static/app_blog/new/images/occupying.png",
     effect: "fadeIn"
 });
 
@@ -120,24 +121,26 @@ $('[data-toggle="tooltip"]').tooltip();
 
 //无限滚动反翻页
 jQuery.ias({
-	history: false,
-	container : '.content',
-	item: '.excerpt',
-	pagination: '.pagination',
-	next: '.next-page a',
-	trigger: '查看更多',
-	loader: '<div class="pagination-loading"><img src="images/loading.gif" /></div>',
-	triggerPageThreshold: 5,
-	onRenderComplete: function() {
-		$('.excerpt .thumb').lazyload({
-			placeholder: 'images/occupying.png',
-			threshold: 400
-		});
-		$('.excerpt img').attr('draggable','false');
-		$('.excerpt a').attr('draggable','false');
-	}
+    history: false,
+    container : '.content',  // 插入的容器
+    item: '.excerpt',
+    pagination: '.pagination',  //分页元素
+    next: '.pagination > li:nth-child(4) > a',  // 下一页元素
+    trigger: '查看更多',
+    loader: '<div class="pagination-loading"><img src="/static/app_blog/new/images/loading.gif" /></div>',
+    triggerPageThreshold: 5,
+    onRenderComplete: function() {
+        $('.excerpt .thumb').lazyload({
+            placeholder: '/static/app_blog/new/images/occupying.png',
+            threshold: 400
+        });
+        $('.excerpt img').attr('draggable','false');
+        $('.excerpt a').attr('draggable','false');
+    }
 });
- 
+
+
+
 //鼠标滚动超出侧边栏高度绝对定位
 $(window).scroll(function () {
     var sidebar = $('.sidebar');

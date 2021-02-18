@@ -39,6 +39,7 @@ class GenerateEncrypted:
             return False
 
 
+
 def cache_decorator(expiration=3 * 60):
     def wrapper(func):
         def news(*args, **kwargs):
@@ -84,3 +85,5 @@ def send_email(emailto, title, content):
         emailto=emailto,
         title=title,
         content=content)
+
+

@@ -14,7 +14,16 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}浩瀚星海{% endblock title %}</title>
+
+    <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}" />
+    <meta name="keywords" content="{{ SITE_KEYWORDS }}" />
+    <meta property="og:type" content="blog" />
+    <meta property="og:title" content="{{ SITE_NAME }}" />
+    <meta property="og:description" content="{{ SITE_DESCRIPTION }}" />
+    <meta property="og:url" content="{{ SITE_BASE_URL }}" />
+    <meta property="og:site_name" content="{{ SITE_NAME }}" />
+
+    <title>{% block title %}{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}{% endblock title %}</title>
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
     <link rel="apple-touch-icon-precomposed" href="{% static 'app_blog/new/images/icon/icon.png' %}">
 
@@ -42,7 +51,6 @@
 </head>
 
 <body class="starlight">
-<!-- <body class="user-select"> -->
 
     <!-- 导航栏 -->
     <nav class="navbar navbar-default navbar-fixed white no-background bootsnav">
@@ -52,7 +60,9 @@
             <div class="container">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                    <input type="text" class="form-control" placeholder="Search">
+                    <form action="" method="get">
+                        <input type="text" name="q" class="form-control" placeholder="请输入关键字" value="{{keyword|default_if_none:''}}">
+                    </form>
                     <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
                 </div>
             </div>
@@ -84,6 +94,24 @@
                     <li><a href="{% url 'app_user:login' %}">登陆</a></li>
                     <li><a href="{% url 'app_user:register' %}">注册</a></li>
                     {% endif %}
+
+
+                    <!-- 主题切换 -->
+                    <li>
+                        <a href="#" class="theme-toggle">
+                            <span alt="dark theme" class="icon-dark" >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-moon" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M14.53 10.53a7 7 0 0 1-9.058-9.058A7.003 7.003 0 0 0 8 15a7.002 7.002 0 0 0 6.53-4.47z"/>
+                                </svg>
+                            </span>
+                            <span alt="light theme" class="icon-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brightness-high-fill" viewBox="0 0 16 16">
+                                    <path d="M12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+                                </svg>
+                            </span>
+                        </a>
+                    </li>
+
                     <!-- 搜索按钮 -->
                     <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
                     <!-- more info -->
@@ -96,7 +124,7 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
                     <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="/" title="浩瀚星海 Carlos">
+                <a class="navbar-brand" href="/" title="{{ SITE_NAME }} Carlos">
                     <img src="{% static 'img/logo-white.png' %}" class="logo logo-display" alt="">
                     <img src="{% static 'img/logo-black.png' %}" class="logo logo-scrolled" alt="">
                 </a>
@@ -122,37 +150,48 @@
         <!-- 侧边弹出栏 -->
         <div class="side">
             <a href="#" class="close-side"><i class="fa fa-times"></i></a>
-            <div class="widget">
-                <h6 class="title">Custom Pages</h6>
-                <ul class="link">
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Services</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Portfolio</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </div>
-            <div class="widget">
-                <h6 class="title">Additional Links</h6>
-                <ul class="link">
-                    <li><a href="#">Retina Homepage</a></li>
-                    <li><a href="#">New Page Examples</a></li>
-                    <li><a href="#">Parallax Sections</a></li>
-                    <li><a href="#">Shortcode Central</a></li>
-                    <li><a href="#">Ultimate Font Collection</a></li>
-                </ul>
-            </div>
-        </div>
+            <header class="header text-center">	
+                <h1 class="blog-name pt-lg-4 mb-0"><a href="index.html">{{SITE_NAME}}</a></h1>
+                
+                <nav class="navbar navbar-expand-lg navbar-dark">
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                    </button>
+        
+                    <div id="navigation" class="collapse navbar-collapse flex-column">
+                        <div class="profile-section pt-3 pt-lg-0">
+                            <img class="profile-image mb-3 rounded-circle mx-auto" src="{% url 'app_gallery:get_random_background' 160 160 %}" alt="image">			
+                            
+                            <div class="bio mb-3" style="color: white;">
+                                Hi, 我是Carlos.
+                            </div>
+                            <ul class="social-list list-inline py-3 mx-auto">
+                                <li class="list-inline-item"><a href="#"><svg class="svg-inline--fa fa-twitter fa-w-16 fa-fw" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="twitter" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"></path></svg><!-- <i class="fab fa-twitter fa-fw"></i> --></a></li>
+                                <li class="list-inline-item"><a href="#"><svg class="svg-inline--fa fa-linkedin-in fa-w-14 fa-fw" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="linkedin-in" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M100.3 448H7.4V148.9h92.9V448zM53.8 108.1C24.1 108.1 0 83.5 0 53.8S24.1 0 53.8 0s53.8 24.1 53.8 53.8-24.1 54.3-53.8 54.3zM448 448h-92.7V302.4c0-34.7-.7-79.2-48.3-79.2-48.3 0-55.7 37.7-55.7 76.7V448h-92.8V148.9h89.1v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3V448h-.1z"></path></svg><!-- <i class="fab fa-linkedin-in fa-fw"></i> --></a></li>
+                                <li class="list-inline-item"><a href="#"><svg class="svg-inline--fa fa-github-alt fa-w-15 fa-fw" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="github-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512" data-fa-i2svg=""><path fill="currentColor" d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"></path></svg><!-- <i class="fab fa-github-alt fa-fw"></i> --></a></li>
+                                <li class="list-inline-item"><a href="#"><svg class="svg-inline--fa fa-stack-overflow fa-w-12 fa-fw" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="stack-overflow" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M290.7 311L95 269.7 86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8 153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"></path></svg><!-- <i class="fab fa-stack-overflow fa-fw"></i> --></a></li>
+                                <li class="list-inline-item"><a href="#"><svg class="svg-inline--fa fa-codepen fa-w-16 fa-fw" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="codepen" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M502.285 159.704l-234-156c-7.987-4.915-16.511-4.96-24.571 0l-234 156C3.714 163.703 0 170.847 0 177.989v155.999c0 7.143 3.714 14.286 9.715 18.286l234 156.022c7.987 4.915 16.511 4.96 24.571 0l234-156.022c6-3.999 9.715-11.143 9.715-18.286V177.989c-.001-7.142-3.715-14.286-9.716-18.285zM278 63.131l172.286 114.858-76.857 51.429L278 165.703V63.131zm-44 0v102.572l-95.429 63.715-76.857-51.429L234 63.131zM44 219.132l55.143 36.857L44 292.846v-73.714zm190 229.715L61.714 333.989l76.857-51.429L234 346.275v102.572zm22-140.858l-77.715-52 77.715-52 77.715 52-77.715 52zm22 140.858V346.275l95.429-63.715 76.857 51.429L278 448.847zm190-156.001l-55.143-36.857L468 219.132v73.714z"></path></svg><!-- <i class="fab fa-codepen fa-fw"></i> --></a></li>
+                            </ul>
+                            <hr> 
+                        </div>
+
+                        <div class="my-2 my-md-3">
+                            <a class="btn btn-primary" href="#" target="_blank">Get in Touch</a>
+                        </div>
+                    </div>
+                </nav>
+            </header>
     </nav>
 
-    <!-- Start Home -->
+    <!-- Home -->
     {% url 'app_gallery:get_random_background' 1920 1080 as the_url %}
     <!-- <div class="pageheader fixed-demo" style="background-image: url('{{the_url}}');"> -->
     <div class="pageheader fixed-demo" style="background-image: url('{% static 'app_blog/new/images/pic.jpg' %}');">
         <div class="container">
             <div style="float: left; max-width: 700px;">
                 {% block home %}
-                <h2 class="title">浩瀚星海</h2>
+                <h2 class="title">{{ SITE_NAME }}</h2>
                 {% endblock home %}
             </div>
 
@@ -250,10 +289,10 @@
             {% block blog_content_sidebar %}
             <div class="fixed">
                 <div class="widget widget_search">
-                    <form class="navbar-form" action="/Search" method="post">
+                    <form class="navbar-form" action="" method="get">
                         <div class="input-group">
-                            <input type="text" name="keyword" class="form-control" size="35" placeholder="请输入关键字"
-                                maxlength="15" autocomplete="off">
+                            <input id="search" type="text" name="q" class="form-control" size="35" placeholder="请输入关键字"
+                                maxlength="15" autocomplete="off" value="{{keyword|default_if_none:''}}">
                             <span class="input-group-btn">
                                 <button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
                             </span>
@@ -261,73 +300,43 @@
                     </form>
                 </div>
                 <div class="widget widget_sentence">
-                    <h3>每日一句</h3>
+                    <h3>Some Info</h3>
                     <div class="widget-sentence-content">
                         <h4>2021年02月05日星期五</h4>
                         <p>Do not let what you cannot do interfere with what you can do.<br />
                             别让你不能做的事妨碍到你能做的事。（John Wooden）</p>
                     </div>
                 </div>
+                <div class="widget">
+                    <div class="widget-sentence-content">
+                        <p><a href="{% url 'app_blog:article_feed' %}">订阅博客</a></p>
+                        <p><a href="{% url 'app_blog:refresh' %}">刷新缓存</a></p>
+                    </div>
+                </div>
             </div>
-            {% url 'app_gallery:get_random_background' 220 150 as the_url %}
+
             <div class="widget widget_hot">
-                <h3>热门文章</h3>
-                <ul>
-                    <li>
-                        <a href="">
-                            <span class="thumbnail">
-                                <img class="thumb" data-original="{{the_url}}" src="{{the_url}}" alt="">
-                            </span>
-                            <span class="text">php如何判断一个日期的格式是否正确</span>
-                            <span class="muted"><i class="glyphicon glyphicon-time"></i> 2021-01-05-4 </span>
-                            <span class="muted"><i class="glyphicon glyphicon-eye-open"></i> 120</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="">
-                            <span class="thumbnail">
-                                <img class="thumb" data-original="{{the_url}}" src="{{the_url}}" alt="">
-                            </span>
-                            <span class="text">php如何判断一个日期的格式是否正确</span>
-                            <span class="muted"><i class="glyphicon glyphicon-time"></i> 2021-01-05-4 </span>
-                            <span class="muted"><i class="glyphicon glyphicon-eye-open"></i> 120</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="">
-                            <span class="thumbnail">
-                                <img class="thumb" data-original="{{the_url}}" src="{{the_url}}" alt="">
-                            </span>
-                            <span class="text">php如何判断一个日期的格式是否正确</span>
-                            <span class="muted"><i class="glyphicon glyphicon-time"></i> 2021-01-05-4 </span>
-                            <span class="muted"><i class="glyphicon glyphicon-eye-open"></i> 120</span>
-                        </a>
-                    </li>
-                </ul>
+                <!-- 最近更新 -->
+                {% show_latest_articles 5 %}
             </div>
+
+            <div class="widget widget_hot">
+                <!-- 最多评论文章 -->
+                {% most_commented_articles %}
+            </div>
+
             {% endblock blog_content_sidebar %}
         </aside>
+
+        <!-- 点击返回顶部 -->
+        <div id="gotop"><a class="gotop"></a></div>
     </section>
 
-    <!-- 底栏 -->
-    <footer class="footinfo">
-        {% block footer %}
-        <div style="text-align: center">
-            Copyright©&nbsp;2021&nbsp;
-            <a href="/" target="blank">浩瀚星海</a>
-            &nbsp;|&nbsp;
-            <a href="/sitemap.xml" title="SiteMap" target="_blank">SiteMap</a>
-            &nbsp;|&nbsp;
-            <a href="{% url 'app_blog:article_feed' %}" title="RSS Feed" target="_blank">订阅博客</a>
-        </div>
-        <div style="text-align: center">
-            Powered by
-            <a href="https://www.djangoproject.com/" rel="nofollow" target="_blank">Django</a>
-            &nbsp;|&nbsp;
-            本页面加载耗时:<!!LOAD_TIMES!!>s
-        </div>
-        {% endblock footer %}
-    </footer>
+
+    <!-- 页脚 -->
+    {% include 'app_blog/footer.html' %}
+
+
 
 
     <script src="{% static 'app_blog/new/js/bootstrap.min.js' %}"></script>
@@ -371,6 +380,35 @@
         }
         setInterval(updateClock, 1000);
         updateClock();
+
+        $('a.theme-toggle').click(function (e) {
+            e.preventDefault();
+            let ele = $(this);
+            let dark = ele.children().first();
+            let light = ele.children().last();
+            let is_dark = dark.css('display') == 'inline' ? false: true;
+            let is_light = light.css('display') == 'inline' ? false : true;
+            if (is_dark==false){
+                $('body').addClass('dark')
+            }else{
+                $('body').removeClass('dark')
+            }
+        });
+
+        //返回顶部按钮
+        $("#gotop").hide();
+        $(window).scroll(function () {
+            if ($(window).scrollTop() > 100) {
+                $("#gotop").fadeIn();
+            } else {
+                $("#gotop").fadeOut();
+            }
+        });
+        $("#gotop").click(function () {
+            $('html,body').animate({
+                'scrollTop': 0
+            }, 500);
+        });
 
         // Tooltip
         $('[data-toggle="tooltip"]').tooltip();  

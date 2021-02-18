@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils import timezone
 from django.utils.html import format_html
 from django.urls import reverse
-from .models import Article, Category, Carousel
+from .models import Article, Category, Carousel, BlogSettings
 
 
 # 自定义 list_filter
@@ -201,3 +201,8 @@ class CarouselAdmin(admin.ModelAdmin):
     list_display = ['id', 'number', 'title', 'content', 'img_url', 'url']
     search_fields = ['title',]
     ordering = ['number', '-id'] 
+
+# 网站配置
+@admin.register(BlogSettings)
+class BlogSettingsAdmin(admin.ModelAdmin):
+    pass

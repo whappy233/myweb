@@ -27,13 +27,11 @@
     </span>
     <!-- 作者 -->
     <span class="item article-meta-source" data-toggle="tooltip" data-placement="bottom" title="作者: {{ article.author }}">
-        <i class="glyphicon glyphicon-user"></i>
-        <a href="{% url 'app_blog:article_list_by_author' article.author %}">{{ article.author }}</a>
+        <a href="{% url 'app_blog:article_list_by_author' article.author %}"><i class="glyphicon glyphicon-user"></i> {{ article.author }}</a>
     </span>
     <!-- 分类 -->
     <span class="item article-meta-category" data-toggle="tooltip" data-placement="bottom" title="分类: {{ article.category }}">
-        <i class="glyphicon glyphicon-list"></i>
-        <a href="{% url 'app_blog:category_detail' article.category.slug %}" title="">{{ article.category }}</a>
+        <a href="{% url 'app_blog:category_detail' article.category.slug %}" title=""><i class="glyphicon glyphicon-list"></i> {{ article.category }}</a>
     </span>
     <!-- 标签 -->
     {% with article.tags.all as tags%}
@@ -56,28 +54,29 @@
     </span>
     <!-- 评论数 -->
     <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="{{ article.comments.count }} 条评论">
-        <i class="glyphicon glyphicon-comment"></i>
-        {{ article.comments.count }}
+        <a href="#comment"><i class="glyphicon glyphicon-comment"></i> {{ article.comments.count }}</a>
     </span>
     <!-- 点赞数 -->
-    <span class="item article-meta-views" data-toggle="tooltip" data-placement="bottom" title="{{ article.users_like.count }} 点赞">
-        <i class="glyphicon glyphicon-heart"></i> 
-        {{ article.users_like.count }}
+    <span class="item article-meta-views" title="{{ article.users_like.count }} 点赞">
+        {% with total_likes=article.users_like.count users_like=article.users_like.all %}
+        <a class="like" href="#" data-id="{{ article.id }}" data-action="{% if request.user in users_like %}un{% endif %}like">
+            <i class="glyphicon glyphicon-heart" style="{% if request.user in users_like %}color:red{% else %}color:white{% endif %}"></i>
+            <span id="count">{{ total_likes }}</span>
+        </a>
+        {% endwith %}
+
     </span>
     <!-- superuser -->
     {% if request.user == article.author or request.user.is_superuser %}
-
     <a class="comment" href="{% url 'app_admin:update_article' article.id article.slug %}">
         <i class="glyphicon glyphicon-pencil"></i>修改</a>
     <a class="comment" href="{{ article.get_admin_url }}">
         <i class="glyphicon glyphicon-pencil"></i>admin中编辑</a>
     {% endif %}
 
-
-
-
 </div>
 {% endblock home %}
+
 
 
 {% block blog_content_main %}
@@ -87,25 +86,48 @@
 
 <!-- 文章主体 -->
 <article class="card">
+
+    <!-- 文章内容 -->
     <div class="entry-content">
         {{ article.body|custom_markdown}}
     </div>
+
+    <!-- 文章结尾 -->
+    <div class="article-footer">
+        <span class="inner">未经允许不得转载</span>
+    </div>    
+
+    <!-- 上一篇 下一篇文章 -->
+    <nav class="nav-single">
+        {% if next_article %}
+            <span class="nav-previous">
+                <a href="{{ next_article.get_absolute_url }}" rel="prev" data-toggle="tooltip" data-placement="bottom" title="上一篇: {{ next_article.title }}">
+                    <i class="fa fa-chevron-left mr-1"></i> {{ next_article.title }}
+                </a>
+            </span>
+        {% endif %}
+        {% if prev_article %}
+            <span class="nav-next">
+                <a href="{{ prev_article.get_absolute_url }}" rel="next" data-toggle="tooltip" data-placement="bottom" title="下一篇: {{ prev_article.title }}">
+                    {{ prev_article.title }} <i class="fa fa-chevron-right ml-1"></i>
+                </a>
+            </span>
+        {% endif %}
+    </nav>
 </article>
 
-<!-- 文章结尾 -->
-<div class="article-footer">
-    <span class="inner">未经允许不得转载</span>
-</div>
 
-<!-- 推荐列表 -->
+<!-- 相似文章 -->
 <div class="card">
     <div class="relates">
-        <div class="title"><h3>相关推荐</h3></div>
+        <div class="title"><h3>相似推荐</h3></div>
         {% similar_articles article %}
     </div>
 </div>
 
+
 <p><a href="{% url 'app_blog:article_share' article.id %}"> 分享文章 </a></p>
+
 
 <!-- 评论 -->
 <div class="card">
@@ -114,7 +136,7 @@
     </div>
 
     <!-- 评论表单 -->
-    {% if article.comment_status == "o" %}
+    {% if article.comment_status == "o" and OPEN_SITE_COMMENT %}
     <div id='respond'>
         {% if request.user.is_authenticated %}
             {% include "app_comments/post_comment.html" with obj=article form=comment_form %}
@@ -215,8 +237,9 @@
     $(document).ready(function () {
         $('a.like').click(function (e) {
             e.preventDefault();
-            var id = $(this).data('id');
-            var action = $(this).data('action');
+            var ele = $(this);
+            var id = ele.data('id');
+            var action = ele.data('action');
 
             $.ajax({
                 url: '{% url "app_blog:blog_like" %}',
@@ -233,17 +256,23 @@
                 },
                 success: function (data) {
                     if (data['status'] == 'ok') {
-                        var previous_action = $('a.like').data('action');
+                        var previous_action = action;
 
                         // 变换动作
-                        $('a.like').data('action', previous_action == 'like' ? 'unlike' : 'like');
+                        ele.data('action', previous_action == 'like' ? 'unlike' : 'like');
                         // 变换链接对应文本
-                        // $('a.like').text(previous_action == 'like' ? 'Unlike' : 'Like');
+                        // ele.text(previous_action == 'like' ? 'Unlike' : 'Like');
 
                         // 更新总点赞数
                         // var previous_likes = parseInt($('span.count').text());
                         // $('span.count').text(previous_action == 'like' ? previous_likes + 1 : previous_likes - 1);
-                        $('span#count').text('👍 ' + data['count']);
+
+                        if (previous_action=='like'){
+                            $('a.like>:first').css('color', 'red');
+                        }else{
+                            $('a.like>:first').css('color', 'white');
+                        }
+                        $('a.like span#count').text( data['count']);
                     }
                     else {
                         window.location.href = "{% url 'app_user:login' %}?next={{ article.get_absolute_url }}"

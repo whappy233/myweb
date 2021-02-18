@@ -86,7 +86,7 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
                     <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="/" title="浩瀚星海 Carlos">
+                <a class="navbar-brand" href="/" title="{{ SITE_NAME }} Carlos">
                     <img src="{% static 'img/logo-white.png' %}" class="logo logo-display" alt="">
                     <img src="{% static 'img/logo-black.png' %}" class="logo logo-scrolled" alt="">
                 </a>
@@ -142,7 +142,7 @@
         <div class="container">
             <div style="float: left; max-width: 500px;">
                 {% block home %}
-                <h2 class="title">浩瀚星海</h2>
+                <h2 class="title">{{ SITE_NAME }}</h2>
                 {% endblock home %}
             </div>
 
@@ -241,7 +241,7 @@
         {% block footer %}
         <div style="text-align: center">
             Copyright©&nbsp;2021&nbsp;
-            <a href="/" target="blank">浩瀚星海</a>
+            <a href="/" target="blank">{{ SITE_NAME }}</a>
             &nbsp;|&nbsp;
             <a href="/sitemap.xml" title="SiteMap" target="_blank">SiteMap</a>
             &nbsp;|&nbsp;

@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import format_html
 
-from app_blog.models import Article, Category, Carousel
+from app_blog.models import Article, Category, Carousel, BlogSettings
 
 
 # 文章
@@ -163,3 +163,9 @@ class CarouselAdmin:
     search_fields = ['title',]
     ordering = ['number', '-id'] 
 xadmin.site.register(Carousel, CarouselAdmin)
+
+
+# 网站配置
+class BlogSettingsAdmin:
+    pass
+xadmin.site.register(BlogSettings, BlogSettingsAdmin)
