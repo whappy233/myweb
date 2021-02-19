@@ -9,11 +9,15 @@ import re
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.conf import settings
 
-from django.contrib.auth import password_validation
 
 # 用户注册
 class RegisterForm(UserCreationForm):
     '''注册表单'''
+
+    class Meta:
+        model = User
+        fields = ("username", 'email')
+
     def __init__(self, *args, **kwargs):
         self._request = kwargs.pop('_request', None)  # 传递额外的参数, 并在调用构造函数之前从 kwargs 中删除额外的参数
         super(RegisterForm, self).__init__(*args, **kwargs)
@@ -29,11 +33,8 @@ class RegisterForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if email_check(email):
-            if User.objects.filter(email=email).exists():
-                raise forms.ValidationError("邮箱已存在")
-        else:
-            raise forms.ValidationError("请检查邮箱格式")
+        if User.objects.filter(email=email).exists():
+                raise forms.ValidationError('该邮箱已注册')
         return email
 
     def clean_check_code(self):
@@ -43,9 +44,7 @@ class RegisterForm(UserCreationForm):
                 raise forms.ValidationError("验证码错误")
         return checkcode
 
-    class Meta:
-        model = User
-        fields = ("username", "email")
+
 
 
 # 用户登录

@@ -1,0 +1,291 @@
+{% load static %}
+
+{# 登录注册 model #}
+{% comment %}
+点击 a 标签调用 model
+<a data-toggle="modal" data-target="#login_register_Modal" rel="nofollow">登录</a>
+{% endcomment %}
+
+
+<!-- 登录注册表单 -->
+<link href="{% static 'app_blog/new/css/login_register_form.css' %}" rel="stylesheet" />
+
+<!-- 拖动验证 -->
+<link href="{% static 'app_blog/new/css/drag.css' %}" rel="stylesheet" />
+
+
+<div class="modal fade user-select" id="login_register_Modal" tabindex="-1" role="dialog"
+    aria-labelledby="loginModalLabel">
+    <div class="modal-dialog" role="document" style="width: 400px;margin: 100px auto;">
+        <div id="login_form" class="login_register_form">
+
+            <!-- <form class="register-form" style="display: none;">
+                <input type="text" placeholder="用户名" id="r_username" />
+                <input type="password" placeholder="密码" id="r_password" />
+                <input type="password" placeholder="确认密码" id="rr_password" />
+                <input type="email" placeholder="邮箱" id="r_email" />
+                <p class="err-message hidden"></p>
+                <button type="button" id="create">注 册</button>
+                <p class="message">已有账户? <a href="#">立刻登录</a></p>
+            </form>
+
+            <form class="login-form" style="display: none;">
+                <input type="text" placeholder="用户名" id="user_name" />
+                <input type="password" placeholder="密码" id="password" />
+                <div id="drag"></div>
+                <p class="err-message hidden"></p>
+                <button type="button" id="login" disabled>登　录</button>
+                <p class="message">还没有账户? <a href="#">立刻创建</a></p>
+            </form> -->
+
+            <form class="forget-form">
+                <div class="form-row">
+                    <input name="f_email" type="email" placeholder="绑定的邮箱" id="f_email" required/>
+                    <button type="button" class="col-md-2" id="send_email_vcode" onclick="getCode(this)">发送验证码</button></a>
+                </div>
+                <input name="verify_code" type="text" placeholder="验证码" id="verify_code" required />
+                <input name="n_pw1" type="password" placeholder="新密码" id="n_pw1" required />
+                <input name="n_pw2" type="password" placeholder="确认新密码" id="n_pw2" required/>
+
+                <p class="err-message" id="err_info"></p>
+                <button type="submit" id="forget_submit">提  交</button>
+                <div class="form-row" style="justify-content: space-between">
+                    <p class="message">已有账户? <a href="#">立刻登录</a></p>
+                    <p class="message">还没有账户? <a href="#">立刻创建</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- 拖动验证 -->
+<script src="{% static 'app_blog/new/js/drag.js' %}"></script>
+
+<script>
+
+    $.ajaxSetup({
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+
+    // 登录注册相关 ----------------------------------------
+    function ajax_form_fail(form_ele, data) {
+        $("#login_form").removeClass('shake_effect');
+        setTimeout(function () {
+            $("#login_form").addClass('shake_effect')
+        }, 10);
+
+        let err_mag_ele = $(form_ele).children('.err-message')
+        err_mag_ele.html(data.msg)
+        err_mag_ele.removeClass('hidden')
+    }
+    // 登录
+    function check_login() {
+        $.ajax({
+            url: "{% url 'app_user:ajax_login' %}",
+            type: 'post',
+            data: {
+                username: $("#user_name").val(),
+                password: $("#password").val()
+            },
+            success: function (data) {
+                if (data.status == 200) {
+                    location.reload();
+                }
+                else {
+                    ajax_form_fail('.login-form', data);
+                    $('#drag').empty();
+                    $('#drag').drag();
+                    $('#login').attr('disabled', true)
+                }
+            },
+            error: function (xhr, status, error) {
+                ajax_form_fail('.login-form', { 'msg': error });
+                $('#drag').empty();
+                $('#drag').drag();
+                $('#login').attr('disabled', true)
+            }
+        })
+    }
+    // 注册
+    function check_register() {
+        // var username = $("#r_user_name").val();
+        // var password1 = $("#r_password").val();
+        // var password2 = $("#rr_password").val();
+        // var email = $("#r_email").val();
+        $.ajax({
+            url: "{% url 'app_user:ajax_register' %}",
+            type: 'post',
+            data: {
+                username: $("#r_username").val(),
+                password1: $("#r_password").val(),
+                password2: $("#rr_password").val(),
+                email: $("#r_email").val(),
+                check_code: '666'
+            },
+            success: function (data) {
+                if (data.status == 200) {
+                    ajax_form_fail('.register-form', data);
+                }
+                else {
+                    ajax_form_fail('.register-form', data);
+                }
+            },
+            error: function (xhr, status, error) {
+                ajax_form_fail('.register-form', { 'msg': error });
+            }
+        })
+
+
+    }
+    $("#create").on('click', function () {
+        check_register();
+        return false;
+    })
+    $("#login").on('click', function () {
+        check_login();
+        return false;
+    })
+    $('.message a').click(function () {
+        $('.login_register_form form').animate({
+            height: 'toggle',
+            opacity: 'toggle'
+        }, 1);
+    });
+
+
+    // 关闭登录注册Model
+    $('#login_register_Modal').on('hidden.bs.modal', function () {
+        $("#login_form").removeClass('shake_effect');
+        $('.err-message').addClass('hidden')
+        $('#login').attr('disabled', true)
+        $('#drag').empty();
+
+        $('.register-form').css('display', 'none');
+        $('.login-form').css('display', 'block');
+
+    });
+    // 打开登录注册Model
+    $('#login_register_Modal').on('show.bs.modal', function () {
+        // 可以设置下拉框为初始值
+        $('#drag').drag();
+        var e = window.event;
+        obj = e.target || e.srcElement;
+        if (obj.name == 'register'){
+            $('.register-form').css('display', 'block');
+            $('.login-form').css('display', 'none');
+        }
+        if (obj.name == 'login'){
+            $('.register-form').css('display', 'none');
+            $('.login-form').css('display', 'block');
+        }
+        
+    });
+
+    let btn = $("#send_email_vcode"),
+        $err_info_ele = $('#err_info');
+    // 发送验证码倒计时60s
+    function getCode(e) {
+        email = document.getElementById("f_email");
+        if (email.value.length == 0) {
+            $err_info_ele.text("请输入电子邮箱");
+        } else {
+            if (!(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(email.value))) {
+                $err_info_ele.text("电子邮箱有误，请重填")
+            } else {
+                //调用获取验证码的接口
+                $.post("{% url 'app_user:send_email_vcode' %}", { 'email': email.value }, function (r) {
+                    if (r.status) {
+                        $err_info_ele.text("验证码发送成功，请查收！");
+                        //按照指定的周期（以毫秒计）来调用函数或计算表达式。
+                        //在ajax请求之后再调用函数
+                        t = setInterval(function () {countdown(e)}, 1000)
+                        //获取验证码成功后调用倒计时函数
+                        countdown(e);
+                    } else {
+                        $err_info_ele.text(r.data)
+                    }
+                });
+            }
+        }
+    }
+    var time = 60;
+    function countdown(e) {
+        if (time == 0) {
+            //这里时设置当时间到0的时候重新设置点击事件，并且默认time修改为60
+            //e.setAttribute("onclick","getcode(this)");
+
+            btn.attr("disabled", false);
+            btn.html("获取验证码");
+            btn.removeClass("disabled");
+            btn.removeClass("layui-btn-disabled")
+            time = 60;
+            clearInterval(t);
+        } else {
+            //这里是显示时间倒计时的时候点击不生效
+            //e.setAttribute("onclick", '');
+
+            btn.addClass("disabled");
+            btn.attr("disabled", true);
+            btn.html("重新发送(" + time + ")");
+
+            //document.getElementById("getcode").innerHTML="重新发送"+time;
+            time--;
+        }
+    }
+
+    $(".forget-form").on('submit', function () {
+
+        console.log(56456136161)
+        let email = $("#f_email").val();
+        let vcode = $('#verify_code').val();
+        let pw1 = $("#n_pw1").val();
+        let pw2 = $("#n_pw2").val();
+
+        console.log(email, vcode, pw1, pw2)
+        let err_msg = [];
+
+        console.log(!vcode)
+        if (!email){
+            err_msg.push("请输入电子邮箱");
+        }
+        if (!vcode){
+            err_msg.push("请输入验证码");
+        }
+        if (!pw1){
+            err_msg.pusht("请输入新密码");
+        }
+        if (!pw2){
+            err_msg.push("请确认密码");
+        }
+        if (pw1 != pw2){
+            err_msg.push("两次密码不一致");
+        }
+
+        $err_info_ele.text(err_msg);
+        if (email && vcode && pw1 && pw2){
+            forget_pw({email: email, vcode: vcode,pw1: pw1, pw2: pw2})
+        }
+        return false;
+    })
+    // 忘记密码
+    function forget_pw(data){
+        $.ajax({
+            url: "{% url 'app_user:forget_pwd' %}",
+            type: 'post',
+            data: data,
+            success: function (data) {
+                if (data.status == 200) {
+                    console.log(data)
+                }
+                else {
+                    console.log(data)
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log(error)
+            }
+        })
+    }
+
+</script>

@@ -11,10 +11,9 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic.edit import FormView
+from django.contrib.auth.forms import UserCreationForm
 from loguru import logger
 from myweb.utils import GenerateEncrypted, get_current_site
-
-from .utils import email_check
 
 from app_user.models import UserProfile
 from app_user.utils import create_validate_code as CheckCode
@@ -221,8 +220,8 @@ def forget_pwd(request):
     elif request.method == 'POST':
         email = request.POST.get("email", None)  # 邮箱
         vcode = request.POST.get("vcode", None)  # 验证码
-        new_pwd= request.POST.get('password', None)  # 密码
-        new_pwd_confirm = request.POST.get('confirm_password')
+        new_pwd= request.POST.get('pw1', None)  # 密码
+        new_pwd_confirm = request.POST.get('pw2')
         # 查询验证码和邮箱是否匹配
         try:
             s_data = request.session.get('vcode', None)
@@ -330,10 +329,6 @@ def ajax_login(request):
         return HttpResponseForbidden()
 
 
-
-
-
-
 def ajax_register(request):
     if request.method == 'POST' and request.is_ajax():
         form = RegisterForm(request.POST)
@@ -354,56 +349,10 @@ def ajax_register(request):
             return JsonResponse({'status':200, 'msg':msg})
 
         else:
-            password1 = form.data['password1']
-            password2 = form.data['password2']
             err_msg = []
-            for msg in form.errors.as_data():
-                if msg == 'email':
-                    err_msg.append("<p>请输入一个有效的 Email 地址</p>")
-                if msg == 'username':
-                    err_msg.append("<p>该用户名已被使用</p>")
-                if msg == 'password2' and password1 == password2:
-                    err_msg.append("<p>密码长度太短。密码必须包含至少 8 个字符</p>")
-                if msg == 'password2' and password1 != password2:
-                    err_msg.append("<p>两次密码不匹配</p>")
-
-            return JsonResponse({'status':400, 'msg':err_msg})
+            for msg in form.errors.as_data().values():
+                err_msg.extend(msg[0].messages)
+            return JsonResponse({'status':400, 'msg':'<br>'.join(err_msg)})
     return JsonResponse({'status':400, 'msg':'FAIL'})
 
-
-
-
-
-
-def ajax_register_(request):
-    if request.method == 'POST' and request.is_ajax():
-        username = request.POST.get('username')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        email = request.POST.get('email')
-
-        if username and password1 and password2 and email:
-            if User.objects.filter(username=username).exists():
-                return JsonResponse({'status':400, 'msg': '用户已存在'})
-
-            if password1 != password2:
-                return JsonResponse({'status':400, 'msg': '两次密码不一致'})
-
-            if not email_check(email):
-                return JsonResponse({'status':400, 'msg': '邮箱格式不正确'})
-
-            user = User.objects.create_user(username=username, password=password1, email=email, is_active=False)
-            site = get_current_site().domain
-            sign = GenerateEncrypted.encode({'id':user.id})
-            if settings.DEBUG: site = '127.0.0.1:8000'
-            path = reverse('app_user:register_result')
-            url = f"http://{site}{path}?type=validation&id={user.id}&sign={sign}"
-            text = f'<p>请点击下面链接验证您的邮箱</p><a href="{url}" rel="bookmark">{url}</a>'
-            print(text)
-            send_email(to_email=user.email, vcode_str=text)
-            msg = '恭喜您注册成功，一封验证邮件已经发送到您 {email} 的邮箱，请验证您的邮箱后登录本站'
-            return JsonResponse({'status':200, 'msg':msg})
-
-
-    return JsonResponse({'status':400, 'msg':'FAIL'})
 

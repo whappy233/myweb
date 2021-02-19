@@ -1,20 +1,21 @@
-{% extends 'base.html' %}
+{% extends 'app_blog/base_blog.html' %}
 {% load static %}
 
 
-{% block content %}
+{% block blog_content_main %}
 
 <h5>
     确认删除 {{article.title}} ?
 </h5>
-    
+
 <button id="delete" class="btn btn-danger">Yes</button>
 <button id="no" class="btn btn-info">No</button>
 <p id="info" ></p>
 {% csrf_token %}
 {% endblock %}
 
-
+{% block blog_content_sidebar %}
+{% endblock %}
 
 
 {% block javascript %}

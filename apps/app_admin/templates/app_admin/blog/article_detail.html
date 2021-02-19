@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends "app_blog/base_blog.html" %}
 
-{% block content %}
+{% block blog_content_main %}
 
 <p>类别:
     {% if article.category.parent_category %}
@@ -33,4 +33,7 @@
 <a href="{% url 'blog:article_delete' article.id article.slug %}">删除</a>
 {% endif %}
 
+{% endblock %}
+
+{% block blog_content_sidebar %}
 {% endblock %}

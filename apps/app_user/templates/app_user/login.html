@@ -1,11 +1,11 @@
-
-{% extends 'base.html' %}
+{% extends 'app_blog/base_blog.html' %}
 {# load common_tags #}
 {% load static %}
 
-{% block content %}
-<h1>Login <span style="font-size: 10px;">{% if request.GET.next %}该页面需要登录才能查看{% endif %}</span></h1>
 
+
+{% block blog_content_main %}
+<h1>Login <span style="font-size: 10px;">{% if request.GET.next %}该页面需要登录才能查看{% endif %}</span></h1>
 <div class="form-wrapper">
     <form method="POST" action="" enctype="multipart/form-data">
         {% csrf_token %}
@@ -46,12 +46,14 @@
     </form>
 
 </div>
+{% endblock %}
 
+
+{% block script %}
 <script>
     // 点击一次,更改图片内容,
     function ChangeCode(ths){
         ths.src = ths.src + '?';
     }
 </script>
-
 {% endblock %}

@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends "app_blog/base_blog.html" %}
 
-{% block content %}
+{% block blog_content_main %}
 
 
 <h3>{% if is_updata %}
@@ -52,4 +52,8 @@
     </div>
 </form>
 
+{% endblock %}
+
+
+{% block blog_content_sidebar %}
 {% endblock %}
