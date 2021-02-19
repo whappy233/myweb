@@ -38,16 +38,16 @@
                 <p class="message">还没有账户? <a href="#">立刻创建</a></p>
             </form> -->
 
-            <form class="forget-form">
+            <form class="forget-form" name="forget_form">
                 <div class="form-row">
                     <input name="f_email" type="email" placeholder="绑定的邮箱" id="f_email" required/>
-                    <button type="button" class="col-md-2" id="send_email_vcode" onclick="getCode(this)">发送验证码</button></a>
+                    <button type="submit" class="col-md-2" id="send_email_vcode" onclick="getCode(this)">发送验证码</button></a>
                 </div>
                 <input name="verify_code" type="text" placeholder="验证码" id="verify_code" required />
                 <input name="n_pw1" type="password" placeholder="新密码" id="n_pw1" required />
                 <input name="n_pw2" type="password" placeholder="确认新密码" id="n_pw2" required/>
 
-                <p class="err-message" id="err_info"></p>
+                <div class="err-message" id="err_info"></div>
                 <button type="submit" id="forget_submit">提  交</button>
                 <div class="form-row" style="justify-content: space-between">
                     <p class="message">已有账户? <a href="#">立刻登录</a></p>
@@ -153,7 +153,6 @@
         }, 1);
     });
 
-
     // 关闭登录注册Model
     $('#login_register_Modal').on('hidden.bs.modal', function () {
         $("#login_form").removeClass('shake_effect');
@@ -196,7 +195,8 @@
                 //调用获取验证码的接口
                 $.post("{% url 'app_user:send_email_vcode' %}", { 'email': email.value }, function (r) {
                     if (r.status) {
-                        $err_info_ele.text("验证码发送成功，请查收！");
+                        $err_info_ele.html("<p style='color:black;'>验证码发送成功，请注意查收！</p>");
+                        $err_info_ele.removeClass('hidden');
                         //按照指定的周期（以毫秒计）来调用函数或计算表达式。
                         //在ajax请求之后再调用函数
                         t = setInterval(function () {countdown(e)}, 1000)
@@ -234,18 +234,25 @@
         }
     }
 
-    $(".forget-form").on('submit', function () {
+    // 在form表单中存在多个 submit 时, 用于获取触发 submit 的 按钮 
+    $(".forget-form button[type=submit]").click(function() {
+        $("button[type=submit]", $(this).parents("form")).removeAttr("clicked");
+        $(this).attr("clicked", "true");
+    });
 
-        console.log(56456136161)
+    $(".forget-form").on('submit', function (e) {
+        let ele = $("button[type=submit][clicked=true]")[0];
+        if (ele.id == 'send_email_vcode'){
+            return false
+        }
+
         let email = $("#f_email").val();
         let vcode = $('#verify_code').val();
         let pw1 = $("#n_pw1").val();
         let pw2 = $("#n_pw2").val();
 
-        console.log(email, vcode, pw1, pw2)
         let err_msg = [];
 
-        console.log(!vcode)
         if (!email){
             err_msg.push("请输入电子邮箱");
         }
