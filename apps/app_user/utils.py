@@ -237,7 +237,24 @@ def crop_image(old_photo, file, data, uid):
     return cropped_photo
 
 
-# 邮箱规则检测
-def email_check(email):
-    pattern = re.compile(r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?")
-    return re.match(pattern, email)
+# 邮箱格式验证
+def validateEmail(email):
+    from django.core.exceptions import ValidationError
+    # 方式1
+    from django.core.validators import validate_email
+    try:
+        validate_email(email)
+    except ValidationError:
+        return False
+    else:
+        return True
+
+    # 方式2
+    # from django import forms
+    # f = forms.EmailField()
+    # try:
+    #     f.clean(value)
+    # except ValidationError:
+    #     return False
+    # else:
+    #     return True

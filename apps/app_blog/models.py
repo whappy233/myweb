@@ -241,7 +241,23 @@ class Article(models.Model):
             #     slug + '=' * (4 - len(slug) % 4)).decode())  # 解码
             slug = uuid4().hex[:10]
             self.slug = slug
-        super().save(*args, **kwargs)
+
+        # 模型的验证器不会在调用save()方法的时候自动执行
+        # 表单的验证器会在调用save()方法的时候自动执行
+        # Django的模型相关源码中，没有is_valid()方法，也不会自动调用full_clean() 方法，所以Django不会自动进行模型验证。
+        # 但是它依然提供了四个重要的验证方法，也就是full_clean() 、clean_fields() 、clean() 和 validate_unique()
+        # Django的表单系统forms的相关源码中，表单在save之前会自动执行一个is_valid()方法，这个方法里会调用验证器
+
+        # 如果你手动调用了 full_clean() 方法，那么会依次自动调用下面的三个方法
+        # clean_fields()：验证各个字段的合法性
+        # clean()：验证模型级别的合法性
+        # validate_unique()：验证字段的独一无二性
+        try:
+            self.full_clean()  
+            super().save(*args, **kwargs)
+        except ValidationError as e:
+            from django.core.exceptions import NON_FIELD_ERRORS
+            print('验证没通过： %s' % e.message_dict[NON_FIELD_ERRORS])
 
     # save 前的验证
     # 草稿文章(d)不应该有发布日期( pub_time )
@@ -250,9 +266,11 @@ class Article(models.Model):
         # 不允许草稿条目具有 pub_time
         if self.status == 'd' and self.pub_time is not None:
             self.pub_time = None
+            # raise ValidationError({'pub_time': _('草稿文章尚未发布，不应该有发布日期！')})
             # raise ValidationError('草稿没有发布日期. 发布日期已清空。')
         if self.status == 'p' and self.pub_time is None:
             self.pub_time = timezone.now()
+
 
 
 
@@ -366,5 +384,10 @@ class BlogSettings(models.Model):
             raise ValidationError(_('只能有一个配置'))
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        cache.clear()
+        try:
+            self.full_clean()  
+            super().save(*args, **kwargs)
+            cache.clear()
+        except ValidationError as e:
+            from django.core.exceptions import NON_FIELD_ERRORS
+            print('验证没通过： %s' % e.message_dict[NON_FIELD_ERRORS])

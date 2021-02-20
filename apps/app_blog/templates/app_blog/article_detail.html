@@ -141,7 +141,8 @@
         {% if request.user.is_authenticated %}
             {% include "app_comments/post_comment.html" with obj=article form=comment_form %}
         {% else %}
-        <p>您还没有登录，请您登<a href="{% url 'app_user:login' %}?next={{ article.get_absolute_url }}">登录</a>后发表评论。</p>
+        <!-- <p>您还没有登录，请您登<a href="{% url 'app_user:login' %}?next={{ article.get_absolute_url }}">登录</a>后发表评论。</p> -->
+        <p>您还没有登录,请<a name="login-form" data-toggle="modal" data-target="#login_register_Modal" rel="nofollow">登录</a>后发表评论。</p>
         {% endif %}
     </div>
     {% else %}

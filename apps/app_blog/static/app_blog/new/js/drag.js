@@ -63,7 +63,7 @@
             $(document).unbind('mousemove');
             $(document).unbind('mouseup');
 
-            $('#login').attr('disabled', false)
+            $('#login_submit').attr('disabled', false)
         }
     }
 

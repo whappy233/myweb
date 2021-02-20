@@ -1,14 +1,15 @@
+import django
 from django.forms import formset_factory
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib import auth
-from .utils import email_check
+from .utils import validateEmail
 from .models import UserProfile
 from django.core.exceptions import ValidationError
 import re
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.conf import settings
-
+from django.db.models import Q
 
 # 用户注册
 class RegisterForm(UserCreationForm):
@@ -31,9 +32,15 @@ class RegisterForm(UserCreationForm):
         # self.fields['extra_field'].initial ="harvard"
         self.fields['check_code'] = forms.CharField(label='验证码', widget=forms.TextInput(attrs={'placeholder': '不区分大小写', "class": "form-control"}))
 
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(Q(username=username) | Q(email=username) | Q(profile__telephone=username)).exists():
+            raise forms.ValidationError('用户名已存在')
+        return username
+
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if User.objects.filter(email=email).exists():
+        if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
                 raise forms.ValidationError('该邮箱已注册')
         return email
 

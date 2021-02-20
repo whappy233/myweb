@@ -24,6 +24,7 @@ from .forms import (EditForm, LoginForm, ProfileEditForm, PwdChangeForm,
 
 # from app_common.decorators import check_honeypot, honeypot_exempt
 
+from .utils import validateEmail
 
 # 返回验证码图片
 def check_code(request):
@@ -194,7 +195,11 @@ def change_pw(request):
 # Ajax 发送邮箱验证码
 def send_email_vcode(request):
     if request.method == 'POST':
-        email = request.POST.get('email',None)
+        email = request.POST.get('email', None)
+
+        if not validateEmail(email):
+            return JsonResponse({'status':400, 'msg':'请输入一个有效的 Email 地址!'})
+
         is_email = User.objects.filter(email=email)
         if is_email.count() != 0:
             vcode_str = generate_vcode()
@@ -205,16 +210,16 @@ def send_email_vcode(request):
                 request.session['vcode'] = vcode_str
                 request.session.set_expiry(300)
                 print(f'邮箱验证码: {vcode_str}')
-                return JsonResponse({'status':True,'data':'发送成功'})
+                return JsonResponse({'status':200,'msg':'验证码发送成功，请注意查收!'})
             else:
-                return JsonResponse({'status':False,'data':'发送验证码出错，请重试！'})
+                return JsonResponse({'status':400,'msg':'发送验证码出错，请重试!'})
         else:
-            return JsonResponse({'status':False,'data':'电子邮箱不存在！'})
+            return JsonResponse({'status':400,'msg':'电子邮箱不存在!'})
     else:
-        return JsonResponse({'status':False,'data':'方法错误'})
+        return JsonResponse({'status':400,'msg':'方法错误!'})
 
 # 忘记密码
-def forget_pwd(request):
+def forget_pwd_(request):
     if request.method == 'GET':
         return render(request, 'app_user/forget_pwd.html')
     elif request.method == 'POST':
@@ -243,6 +248,39 @@ def forget_pwd(request):
         except Exception as e:
             message = "验证码错误"
             return render(request,'app_user/forget_pwd.html', {'msg': message})
+
+
+def forget_pwd(request):
+    if request.method == 'POST' and request.is_ajax():
+        email = request.POST.get("email", None)  # 邮箱
+        vcode = request.POST.get("vcode", None)  # 验证码
+        new_pwd= request.POST.get('pw1', None)  # 密码
+        new_pwd_confirm = request.POST.get('pw2', None)
+        # 查询验证码和邮箱是否匹配
+        if new_pwd != new_pwd_confirm:
+            return JsonResponse({'status':400, 'msg':'两次密码不一致'})
+        try:
+            s_data = request.session.get('vcode', None)
+            s_email = request.session.get('email', None)
+            if s_data and s_email:
+                if s_data==vcode and s_email==email:
+                    user = User.objects.get(email=email)
+                    print(new_pwd)
+                    user.set_password(new_pwd)
+                    user.save()
+                    request.session.flush()
+                    message = f"修改密码成功，去<a href='{reverse('app_user:login')}'>登录</a>！"
+                    return JsonResponse({'status': 200, 'msg': message})
+                else:
+                    return JsonResponse({'status': 400, 'msg': "验证码错误"})
+            else:
+                return JsonResponse({'status': 400, 'msg': "验证码过期"})
+        except Exception as e:
+            return JsonResponse({'status': 400, 'msg': "验证码错误"})
+
+    return HttpResponseForbidden()
+
+
 
 # 编辑资料
 @login_required
@@ -309,6 +347,7 @@ def ajax_login(request):
     if request.method == 'POST' and request.is_ajax():
         username = request.POST.get('username')
         password = request.POST.get('password')
+        print(username, password)
         if password and username:
             user = auth.authenticate(username=username, password=password)
             if user:
@@ -345,7 +384,7 @@ def ajax_register(request):
             text = f'<p>请点击下面链接验证您的邮箱</p><a href="{url}" rel="bookmark">{url}</a>'
             print(text)
             send_email(to_email=user.email, vcode_str=text)
-            msg = f'恭喜您注册成功，一封验证邮件已经发送到您 {user.email} 的邮箱，请验证您的邮箱后登录本站'
+            msg = f'恭喜您注册成功，一封验证邮件已经发送到您 {user.email} 的邮箱，请验证您的邮箱后登录本站!'
             return JsonResponse({'status':200, 'msg':msg})
 
         else:
