@@ -9,8 +9,39 @@
 {% block title %}{{ article.title }}{% endblock title %}
 
 {% block css_style %}
-<link rel="stylesheet" href="{% static 'mdeditor/css/editormd.preview.css' %}"/>
+<!-- markdown -->
+<link rel="stylesheet" href="{% static 'mdeditor/css/editormd.css' %}"/>
+<script type="text/javascript" src="{% static 'mdeditor/js/editormd.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'mdeditor/js/lib/marked.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'mdeditor/js/lib/prettify.min.js' %}"></script>
+<script>
+    $(function(){
+        var testView = editormd.markdownToHTML("markdown-view", {
+            // gfm                  : true,
+            // toc                  : true,
+            // tocm                 : false,
+            // tocStartLevel        : 1,
+            // tocTitle             : "目录",
+            // tocDropdown          : false,
+            // tocContainer         : "",
+            // markdown             : "",
+            // markdownSourceCode   : false,
+            // htmlDecode           : false,
+            // autoLoadKaTeX        : true,
+            // pageBreak            : true,
+            // atLink               : true,    // for @link
+            // emailLink            : true,    // for mail address auto link
+            // tex                  : false,
+            // taskList             : false,   // Github Flavored Markdown task lists
+            // emoji                : false,
+            // flowChart            : false,
+            // sequenceDiagram      : false,
+            // previewCodeHighlight : true
+        });
+    })
+</script>
 {% endblock css_style %}
+
 
 <!-- Start Home -->
 {% block home %}
@@ -77,19 +108,17 @@
 </div>
 {% endblock home %}
 
-
-
 {% block blog_content_main %}
-
 <!-- 面包屑导航 -->
 {% load_breadcrumb article %}
 
 <!-- 文章主体 -->
 <article class="card">
-
     <!-- 文章内容 -->
     <div class="entry-content">
-        {{ article.body|custom_markdown}}
+        <div id="markdown-view">
+            <textarea style="display: none;" cols="100" rows="100">{{ article.body}}</textarea>
+        </div>
     </div>
 
     <!-- 文章结尾 -->
@@ -116,7 +145,6 @@
     </nav>
 </article>
 
-
 <!-- 相似文章 -->
 <div class="card">
     <div class="relates">
@@ -125,9 +153,7 @@
     </div>
 </div>
 
-
 <p><a href="{% url 'app_blog:article_share' article.id %}"> 分享文章 </a></p>
-
 
 <!-- 评论 -->
 <div class="card">
@@ -170,118 +196,118 @@
 
 <button id="btn1">点击发送ajax</button>
 <p id="pp1"></p>
-
 {% endblock blog_content_main %}
 
 
 {% block script %}
 <script src="{% static 'js/jquery.cookie_1.4.1.min.js' %}"></script>
 <script>
+    $(function(){
 
-    // 回复评论
-    function do_reply(parentid, username) {
-        $('#id_parent_comment').val(parentid);
-        $('#cancel_comment').show();
-        $("#commentform").appendTo($("#comment-content-" + parentid));
-    }
+        // 回复评论
+        function do_reply(parentid, username) {
+            $('#id_parent_comment').val(parentid);
+            $('#cancel_comment').show();
+            $("#commentform").appendTo($("#comment-content-" + parentid));
+        };
 
-    // 取消回复
-    function cancel_reply() {
-        $('#id_parent_comment').val('');
-        $('#comments').text('添加评论');
-        $('#cancel_comment').hide();
-        $("#commentform").appendTo($("#respond"));
-    }
+        // 取消回复
+        function cancel_reply() {
+            $('#id_parent_comment').val('');
+            $('#comments').text('添加评论');
+            $('#cancel_comment').hide();
+            $("#commentform").appendTo($("#respond"));
+        };
 
-    // 删除评论
-    function delete_comment(comment_id, obj_id){
-        $.ajax({
-            url: '{% url "app_comments:ajax_delete_comment" %}',
-            data: {
-                'comment_id':comment_id,
-                'obj_id':obj_id,
-                'csrfmiddlewaretoken': '{{ csrf_token }}',
-            },
-            type: 'post',
-            dataType: 'json',
-            success: function (data) {
-                if (data['status']==200){
-                    $(`#div-comment-${comment_id}`).remove();
-                    console.log('删除成功!')
-                }
-            }
-        });
-    }
-
-    // 按钮点击异步请求
-    $('#btn1').on('click', function () {
-        $.ajax({
-            url: '{% url "app_blog:ajax_app_test" %}',
-            data: {
-                'keyword': `发送: ${Math.random()}`
-            },
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                $("#pp1").text("返回结果是: " + data.count)
-            }
-        });
-    });
-
-    // 获取csrftoken
-    var csrftoken = $.cookie('csrftoken');
-    function csrfSafeMethod(method) {
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-
-    // 点赞
-    $(document).ready(function () {
-        $('a.like').click(function (e) {
-            e.preventDefault();
-            var ele = $(this);
-            var id = ele.data('id');
-            var action = ele.data('action');
-
+        // 删除评论
+        function delete_comment(comment_id, obj_id){
             $.ajax({
-                url: '{% url "app_blog:blog_like" %}',
+                url: '{% url "app_comments:ajax_delete_comment" %}',
                 data: {
-                    'id': id,
-                    'action': action,
+                    'comment_id':comment_id,
+                    'obj_id':obj_id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
                 },
-                type: 'POST',
+                type: 'post',
                 dataType: 'json',
-                beforeSend: function (xhr, settings) {
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    }
-                },
                 success: function (data) {
-                    if (data['status'] == 'ok') {
-                        var previous_action = action;
-
-                        // 变换动作
-                        ele.data('action', previous_action == 'like' ? 'unlike' : 'like');
-                        // 变换链接对应文本
-                        // ele.text(previous_action == 'like' ? 'Unlike' : 'Like');
-
-                        // 更新总点赞数
-                        // var previous_likes = parseInt($('span.count').text());
-                        // $('span.count').text(previous_action == 'like' ? previous_likes + 1 : previous_likes - 1);
-
-                        if (previous_action=='like'){
-                            $('a.like>:first').css('color', 'red');
-                        }else{
-                            $('a.like>:first').css('color', 'white');
-                        }
-                        $('a.like span#count').text( data['count']);
+                    if (data['status']==200){
+                        $(`#div-comment-${comment_id}`).remove();
+                        console.log('删除成功!')
                     }
-                    else {
-                        window.location.href = "{% url 'app_user:login' %}?next={{ article.get_absolute_url }}"
-                    }
+                }
+            });
+        };
+
+        // 按钮点击异步请求
+        $('#btn1').on('click', function () {
+            $.ajax({
+                url: '{% url "app_blog:ajax_app_test" %}',
+                data: {
+                    'keyword': `发送: ${Math.random()}`
                 },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    $("#pp1").text("返回结果是: " + data.count)
+                }
             });
         });
-    });
 
+        // 获取csrftoken
+        var csrftoken = $.cookie('csrftoken');
+        function csrfSafeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        };
+
+        // 点赞
+        $(document).ready(function () {
+            $('a.like').click(function (e) {
+                e.preventDefault();
+                var ele = $(this);
+                var id = ele.data('id');
+                var action = ele.data('action');
+
+                $.ajax({
+                    url: '{% url "app_blog:blog_like" %}',
+                    data: {
+                        'id': id,
+                        'action': action,
+                    },
+                    type: 'POST',
+                    dataType: 'json',
+                    beforeSend: function (xhr, settings) {
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        }
+                    },
+                    success: function (data) {
+                        if (data['status'] == 'ok') {
+                            var previous_action = action;
+
+                            // 变换动作
+                            ele.data('action', previous_action == 'like' ? 'unlike' : 'like');
+                            // 变换链接对应文本
+                            // ele.text(previous_action == 'like' ? 'Unlike' : 'Like');
+
+                            // 更新总点赞数
+                            // var previous_likes = parseInt($('span.count').text());
+                            // $('span.count').text(previous_action == 'like' ? previous_likes + 1 : previous_likes - 1);
+
+                            if (previous_action=='like'){
+                                $('a.like>:first').css('color', 'red');
+                            }else{
+                                $('a.like>:first').css('color', 'white');
+                            }
+                            $('a.like span#count').text( data['count']);
+                        }
+                        else {
+                            window.location.href = "{% url 'app_user:login' %}?next={{ article.get_absolute_url }}"
+                        }
+                    },
+                });
+            });
+        });
+    })
 </script>
 {% endblock script %}
