@@ -19,7 +19,7 @@ from app_comments.models import Comments
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-
+import markdown
 
 
 
@@ -130,19 +130,22 @@ class Category(models.Model):
 # 文章模型
 class Article(models.Model):
     '''文章模型'''
+    IMG_LINK = '/static/app_blog/images/occupying.png'
     STATUS_CHOICES = (('d', '草稿'), ('p', '发布'),)
     COMMENT_STATUS = (('o', '打开'), ('c', '关闭'),)
     tags = TaggableManager(blank=True, through=CnTaggedItem)  # 添加标签管理器
     title = models.CharField('标题', max_length=250)
     # slug 字段用于 URL 中，仅包含字母数字下划线以及连字符。根据 slug 字段，可对博客构建具有良好外观和 SEO 友好的 URL。
     # 使用 unique_for_date 参数可采用发布日期与 slug 对帖子构建URL
-    slug = models.SlugField('slug', max_length=250, unique_for_date='pub_time', blank=True)
+    slug = models.SlugField('slug', unique_for_date='pub_time', blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_articles', verbose_name='作者')
     category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='blog_articles', verbose_name='分类', blank=False, null=False)
     users_like = models.ManyToManyField(User, related_name='blog_liked', blank=True)
 
     # body = RichTextUploadingField('正文')
     body = MDTextField('正文')
+    img_link = models.CharField('图片地址', default=IMG_LINK, max_length=255)
+    summary = models.TextField('文章摘要', max_length=230, default='文章摘要等同于网页description内容，请务必填写...')
     views = models.PositiveIntegerField('阅读次数', default=0)
     pub_time = models.DateTimeField('发布时间', default=timezone.now, null=True, blank=True)
     created = models.DateTimeField('创建时间', auto_now_add=True)
@@ -150,8 +153,9 @@ class Article(models.Model):
     status = models.CharField('文章状态', max_length=10, choices=STATUS_CHOICES, default='d')
     is_delete = models.BooleanField('是否逻辑删除', default=False)
 
-    comment_status = models.CharField('评论状态', max_length=1, choices=COMMENT_STATUS, default='o')
     article_order = models.IntegerField('排序,数字越大越靠前', blank=False, null=False, default=0)
+
+    comment_status = models.CharField('评论状态', max_length=1, choices=COMMENT_STATUS, default='o')
 
     # contenttypes
     comments = GenericRelation(Comments)  # 该字段不会存储于数据库中(用于反向关系查询)
@@ -190,6 +194,12 @@ class Article(models.Model):
         self.status = 'd'
         self.pub_time = None
         self.save(update_fields=['status', 'pub_time'])
+
+    def body_to_markdown(self):
+        return markdown.markdown(self.body, extensions=[
+            'markdown.extensions.extra',
+            'markdown.extensions.codehilite',
+        ])
 
     # 标准 urls
     def get_absolute_url(self):  # 构建URL
@@ -272,9 +282,6 @@ class Article(models.Model):
             self.pub_time = timezone.now()
 
 
-
-
-
 # 轮播图
 class Carousel(models.Model):
     number = models.IntegerField('编号', help_text='编号决定图片播放的顺序，图片不要多于5张')
@@ -292,6 +299,7 @@ class Carousel(models.Model):
     def __str__(self):
         return self.content[:25]
 
+
 # 死链
 class Silian(models.Model):
     badurl = models.CharField('死链地址', max_length=200, help_text='注意：地址是以http开头的完整链接格式')
@@ -305,6 +313,7 @@ class Silian(models.Model):
 
     def __str__(self):
         return self.badurl
+
 
 # 友链
 class FriendLink(models.Model):
@@ -338,7 +347,7 @@ class FriendLink(models.Model):
         self.is_show = True
         self.save(update_fields=['is_show'])
 
-
+# 关于
 class AboutBlog(models.Model):
     body = models.TextField(verbose_name='About 内容')
     create_date = models.DateTimeField(verbose_name='创建时间', auto_now_add=True)
@@ -360,7 +369,7 @@ class BlogSettings(models.Model):
     site_description = models.TextField("网站描述", max_length=1000, null=False, blank=False, default='')
     site_seo_description = models.TextField("网站SEO描述", max_length=1000, null=False, blank=False, default='')
     site_keywords = models.TextField("网站关键字", max_length=1000, null=False, blank=False, default='')
-    article_sub_length = models.IntegerField("文章摘要长度", default=300)
+    article_sub_length = models.IntegerField("文章摘要长度", default=100)
     sidebar_article_count = models.IntegerField("侧边栏文章数目", default=10)
     sidebar_comment_count = models.IntegerField("侧边栏评论数目", default=5)
     show_google_adsense = models.BooleanField('是否显示谷歌广告', default=False)

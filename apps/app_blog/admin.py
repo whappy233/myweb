@@ -47,9 +47,9 @@ class ArticleAdmin(admin.ModelAdmin):
     actions_on_top = True   # 执行动作的位置
     # actions_on_bottom = False
     ordering = ['author']  # 默认排序
-    fields = ['tags', 'title', 'author', 'category', 'body',
-            'pub_time', 'status', 'is_delete', 'slug', 'views', 
-            'comment_status', 'article_order', 'users_like']
+    fields = ['tags', 'title', 'author', 'category', 'img_link',
+            'summary', 'body', 'pub_time', 'status', 'is_delete',
+            'slug', 'views', 'comment_status', 'article_order', 'users_like']
 
     empty_value_display = '<span>-</span>'  # 字段值为空时显示的文本(可为纯文本,可为html)
     # admin_order_field = ('title', 'updated')  # 设置需要排序的字段

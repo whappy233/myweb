@@ -221,23 +221,13 @@ class FormatTimeNode(template.Node):
 @register.filter()
 def markdown_format(content):
     '''markdown 格式化'''
-    return mark_safe(markdown.markdown(content,extensions=[
+    # markdown.extensions.extra 用于标题、表格、引用这些基本转换
+    # markdown.extensions.codehilite 用于语法高亮
+    # markdown.extensions.toc 用于生成目录
+    return markdown.markdown(content,extensions=[
                                      'markdown.extensions.extra',
                                      'markdown.extensions.codehilite',
-                                     'markdown.extensions.toc',
-                                  ]))
-
-# markdown.extensions.extra 用于标题、表格、引用这些基本转换
-# markdown.extensions.codehilite 用于语法高亮
-# markdown.extensions.toc 用于生成目录
-
-
-@register.filter(is_safe=True)
-@stringfilter
-def custom_markdown(content):
-    '''markdown 格式化'''
-    from app_blog.utils import CommonMarkdown
-    return mark_safe(CommonMarkdown.get_markdown(content))
+                                  ])
 
 
 import datetime

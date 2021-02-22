@@ -11,35 +11,6 @@
 {% block css_style %}
 <!-- markdown -->
 <link rel="stylesheet" href="{% static 'mdeditor/css/editormd.css' %}"/>
-<script type="text/javascript" src="{% static 'mdeditor/js/editormd.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'mdeditor/js/lib/marked.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'mdeditor/js/lib/prettify.min.js' %}"></script>
-<script>
-    $(function(){
-        var testView = editormd.markdownToHTML("markdown-view", {
-            // gfm                  : true,
-            // toc                  : true,
-            // tocm                 : false,
-            // tocStartLevel        : 1,
-            // tocTitle             : "目录",
-            // tocDropdown          : false,
-            // tocContainer         : "",
-            // markdown             : "",
-            // markdownSourceCode   : false,
-            // htmlDecode           : false,
-            // autoLoadKaTeX        : true,
-            // pageBreak            : true,
-            // atLink               : true,    // for @link
-            // emailLink            : true,    // for mail address auto link
-            // tex                  : false,
-            // taskList             : false,   // Github Flavored Markdown task lists
-            // emoji                : false,
-            // flowChart            : false,
-            // sequenceDiagram      : false,
-            // previewCodeHighlight : true
-        });
-    })
-</script>
 {% endblock css_style %}
 
 
@@ -114,11 +85,12 @@
 
 <!-- 文章主体 -->
 <article class="card">
-    <!-- 文章内容 -->
-    <div class="entry-content">
-        <div id="markdown-view">
-            <textarea style="display: none;" cols="100" rows="100">{{ article.body}}</textarea>
-        </div>
+    <!-- 目录 -->
+    {{article.toc|safe}}
+
+    <!-- body -->
+    <div class="markdown-body">
+        {{article.body|safe}}
     </div>
 
     <!-- 文章结尾 -->

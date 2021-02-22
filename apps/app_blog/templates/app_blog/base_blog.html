@@ -26,13 +26,13 @@
     <title>{% block title %}{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}{% endblock title %}</title>
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
 
-    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/new/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/new/css/nprogress.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/new/css/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/new/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/css/nprogress.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/css/font-awesome.min.css' %}">
 
     <!-- 代码高亮 -->
-    <!-- <link rel="stylesheet" type="text/css" href="{% static 'app_blog/new/css/default.css' %}"> -->
+    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/css/markdown_format_codehilite.css' %}">
 
     <link href="{% static 'css/bootsnav.css' %}" rel="stylesheet">
     <link href="{% static 'css/overwrite.css' %}" rel="stylesheet">
@@ -42,9 +42,9 @@
     <link href="{% static 'css/jquery.flipbox.css' %}" rel="stylesheet"/>
     <link href="{% static 'css/clock_style.css' %}" rel="stylesheet"/>
 
-    <script src="{% static 'app_blog/new/js/jquery-2.1.4.min.js' %}"></script>
-    <script src="{% static 'app_blog/new/js/nprogress.js' %}"></script>
-    <script src="{% static 'app_blog/new/js/jquery.lazyload.min.js' %}"></script>
+    <script src="{% static 'app_blog/js/jquery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'app_blog/js/nprogress.js' %}"></script>
+    <script src="{% static 'app_blog/js/jquery.lazyload.min.js' %}"></script>
 
     {% block css_style %}
     {% endblock css_style %}
@@ -186,7 +186,7 @@
     <!-- Home -->
     {% url 'app_gallery:get_random_background' 1920 1080 as the_url %}
     <!-- <div class="pageheader fixed-demo" style="background-image: url('{{the_url}}');"> -->
-    <div class="pageheader fixed-demo" style="background-image: url('{% static 'app_blog/new/images/pic.jpg' %}');">
+    <div class="pageheader fixed-demo" style="background-image: url('{% static 'app_blog/images/pic.jpg' %}');">
         <div class="container">
             <div style="float: left; max-width: 700px;">
                 {% block home %}
@@ -338,9 +338,9 @@
     {% include 'app_blog/login_register_model.html' %}
 
 
-    <script src="{% static 'app_blog/new/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'app_blog/new/js/jquery.ias.js' %}"></script>
-    <script src="{% static 'app_blog/new/js/scripts.js' %}"></script>
+    <script src="{% static 'app_blog/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'app_blog/js/jquery.ias.js' %}"></script>
+    <script src="{% static 'app_blog/js/scripts.js' %}"></script>
 
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootsnav.js' %}"></script>
@@ -352,7 +352,7 @@
     <!-- body 背景星星 -->
     <!-- <script src="{% static 'js/starlight.js' %}"></script> -->
     <!-- body 背景雪花 -->
-    <!-- <script src="{% static 'app_blog/new/js/snow.js' %}"></script> -->
+    <!-- <script src="{% static 'app_blog/js/snow.js' %}"></script> -->
 
     <script>
         // Start Home ios-parallax背景图片鼠标移动

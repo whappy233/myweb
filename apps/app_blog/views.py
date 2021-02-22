@@ -19,7 +19,9 @@ from myweb.utils import cache
 from .forms import EmailArticleForm, SearchForm
 from .models import Article, Category, AboutBlog
 import time
-
+import markdown
+from markdown.extensions.toc import TocExtension  # 锚点的拓展
+from django.utils.text import slugify
 
 
 class ArticleListView(ListView):
@@ -223,6 +225,24 @@ class ArticleDetailView(DetailView):
                 if t > 60 * 30:
                     obj.viewed()
                     ses[the_key] = time.time()
+
+        # 获取文章更新的时间，判断是否从缓存中取文章的markdown,可以避免每次都转换
+        ud = obj.updated.strftime("%Y%m%d%H%M%S")
+        md_key = '{}_md_{}'.format(obj.id, ud)
+        cache_md = cache.get(md_key)
+        if cache_md:
+            obj.body, obj.toc = cache_md
+            logger.info(f'获取文章Markdown缓存, KEY: {md_key}')
+        else:
+            md = markdown.Markdown(extensions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite',
+                TocExtension(slugify=slugify),
+            ])
+            obj.body = md.convert(obj.body)
+            obj.toc = md.toc  # 目录
+            cache.set(md_key, (obj.body, obj.toc), 60 * 60 * 12)
+            logger.info(f'设置文章Markdown缓存, KEY: {md_key}')
 
         self.object = obj
         return obj

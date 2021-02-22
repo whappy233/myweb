@@ -7,7 +7,7 @@
 {% for article in articles %}
 <article class="excerpt">
     <a class="focus" href="{{ article.get_absolute_url }}" title="{{ article.title }}">
-        <img class="thumb" data-original="{{the_url}}" src="{{the_url}}" alt="">
+        <img class="thumb" data-original="{{article.img_link}}" src="{{article.img_link}}" alt="">
     </a>
     <header>
         <a class="cat" href="{% url 'app_blog:category_detail' article.category.slug %}" rel="category tag">{{ article.category }}<i></i></a>
@@ -42,9 +42,7 @@
         {% endif %}
     </p>
     <p class="note">
-        {% comment %} {{ article.body|truncatewords:10|linebreaks }} {% endcomment %}
-        {% comment %} {{ article.body|markdown:10|linebreaks }} {% endcomment %}
-        {{ article.body|custom_markdown|truncatechars_content }}
+        {{ article.summary|truncatechars_content }}
     </p>
 </article>
 {% empty %}

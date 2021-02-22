@@ -7,7 +7,7 @@
             <img src="{{ comment_item.author.profile.photo.url }}" alt="user_image" class="img-responsive">
         </div>
         <div class="comment-content col-md-10" id="comment-content-{{ comment_item.pk }}">
-            <p>{{ comment_item.body |escape|custom_markdown }}</p>
+            <p>{{ comment_item.body |escape|markdown_format|safe }}</p>
             <div class="comment_footer small mute">
                 <span>By&nbsp;&nbsp;
                     {% with comment_item.author as user %}
