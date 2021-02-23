@@ -38,10 +38,6 @@
     <link href="{% static 'css/overwrite.css' %}" rel="stylesheet">
     <link href="{% static 'css/skins/color.css' %}" rel="stylesheet">
 
-    <!-- Clock -->
-    <link href="{% static 'css/jquery.flipbox.css' %}" rel="stylesheet"/>
-    <link href="{% static 'css/clock_style.css' %}" rel="stylesheet"/>
-
     <script src="{% static 'app_blog/js/jquery-2.1.4.min.js' %}"></script>
     <script src="{% static 'app_blog/js/nprogress.js' %}"></script>
     <script src="{% static 'app_blog/js/jquery.lazyload.min.js' %}"></script>
@@ -53,7 +49,7 @@
 <body class="starlight">
 
     <!-- 导航栏 -->
-    <nav class="navbar navbar-default navbar-fixed white no-background bootsnav">
+    <nav class="cd-auto-hide-header navbar navbar-default navbar-fixed white no-background bootsnav">
 
         <!-- 顶部搜索-->
         <div class="top-search">
@@ -193,84 +189,6 @@
                 <h2 class="title">{{ SITE_NAME }}</h2>
                 {% endblock home %}
             </div>
-
-            <div class="clock" style="float: right;">
-                <div class="time-box">
-                    <div class="time-side">0</div>
-                    <div class="time-side">1</div>
-                    <div class="time-side">2</div>
-                    <div class="time-side">3</div>
-                    <div class="time-side">4</div>
-                    <div class="time-side">5</div>
-                    <div class="time-side">6</div>
-                    <div class="time-side">7</div>
-                    <div class="time-side">8</div>
-                    <div class="time-side">9</div>
-                </div>
-                <div class="time-box">
-                    <div class="time-side">0</div>
-                    <div class="time-side">1</div>
-                    <div class="time-side">2</div>
-                    <div class="time-side">3</div>
-                    <div class="time-side">4</div>
-                    <div class="time-side">5</div>
-                    <div class="time-side">6</div>
-                    <div class="time-side">7</div>
-                    <div class="time-side">8</div>
-                    <div class="time-side">9</div>
-                </div>
-                <span>:</span>
-                <div class="time-box">
-                    <div class="time-side">0</div>
-                    <div class="time-side">1</div>
-                    <div class="time-side">2</div>
-                    <div class="time-side">3</div>
-                    <div class="time-side">4</div>
-                    <div class="time-side">5</div>
-                    <div class="time-side">6</div>
-                    <div class="time-side">7</div>
-                    <div class="time-side">8</div>
-                    <div class="time-side">9</div>
-                </div>
-                <div class="time-box">
-                    <div class="time-side">0</div>
-                    <div class="time-side">1</div>
-                    <div class="time-side">2</div>
-                    <div class="time-side">3</div>
-                    <div class="time-side">4</div>
-                    <div class="time-side">5</div>
-                    <div class="time-side">6</div>
-                    <div class="time-side">7</div>
-                    <div class="time-side">8</div>
-                    <div class="time-side">9</div>
-                </div>
-                <span>:</span>
-                <div class="time-box">
-                    <div class="time-side">0</div>
-                    <div class="time-side">1</div>
-                    <div class="time-side">2</div>
-                    <div class="time-side">3</div>
-                    <div class="time-side">4</div>
-                    <div class="time-side">5</div>
-                    <div class="time-side">6</div>
-                    <div class="time-side">7</div>
-                    <div class="time-side">8</div>
-                    <div class="time-side">9</div>
-                </div>
-                <div class="time-box">
-                    <div class="time-side">0</div>
-                    <div class="time-side">1</div>
-                    <div class="time-side">2</div>
-                    <div class="time-side">3</div>
-                    <div class="time-side">4</div>
-                    <div class="time-side">5</div>
-                    <div class="time-side">6</div>
-                    <div class="time-side">7</div>
-                    <div class="time-side">8</div>
-                    <div class="time-side">9</div>
-                </div>
-            </div>
-
         </div>
     </div>
 
@@ -284,10 +202,9 @@
         </div>
 
         <!-- 侧边 -->
-        {% block blog_content_sidebar %}
         <aside class="sidebar">
             <div class="fixed">
-                <div class="widget widget_search">
+                <div class="card card-nopdding widget widget_search">
                     <form class="navbar-form" action="" method="get">
                         <div class="input-group">
                             <input id="search" type="text" name="q" class="form-control" size="35" placeholder="请输入关键字"
@@ -298,7 +215,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="widget widget_sentence">
+                <div class="card card-nopdding widget widget_sentence">
                     <h3>Some Info</h3>
                     <div class="widget-sentence-content">
                         <h4>2021年02月05日星期五</h4>
@@ -306,26 +223,27 @@
                             别让你不能做的事妨碍到你能做的事。（John Wooden）</p>
                     </div>
                 </div>
-                <div class="widget">
+                <div class="card card-nopdding widget">
                     <div class="widget-sentence-content">
                         <p><a href="{% url 'app_blog:article_feed' %}">订阅博客</a></p>
                         <p><a href="{% url 'app_blog:refresh' %}">刷新缓存</a></p>
                     </div>
                 </div>
+                {% block sidebar_fixed %}
+                {% endblock sidebar_fixed %}
             </div>
 
-            <div class="widget widget_hot">
+            <div class="card card-nopdding widget widget_hot">
                 <!-- 最近更新 -->
                 {% show_latest_articles 5 %}
             </div>
 
-            <div class="widget widget_hot">
+            <div class="card card-nopdding widget widget_hot">
                 <!-- 最多评论文章 -->
                 {% most_commented_articles %}
             </div>
 
         </aside>
-        {% endblock blog_content_sidebar %}
 
         <!-- 点击返回顶部 -->
         <div id="gotop"><a class="gotop"></a></div>
@@ -355,64 +273,88 @@
     <!-- <script src="{% static 'app_blog/js/snow.js' %}"></script> -->
 
     <script>
-        // Start Home ios-parallax背景图片鼠标移动
-        $('.pageheader').iosParallax({
-            movementFactor: 50, // 背景移动的速度
-            dampenFactor: 50  // 多大程度地抑制运动（越大速度越慢）
-        });
+        $(function(){
+            // -------------------------------------
+            // 自动隐藏显示导航菜单
+            var mainHeader = $('.cd-auto-hide-header'),
+                headerHeight = mainHeader.height(),
+                scrolling = false,
+                previousTop = 0,
+                scrollDelta = 10,
+                scrollOffset = 150;
 
-        // 时钟
-        $('.clock .time-box').flipbox({
-            vertical: true
-        });
-        function updateClock() {
-            var now = new Date();
-            var hours = now.getHours();
-            var minutes = now.getMinutes();
-            var seconds = now.getSeconds();
-            $('.clock .time-box:eq(0)').flipbox('jump', Math.floor(hours / 10));
-            $('.clock .time-box:eq(1)').flipbox('jump', hours % 10);
-            $('.clock .time-box:eq(2)').flipbox('jump', Math.floor(minutes / 10));
-            $('.clock .time-box:eq(3)').flipbox('jump', minutes % 10);
-            $('.clock .time-box:eq(4)').flipbox('jump', Math.floor(seconds / 10));
-            $('.clock .time-box:eq(5)').flipbox('jump', seconds % 10);
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+            $(window).on('scroll', function () {
+                if (!scrolling) {
+                    scrolling = true;
+                    (!window.requestAnimationFrame)
+                        ? setTimeout(autoHideHeader, 250)
+                        : requestAnimationFrame(autoHideHeader);
+                }
+            });
 
-        // 主题切换
-        $('a.theme-toggle').click(function (e) {
-            e.preventDefault();
-            let ele = $(this);
-            let dark = ele.children().first();
-            let light = ele.children().last();
-            let is_dark = dark.css('display') == 'inline' ? false: true;
-            let is_light = light.css('display') == 'inline' ? false : true;
-            if (is_dark==false){
-                $('body').addClass('dark')
-            }else{
-                $('body').removeClass('dark')
+            $(window).on('resize', function () {
+                headerHeight = mainHeader.height();
+            });
+
+            function autoHideHeader() {
+                var currentTop = $(window).scrollTop();
+                checkSimpleNavigation(currentTop);
+                previousTop = currentTop;
+                scrolling = false;
             }
-        });
 
-        //返回顶部按钮
-        $("#gotop").hide();
-        $(window).scroll(function () {
-            if ($(window).scrollTop() > 100) {
-                $("#gotop").fadeIn();
-            } else {
-                $("#gotop").fadeOut();
+            function checkSimpleNavigation(currentTop) {
+                if (previousTop - currentTop > scrollDelta) {
+                    mainHeader.removeClass('is-hidden');  // 向上显示导航
+                } else if (currentTop - previousTop > scrollDelta && currentTop > scrollOffset) {
+                    mainHeader.addClass('is-hidden');  // 向下隐藏导航
+                }
             }
-        });
-        $("#gotop").click(function () {
-            $('html,body').animate({
-                'scrollTop': 0
-            }, 500);
-        });
 
-        // Tooltip
-        $('[data-toggle="tooltip"]').tooltip();  
+            // -------------------------------------
+            // Start Home ios-parallax背景图片鼠标移动
+            $('.pageheader').iosParallax({
+                movementFactor: 50, // 背景移动的速度
+                dampenFactor: 50  // 多大程度地抑制运动（越大速度越慢）
+            });
 
+            // -------------------------------------
+            // 主题切换
+            $('a.theme-toggle').click(function (e) {
+                e.preventDefault();
+                let ele = $(this);
+                let dark = ele.children().first();
+                let light = ele.children().last();
+                let is_dark = dark.css('display') == 'inline' ? false: true;
+                let is_light = light.css('display') == 'inline' ? false : true;
+                if (is_dark==false){
+                    $('body').addClass('dark')
+                }else{
+                    $('body').removeClass('dark')
+                }
+            });
+
+            // -------------------------------------
+            //返回顶部按钮
+            $("#gotop").hide();
+            $(window).scroll(function () {
+                if ($(window).scrollTop() > 100) {
+                    $("#gotop").fadeIn();
+                } else {
+                    $("#gotop").fadeOut();
+                }
+            });
+            $("#gotop").click(function () {
+                $('html,body').animate({
+                    'scrollTop': 0
+                }, 500);
+            });
+
+            // -------------------------------------
+            // Tooltip
+            $('[data-toggle="tooltip"]').tooltip();  
+
+        })
     </script>
 
     {% block script %}

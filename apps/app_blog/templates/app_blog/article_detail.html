@@ -85,9 +85,6 @@
 
 <!-- 文章主体 -->
 <article class="card">
-    <!-- 目录 -->
-    {{article.toc|safe}}
-
     <!-- body -->
     <div class="markdown-body">
         {{article.body|safe}}
@@ -169,6 +166,55 @@
 <button id="btn1">点击发送ajax</button>
 <p id="pp1"></p>
 {% endblock blog_content_main %}
+
+
+{% block sidebar_fixed %}
+<!-- 目录 -->
+<div class="card card-nopdding widget">
+    <div class="widget-sentence-content">
+        <div class="toc">
+            <ul>
+                <li><a href="#mrdoc觅道文档-记录文档汇聚思想-english" draggable="false">MrDoc觅道文档 - 记录文档，汇聚思想 - English</a>
+                    <ul>
+                        <li><a href="#介绍" draggable="false">介绍</a></li>
+                        <li><a href="#开源地址" draggable="false">开源地址</a></li>
+                        <li><a href="#示例站点" draggable="false">示例站点：</a></li>
+                        <li><a href="#说明文档" draggable="false">说明文档：</a>
+                            <ul>
+                                <li><a href="#1安装依赖库" draggable="false">1、安装依赖库</a></li>
+                                <li><a href="#2配置数据库信息" draggable="false">2、配置数据库信息</a></li>
+                                <li><a href="#3初始化数据库" draggable="false">3、初始化数据库</a></li>
+                                <li><a href="#4创建管理员账户" draggable="false">4、创建管理员账户</a></li>
+                                <li><a href="#5测试运行" draggable="false">5、测试运行</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="#特性" draggable="false">特性：</a></li>
+                <li><a href="#应用核心依赖环境" draggable="false">应用核心依赖环境</a></li>
+                <li><a href="#简明安装教程" draggable="false">简明安装教程</a>
+                    <ul>
+                        <li><a href="#1安装依赖库" draggable="false">1、安装依赖库</a></li>
+                        <li><a href="#2配置数据库信息" draggable="false">2、配置数据库信息</a></li>
+                        <li><a href="#3初始化数据库" draggable="false">3、初始化数据库</a></li>
+                        <li><a href="#4创建管理员账户" draggable="false">4、创建管理员账户</a></li>
+                        <li><a href="#5测试运行" draggable="false">5、测试运行</a></li>
+                    </ul>
+                </li>
+                <li><a href="#问题提交和反馈" draggable="false">问题提交和反馈</a>
+                    <ul>
+                        <li><a href="#1提交issue" draggable="false">1、提交issue</a></li>
+                        <li><a href="#2加入mrdoc交流群" draggable="false">2、加入MrDoc交流群</a></li>
+                        <li><a href="#3联系作者" draggable="false">3、联系作者</a></li>
+                    </ul>
+                </li>
+                <li><a href="#赞赏项目" draggable="false">赞赏项目</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock sidebar_fixed %}
+
 
 
 {% block script %}

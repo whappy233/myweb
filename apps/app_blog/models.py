@@ -145,7 +145,7 @@ class Article(models.Model):
     # body = RichTextUploadingField('正文')
     body = MDTextField('正文')
     img_link = models.CharField('图片地址', default=IMG_LINK, max_length=255)
-    summary = models.TextField('文章摘要', max_length=230, default='文章摘要等同于网页description内容，请务必填写...')
+    summary = models.TextField('文章摘要', max_length=300, default='文章摘要等同于网页description内容，请务必填写...')
     views = models.PositiveIntegerField('阅读次数', default=0)
     pub_time = models.DateTimeField('发布时间', default=timezone.now, null=True, blank=True)
     created = models.DateTimeField('创建时间', auto_now_add=True)
