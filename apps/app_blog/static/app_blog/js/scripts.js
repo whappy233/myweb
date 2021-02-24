@@ -2,32 +2,26 @@
 /*window.onresize=function(){
     window.location.reload();
 }*/
- 
-//页面加载
-$('body').show();
-$('.version').text(NProgress.version);
+
+// 页面加载条
 NProgress.start();
 setTimeout(function () {
     NProgress.done();
     $('.fade').removeClass('out');
 }, 1000);
 
-//页面加载时给img和a标签添加draggable属性
-(function () {
-    $('img').attr('draggable', 'false');
-    $('a').attr('draggable', 'false');
-})();
 
 //设置Cookie
 function setCookie(name, value, time) {
     var strsec = getsec(time);
+    console.log(strsec)
     var exp = new Date();
     exp.setTime(exp.getTime() + strsec * 1);
     document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
 }
 function getsec(str) {
-    var str1 = str.substring(1, str.length) * 1;
-    var str2 = str.substring(0, 1);
+    var str1 = str.substring(0, str.length-1) * 1;
+    var str2 = str.charAt(str.length-1);;
     if (str2 == "s") {
         return str1 * 1000;
     } else if (str2 == "h") {
@@ -36,7 +30,6 @@ function getsec(str) {
         return str1 * 24 * 60 * 60 * 1000;
     }
 }
-
 //获取Cookie
 function getCookie(name) {
     var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
@@ -47,57 +40,11 @@ function getCookie(name) {
     }
 }
 
-//导航智能定位
-$.fn.navSmartFloat = function () {
-    var position = function (element) {
-        var top = element.position().top,
-            pos = element.css("position");
-        $(window).scroll(function () {
-            var scrolls = $(this).scrollTop();
-            if (scrolls > top) { //如果滚动到页面超出了当前元素element的相对页面顶部的高度
-                $('.header-topbar').fadeOut(0);
-                if (window.XMLHttpRequest) { //如果不是ie6
-                    element.css({
-                        position: "fixed",
-                        top: 0
-                    }).addClass("shadow");
-                } else { //如果是ie6
-                    element.css({
-                        top: scrolls
-                    });
-                }
-            } else {
-                $('.header-topbar').fadeIn(500);
-                element.css({
-                    position: pos,
-                    top: top
-                }).removeClass("shadow");
-            }
-        });
-    };
-    return $(this).each(function () {
-        position($(this));
-    });
-};
-
-//启用导航定位
-$("#navbar").navSmartFloat();
-
-//返回顶部按钮
-$("#gotop").hide();
-$(window).scroll(function () {
-    if ($(window).scrollTop() > 100) {
-        $("#gotop").fadeIn();
-    } else {
-        $("#gotop").fadeOut();
-    }
-});
-$("#gotop").click(function () {
-    $('html,body').animate({
-        'scrollTop': 0
-    }, 500);
-});
-
+//页面加载时给img和a标签添加draggable属性
+(function () {
+    $('img').attr('draggable', 'false');
+    $('a').attr('draggable', 'false');
+})();
 
 //图片延时加载
 $("img.thumb").lazyload({
@@ -110,20 +57,12 @@ $(".single .content img").lazyload({
     effect: "fadeIn"
 });
 
-//IE6-9禁止用户选中文本
-document.body.onselectstart = document.body.ondrag = function () {
-    return false;
-};
-
-//启用工具提示
-$('[data-toggle="tooltip"]').tooltip();
-
 
 //无限滚动反翻页
 jQuery.ias({
     history: false,
     container : '.content',  // 插入的容器
-    item: '.excerpt',
+    item: '.card.article',
     pagination: '.pagination',  //分页元素
     next: '.pagination > li:nth-child(4) > a',  // 下一页元素
     trigger: '查看更多',
@@ -149,7 +88,7 @@ $(window).scroll(function () {
     if (windowScrollTop > sidebarHeight - 60 && sidebar.length) {
         $('.fixed').css({
             'position': 'fixed',
-            'top': '70px',
+            'top': '0px',
             'width': '360px'
         });
     } else {
@@ -157,12 +96,18 @@ $(window).scroll(function () {
     }
 });
 
-//禁止右键菜单
-/*window.oncontextmenu = function(){
-	return false;
-};*/
 
-/*自定义右键菜单*/
+//IE6-9禁止用户选中文本
+// document.body.onselectstart = document.body.ondrag = function () {
+//     return false;
+// };
+
+// 禁止右键菜单
+// window.oncontextmenu = function(){
+// 	return false;
+// };
+
+// 自定义右键菜单
 // (function () {
 //     var oMenu = document.getElementById("rightClickMenu");
 //     var aLi = oMenu.getElementsByTagName("li");

@@ -284,6 +284,7 @@ class Article(models.Model):
 
 # 轮播图
 class Carousel(models.Model):
+    # 轮播图大小 820*200
     number = models.IntegerField('编号', help_text='编号决定图片播放的顺序，图片不要多于5张')
     title = models.CharField('标题', max_length=20, blank=True, null=True, help_text='标题可以为空')
     content = models.CharField('描述', max_length=80)

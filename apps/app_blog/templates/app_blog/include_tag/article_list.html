@@ -5,8 +5,7 @@
 
 {% url 'app_gallery:get_random_background' 220 150 as the_url %}
 {% for article in articles %}
-<div class="card card-nopdding">
-
+<div class="card card-nopdding article">
 <article class="excerpt">
     <div class="focus">
         <a href="{{ article.get_absolute_url }}" title="{{ article.title }}">
