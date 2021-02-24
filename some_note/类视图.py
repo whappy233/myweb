@@ -10,7 +10,7 @@ from app_blog.models import Article
 from django.utils import timezone
 class IndexView(ListView):
     template_name = 'blog/article_list.html'
-    context_object_name = 'latest_articles'
+    context_object_name = 'recently_updated'
     # 希望只展示作者自己发表的文章列表且按文章发布时间逆序排列
     def get_queryset(self):
         return Article.objects.filter(author = self.request.user).order_by('-pub_date')
@@ -24,7 +24,7 @@ from django.utils import timezone
 class IndexView(ListView):
     queryset = Article.objects.all().order_by("-pub_date")
     template_name = 'blog/article_list.html'
-    context_object_name = 'latest_articles'
+    context_object_name = 'recently_updated'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['now'] = timezone.now() #只有这行代码有用

@@ -68,9 +68,9 @@
     }
 
     $.fn.drag = function(options){
-		var slide = new Drag(this, options);
-		slide.init();
-        return slide
+		var d = new Drag(this, options);
+		d.init();
+        return d
     };
 
 })(jQuery);

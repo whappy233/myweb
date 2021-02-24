@@ -26,9 +26,13 @@
     <title>{% block title %}{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}{% endblock title %}</title>
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
 
+
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous"> -->
+
     <link rel="stylesheet" type="text/css" href="{% static 'app_blog/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app_blog/css/nprogress.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app_blog/css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app_blog/css/background_color.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app_blog/css/font-awesome.min.css' %}">
 
     <!-- 代码高亮 -->
@@ -132,7 +136,7 @@
                         <a href="/" class="dropdown-toggle" data-toggle="dropdown">Blog</a>
                         <ul class="dropdown-menu">
                             {% cache 500 monthly_archive %}
-                            {% blog_category_menu %}
+                            {% blog_category %}
                             {% endcache %}
                         </ul>
                     </li>
@@ -197,6 +201,7 @@
     <section class="container">
         <div class="content-wrap">
             <div class="content">
+                <noscript>Js 已禁用</noscript>
                 {% block blog_content_main %}
                 {% endblock blog_content_main %}
             </div>
@@ -205,17 +210,9 @@
         <!-- 侧边 -->
         <aside class="sidebar">
             <div class="fixed">
-                <div class="card card-nopdding widget widget_search">
-                    <form class="navbar-form" action="" method="get">
-                        <div class="input-group">
-                            <input id="search" type="text" name="q" class="form-control" size="35" placeholder="请输入关键字"
-                                maxlength="15" autocomplete="off" value="{{keyword|default_if_none:''}}">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
-                            </span>
-                        </div>
-                    </form>
-                </div>
+                <!-- 轮播图 -->
+                {% include 'app_blog/include_tag/banner.html' %}
+
                 <div class="card card-nopdding widget widget_sentence">
                     <h3>Some Info</h3>
                     <div class="widget-sentence-content">
@@ -236,7 +233,7 @@
 
             <div class="card card-nopdding widget widget_hot">
                 <!-- 最近更新 -->
-                {% show_latest_articles 5 %}
+                {% recently_updated 5 %}
             </div>
 
             <div class="card card-nopdding widget widget_hot">
@@ -332,17 +329,21 @@
 
             // -------------------------------------
             //返回顶部按钮
+            var is_flying = false;
             $("#gotop").hide();
             $(window).scroll(function () {
-                if ($(window).scrollTop() > 100) {
-                    $("#gotop").fadeIn();
-                } else {
-                    $("#gotop").fadeOut();
+                if (!is_flying){
+                    if ($(window).scrollTop() > 100) {
+                        $("#gotop").fadeIn();
+                    } else {
+                        $("#gotop").fadeOut();
+                    }
                 }
             });
 
+            // -------------------------------------
             // 滚动到指定位置
-            $('a#gotop, .toc a').click(function(e){
+            $('a.gotop, .toc a').click(function(e){
                 e.preventDefault();
                 var ele = $(this),
                     aim = ele.attr('href');

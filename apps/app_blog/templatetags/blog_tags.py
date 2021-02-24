@@ -30,7 +30,7 @@ def get_carousel_list():
 
 
 # 返回文章列表模板
-@register.inclusion_tag('app_blog/include_tag/article_list.html')
+@register.inclusion_tag('app_blog/include_tag/list.html')
 def load_article_list(articles):
     '''返回文章列表模板'''
     return {'articles': articles}
@@ -82,8 +82,8 @@ def istype(obj, typename):
 
 
 # 博客分类层级
-@register.inclusion_tag('app_blog/include_tag/blog_category.html')
-def blog_category_menu():
+@register.inclusion_tag('app_blog/include_tag/category.html')
+def blog_category():
     '''博客分类层级'''
     all_categorys = Category.objects.all()
     top_categorys = all_categorys.filter(parent_category=None)
@@ -108,16 +108,16 @@ def most_commented_articles(count=5):
     return {'articles': article_list}
 
 # 最近更新 (返回模板) cache
-'inclusion_tag (处理数据并返回模板)   {% show_latest_articles 5 %}'
-@register.inclusion_tag('app_blog/include_tag/latest_articles.html')  # 指定利用返回值显示的模板
-def show_latest_articles(count=5):
+'inclusion_tag (处理数据并返回模板)   {% recently_updated 5 %}'
+@register.inclusion_tag('app_blog/include_tag/recently_updated.html')  # 指定利用返回值显示的模板
+def recently_updated(count=5):
     x = lambda: Article.published.order_by('-pub_time')[:count]
-    latest_articles = cache.get_or_set('latest_articles', x, 60*100)
-    return {'articles':latest_articles}
+    recently_updated = cache.get_or_set('recently_updated', x, 60*100)
+    return {'articles':recently_updated}
 
 # 归档 (返回模板)
-@register.inclusion_tag('app_blog/include_tag/article_archives.html')
-def article_archives():
+@register.inclusion_tag('app_blog/include_tag/archives.html')
+def blog_archives():
     #按日期逆序排序
     articles = Article.published.order_by('-pub_time')
     return {'articles': articles}

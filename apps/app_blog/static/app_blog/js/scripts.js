@@ -88,7 +88,7 @@ $(window).scroll(function () {
     if (windowScrollTop > sidebarHeight - 60 && sidebar.length) {
         $('.fixed').css({
             'position': 'fixed',
-            'top': '0px',
+            'top': '15px',
             'width': '360px'
         });
     } else {

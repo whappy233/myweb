@@ -26,8 +26,35 @@
 
 {% block blog_content_main %}
 
-<!-- 轮播图 -->
-{% include 'app_blog/include_tag/carousel.html' %}
+<div class="categorylist">
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="card card-body bg-primary-gradient">
+                <i class="glyphicon glyphicon-fire"></i>
+                Hot
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="card card-body bg-success-gradient">
+                <i class="glyphicon glyphicon-flash"></i>
+                Recommend
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="card card-body bg-danger-gradient">
+                <i class="glyphicon glyphicon-flag"></i>
+                C
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="card card-body bg-warning-gradient">
+                <i class="glyphicon glyphicon-thumbs-up"></i>
+                D
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- 推荐 -->
 <div class="card excerpt-minic excerpt-minic-index">
@@ -36,6 +63,7 @@
         同时...
     </p>
 </div>
+
 
 <!-- 文章列表 -->
 {% load_article_list article_list %}

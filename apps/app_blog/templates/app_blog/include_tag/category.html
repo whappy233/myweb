@@ -7,7 +7,7 @@
         <ul class="dropdown-menu">
 
             {% query all_categorys parent_category=category_item as cc_categorys %}
-            {% with top_categorys=cc_categorys template_name="app_blog/include_tag/blog_category.html" %}
+            {% with top_categorys=cc_categorys template_name="app_blog/include_tag/category.html" %}
             {% include template_name %}
             {% endwith %}
 

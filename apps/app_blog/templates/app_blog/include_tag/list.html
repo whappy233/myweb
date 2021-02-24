@@ -13,7 +13,7 @@
         </a>
     </div>
     <div class="header">
-        <a class="cat" href="{% url 'app_blog:category_detail' article.category.slug %}" rel="category tag">{{ article.category }}<i></i></a>
+        <a class="cat" href="{% url 'app_blog:category_detail' article.category.slug %}" rel="category tag">{{ article.category }}</a>
         <h2><a href="{{ article.get_absolute_url }}" title="{{ article.title }}">{{article.title}}</a></h2>
     </div>
     <div class="meta">
