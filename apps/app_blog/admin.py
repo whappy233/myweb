@@ -89,6 +89,9 @@ class ArticleAdmin(admin.ModelAdmin):
 
     def make_published(self, request, queryset):
         # 注意: 此操作不会触发模型的 clean 方法!
+        # update() 方法是直接转为 SQL 语句的。这是一种用于直接更新的批量操作。
+        # 它并不会调用模型的 save() 方法，或发射 pre_save 或 post_save 信号（调用 save() 会触发信号），
+        # 或使用 auto_now 字段选项
         queryset.update(status='p', pub_time=timezone.now())
     make_published.short_description = "发布所选文章"
     make_published.allowed_permissions = ('change',)  #  要求只有change权限的管理人员才能更改文章发表状态

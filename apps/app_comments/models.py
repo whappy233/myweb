@@ -32,3 +32,17 @@ class Comments(models.Model):
         return f'{self.body} (关联对象: {self.content_type}, id: {self.object_id})'
 
 
+
+from django.db.models.signals import post_save
+def notify_handler(sender, instance, created, **kwargs):
+    content_object = instance.content_object
+    comment_author = instance.author
+    parent_comment = instance.parent_comment
+    # 判断是否是第一次生成评论，后续修改评论不会再次激活信号
+    if created:
+        if parent_comment:  # 是否有父级
+            print('回复的作者', parent_comment.author)
+        print('文章作者', content_object.author)
+        print('当前评论作者', comment_author)
+
+post_save.connect(notify_handler, sender=Comments)

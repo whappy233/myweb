@@ -999,7 +999,7 @@ color:#FFF;
 }
 
 .excerpt {
-	padding: 10px 10px 10px 180px;
+	padding: 10px 10px 5px 180px;
 }
 .excerpt .focus {
 	width: 160px;
@@ -1200,7 +1200,7 @@ color:#FFF;
 	padding: 10px;
 }
 .excerpt {
-	padding: 10px 10px 10px 120px;
+	padding: 10px 10px 5px 120px;
 }
 .excerpt .focus {
 	width: 100px;

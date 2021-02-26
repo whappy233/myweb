@@ -27,6 +27,15 @@ import markdown
 from loguru import logger
 import re
 
+
+# 无论在自定义的 Manager 中添加了什么特性，都必须能够对 Manager 实例进行简单的复制:
+# 也就是说, 以下代码必须有效:
+# import copy
+# manager = MyManager()
+# my_copy = copy.copy(manager)
+# Django 在某些查询期间对管理器对象进行浅拷贝；如果您的管理器无法被复制，那么这些查询将失败。
+# 对于大多数的资源管理器来说，这不是问题。若你只是为 Manager 添加简单的方法，一般不会疏忽地把 Manager 变的不可拷贝。但是，若重写了 Manager 对象用于控制对象状态的 __getattr__ 或其它私有方法，你需要确认你的修改不会影响 Manager 被复制。
+
 # 自定义的管理器
 class PublishedManage(models.Manager):
     def get_queryset(self):
@@ -94,7 +103,6 @@ class Category(models.Model):
         parse(self)
         return categorys
 
-
     @staticmethod
     def xx():
         def parse(category):
@@ -109,8 +117,6 @@ class Category(models.Model):
         for i in top:
             print(i.id)
             parse(i)
-
-
 
     class Meta:
         ordering = ['name']
@@ -401,3 +407,5 @@ class BlogSettings(models.Model):
         except ValidationError as e:
             from django.core.exceptions import NON_FIELD_ERRORS
             print('验证没通过： %s' % e.message_dict[NON_FIELD_ERRORS])
+
+

@@ -182,66 +182,65 @@
 {% block script %}
 <script src="{% static 'js/jquery.cookie_1.4.1.min.js' %}"></script>
 <script>
-    $(function(){
 
-        // 回复评论
-        function do_reply(parentid, username) {
-            $('#id_parent_comment').val(parentid);
-            $('#cancel_comment').show();
-            $("#commentform").appendTo($("#comment-content-" + parentid));
-        };
+    // 回复评论
+    function do_reply(parentid, username) {
+        $('#id_parent_comment').val(parentid);
+        $('#cancel_comment').show();
+        $("#commentform").appendTo($("#comment-content-" + parentid));
+    };
 
-        // 取消回复
-        function cancel_reply() {
-            $('#id_parent_comment').val('');
-            $('#comments').text('添加评论');
-            $('#cancel_comment').hide();
-            $("#commentform").appendTo($("#respond"));
-        };
+    // 取消回复
+    function cancel_reply() {
+        $('#id_parent_comment').val('');
+        $('#comments').text('添加评论');
+        $('#cancel_comment').hide();
+        $("#commentform").appendTo($("#respond"));
+    };
 
-        // 删除评论
-        function delete_comment(comment_id, obj_id){
-            $.ajax({
-                url: '{% url "app_comments:ajax_delete_comment" %}',
-                data: {
-                    'comment_id':comment_id,
-                    'obj_id':obj_id,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}',
-                },
-                type: 'post',
-                dataType: 'json',
-                success: function (data) {
-                    if (data['status']==200){
-                        $(`#div-comment-${comment_id}`).remove();
-                        console.log('删除成功!')
-                    }
+    // 删除评论
+    function delete_comment(comment_id, obj_id){
+        $.ajax({
+            url: '{% url "app_comments:ajax_delete_comment" %}',
+            data: {
+                'comment_id':comment_id,
+                'obj_id':obj_id,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function (data) {
+                if (data['status']==200){
+                    $(`#div-comment-${comment_id}`).remove();
+                    console.log('删除成功!')
                 }
-            });
-        };
-
-        // 按钮点击异步请求
-        $('#btn1').on('click', function () {
-            $.ajax({
-                url: '{% url "app_blog:ajax_app_test" %}',
-                data: {
-                    'keyword': `发送: ${Math.random()}`
-                },
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    $("#pp1").text("返回结果是: " + data.count)
-                }
-            });
+            }
         });
+    };
 
-        // 获取csrftoken
-        var csrftoken = $.cookie('csrftoken');
-        function csrfSafeMethod(method) {
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        };
+    // 按钮点击异步请求
+    $('#btn1').on('click', function () {
+        $.ajax({
+            url: '{% url "app_blog:ajax_app_test" %}',
+            data: {
+                'keyword': `发送: ${Math.random()}`
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                $("#pp1").text("返回结果是: " + data.count)
+            }
+        });
+    });
 
-        // 点赞
-        $(document).ready(function () {
+    // 获取csrftoken
+    var csrftoken = $.cookie('csrftoken');
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    };
+
+    // 点赞
+    $(document).ready(function () {
             $('a.like').click(function (e) {
                 e.preventDefault();
                 var ele = $(this);
@@ -288,6 +287,6 @@
                 });
             });
         });
-    })
+
 </script>
 {% endblock script %}

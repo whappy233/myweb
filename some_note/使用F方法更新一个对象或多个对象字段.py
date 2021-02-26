@@ -14,6 +14,9 @@ for product in products:
     product.save()
 
 
+# update() 方法是直接转为 SQL 语句的。这是一种用于直接更新的批量操作。
+# 它并不会调用模型的 save() 方法，或发射 pre_save 或 post_save 信号（调用 save() 会触发信号），或使用 auto_now 字段选项
+
 # 使用F方法可以解决上述问题。我们直接可以更新数据库，而不必将所有产品载入内存。
 from django.db.models import F
 Product.objects.update(price=F('price') * 1.2)

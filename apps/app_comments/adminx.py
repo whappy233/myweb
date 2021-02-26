@@ -6,7 +6,7 @@ from .models import Comments
 
 
 class CommentAdmin:
-    list_display = ['id', 'body', 'link_to_userinfo', 'link_to_article', 'created_time', 'is_active']  # 显示字段
+    list_display = ['id', 'body', 'link_to_userinfo', 'parent_comment', 'link_to_article', 'created_time', 'is_active']  # 显示字段
     search_fields = ['author', 'body', 'content_object']  # 搜索字段
     list_filter = ['created_time', 'is_active']  # 过滤器
     list_editable = ['is_active']

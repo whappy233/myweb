@@ -8,7 +8,7 @@ from .models import Comments
 # admin.site.register(Comments)  # 注册方式1
 @admin.register(Comments)  # 注册方式2（使用包装）
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'body', 'link_to_userinfo', 'link_to_article', 'created_time', 'is_active']  # 显示字段
+    list_display = ['id', 'body', 'link_to_userinfo', 'parent_comment', 'link_to_article', 'created_time', 'is_active']  # 显示字段
     search_fields = ['author', 'body', 'content_object']  # 搜索字段
     list_filter = ['created_time', 'is_active']  # 过滤器
     list_editable = ['is_active']
