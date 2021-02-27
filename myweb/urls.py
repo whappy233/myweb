@@ -11,6 +11,13 @@ from django.conf import settings
 from django.views.static import serve
 
 
+# 自定义错误处理
+# handler400 = ''
+# handler403 = 'app_blog.views.permission_denied_view'
+# handler404 = 'app_blog.views.page_not_found_view'
+# handler500 = 'app_blog.views.server_error_view'
+
+
 sitemaps = {
     'articles': ArticleSitemap,
     }

@@ -116,16 +116,18 @@ def my_view(request):
 #  除非你使用Vary头部通知缓存机制需要考虑请求头里的cookie和语言的不同。
 # 要在 Django 完成这项工作，可使用便利的 vary_on_headers 视图装饰器。
 # 例如下面代码告诉Django读取缓存数据时需要同时考虑User-Agent和Cookie的不同。与此类似的装饰器还有@vary_on_cookie。
+# Vary 头定义了缓存机制在构建其缓存密钥时应该考虑哪些请求报头
 from django.views.decorators.vary import vary_on_headers
 @vary_on_headers('User-Agent', 'Cookie')
 def my_view(request):
     ...
 
 
-'@never_cache'
+'@never_cache'  # 禁止浏览器缓存
 # 如果你想用头部完全禁掉缓存, 你可以使用@never_cache装饰器。
 # 如果你不在视图中使用缓存，服务器端是肯定不会缓存的，
 # 然而用户的客户端如浏览器还是会缓存一些数据，这时你可以使用never_cache禁用掉客户端的缓存。
+# 这个装饰器添加 Cache-Control: max-age=0, no-cache, no-store, must-revalidate 头到一个响应来标识禁止缓存该页面
 from django.views.decorators.cache import never_cache
 @never_cache
 def myview(request):
@@ -147,17 +149,24 @@ from django.views.generic import TemplateView
 class ProtectedView(TemplateView):
     template_name = 'secret.html'
 
-'@require_http_methods'
-# 该装饰器的作用是限制用户的请求方法。
-# 如下例中仅接收GET和POST方法。与此类似的装饰器还有@require_POST, @require_GET和@require_safe。
+'@require_http_methods' # 该装饰器的作用是限制用户的请求方法。
+# 与此类似的装饰器:
+# require_GET()
+# 装饰器可以要求视图只接受 GET 方法。用法如下：
+# require_POST()
+# 装饰器可以要求视图只接受 POST 方法。用法如下：
+# require_safe()
+# 装饰器可以要求视图只接收 GET 和 HEAD 方法。这些方法通常被认为是安全的，因为它们除了检索请求的资源外，没有特别的操作。
 from django.views.decorators.http import require_http_methods
+# 如下例中仅接收GET和POST方法。
 @require_http_methods(["GET", "POST"])
 def my_view(request):
     # Only accept GET or POST method
     pass
 
 '@gzip_page'
-# 该装饰器可以压缩内容，前提是用户客户端允许内容压缩的话。使用方法如下:
+# 该装饰器可以压缩内容，前提是用户客户端允许内容压缩的话.它相应的设置了 Vary 头部，这样缓存将基于 Accept-Encoding 头进行存储。
+# 使用方法如下:
 from django.views.decorators.gzip import gzip_page
 @gzip_page
 def my_view(request):

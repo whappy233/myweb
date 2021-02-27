@@ -379,3 +379,20 @@ def AboutView(request):
         repo_url = 'https://github.com/Hopetree'
         body = '<li>作者 Github 地址：<a href="{}">{}</a></li>'.format(repo_url, repo_url)
     return render(request, 'blog/about.html', context={'body': body})
+
+
+
+# 400
+def page_not_found_view(request, exception, template_name='blog/error_page.html'):
+    if exception: logger.error(exception)
+    url = request.get_full_path()
+    return render(request, template_name, {'message': f'页面"{url}"不存在', 'statuscode': '404'}, status=404)
+
+# 500
+def server_error_view(request, template_name='blog/error_page.html'):
+    return render(request, template_name, {'message': '500 error','statuscode': '500'},status=500)
+
+# Forbid
+def permission_denied_view(request, exception, template_name='blog/error_page.html'):
+    if exception:logger.error(exception)
+    return render(request, template_name, {'message': '您没有权限访问此页面', 'statuscode': '403'}, status=403)
