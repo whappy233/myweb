@@ -195,11 +195,11 @@ def make_ajax(view_func):
         request.upload_handlers.insert(0, LogFileUploadHandler(request))
         response = view_func(request, *args, **kwargs)
         if 'formhash' in request.GET and isinstance(response, redirect):
-            #situation 3
+            #situation 3  POST提交过来的，并且表单成功处理
             location = response['Location']
             return HttpResponse('<script type="text/javascript">window.parent.location.href="%s"</script>' % location)
         elif 'formhash' in request.GET and isinstance(response, HttpResponse) and request.method == 'POST':
-            #situation 2
+            #situation 2  POST提交过来的，但是表单中包含错误数据，这时显示的页面需要同时包含这些错误提示
             js = """
             <script type="text/javascript">
             $(document).ready(function(){ window.parent.replace_iframe(); })

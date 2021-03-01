@@ -319,6 +319,11 @@ MDEDITOR_CONFIGS = {
 }
 
 # session 会话配置
+# 'django.contrib.sessions.backends.db'
+# 'django.contrib.sessions.backends.file'
+# 'django.contrib.sessions.backends.cache'
+# 'django.contrib.sessions.backends.cached_db'
+# 'django.contrib.sessions.backends.signed_cookies'
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # 引擎（默认）
 SESSION_COOKIE_NAME = "sessionid"  # Session的cookie保存在浏览器上时的key，
 SESSION_COOKIE_PATH = "/"  # Session的cookie保存的路径（默认）

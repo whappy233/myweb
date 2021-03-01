@@ -28,7 +28,7 @@ def front_user_middleware(get_response):
 
 
 import time
-class StatsMiddleware(object):
+class StatsMiddleware:
     def __init__(self, get_response):
         # 执行一些初始代码 
         self.get_response = get_response
@@ -57,7 +57,7 @@ class StatsMiddleware(object):
 
 # 2. 类实现中间件
 from django.contrib.auth.models import User
-class FrontUserMiddleware(object):
+class FrontUserMiddleware:
     def __init__(self, get_response):
         # 执行一些初始代码
         print('FrontUserMiddleware 中间件初始化...')
