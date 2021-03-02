@@ -25,6 +25,7 @@ class IndexView(ListView):
     queryset = Article.objects.all().order_by("-pub_date")
     template_name = 'blog/article_list.html'
     context_object_name = 'recently_updated'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['now'] = timezone.now() #只有这行代码有用
@@ -44,6 +45,7 @@ class ArticleDetailView(DetailView):
     queryset = Article.objects.all().order_by("-pub_date")
     template_name = 'blog/article_detail.html'
     context_object_name = 'article'
+
     def get_object(self, queryset=None):
         obj = super().get_object(queryset=queryset)
         if obj.author != self.request.user:
@@ -97,7 +99,6 @@ class RestaurantForm(ModelForm):
             'url': '网站',
         }
 
-
 # views.py --------------------------------------
 from django.views.generic.edit import CreateView
 class RestaurantCreate(CreateView):
@@ -111,7 +112,6 @@ class RestaurantCreate(CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(RestaurantCreate, self).form_valid(form)
-
 
 # template
 '''
@@ -142,3 +142,155 @@ class RestaurantCreate(CreateView):
     </form>
     {% endblock %}
 '''
+
+
+# ------------------------------------------------------------------------------------
+# 类视图装饰器
+def zzz(text='类视图装饰器'):
+    from django.contrib.auth.decorators import login_required
+    from django.utils.decorators import method_decorator
+    from django.views.generic import TemplateView
+
+    # 关键参数 name 传递要被装饰的方法名:
+    # 因为所有的请求必须经过 dispatch 方法, 所以相当于所有请求都需要 login_required 验证
+    @method_decorator(login_required, name='dispatch')
+    class ProtectedView(TemplateView):
+        template_name = 'secret.html'
+
+    # decorator 参数接受一个装饰器列表或元组
+    from django.views.decorators.cache import never_cache
+    decorators = [never_cache, login_required]
+    @method_decorator(decorators, name='dispatch')
+    class ProtectedView(TemplateView):
+        template_name = 'secret.html'
+
+
+# ------------------------------------------------------------------------------------
+# 基于类的通用视图
+def zzz(text='基于类的通用视图'):
+    from django.shortcuts import redirect
+    from django.shortcuts import render
+    from django.views import View
+    from .forms import MyForm
+
+    class MyFormView(View):
+        form_class = MyForm
+        initial = {'key': 'value'}
+        template_name = 'form_template.html'
+
+        def get(self, request, *args, **kwargs):
+            form = self.form_class(initial=self.initial)
+            return render(request, self.template_name, {'form': form})
+
+        def post(self, request, *args, **kwargs):
+            form = self.form_class(request.POST)
+            if form.is_valid():
+                # <process form cleaned data>
+                return redirect('/success/')
+            return render(request, self.template_name, {'form': form})
+
+
+    # urls 传递的的参数在: self.kwargs 里面(dict)
+
+    # path('authors/<int:pk>/', AuthorDetailView.as_view(), name='author-detail')
+    # path('authors/<slug:slug>/', AuthorDetailView.as_view(), name='author-detail')
+    # URLconf 在这里使用组 pk ，这个名字是 DetailView 用来查找过滤查询集的主键值的默认名称(pk_url_kwarg),
+    # URLconf 在这里使用组 slug ，这个名字是 DetailView 用来查找过滤查询集的slug的默认名称(slug_url_kwarg),
+    # 在 DetailView 视图中会自动查找, 不需要手动执行 self.kwargs['pk'] 和 self.kwargs['slug'].
+    # 对于继承了 SingleObjectMixin 的视图都支持 pk_url_kwarg 和 slug_url_kwarg, 即需要获取单个对象的视图都支持.
+
+    # 指向用户详情
+    class AuthorDetailView(DetailView):
+        queryset = User.objects.all()
+
+        def get_object(self):
+            obj = super().get_object()  # 这里根据 pk 或 slug 查询对象
+            # Record the last accessed date
+            obj.last_accessed = timezone.now()
+            obj.save()
+            return obj
+
+
+# ------------------------------------------------------------------------------------
+# 基于类的Form视图
+def zzz(text='基于类的Form视图'):
+    from myapp.forms import ContactForm
+    from django.views.generic.edit import FormView
+    class ContactView(FormView):
+        template_name = 'contact.html'
+        success_url = '/thanks/'  # 若不提供该属性, 在可能的情况下将会使用 get_absolute_url()
+
+        form_class = ContactForm
+
+        def form_valid(self, form):
+            # 验证有效的表单数据后，将调用此方法
+            # 返回 HttpResponse 对象
+            form.send_email()
+            return super().form_valid(form)  # 默认将会重定向到 success_url
+
+    # 示例
+    from django.urls import reverse_lazy
+    from django.views.generic.edit import CreateView, DeleteView, UpdateView
+    from myapp.models import Author
+
+    class AuthorCreate(CreateView):
+        model = Author
+
+        # 如果已经给出了 model 属性，则使用这个模型类自动创建 ModelForm
+        # 如果 get_object() 返回一个对象，则使用这个对象的类自动创建 ModelForm
+        # 如果已经给出了 queryset  ，则使用这个查询集的模型自动创建 ModelForm
+
+        # 在自动生成 ModelForm 的中包含的字段, 在没有指定 form_class 时是必需的
+        # 如果同时指定了 fields 和 form_class 属性，将会引发 ImproperlyConfigured 异常
+        fields = ['name']  
+
+    class AuthorUpdate(UpdateView):
+        model = Author
+
+        # 如果已经给出了 model 属性，则使用这个模型类自动创建 ModelForm
+        # 如果 get_object() 返回一个对象，则使用这个对象的类自动创建 ModelForm
+        # 如果已经给出了 queryset  ，则使用这个查询集的模型自动创建 ModelForm
+
+        # 在自动生成 ModelForm 的中包含的字段, 在没有指定 form_class 时是必需的
+        # 如果同时指定了 fields 和 form_class 属性，将会引发 ImproperlyConfigured 异常
+        fields = ['name']
+
+    class AuthorDelete(DeleteView):
+        model = Author
+        # 使用 reverse_lazy() 来代替 reverse() ，因为在文件导入时不加载 urls
+        success_url = reverse_lazy('author-list')
+
+
+    # 下面是一个展示了如何实现适用于 AJAX 请求的表单以及普通表单的 POST 请求：
+    from django.http import JsonResponse
+    from django.views.generic.edit import CreateView
+    from myapp.models import Author
+
+    class AjaxableResponseMixin:
+        """
+        添加 Ajax 支持
+        必须与基于 FormView 的视图一起使用（例如 CreateView)
+        """
+        def form_invalid(self, form):
+            '''无效表单'''
+            response = super().form_invalid(form)
+            if self.request.is_ajax():
+                return JsonResponse(form.errors, status=400)
+            else:
+                return response
+
+        def form_valid(self, form):
+            '''表单验证成功'''
+            # 确保调用父级的 form_valid() 方法
+            # 因为它可能会做一些处理(例如在CreateView的情况下, 它将调用form.save() )
+            response = super().form_valid(form)
+            if self.request.is_ajax():
+                data = {'pk': self.object.pk,}
+                return JsonResponse(data)
+            else:
+                return response
+
+    class AuthorCreate(AjaxableResponseMixin, CreateView):
+        model = Author
+        fields = ['name']
+

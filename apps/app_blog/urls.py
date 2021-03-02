@@ -13,7 +13,7 @@ urlpatterns = [
     path('category/<slug:category_slug>/', views.CategoryDetailView.as_view(), name='category_detail'),  # 分组下的文章列表
     re_path(r'^tags/(?P<tag_slug>[-\w]+)/$', views.TagDetailView.as_view(), name='article_list_by_tag'),  # 某个标签下的所有文章
 
-    path('detail/<int:year>/<int:month>/<int:day>/<slug:slug>/<int:id>/', views.ArticleDetailView.as_view(), name='article_detail'),  # 文章详情
+    path('detail/<int:year>/<int:month>/<int:day>/<slug:slug>/<int:pk>/', views.ArticleDetailView.as_view(), name='article_detail'),  # 文章详情
 
     path('<int:article_id>/share/', views.article_share, name='article_share'),  # 分享文章
 

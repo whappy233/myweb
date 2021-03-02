@@ -28,7 +28,6 @@ def get_carousel_list():
     return Carousel.objects.all()
 
 
-
 # 返回文章列表模板
 @register.inclusion_tag('app_blog/include_tag/list.html')
 def load_article_list(articles):
@@ -36,12 +35,23 @@ def load_article_list(articles):
     return {'articles': articles}
 
 
-
 # 文章总数
 'simple_tag (处理数据并返回一个字符串或者给context设置或添加变量)  {% total_articles %}'
 @register.simple_tag(name='total_articles')  # 注册模板标签和过滤器, 默认使用函数名作为标签名字，也可自定义 @register.simple_tag(name='name')
 def total_articles():  # 定义标签
     return Article.published.count()
+
+
+# 在模板执行 queryset 查询
+@register.simple_tag
+def query(queryset, **kwargs):
+    """ 
+    {% query books author=author as mybooks %}
+    {% for book in mybooks %}
+    ...
+    {% endfor %}
+    """
+    return queryset.filter(**kwargs)
 
 
 
@@ -57,18 +67,6 @@ def truncatechars_content(content):
     from ..utils import get_blog_setting
     blogsetting = get_blog_setting()
     return truncatechars_html(content, blogsetting.article_sub_length)
-
-
-# 在模板执行 queryset 查询
-@register.simple_tag
-def query(queryset, **kwargs):
-    """ 
-    {% query books author=author as mybooks %}
-    {% for book in mybooks %}
-    ...
-    {% endfor %}
-    """
-    return queryset.filter(**kwargs)
 
 
 # 类型检查
@@ -91,7 +89,6 @@ def blog_category():
             'top_categorys': top_categorys}
 
 
-
 # 最多评论 cache
 @register.inclusion_tag('app_blog/include_tag/most_commented_articles.html')  # 指定利用返回值显示的模板
 def most_commented_articles(count=5):
@@ -107,6 +104,7 @@ def most_commented_articles(count=5):
         logger.info(f'设置最多评论缓存:{cache_key}')
     return {'articles': article_list}
 
+
 # 最近更新 (返回模板) cache
 'inclusion_tag (处理数据并返回模板)   {% recently_updated 5 %}'
 @register.inclusion_tag('app_blog/include_tag/recently_updated.html')  # 指定利用返回值显示的模板
@@ -115,12 +113,14 @@ def recently_updated(count=5):
     recently_updated = cache.get_or_set('recently_updated', x, 60*100)
     return {'articles':recently_updated}
 
+
 # 归档 (返回模板)
 @register.inclusion_tag('app_blog/include_tag/archives.html')
 def blog_archives():
     #按日期逆序排序
     articles = Article.published.order_by('-pub_time')
     return {'articles': articles}
+
 
 # 相似文章 cache
 @register.inclusion_tag('app_blog/include_tag/similar_articles.html')
@@ -141,6 +141,7 @@ def similar_articles(obj, count=5):
         value = None
 
     return {'articles': value}
+
 
 # 获得文章面包屑
 @register.inclusion_tag('app_blog/include_tag/breadcrumb.html')
@@ -194,6 +195,7 @@ def do_format_time(parser, token):
             "%r tag's argument should be in quotes" % tag_name
         )
     return FormatTimeNode(date_to_be_formatted, format_string[1:-1])
+
 
 class FormatTimeNode(template.Node):
     def __init__(self, date_to_be_formatted, format_string):

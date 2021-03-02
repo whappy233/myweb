@@ -1,5 +1,4 @@
-import django
-from django.forms import formset_factory
+
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib import auth
@@ -52,8 +51,6 @@ class RegisterForm(UserCreationForm):
         return checkcode
 
 
-
-
 # 用户登录
 class LoginForm(forms.Form):
     '''用户登录'''
@@ -72,10 +69,6 @@ class LoginForm(forms.Form):
             if checkcode.lower() != self._request.session['CheckCode'].lower():  # 验证验证码
                 raise forms.ValidationError("验证码错误")
         return checkcode
-
-
-
-
 
 
 # 修改密码
@@ -113,7 +106,6 @@ class PwdChangeForm(forms.Form):
         return pw2
 
 
-
 # 自定义手机号验证
 def mobile_validate(value):
     mobile_re = re.compile(r'^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$')
@@ -121,6 +113,18 @@ def mobile_validate(value):
         raise ValidationError('手机号码格式错误')
 # mobile = forms.CharField(validators=[mobile_validate, ], error_messages={'required': u'手机不能为空'},
 #                             widget=forms.TextInput(attrs={'class': "form-control", 'placeholder': u'手机号码'}))
+
+
+
+
+# 可以不使用类定义，而是使用独立函数 modelform_factory() 来创建给定模型的表单。
+# 如果您没有很多自定义设置，这可能会更方便
+from django.forms import modelform_factory
+UserEditForm = modelform_factory(User, fields=('first_name', 'last_name', 'email'))
+
+# 也可以用来对已有表单进行修改，例如给字段指定使用组件
+from django.forms import Textarea
+Form = modelform_factory(User, form=UserEditForm, widgets={"first_name": Textarea()})
 
 
 # 用户信息编辑(User)
@@ -136,6 +140,19 @@ class UserEditForm(forms.ModelForm):
                 'email': '邮箱',
                 }
 
+    # {{ form.media }} 引入静资源
+    # <link href="http://static.example.com/pretty.css" type="text/css" media="all" rel="stylesheet">
+    # <script src="http://static.example.com/animations.js"></script>
+    # <script src="http://static.example.com/actions.js"></script>
+    # class Media:
+        # 组件从其父组件继承所有资源。如果您不想用这种方式继承 Media ，要在 Media 声明:
+        # extend=False
+        # css = {
+        #     'all': ('pretty.css',)
+        # }
+        # js = ('animations.js', 'actions.js')
+
+
 
 # 用户信息编辑(UserProfile)
 class ProfileEditForm(forms.ModelForm):
@@ -144,6 +161,8 @@ class ProfileEditForm(forms.ModelForm):
         model = UserProfile
         fields = ('org', 'telephone')
 
+        # widgets 字典接受任何 widget 实例（例如 Textarea(...) ）或类（例如 Textarea）。
+        # 注意，对于具有非空 choices 属性的模型字段，widgets 字典会被忽略
         widgets = {
             'org': forms.Textarea(attrs={'cols': 19, 'rows': 1, 'class': '自定义样式'}),
             'telephone': forms.TextInput(attrs={'type' : 'number','class' : 'your_class', 'max_length': 6, 'placeholder': u'手机号码'})
@@ -181,24 +200,28 @@ class UserPhotoUploadForm(forms.Form):
 
 
 
-
-
-
-
-
-
-
-
-
-
+from django.forms import formset_factory
 # formset_factory ---------------------------------------------------------------------
 # 有的时候用户需要在1个页面上使用多个表单，比如一次性提交添加多本书的信息，这时我们可以使用formset。这是一个表单的集合
 # extra: 额外的空表单数量
 # max_num: 包含表单数量（不含空表单), max_num优先级高于extra
 EditForm = formset_factory(ProfileEditForm, extra=3, max_num=2)  # 创建多个相同的表单
 
+editform = EditForm()
+for i in editform:
+    print(i.as_p())
+
+f = EditForm(initial={'org':123}, extra=2, max_num=3)
+# 将会显示三张表单。一张是传了初始数据的，另外两张是额外的
+# 如果 max_num 的值大于初始数据现有数量，那空白表单可显示的数量取决于 extra 的数量，只要总表单数不超过 max_num 。
+# 例如， extra=2 ， max_num=2 并且formset有一个 initial 初始化项，则会显示一张初始化表单和一张空白表单。
+
+# 如果初始数据项的数量超过 max_num ，那么 max_num 的值会被无视，所有初始数据表单都会显示，并且也不会有额外的表单显示。
+# 例如，假设 extra=3 ， max_num=1 并且formset有两个初始化项，那么只会显示两张有初始化数据的表单
+
+
 # inlineformset ---------------------------------------------------------------------
-# 想我们有如下 recipe 模型，Recipe 与 Ingredient是单对多的关系。
+# 想我们有如下 recipe 模型，Recipe 与 Ingredient是一对多的关系。
 # 一般的formset只允许我们一次性提交多个Recipe或多个Ingredient。
 # 但如果我们希望同一个页面上添加一个菜谱(Recipe)和多个原料(Ingredient)，这时我们就需要用使用 inlineformset 了
 

@@ -99,8 +99,8 @@ ROOT_URLCONF = 'myweb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # 定义目录列表，引擎应在其中按搜索顺序查找模板源文件
+        'APP_DIRS': True,  # 告诉引擎是否在已安装的应用程序中寻找模板
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -109,7 +109,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',  # 在模板里面可以直接使用message对象
 
                 # 其他
-                # django.template.context_processors.i18n   在模板里面可以直接使用s ettings 的 LANGUAGES 和 LANGUAGE_CODE
+                # django.template.context_processors.i18n   在模板里面可以直接使用 settings 的 LANGUAGES 和 LANGUAGE_CODE
                 # django.template.context_processors.media  可以在模板里面使用 settings 的 MEDIA_URL 参数
                 # django.template.context_processors.csrf   给模板标签 {% csrf_token %} 提供 token 值，默认总是开启。
                 # django.template.context_processors.tz     可以在模板里面使用 TIME_ZONE 参数
@@ -121,6 +121,45 @@ TEMPLATES = [
         },
     },
 ]
+
+# ------------------------------------------------------------------------------------
+# 使用 jinja2 模板引擎
+# TEMPLATES_jinja2 = [
+#     {
+#         'BACKEND': 'django.template.backends.jinja2.Jinja2',
+#         'DIRS': [os.path.join(BASE_DIR, 'templates')],  # 定义目录列表，引擎应在其中按搜索顺序查找模板源文件
+#         'APP_DIRS': True,  # 告诉引擎是否在已安装的应用程序中寻找模板
+#         'OPTIONS': {
+#             'context_processors': [
+#                 'django.template.context_processors.debug',
+#                 'django.template.context_processors.request',
+#                 'django.contrib.auth.context_processors.auth',
+#                 'django.contrib.messages.context_processors.messages',
+#             ],
+#             'environment': 'learning_logs.jinja2_env.environment',  # 添加环境变量
+#         },
+#     },
+# ]
+
+# ------------------------------------------------------------------------------------
+# jinja2_env.py
+
+# from django.templatetags.static import static
+# from django.urls import reverse
+# from jinja2 import Environment
+
+# def environment(**options):
+#     env = Environment(**options)
+#     env.globals.update({
+#         'static': static,
+#         'url': reverse,
+#     })
+#     return env
+# ------------------------------------------------------------------------------------
+# <img src="{{ static('path/to/company-logo.png') }}" alt="Company Logo">
+# <a href="{{ url('admin:index') }}">Administration</a>
+# ------------------------------------------------------------------------------------
+
 
 WSGI_APPLICATION = 'myweb.wsgi.application'
 
@@ -172,8 +211,8 @@ logger.add(os.path.join(LOG_DIR, 'error.log'), rotation='1 days', retention='30 
 #         'BACKEND': 'django.core.cache.backends.dummy.DummyCache', # 引擎 (开发调试缓存)
 #         'TIMEOUT': 300, # 缓存超时时间（默认300，None表示永不过期，0表示立即过期）
 #         'OPTIONS':{
-#             'MAX_ENTRIES': 300, # 最大缓存个数（默认300）                                      
-#             'CULL_FREQUENCY': 3, # 缓存到达最大个数之后，剔除缓存个数的比例，即：1/CULL_FREQUENCY（默认3）                                   
+#             'MAX_ENTRIES': 300, # 最大缓存个数（默认300）
+#             'CULL_FREQUENCY': 3, # 缓存到达最大个数之后，剔除缓存个数的比例，即：1/CULL_FREQUENCY（默认3）
 #         },
 #         'KEY_PREFIX': '',  # 缓存key的前缀（默认空）
 #         'VERSION': 1, # 缓存key的版本（默认1）
@@ -263,7 +302,7 @@ AUTHENTICATION_BACKENDS = ('app_user.user_login_backend.CustomBackend',)
 # CKEDITOR_IMAGE_QUALITY = 40
 # CKEDITOR_ALLOW_NONIMAGE_FILES = False
 # CKEDITOR_BROWSE_SHOW_DIRS = True
-# CKEDITOR_RESTRICT_BY_USER = False  # 如果为True /media/blog_uploads/用户名/ 
+# CKEDITOR_RESTRICT_BY_USER = False  # 如果为True /media/blog_uploads/用户名/
 # CKEDITOR_RESTRICT_BY_DATE = True  # /media/blog_uploads/用户名(CKEDITOR_RESTRICT_BY_USER 如果为True)/年/月/日/文件名
 # CKEDITOR_CONFIGS = {
 #     'default': {
@@ -284,7 +323,7 @@ AUTHENTICATION_BACKENDS = ('app_user.user_login_backend.CustomBackend',)
 # }
 
 # mdeditor 富文本编辑器配置
-if timezone.now().hour >= 18: 
+if timezone.now().hour >= 18:
     _mdeditor_theme = 'dark'
     _editor_theme = 'pastel-on-dark'
 else:
@@ -296,10 +335,10 @@ MDEDITOR_CONFIGS = {
     'heigth': 500,   # 自定义编辑框高度
     'toolbar': ["undo", "redo", "|",
                 "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
-                "h1", "h2", "h3", "h5", "h6", "|", 
+                "h1", "h2", "h3", "h5", "h6", "|",
                 "list-ul", "list-ol", "hr", "|",
                 "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "goto-line", "|",
-                "help", "info", "||", 
+                "help", "info", "||",
                 "preview", "watch", "fullscreen"],  # 自定义编辑框工具栏
     'image_folder': 'body_imgs',        # 图片保存文件夹名称
     'upload_image_formats': ["jpg", "jpeg", "gif", "png", "bmp", "webp"],  # 图片上传格式类型
