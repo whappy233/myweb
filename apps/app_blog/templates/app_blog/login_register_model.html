@@ -96,6 +96,12 @@
         $.ajax({
             url: "{% url 'app_user:ajax_login' %}",
             type: 'post',
+            // 发送 ajax json 请求
+            // contentType:'application/json;charset=UTF-8',  
+            // data: JSON.stringify({
+            //     username: $("#user_name").val(),
+            //     password: $("#password").val()
+            // }
             data: {
                 username: $("#user_name").val(),
                 password: $("#password").val()
