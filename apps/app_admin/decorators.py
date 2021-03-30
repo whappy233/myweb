@@ -4,6 +4,11 @@ from functools import wraps
 from django.shortcuts import redirect
 
 # 超级管理员用户需求
+
+
+from django.contrib.admin.views.decorators import staff_member_required
+
+# @staff_member_required  # 如果用户已登录, 且为工作人员, 且处于活动状态, 则正常执行视图
 def superuser_only(redirect_url='', *args, **kwargs):
     """限制视图只有超级管理员能够访问"""
     def wrapper(function):

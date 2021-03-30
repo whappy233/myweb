@@ -21,6 +21,20 @@ def my_view(request):
 # 注意:
 # login_required 装饰器不会检查用户是否是 is_active 状态。
 # 如果你想进一步限制登录验证成功的用户对某些视图函数的访问，你需要使用更强大的 @user_passes_test 装饰器。
+# 使用基于类的视图时，可以使用 LoginRequiredMixin 实现和 login_required 相同的行为,
+from django.contrib.auth.mixins import LoginRequiredMixin
+# LoginRequiredMixin 应该在继承列表中最左侧的位置
+class MyView(LoginRequiredMixin, View):
+    '''未经验证用户的所有请求都会被重定向到登录页面或者显示 HTTP 403 Forbidden 错误，
+    这取决于 raise_exception 参数'''
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+    raise_exception = False  # 重定向到登录页面
+
+
+from django.contrib.admin.views.decorators import staff_member_required
+@staff_member_required  # 如果用户已登录, 且为工作人员, 且处于活动状态, 则正常执行视图
+
 
 
 '''
@@ -33,7 +47,7 @@ def my_view(request):
 # 该函数必需接收user对象为参数。
 # 与 @login_required 类似，@user_passes_test 还有两个可选参数(login_url和redirect_field_name)，这里就不多讲了。
 # user_passes_test(func[,login_url=None, redirect_field_name=REDIRECT_FIELD_NAME])
-# 下例 中@user_passes_test 装饰器对用户的email地址结尾进行判断，会把未通过测试的用户会定向到登录url。试想一个匿名用户来访问，她没有email地址，显然不能通过测试，登录后再来吧。
+# 下例 中@user_passes_test 装饰器对用户的email地址结尾进行判断，会把未通过测试的用户会定向到settings.LOGIN_URL。试想一个匿名用户来访问，她没有email地址，显然不能通过测试，登录后再来吧。
 from django.contrib.auth.decorators import user_passes_test
 def email_check(user):
     return user.email.endswith('@example.com')
@@ -53,6 +67,22 @@ def my_view(request):
 def my_view(request):
     ...
 
+
+class UserPassesTestMixin
+# 使用基于类的视图时，可以使用 UserPassesTestMixin 执行此操作。
+
+# test_func()
+# 你必须覆盖类方法 test_func() 以提供执行的测试。此外，还可以设置 AccessMixin 的任何参数来自定义处理未授权用户：
+from django.contrib.auth.mixins import UserPassesTestMixin
+class MyView(UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.email.endswith('@example.com')
+
+# get_test_func()
+# 你也可以覆盖 get_test_func() 方法，以使 mixin 对其检查使用不同名称的函数（而不是 test_func() ）。
+
+
+
 '''
 =====================================================================
 @permission_required
@@ -62,10 +92,22 @@ def my_view(request):
 # 下例检查用户是否有 app_name.can_vote 的权限，没有的话定向至 login_url。如果你设置了 raise_exception=True, 会直接返回403无权限的错误，而不会跳转到登录页面。
 # 那么问题来了，我们需要先使用@login_required来验证用户是否登录，再使用@permission_required装饰器来查看登录用户是否具有相关权限吗？ 
 # 答案是不需要。如果一个匿名用户来访问这个视图，显然该用户没有相关权限，会自动定向至登录页面。
+# 如果你想使用 raise_exception 但也想给用户登录的机会，那需要添加 login_required() 装饰器.
 from django.contrib.auth.decorators import permission_required
 @permission_required('app_name.can_vote', login_url='/login/')
 def my_view(request):
     ...
+
+
+
+from django.contrib.auth.mixins import PermissionRequiredMixin
+class MyView(PermissionRequiredMixin, View):
+    permission_required = 'polls.add_choice'
+    # 或者提供多个权限
+    # permission_required = ('polls.view_choice', 'polls.change_choice')
+
+
+
 
 
 '''

@@ -207,11 +207,11 @@ from django.forms import formset_factory
 # max_num: 包含表单数量（不含空表单), max_num优先级高于extra
 EditForm = formset_factory(ProfileEditForm, extra=3, max_num=2)  # 创建多个相同的表单
 
-editform = EditForm()
-for i in editform:
-    print(i.as_p())
+# editform = EditForm()
+# for i in editform:
+#     print(i.as_p())
 
-f = EditForm(initial={'org':123}, extra=2, max_num=3)
+# f = EditForm(initial={'org':123}, extra=2, max_num=3)
 # 将会显示三张表单。一张是传了初始数据的，另外两张是额外的
 # 如果 max_num 的值大于初始数据现有数量，那空白表单可显示的数量取决于 extra 的数量，只要总表单数不超过 max_num 。
 # 例如， extra=2 ， max_num=2 并且formset有一个 initial 初始化项，则会显示一张初始化表单和一张空白表单。

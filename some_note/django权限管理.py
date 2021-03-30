@@ -16,6 +16,8 @@
 # 删除文章(delete): app_blog.delete_article
 
 
+
+
 '''
 ========================================================================
 在模板中验证用户是否有权限
@@ -94,7 +96,7 @@ class ProductUpdate(UpdateView):
 # 方法1. 在 Mode l的 meta 属性中添加 permissions
 class Article(models.Model):
     ...
-    class Meta:
+    class Meta:  # 代理模型不会继承其子类的具体模型权限
         permissions = (
             ("publish_article", "能发布文章"),
             ("comment_article", "能评论文章"),
@@ -136,7 +138,7 @@ mygroup.permissions.add(permission1, permission2, ...)
 ========================================================================
 如果你希望在代码中移除一个用户的权限，你可以使用remove或clear方法
 '''
-myuser.user_permissions.remove(permission, permission, ...)
+myuser.user_permissions.remove(permission1, permission2, ...)
 myuser.user_permissions.clear()
 
 
@@ -168,7 +170,7 @@ def user_gains_perms(request, user_id):
     )
     user.user_permissions.add(permission)  # 给用户新增权限
 
-    # 检查缓存的权限集
+    # 检查缓存的权限集(此时还是访问的缓存)
     user.has_perm('app_blog.change_article')  # False
 
     # 请求用户的新实例
