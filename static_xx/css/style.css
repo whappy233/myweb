@@ -1,0 +1,430 @@
+/*
+General
+=========================== */
+.gray{
+    background-color: #f9f9f9;
+}
+
+.test-height{
+    height: 1800px;
+}
+
+.pageheader{
+    padding: 70px 0;
+    background-image: url('/static/img/mountains_light_sun_sky_clouds_114136_2560x1080.jpg');
+}
+
+.pageheader .title{
+    text-shadow: 6px 6px 0px rgba(0,0,0,0.2);
+    color: #fff !important;
+    font-family: "Microsoft YaHei"
+}
+
+.pageheader p{
+    margin-bottom: 0;
+    color: #f5f5f5;
+    font-size: 16px;
+    font-family: "Microsoft YaHei"
+}
+
+hr{
+    border: solid 2px #efefef;
+    margin: 60px 0 50px;
+}
+
+/*
+Home
+=========================== */
+.btn-home{
+    border: solid 1px #fff;
+    color: #fff !important;
+    padding: 10px 20px;
+    margin: 5px;
+    letter-spacing: 1px;
+}
+
+.btn-home:hover,
+.btn-home:focus{
+    color: #3f3f3f !important;
+    background-color: #fff;
+}
+
+
+/*
+Affiliates
+=========================== */
+.affiliates{
+    display: inline-block;
+    padding: 10px;
+    border: solid 1px #bbb;
+    margin: 0 5px;
+    color: #fff;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -o-border-radius: 2px;
+    border-radius: 2px;
+    box-shadow: 6px 6px 0px rgba(0,0,0,0.2);
+    background: rgba(255,255,255,0.1);
+    position: relative;
+    text-align: left;
+    -webkit-transition: all 1s ease-in-out;
+	-moz-transition: all 1s ease-in-out;
+	-o-transition: all 1s ease-in-out;
+	-ms-transition: all 1s ease-in-out;
+	transition: all 1s ease-in-out;
+}
+
+.affiliates a{
+    text-decoration: none !important;
+}
+
+.affiliates img{
+    width: 200px;
+    margin-bottom: 5px;
+}
+
+.affiliates h6{
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 0px;
+}
+
+
+/*
+Menu Demo
+=========================== */
+ol.menu-demo{
+    padding: 0;
+    margin: 0 -15px;
+    list-style: none;
+    display: block;
+}
+
+ol.menu-demo li{
+    margin-bottom: 15px;
+}
+
+ol.menu-demo li a{
+    display: block;
+    padding: 15px 25px;
+    background-color: #fff;
+    border: solid 2px #3f3f3f;
+    color: #3f3f3f;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -o-border-radius: 2px;
+    border-radius: 2px;
+}
+
+ol.menu-demo li a:focus,
+ol.menu-demo li a:hover{
+    background-color: #12c064;
+    border: solid 2px #12c064;
+    color: #fff;
+    text-decoration: none;
+}
+
+
+/*
+Footer
+=========================== */
+footer{
+    border-top: solid 1px #efefef;
+}
+
+footer .container{
+    padding: 25px 15px;
+}
+
+/*
+Clear spacer
+=========================== */
+.margin-clear{
+	margin:0 !important;
+}
+
+.padding-clear{
+	padding:0 !important;
+}
+
+.margintop-clear{
+	margin-top:0 !important;
+}
+
+.paddingtop-clear{
+	padding-top:0 !important;
+}
+
+.marginbot-clear{
+	margin-bottom:0 !important;
+}
+
+.paddingbot-clear{
+	padding-bottom:0 !important;
+}
+
+.marginleft-clear{
+	margin-left:0 !important;
+}
+
+.paddingleft-clear{
+	padding-left:0 !important;
+}
+
+.marginright-clear{
+	margin-right:0 !important;
+}
+
+.paddingright-clear{
+	padding-right:0 !important;
+}
+
+.padding-top40{
+	padding-top:40px !important;
+}
+
+.padding-topt60{
+	padding-top:60px !important;
+}
+
+.padding-top70{
+	padding-top:70px !important;
+}
+
+.padding-bot5{
+	padding-bottom:5px !important;
+}
+
+.padding-bot10{
+	padding-bottom:10px !important;
+}
+
+.padding-bot15{
+	padding-bottom:15px !important;
+}
+
+.padding-bot20{
+	padding-bottom:20px !important;
+}
+
+.padding-bot30{
+	padding-bottom:30px !important;
+}
+
+.padding-bot40{
+	padding-bottom:40px !important;
+}
+
+.padding-bot50{
+	padding-bottom:50px !important;
+}
+
+.padding-bot60{
+	padding-bottom:60px !important;
+}
+
+.padding-bot70{
+	padding-bottom:70px !important;
+}
+
+.margin-mintop10{
+	margin-top:-10px !important;
+}
+
+.margin-mintop20{
+	margin-top:-20px !important;
+}
+
+.margin-mintop30{
+	margin-top:-30px !important;
+}
+
+.margin-mintop60{
+	margin-top:-60px !important;
+}
+
+.margin-mintop110{
+	margin-top:-110px !important;
+}
+
+.margin-minbot10{
+	margin-bottom:-10px !important;
+}
+
+.margin-minbot20{
+	margin-bottom:-20px !important;
+}
+
+.margin-minbot30{
+	margin-bottom:-30px !important;
+}
+
+.margin-minbot60{
+	margin-bottom:-60px !important;
+}
+
+/*
+Custom left right spacer
+=========================== */
+.margin-left10{
+	margin-left:10px !important;
+}
+
+.margin-right10{
+	margin-right:10px !important;
+}
+
+.margin-left20{
+	margin-left:20px !important;
+}
+
+.margin-right20{
+	margin-right:20px !important;
+}
+
+/*
+Custom top spacer
+=========================== */
+.margintop5{
+	margin-top:5px !important;
+}
+
+.margintop10{
+	margin-top:10px !important;
+}
+
+.margintop15{
+	margin-top:15px !important;
+}
+
+.margintop20{
+	margin-top:20px !important;
+}
+
+.margintop25{
+	margin-top:25px !important;
+}
+
+.margintop30{
+	margin-top:30px !important;
+}
+
+.margintop35{
+	margin-top:35px !important;
+}
+
+.margintop40{
+	margin-top:40px !important;
+}
+
+.margintop45{
+	margin-top:45px !important;
+}
+
+.margintop50{
+	margin-top:50px !important;
+}
+
+.margintop55{
+	margin-top:55px !important;
+}
+
+.margintop60{
+	margin-top:60px !important;
+}
+
+.margintop80{
+	margin-top:80px !important;
+}
+
+/*
+Custom bottom spacer
+=========================== */
+.marginbot5{
+	margin-bottom:5px !important;
+}
+
+.marginbot10{
+	margin-bottom:10px !important;
+}
+
+.marginbot15{
+	margin-bottom:15px !important;
+}
+
+.marginbot20{
+	margin-bottom:20px !important;
+}
+
+.marginbot25{
+	margin-bottom:25px !important;
+}
+
+.marginbot30{
+	margin-bottom:30px !important;
+}
+
+.marginbot35{
+	margin-bottom:35px !important;
+}
+
+.marginbot40{
+	margin-bottom:40px !important;
+}
+
+.marginbot45{
+	margin-bottom:45px !important;
+}
+
+
+.marginbot50{
+	margin-bottom:50px !important;
+}
+
+.marginbot55{
+	margin-bottom:55px !important;
+}
+
+.marginbot60{
+	margin-bottom:60px !important;
+}
+
+.marginbot80{
+	margin-bottom:80px !important;
+}
+
+/*
+Pre Code
+=========================== */
+pre {
+    font-family: monospace;
+    padding: 5px 25px 30px;
+    border: solid 1px #ccc;
+    border-left: solid 10px #ccc;
+    background-color: #f5f5f5;
+    margin-bottom: 30px;
+    color: #6f6f6f;
+    border-radius: 0px;
+}
+pre + pre {
+    background: #6f6f6f;
+}
+pre {
+    word-break: break-all; /* webkit */
+    word-wrap: break-word;
+    white-space: pre;
+    white-space: -moz-pre-wrap; /* fennec */
+    white-space: pre-wrap;
+    white-space: pre\9; /* IE7+ */
+}
+
+pre span{
+    color: #12c064;
+}
+
+@media (max-width:676px){
+    .wrap-affiliates{
+        text-align: left;
+        margin-top: 30px;
+    }
+}
