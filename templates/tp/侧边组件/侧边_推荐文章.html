@@ -1,0 +1,45 @@
+{% load static %}
+
+
+
+
+<!-- 最受欢迎文章 -->
+{% spaceless %}
+<div class="widget">
+    <div class="section-heading heading-dark text_uppercase">
+        <h3 class="item-heading">popular posts</h3>
+    </div>
+    <div class="widget-latest">
+        <ul class="block-list">
+            {% static 'st/img/financial_fail (1).png' as default_img %}
+            {% for article in articles %}
+            <li class="single-item ease-out">
+                <div class="item-img">
+                    <a href="{{ article.get_absolute_url }}">
+                        <img onerror="this.onerror=null,this.src='{{ default_img }}'" 
+                            data-src="https://picsum.photos/id/10{{ forloop.counter|add:50 }}/100/80" 
+                            alt="{{ article.title }}">
+                    </a>
+                </div>
+                <div class="item-content">
+                    <ul class="entry-meta meta-color-dark">
+                        <li><i class="fas fa-tag"></i>
+                            {% with article.tags.all as tags%}
+                            {% for tag in tags %}
+                            <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                            {% endfor %}
+                            {% endwith %}
+                        </li>
+                    </ul>
+                    <h2 class="item-title">
+                        <a href="{{ article.get_absolute_url }}">
+                            {{ article.title }}
+                        </a>
+                    </h2>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endspaceless %}

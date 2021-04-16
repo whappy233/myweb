@@ -167,13 +167,14 @@
             <td>{{ user_form.email }}</td>
           </tr>
           <tr>
-            <td>{{ profile_form.org.label_tag }}</td>
-            <td>{{ profile_form.org }}</td>
-          </tr>
-          <tr>
             <td>{{ profile_form.telephone.label_tag }}</td>
             <td>{{ profile_form.telephone }}</td>
             <td>{{ profile_form.telephone.errors }}</td>
+          </tr>
+          <tr>
+            <td>{{ profile_form.introduction.label_tag }}</td>
+            <td>{{ profile_form.introduction }}</td>
+            <td>{{ profile_form.introduction.errors }}</td>
           </tr>
         </table>
         <p><input type="submit" value="保存修改" style="text-align: right;"></p>

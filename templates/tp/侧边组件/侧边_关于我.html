@@ -1,0 +1,22 @@
+{% load static %}
+
+{% load user_tags %}
+
+
+<!-- 关于我 -->
+{% get_user username='891953720' as me %}
+
+{% spaceless %}
+<div class="widget">
+    <div class="section-heading heading-dark text_uppercase">
+        <h3 class="item-heading">about me</h3>
+    </div>
+    <div class="widget-about">
+        <figure class="author-figure"><a href="/about"><img src="{{ me.profile.photo.url }}" alt="about"></a>
+        </figure>
+        <figure class="author-signature"><img src="{% static 'st/img/name.png' %}" alt="about">
+        </figure>
+        <p>{{ me.profile.introduction }}</p>
+    </div>
+</div>
+{% endspaceless %}

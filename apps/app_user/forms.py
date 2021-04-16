@@ -159,23 +159,22 @@ class ProfileEditForm(forms.ModelForm):
     '''用户信息编辑(UserProfile)'''
     class Meta:
         model = UserProfile
-        fields = ('org', 'telephone')
+        fields = ('telephone', 'introduction')
 
         # widgets 字典接受任何 widget 实例（例如 Textarea(...) ）或类（例如 Textarea）。
         # 注意，对于具有非空 choices 属性的模型字段，widgets 字典会被忽略
         widgets = {
-            'org': forms.Textarea(attrs={'cols': 19, 'rows': 1, 'class': '自定义样式'}),
             'telephone': forms.TextInput(attrs={'type' : 'number','class' : 'your_class', 'max_length': 6, 'placeholder': u'手机号码'})
         }
         labels = {
-            'org': 'ORG',
-            'telephone': '666'
+            'telephone': '手机号',
+            'introduction': '个人描述',
         }
         help_texts = {
-            'org': ('Some useful help text.'),
+            'introduction': ('你的一些描述.'),
         }
         error_messages = {
-            'org': {
+            'introduction': {
                 'max_length': ("This writer's org is too long."),
             },
         }

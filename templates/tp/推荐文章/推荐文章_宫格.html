@@ -1,0 +1,121 @@
+
+
+<!-- 推荐文章模板 -->
+
+<!-- 推荐数量为4 -->
+
+<!-- Article_recommendation -->
+
+{% load static %}
+{% load blog_tags %}
+{% load gallery_tags %}
+{% load humanize %}
+
+
+<!-- 传入 articles 列表 -->
+
+{% spaceless %}
+<section class="blog-wrap-layout15 Gongge">
+    <div class="container">
+        <div class="row gutters-21">
+
+            <div class="col-xl-6 col-lg-6 col-md-6 ">
+                <div class="blog-box-layout13">
+                    <div class="item-img">
+                        <img src="{% static 'st/img/blog/blog110.jpg' %}" alt="{{articles.0.title}}">
+                        <div class="item-content">
+                            <ul class="entry-meta meta-color-light">
+                                <li><i class="fas fa-tag"></i>
+                                    {% with articles.0.tags.all as tags%}
+                                    {% for tag in tags %}
+                                    <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                                    {% endfor %}
+                                    {% endwith %}
+                                </li>
+                                <li><i class="fas fa-calendar-alt"></i>{% format_time articles.0.pub_time "%Y-%m-%d %H:%M" %}</li>
+                            </ul>
+                            <h2 class="item-title">
+                                <a href="{{ articles.0.get_absolute_url }}">
+                                    {{ articles.0.title }}
+                                </a>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-3 col-md-3 ">
+                <div class="blog-box-layout13">
+                    <div class="item-img">
+                        <img src="{% static 'st/img/blog/blog111.jpg' %}" alt="{{articles.1.title}}">
+                        <div class="item-content">
+                            <ul class="entry-meta meta-color-light">
+                                <li><i class="fas fa-tag"></i>
+                                    {% with articles.1.tags.all as tags%}
+                                    {% for tag in tags %}
+                                    <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                                    {% endfor %}
+                                    {% endwith %}
+                                </li>
+                                <li><i class="fas fa-calendar-alt"></i>{% format_time articles.1.pub_time "%Y-%m-%d %H:%M" %}</li>
+                            </ul>
+                            <h2 class="item-title">
+                                <a href="{{ articles.1.get_absolute_url }}">
+                                    {{ articles.1.title }}
+                                </a>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="blog-box-layout13">
+                    <div class="item-img">
+                        <img src="{% static 'st/img/blog/blog112.jpg' %}" alt="{{articles.2.title}}">
+                        <div class="item-content">
+                            <ul class="entry-meta meta-color-light">
+                                <li><i class="fas fa-tag"></i>
+                                    {% with articles.2.tags.all as tags%}
+                                    {% for tag in tags %}
+                                    <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                                    {% endfor %}
+                                    {% endwith %}
+                                </li>
+                                <li><i class="fas fa-calendar-alt"></i>{% format_time articles.2.pub_time "%Y-%m-%d %H:%M" %}</li>
+                            </ul>
+                            <h2 class="item-title">
+                                <a href="{{ articles.2.get_absolute_url }}">
+                                    {{ articles.2.title }}
+                                </a>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-3 col-md-3 ">
+                <div class="blog-box-layout13">
+                    <div class="item-img">
+                        <img src="{% static 'st/img/blog/blog113.jpg' %}" alt="{{articles.3.title}}">
+                        <div class="item-content">
+                            <ul class="entry-meta meta-color-light">
+                                <li><i class="fas fa-tag"></i>
+                                    {% with articles.3.tags.all as tags%}
+                                    {% for tag in tags %}
+                                    <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                                    {% endfor %}
+                                    {% endwith %}
+                                </li>
+                                <li><i class="fas fa-calendar-alt"></i>{% format_time articles.3.pub_time "%Y-%m-%d %H:%M" %}</li>
+                            </ul>
+                            <h2 class="item-title">
+                                <a href="{{ articles.3.get_absolute_url }}">
+                                    {{ articles.3.title }}
+                                </a>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endspaceless %}

@@ -1,0 +1,46 @@
+<!-- 推荐文章模板 -->
+
+<!-- 建议推荐数量为4的倍数, 不建议数量过多 排版更好 -->
+
+<!-- Article_recommendation -->
+
+{% load blog_tags %}
+{% load gallery_tags %}
+{% load humanize %}
+
+
+<section class="blog-wrap-layout4">
+    <div class="container">
+        <div class="row gutters-40">
+            {% widthratio 12 articles|length 1 as qq %}
+            {% for article in articles %}
+            <div class="col-lg-{{qq}} col-md-{{qq}} col-sm-6 col-12">
+                <div class="blog-box-layout9">
+                    <div class="item-img">
+                        <a href="{{ article.get_absolute_url }}"><img data-src="https://picsum.photos/id/10{{ forloop.counter|add:20 }}/270/203" alt="{{ article.title }}"></a>
+                    </div>
+                    <div class="item-content">
+                        <ul class="entry-meta meta-color-dark">
+                            <li><i class="fas fa-tag"></i>
+                                {% with article.tags.all as tags%}
+                                {% for tag in tags %}
+                                <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                                {% endfor %}
+                                {% endwith %}
+                            </li>
+                            <li><i class="fas fa-calendar-alt"></i>{% format_time article.pub_time "%Y-%m-%d %H:%M" %}</li>
+                        </ul>
+                        <h3 class="item-title">
+                            <a href="{{ article.get_absolute_url }}">
+                                {{ article.title }}
+                            </a>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            暂无推荐
+            {% endfor %}
+        </div>
+    </div>
+</section>

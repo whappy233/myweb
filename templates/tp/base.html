@@ -1,0 +1,499 @@
+{% load static %}
+
+
+<!doctype html>
+<html class="no-js" lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}{% endblock title %}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'st/img/favicon.ico' %}">
+    <!-- Normalize CSS -->
+    <link rel="stylesheet" href="{% static 'st/css/normalize.css' %}">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{% static 'st/css/main.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="{% static 'st/css/fontawesome-all.min.css' %}">
+    <!-- Flat Icon CSS -->
+    <link rel="stylesheet" href="{% static 'st/font/flaticon.css' %}">
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="{% static 'st/css/animate.min.css' %}">
+    <!-- Meanmenu CSS -->
+    <link rel="stylesheet" href="{% static 'st/css/meanmenu.min.css' %}">
+    <!-- 幻灯片 Owl Carousel CSS -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'st/style.css' %}">
+    <!-- Modernize js -->
+    <script src="{% static 'st/js/modernizr-3.6.0.min.js' %}"></script>
+
+    {% block css_link %}
+    {% endblock css_link %}
+
+
+</head>
+
+<body id="main" class="sticky-header" data-theme='light'>
+    <script>
+        var theme1;
+        if(window.matchMedia('(prefers-color-scheme: dark)').matches){
+            theme1 = 'dark'
+        };
+        if(window.matchMedia('(prefers-color-scheme: light)').matches){
+            theme1 = 'light'
+        };
+        document.getElementById('main').setAttribute('data-theme' , window.localStorage.getItem("theme")||theme1||'dark');
+    </script>
+    <!-- 滚动到顶部 ScrollUp Start Here -->
+    <a href="#wrapper" data-type="section-switch" class="scrollup" title="Back to the top">
+        <i class="fas fa-angle-double-up"></i>
+    </a>
+    <!-- 滚动到顶部 ScrollUp End Here -->
+
+    <!-- 页面加载动画 Preloader Start Here -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="line line1"></div>
+            <div class="line line2"></div>
+            <div class="line line3"></div>
+        </div>
+    </div>
+    <!-- 页面加载动画 Preloader End Here -->
+
+    <div id="wrapper" class="wrapper">
+        <!-- 在此处添加您的网站或应用程序内容 -->
+
+        <!-- 头部导航 Header Area Start Here -->
+        {% block header %}
+        <header class="has-mobile-menu">
+            <div id="rt-sticky-placeholder"></div>
+            <div id="header-menu" class="header-menu menu-layout2 bg--transparent">
+                <div class="container">
+                    <div class="row d-flex align-items-center">
+                        <!-- 左侧logo -->
+                        <div class="col-lg-2">
+                            <div class="logo-area">
+                                <a href="/" class="temp-logo" id="temp-logo">
+                                    <img src="{% static 'st/img/logo.png' %}" alt="logo" class="img-fluid">
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- 中间菜单 -->
+                        <div class="col-lg-8 d-flex justify-content-end">
+                            <nav id="dropdown" class="template-main-menu">
+                                <ul>
+                                    <!-- 分类 -->
+                                    <li>
+                                        <a href="#">分类</a>
+                                        <ul class="dropdown-menu-col-1 animation">
+                                            <li>
+                                                <a href="javascript:void(0)">分类1</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">分类2</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">分类3</a>
+                                            </li>
+                                            <li>
+                                                <a href="blog-category2.html">Category 2</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <!-- Page -->
+                                    <li class="possition-static hide-on-mobile-menu">
+                                        <a href="#">PAGES</a>
+                                        <div class="template-mega-menu animation">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        <div class="menu-ctg-title">Home</div>
+                                                        <ul class="sub-menu">
+                                                            <li>
+                                                                <a href="index.html">
+                                                                    <i class="fas fa-home"></i>Home 1</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="index2.html">
+                                                                    <i class="fas fa-home"></i>Home 2</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="index3.html">
+                                                                    <i class="fas fa-home"></i>Home 3</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="index4.html">
+                                                                    <i class="fas fa-home"></i>Home 4</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="index5.html">
+                                                                    <i class="fas fa-home"></i>Home 5</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="menu-ctg-title">Home</div>
+                                                        <ul class="sub-menu">
+                                                            <li>
+                                                                <a href="index6.html">
+                                                                    <i class="fas fa-home"></i>Home 6</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="index7.html">
+                                                                    <i class="fas fa-home"></i>Home 7</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="index8.html">
+                                                                    <i class="fas fa-home"></i>Home 8</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="index9.html">
+                                                                    <i class="fas fa-home"></i>Home 9</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="index10.html">
+                                                                    <i class="fas fa-home"></i>Home 10</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="menu-ctg-title">Home</div>
+                                                        <ul class="sub-menu">
+                                                            <li>
+                                                                <a href="index11.html">
+                                                                    <i class="fas fa-home"></i>Home 11</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="index12.html">
+                                                                    <i class="fas fa-home"></i>Home 12</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="index13.html">
+                                                                    <i class="fas fa-home"></i>Home 13</a>
+                                                            </li>
+                                                        </ul>
+                                                        <div class="menu-ctg-title">ARCHIVES</div>
+                                                        <ul class="sub-menu">
+                                                            <li>
+                                                                <a href="archives1.html">
+                                                                    <i class="fab fa-cloudversify"></i>Archive 1</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="menu-ctg-title">ARCHIVES</div>
+                                                        <ul class="sub-menu">
+                                                            <li>
+                                                                <a href="archives2.html">
+                                                                    <i class="fab fa-cloudversify"></i>Archive 2</a>
+                                                            </li>
+                                                        </ul>
+                                                        <div class="menu-ctg-title">AUTHORS</div>
+                                                        <ul class="sub-menu">
+                                                            <li>
+                                                                <a href="authors.html">
+                                                                    <i class="fas fa-users"></i>Authors</a>
+                                                            </li>
+                                                        </ul>
+                                                        <div class="menu-ctg-title">PAGES</div>
+                                                        <ul class="sub-menu">
+                                                            <li>
+                                                                <a href="404.html">
+                                                                    <i class="fas fa-user-secret"></i>404 Error</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="hide-on-desktop-menu">
+                                        <a href="#">Pages</a>
+                                        <ul>
+                                            <li>
+                                                <a href="about.html">About 1</a>
+                                            </li>
+                                            <li>
+                                                <a href="blog-category1.html">Blog Category 1</a>
+                                            </li>
+                                            <li>
+                                                <a href="single-blog.html">Blog Details 1</a>
+                                            </li>
+                                            <li>
+                                                <a href="archives1.html">Archives 1</a>
+                                            </li>
+                                            <li>
+                                                <a href="404.html">404 Error</a>
+                                            </li>
+                                            <li>
+                                                <a href="contact.html">Contact</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <!-- 相册 -->
+                                    <li>
+                                        <a href="{% url 'app_gallery:gallery_list' %}">相册</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+
+                        <!-- 右侧菜单 -->
+                        <div class="col-lg-2 d-flex justify-content-end right_submenu">
+                            <div class="header-action-items submenu">
+                                <ul>
+                                    <!-- 搜索 -->
+                                    <li data="header-search">
+                                        <i title="Search" class="fas fa-search"></i>
+                                    </li>
+                                    <!-- 夜间模式 -->
+                                    <li class="dark_mode">
+                                        <i title="Dark" class="far fa-moon"></i>
+                                    </li>
+                                    {% if request.user.is_superuser %}
+                                    <!-- 新建文章 -->
+                                    <li>
+                                        <i data-href="{% url 'app_admin:create_blog' %}" class="fas fa-plus" title="新建文章"></i>
+                                    </li>
+                                    {% endif %}
+                                    {% if request.user.is_authenticated %} {# 当用户被验证 #}
+                                    <!-- User -->
+                                    <li class="user-wrap">
+                                        <img src="{{ request.user.profile.photo.url }}" alt="用户: {{ request.user }}" title="用户: {{ request.user }}">
+                                        <div class="template-mega-menu animation">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-9 user-content">
+                                                        <div class="user-content-body">
+                                                            <div class="user-msg-lists">
+                                                                <ul class="list-group list-group-flush">
+                                                                    <li class="list-group-item go_comment_detail ease-in-out " data-comment_detail='#www.abc.com'>
+                                                                        <div class="user_pic_to_message">
+                                                                            <img src="{% static 'st/img/product/top-product1.jpg' %}" class="rounded-circle" alt="image">
+                                                                        </div>
+                                                                        <div class="flex-grow-1 min-width-0">
+                                                                            <div class="mb-1 d-flex justify-content-between align-items-center">
+                                                                                <div class="text-truncate user_name_a">
+                                                                                    <a href="#user_name">Lucas Kriebel (via Twitter)</a>
+                                                                                </div>
+                                                                                <span class="text-nowrap text-muted">
+                                                                                    2021-03-16
+                                                                                </span>
+                                                                            </div>
+                                                                            <div class="text-muted d-flex justify-content-between">
+                                                                                <div class="text-truncate small">
+                                                                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum, labore?
+                                                                                </div>
+                                                                                <div class="text-nowrap pl-3">
+                                                                                    <ul class="list-inline">
+                                                                                        <li class="list-inline-item mb-0 comment_status">
+                                                                                            <i class="far fa-circle"></i>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="remove_msg">
+                                                                            <i class="trash far fa-trash-alt"></i>
+                                                                            <i class="cancel fas fa-times" style="display: none;color:red"></i>
+                                                                            <i class="delete fas fa-check" style="display: none;color:#10bd47"></i>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="list-group-item go_comment_detail ease-in-out " data-comment_detail='#www.abc.com' data-isread='true'>
+                                                                        <div class="user_pic_to_message">
+                                                                            <img src="{% static 'st/img/product/top-product1.jpg' %}" class="rounded-circle" alt="image">
+                                                                        </div>
+                                                                        <div class="flex-grow-1 min-width-0">
+                                                                            <div class="mb-1 d-flex justify-content-between align-items-center">
+                                                                                <div class="text-truncate user_name_a">
+                                                                                    <a href="#user_name">Lucas Kriebel (via Twitter)</a>
+                                                                                </div>
+                                                                                <span class="text-nowrap text-muted">
+                                                                                    2021-03-19
+                                                                                </span>
+                                                                            </div>
+                                                                            <div class="text-muted d-flex justify-content-between">
+                                                                                <div class="text-truncate small">
+                                                                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum, labore?
+                                                                                </div>
+                                                                                <div class="text-nowrap pl-3">
+                                                                                    <ul class="list-inline">
+                                                                                        <li class="list-inline-item mb-0 comment_status">
+                                                                                            <i class="far fa-circle"></i>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="remove_msg">
+                                                                            <i class="trash far fa-trash-alt"></i>
+                                                                            <i class="cancel fas fa-times" style="display: none;color:red"></i>
+                                                                            <i class="delete fas fa-check" style="display: none;color:#10bd47"></i>
+                                                                        </div>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-3 user_menu_list">
+                                                        <ul class="sub-menu">
+                                                            <li><a href="{% url 'app_user:profile' %}"><i class="fas fa-user-edit"></i>修改信息</a></li>
+                                                            <li><a href="{% url 'app_user:change_pw' %}"><i class="fas fa-key"></i>修改密码</a></li>
+                                                            {% if request.user.is_superuser %}
+                                                            <li><a href="{% url 'app_admin:index' %}"><i class="fas fa-user-cog"></i>ADMIN</a></li>
+                                                            <li><a href="/xadmin"><i class="fas fa-user-shield"></i>XADMIN</a></li>
+                                                            <li><a href="{% url 'app_blog:refresh' %}"><i class="fas fa-redo-alt"></i>刷新缓存</a></li>
+                                                            {% endif %}
+                                                            <li><a href="{% url 'app_user:logout' %}"><i class="fas fa-sign-out-alt"></i>退出登陆</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% else %}
+                                    <!-- 登陆 -->
+                                    <li>
+                                        <i data-href="{% url 'app_user:login' %}" class="fas fa-user-astronaut" title="登陆"></i>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        {% endblock header %}
+        <!-- 头部导航 Header Area End Here -->
+
+
+
+        {% block container %}
+        {% endblock container %}
+
+
+        <!-- 页脚 Footer Area Start Here -->
+        <footer class="footer-wrap-layout2">
+            <div class="container">
+                <div class="footer-box-layout2">
+                    <div class="footer-logo">
+                        <a href="/"><img src="{% static 'st/img/logo.png' %}" alt="logo"></a>
+                    </div>
+                    <ul class="footer-social">
+                        <li><a href="/sitemap.xml" title="SiteMap" target="_blank">SiteMap</a></li>
+                        <li><a href="{% url 'app_blog:article_feed' %}" title="RSS Feed" target="_blank">订阅博客</a></li>
+                        <li><a href="/links.html" title="友情链接" rel="nofollow" target="_blank">友情链接</a></li>
+                        <li>
+                            Powered by
+                            <a href="https://www.djangoproject.com/" target="_blank" style="color: dodgerblue;">Django</a>
+                        </li>
+                        <li>本页面加载耗时:<!!LOAD_TIMES!!>s</li>
+                    </ul>
+                    <div class="copyright">
+                        Copyright&copy;&nbsp;{{ CURRENT_YEAR }}&nbsp;
+                        <a href="/" title="{{ SITE_NAME }}" style="color: dodgerblue;">{{ SITE_NAME }}</a>.
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- 页脚 Footer Area End Here -->
+
+        <!-- 搜索界面 Search Box Start Here -->
+        <div id="header-search" class="header-search">
+            <button type="button" class="close">×</button>
+            <div class="header-search-form">
+                <form action="" method="get">
+                    <input type="search" name="q" placeholder="在此输入........" value="{{keyword|default_if_none:''}}"/>
+                    <button type="submit" class="search-btn">
+                        <i class="flaticon-magnifying-glass"></i>
+                    </button>
+                </form>
+                <div class="header-search-result">
+                    <div class="result_meta">找到<span>20</span>条结果</div>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>搜索界面 Search Box Start Here搜索界面 Search Box Start Here搜索界面 Search Box Start Here</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>1</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>2</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>3</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>4</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>5</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>6</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>7</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>8</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>9</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>10</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>11</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>12</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>13</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>14</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>15</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>16</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>17</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>18</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>19</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>20</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- 搜索界面 Search Box End Here -->
+    </div>
+
+
+
+
+
+    <!-- jquery-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Plugins js -->
+    <script src="{% static 'st/js/plugins.js' %}"></script>
+    <!-- Popper js -->
+    <script src="{% static 'st/js/popper.min.js' %}"></script>
+    <!-- Bootstrap js -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <!-- 幻灯片 Owl Carousel js -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <!-- Meanmenu js -->
+    <script src="{% static 'st/js/meanmenu.js' %}"></script>
+    <!-- Smooth Scroll js -->
+    <script src="{% static 'st/js/jquery.smoothscroll.min.js' %}"></script>
+    <!-- Main js -->
+    <script src="{% static 'st/js/main.js' %}"></script>
+
+
+
+    {% block script %}
+    {% endblock script %}
+
+	<script>
+        /*-------------------------------------
+        MeanMenu 响应式导航栏
+        --------------------------------------*/
+        if ($.fn.meanmenu) {
+            $('nav#dropdown').meanmenu({
+                meanMenuClose: "✕",
+                siteLogo: `
+                <div class='mobile-menu-nav-back'>
+                    <a class='logo-mobile' href='/'>
+                        <img src="{% static 'st/img/logo-mobile.png' %}" alt='logo' class='img-fluid'/>
+                    </a>
+                </div>
+                `
+            });
+        };
+
+    </script>
+
+
+
+</body>
+
+</html>

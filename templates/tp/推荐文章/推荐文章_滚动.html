@@ -1,0 +1,85 @@
+<!-- 推荐文章模板 -->
+
+<!-- 推荐数量为4 -->
+
+<!-- Article_recommendation -->
+
+{% load static %}
+{% load blog_tags %}
+{% load gallery_tags %}
+{% load humanize %}
+
+
+
+{% spaceless %}
+<section class="slider-wrap-layout7 Carousel">
+    <div class="container">
+        <div class="rc-carousel nav-control-layout8"
+            data-loop="true"
+            data-center="false"
+            data-items="{{articles|length}}"
+            data-margin="10"
+            data-autoplay="false"
+            data-autoplay-timeout="2000"
+            data-smart-speed="700"
+            data-nav="true"
+            data-dots="false"
+            data-nav-speed="false"
+
+            data-r-x-small="1"
+            data-r-x-small-nav="true"
+            data-r-x-small-dots="true"
+
+            data-r-x-medium="2"
+            data-r-x-medium-nav="true"
+            data-r-x-medium-dots="false"
+
+            data-r-small="3"
+            data-r-small-nav="true"
+            data-r-small-dots="false"
+
+            data-r-medium="4"
+            data-r-medium-nav="true"
+            data-r-medium-dots="false"
+
+            data-r-large="5"
+            data-r-large-nav="true"
+            data-r-large-dots="false"
+
+            data-r-extra-large="6"
+            data-r-extra-large-nav="true"
+            data-r-extra-large-dots="false"
+            >
+
+            {% static 'st/img/financial_fail (1).png' as default_img %}
+            {% for article in articles %}
+            <div class="blog-box-layout13">
+                <div class="item-img">
+                    <img onerror="this.onerror=null,this.src='{{ default_img }}'" 
+                        data-src="https://picsum.photos/id/10{{ forloop.counter|add:20 }}/262/196" 
+                        alt="{{ article.title }}">
+                    <div class="item-content">
+                        <ul class="entry-meta meta-color-light">
+                            <li><i class="fas fa-tag"></i>
+                                {% with article.tags.all as tags%}
+                                {% for tag in tags %}
+                                <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                                {% endfor %}
+                                {% endwith %}
+                            </li>
+                            <li><i class="fas fa-calendar-alt"></i>{% format_time article.pub_time "%Y-%m-%d %H:%M" %}</li>
+                        </ul>
+                        <h2 class="item-title">
+                            <a href="{{ article.get_absolute_url }}">
+                                {{ article.title }}
+                            </a>
+                        </h2>
+                    </div>
+                    <a href="{{ article.get_absolute_url }}" class="mask ease-in-out"></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endspaceless %}
