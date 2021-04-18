@@ -24,7 +24,7 @@ SECRET_KEY = 'jh*9r+p97rvldfkdnm6yvnm(m&ws$x)=squ!=rlu5s(uilhj+g'
 # SECRET_KEY= os.environ['SECRET_KEY']
 
 # 不要在生产环境打开 debug 开关
-DEBUG = True if os.environ.get('USER_NAME') == 'Carlos' else False
+DEBUG = os.environ.get('USER_NAME') == 'Carlos'
 
 ALLOWED_HOSTS = ['*']
 
@@ -97,7 +97,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],  # 定义目录列表，引擎应在其中按搜索顺序查找模板源文件
-        'APP_DIRS': True,  # 告诉引擎是否在已安装的应用程序中寻找模板
+        'APP_DIRS': True,  # 直接在app的目录下寻找templates
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -263,10 +263,8 @@ USE_TZ = False  # 默认值True。若使用了本地时间，必须设为False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 STATIC_URL = '/static/'
-if DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-else:
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 
 
 # 媒体文件
