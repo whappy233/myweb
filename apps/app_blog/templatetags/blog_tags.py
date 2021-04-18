@@ -27,12 +27,20 @@ def get_carousel_list():
     '''获取轮播图片列表'''
     return Carousel.objects.all()
 
+
+# 返回文章列表模板
+@register.inclusion_tag('app_blog/include_tag/list.html')
+def load_article_list(articles):
+    '''返回文章列表模板'''
+    return {'articles': articles}
+
+
 # 文章总数
 'simple_tag (处理数据并返回一个字符串或者给context设置或添加变量)  {% total_articles %}'
-# 注册模板标签和过滤器, 默认使用函数名作为标签名字，也可自定义 @register.simple_tag(name='name')
-@register.simple_tag(name='total_articles')  
+@register.simple_tag(name='total_articles')  # 注册模板标签和过滤器, 默认使用函数名作为标签名字，也可自定义 @register.simple_tag(name='name')
 def total_articles():  # 定义标签
     return Article.published.count()
+
 
 # 在模板执行 queryset 查询
 @register.simple_tag
@@ -47,14 +55,28 @@ def query(queryset, **kwargs):
 
 
 
+@register.filter(is_safe=True)
+@stringfilter
+def truncatechars_content(content):
+    """
+    获得文章内容的摘要
+    :param content:
+    :return:
+    """
+    from django.template.defaultfilters import truncatechars_html
+    from ..utils import get_blog_setting
+    blogsetting = get_blog_setting()
+    return truncatechars_html(content, blogsetting.article_sub_length)
 
 
-# 返回文章列表模板
-@register.inclusion_tag('app_blog/include_tag/list.html')
-def load_article_list(articles):
-    '''返回文章列表模板'''
-    return {'articles': articles}
-
+# 类型检查
+@register.filter(is_safe=True)
+def istype(obj, typename):
+    try:
+        res = obj.__class__.__name__ == typename
+    except:
+        res = False
+    return res
 
 
 # 博客分类层级
@@ -65,23 +87,6 @@ def blog_category():
     top_categorys = all_categorys.filter(parent_category=None)
     return {'all_categorys': all_categorys,
             'top_categorys': top_categorys}
-
-
-# 最多浏览量 cache
-@register.inclusion_tag('tp/推荐文章.html')  # 指定利用返回值显示的模板
-def recommendations_articles(count=5, temp_class='滚动'):
-    cache_key = 'recommendations_articles'
-    # x = lambda:Article.published.annotate(total_comments=Count('comments')).order_by('-total_comments')[:count]
-    # article_list = cache.get_or_set(cache_key, x, 60*100)
-    article_list = cache.get(cache_key)
-    if article_list:
-        logger.info(f'获取推荐文章缓存:{cache_key}')
-    else:
-        article_list = Article.published.annotate(total_views=Count('views')).filter(total_views__gt=0).order_by('-total_views')[:count]
-        cache.set(cache_key, article_list, 60 * 100)
-        logger.info(f'设置推荐文章缓存:{cache_key}')
-    print(temp_class)
-    return {'articles': article_list, 'temp_class': temp_class}
 
 
 # 最多评论 cache
@@ -241,28 +246,3 @@ def chinese_date_format(value):
 @register.filter(name='add_description')
 def add_description(value, args):
     return "{} ({})".format(value, args)
-
-
-@register.filter(is_safe=True)
-@stringfilter
-def truncatechars_content(content):
-    """
-    获得文章内容的摘要
-    :param content:
-    :return:
-    """
-    from django.template.defaultfilters import truncatechars_html
-    from ..utils import get_blog_setting
-    blogsetting = get_blog_setting()
-    return truncatechars_html(content, blogsetting.article_sub_length)
-
-
-# 类型检查
-@register.filter(is_safe=True)
-def istype(obj, typename):
-    try:
-        res = obj.__class__.__name__ == typename
-    except:
-        res = False
-    return res
-

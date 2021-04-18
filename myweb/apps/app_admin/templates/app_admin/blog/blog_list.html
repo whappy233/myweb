@@ -1,0 +1,85 @@
+{% extends "app_blog/base_blog.html" %}
+
+
+
+{% block blog_content_main %}
+<div>
+    <div style="display: inline-block;">
+        {% if search %}
+        <h3>搜索关键字: "{{ search }}" 找到{% if page_obj %}{{ page_obj.paginator.count }}{% else %} 0 {% endif %}个结果</h3>
+        {% else %}
+        <h3>所有文章 共{% if page_obj %}{{ page_obj.paginator.count }}{% else %} 0 {% endif %}篇</h3>
+        {% endif %}
+    </div>
+    <div style="float: right;">
+        <a href="{% url 'app_admin:create_blog' %}">
+            <button class='btn btn-info'>新建+</button>
+        </a>
+    </div>
+</div>
+
+<form action="" role="search" method="get" class="form-inline">
+    <input type="text" name="search" id="q" class="form-control" value="{{ search|default:'' }}" placeholder="搜索文章">
+    <input type="submit" value="搜索" >
+</form>
+
+<select>
+    <option>删除选定</option>
+    <option>发表选定</option>
+    <option>取消发表选定</option>
+</select>
+<button class="btn btn-info" type="submit">执行</button>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Check</th>
+            <th>标题</th>
+            <th>类别</th>
+            <th>发布日期</th>
+            <th>查看</th>
+            <th>修改</th>
+            <th>删除</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if page_obj %}
+        {% for article in page_obj %}
+        <tr>
+            <td class="form-group">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="{{article.id}}">
+                    <label class="custom-control-label" for="{{article.id}}"></label>
+                </div>
+            </td>
+
+            <td>{{ article.title }}</td>
+            <td>{{ article.category.name }}</td>
+            <td>{{ article.pub_time | date:"Y-m-d" | default:"-" }}</td>
+
+            {% if article.pub_time %}
+            <td><a href="{{ article.get_absolute_url }}"><span class="glyphicon glyphicon-eye-open">☺︎</span></a></td>
+            {% else %}
+            <td>-</td>
+            {% endif %}
+            <td><a href="{% url 'app_admin:update_article' article.id article.slug %}"><span class="glyphicon glyphicon-eye-open">✎</span></a></td>
+            <td><a href="{% url 'app_admin:delete_article' article.id article.slug %}"><span class="glyphicon glyphicon-eye-open">✗</span></a></td>
+
+        </tr>
+        {% endfor %}
+        {% else %}
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        {% endif %}
+    </tbody>
+
+</table>
+
+{# 从 paginator.html 引入分页模板 #}
+{% include 'pagination.html' with page_obj=page_obj %}
+
+{% endblock %}

@@ -1,0 +1,344 @@
+{% load static %}
+{% load blog_tags %}
+{% load gallery_tags %}
+{% load cache %}
+
+
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock title %}</title>
+    <link href="{% static 'img/favicon.ico' %}" rel="shortcut icon" type="image/x-icon">
+
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'fonts/FontAwesome/font-awesome.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/bootsnav.css' %}" rel="stylesheet">
+    <link href="{% static 'css/overwrite.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/skins/color.css' %}" rel="stylesheet">
+
+    <!-- Clock -->
+    <link href="{% static 'css/jquery.flipbox.css' %}" rel="stylesheet">
+    <link href="{% static 'css/clock_style.css' %}" rel="stylesheet">
+
+    {% block css_file %}
+    {% endblock css_file %}
+
+</head>
+{% block css_style %}
+{% endblock css_style %}
+<!-- <body class="starlight"> -->
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-default navbar-fixed white no-background bootsnav">
+
+        <!-- 顶部搜索-->
+        <div class="top-search">
+            <div class="container">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Search">
+                    <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- 属性导航 -->
+            <div class="attr-nav">
+                <ul>
+                    {% if request.user.is_authenticated %} {# 当用户被验证 #}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="{{request.user.profile.photo.url}}"
+                                style="width: 2rem;height: 2rem; border-radius:1rem">
+                            <span class="badge">3</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'app_user:profile' %}">修改信息</a></li>
+                            <li><a href="{% url 'app_user:change_pw' %}">修改密码</a></li>
+                            {% if request.user.is_superuser %}
+                            <li><a href="{% url 'app_admin:index' %}">ADMIN</a></li>
+                            <li><a href="/xadmin">XADMIN</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'app_user:logout' %}">退出登陆</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'app_admin:create_blog' %}">新建文章</a></li>
+                    {% else %}
+                    <li><a href="{% url 'app_user:login' %}">登陆</a></li>
+                    <li><a href="{% url 'app_user:register' %}">注册</a></li>
+                    {% endif %}
+                    <!-- 搜索按钮 -->
+                    <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
+                    <!-- more info -->
+                    <li class="side-menu"><a href="#"><i class="fa fa-bars"></i></a></li>
+                </ul>
+            </div>
+
+            <!-- logo -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="/" title="{{ SITE_NAME }} Carlos">
+                    <img src="{% static 'img/logo-white.png' %}" class="logo logo-display" alt="">
+                    <img src="{% static 'img/logo-black.png' %}" class="logo logo-scrolled" alt="">
+                </a>
+            </div>
+
+            <!-- 包括导航链接、表单和其他内容 -->
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+                    <li class="dropdown">
+                        <a href="/" class="dropdown-toggle" data-toggle="dropdown">Blog</a>
+                        <ul class="dropdown-menu">
+                            {% cache 500 monthly_archive %}
+                            {% blog_category %}
+                            {% endcache %}
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'app_gallery:gallery_list' %}">Gallery</a></li>
+                    <li><a href="#">Other</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 侧边弹出栏 -->
+        <div class="side">
+            <a href="#" class="close-side"><i class="fa fa-times"></i></a>
+            <div class="widget">
+                <h6 class="title">Custom Pages</h6>
+                <ul class="link">
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Portfolio</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="widget">
+                <h6 class="title">Additional Links</h6>
+                <ul class="link">
+                    <li><a href="#">Retina Homepage</a></li>
+                    <li><a href="#">New Page Examples</a></li>
+                    <li><a href="#">Parallax Sections</a></li>
+                    <li><a href="#">Shortcode Central</a></li>
+                    <li><a href="#">Ultimate Font Collection</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Start Home -->
+    {% url 'app_gallery:get_random_background' 0 0 as the_url %}
+    <!-- <div class="pageheader" style="background-image: url('{{the_url}}');"> -->
+    <div class="pageheader fixed-demo" style="background-image: url('{% static 'app_blog/images/pic.jpg' %}');">
+        <div class="container">
+            <div style="float: left; max-width: 500px;">
+                {% block home %}
+                <h2 class="title">{{ SITE_NAME }}</h2>
+                {% endblock home %}
+            </div>
+
+            <div class="clock" style="float: right;">
+                <div class="time-box">
+                    <div class="time-side">0</div>
+                    <div class="time-side">1</div>
+                    <div class="time-side">2</div>
+                    <div class="time-side">3</div>
+                    <div class="time-side">4</div>
+                    <div class="time-side">5</div>
+                    <div class="time-side">6</div>
+                    <div class="time-side">7</div>
+                    <div class="time-side">8</div>
+                    <div class="time-side">9</div>
+                </div>
+                <div class="time-box">
+                    <div class="time-side">0</div>
+                    <div class="time-side">1</div>
+                    <div class="time-side">2</div>
+                    <div class="time-side">3</div>
+                    <div class="time-side">4</div>
+                    <div class="time-side">5</div>
+                    <div class="time-side">6</div>
+                    <div class="time-side">7</div>
+                    <div class="time-side">8</div>
+                    <div class="time-side">9</div>
+                </div>
+                <span>:</span>
+                <div class="time-box">
+                    <div class="time-side">0</div>
+                    <div class="time-side">1</div>
+                    <div class="time-side">2</div>
+                    <div class="time-side">3</div>
+                    <div class="time-side">4</div>
+                    <div class="time-side">5</div>
+                    <div class="time-side">6</div>
+                    <div class="time-side">7</div>
+                    <div class="time-side">8</div>
+                    <div class="time-side">9</div>
+                </div>
+                <div class="time-box">
+                    <div class="time-side">0</div>
+                    <div class="time-side">1</div>
+                    <div class="time-side">2</div>
+                    <div class="time-side">3</div>
+                    <div class="time-side">4</div>
+                    <div class="time-side">5</div>
+                    <div class="time-side">6</div>
+                    <div class="time-side">7</div>
+                    <div class="time-side">8</div>
+                    <div class="time-side">9</div>
+                </div>
+                <span>:</span>
+                <div class="time-box">
+                    <div class="time-side">0</div>
+                    <div class="time-side">1</div>
+                    <div class="time-side">2</div>
+                    <div class="time-side">3</div>
+                    <div class="time-side">4</div>
+                    <div class="time-side">5</div>
+                    <div class="time-side">6</div>
+                    <div class="time-side">7</div>
+                    <div class="time-side">8</div>
+                    <div class="time-side">9</div>
+                </div>
+                <div class="time-box">
+                    <div class="time-side">0</div>
+                    <div class="time-side">1</div>
+                    <div class="time-side">2</div>
+                    <div class="time-side">3</div>
+                    <div class="time-side">4</div>
+                    <div class="time-side">5</div>
+                    <div class="time-side">6</div>
+                    <div class="time-side">7</div>
+                    <div class="time-side">8</div>
+                    <div class="time-side">9</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 主体 -->
+    <div class="container">
+        <!-- <div class="row"> -->
+        <!-- {{Carlos}}{# 全局tag #} -->
+        {% block content %}
+        {% endblock content %}
+        <!-- </div> -->
+        <div id="rocket" class="move" title="点击返回顶部"></div>
+    </div>
+
+    <!-- 底栏 -->
+    <footer class="footinfo">
+        {% block footer %}
+        <div style="text-align: center">
+            Copyright©&nbsp;2021&nbsp;
+            <a href="/" target="blank">{{ SITE_NAME }}</a>
+            &nbsp;|&nbsp;
+            <a href="/sitemap.xml" title="SiteMap" target="_blank">SiteMap</a>
+            &nbsp;|&nbsp;
+            <a href="{% url 'app_blog:article_feed' %}" title="RSS Feed" target="_blank">订阅博客</a>
+        </div>
+        <div style="text-align: center">
+            Powered by
+            <a href="https://www.djangoproject.com/" rel="nofollow" target="_blank">Django</a>
+            &nbsp;|&nbsp;
+            本页面加载耗时:<!!LOAD_TIMES!!>s
+        </div>
+        {% endblock footer %}
+    </footer>
+
+    <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootsnav.js' %}"></script>
+
+    <!-- Clock -->
+    <script src="{% static 'js/jquery.flipbox.js' %}"></script>
+    <!-- body 背景星星 -->
+    <script src="{% static 'js/starlight.js' %}"></script>
+    <!-- 背景图片鼠标移动 -->
+    <script src="{% static 'js/ios-parallax.js' %}"></script>
+
+    {% block javascript %}
+    {% endblock javascript %}
+
+    <script>
+        $(document).ready(function () {
+
+            // Start Home ios-parallax背景图片鼠标移动
+            $('.pageheader').iosParallax({
+                movementFactor: 50, // 背景移动的速度
+                dampenFactor: 50  // 多大程度地抑制运动（越大速度越慢）
+            });
+
+            // Clock
+            $('.clock .time-box').flipbox({
+                vertical: true
+            });
+            function updateClock() {
+                var now = new Date();
+                var hours = now.getHours();
+                var minutes = now.getMinutes();
+                var seconds = now.getSeconds();
+                $('.clock .time-box:eq(0)').flipbox('jump', Math.floor(hours / 10));
+                $('.clock .time-box:eq(1)').flipbox('jump', hours % 10);
+                $('.clock .time-box:eq(2)').flipbox('jump', Math.floor(minutes / 10));
+                $('.clock .time-box:eq(3)').flipbox('jump', minutes % 10);
+                $('.clock .time-box:eq(4)').flipbox('jump', Math.floor(seconds / 10));
+                $('.clock .time-box:eq(5)').flipbox('jump', seconds % 10);
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+
+            // Tooltip
+            $('[data-toggle="tooltip"]').tooltip();  
+
+            // 滚动到顶部
+            var rocket = $('#rocket');
+            $(window).on('scroll', debounce(slideTopSet, 300));
+            function debounce(func, wait) {
+                var timeout;
+                return function () {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(func, wait);
+                };
+            };
+            function slideTopSet() {
+                var top = $(document).scrollTop();
+                if (top > 200) {
+                    rocket.addClass('show');
+                } else {
+                    rocket.removeClass('show');
+                }
+            };
+            $(document).on('click', '#rocket', function (event) {
+                rocket.addClass('move');
+                $('body, html').animate({
+                    scrollTop: 0
+                }, 800);
+            });
+            $(document).on('animationEnd', function () {
+                setTimeout(function () {
+                    rocket.removeClass('move');
+                }, 400);
+            });
+            $(document).on('webkitAnimationEnd', function () {
+                setTimeout(function () {
+                    rocket.removeClass('move');
+                }, 400);
+            });
+
+        });
+    </script>
+
+</body>
+</html>

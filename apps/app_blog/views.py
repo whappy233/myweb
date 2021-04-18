@@ -25,7 +25,7 @@ from django.utils.text import slugify
 
 
 class ArticleListView(ListView):
-    template_name = 'tp/文章列表_index.html'  # 视图默认的模板名称是: 模型名小写_list.html
+    template_name = 'blog/article_list.html'  # 视图默认的模板名称是: 模型名小写_list.html
     context_object_name = 'article_list'  # 设置上下文变量
 
     page_type = ''
@@ -180,9 +180,8 @@ class CategoryDetailView(ArticleListView):
 
 # 文章详情
 class ArticleDetailView(DetailView):
-    '''文章详情'''
+    '''文章详细'''
     model = Article
-    template_name = 'tp/文章详情.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -350,7 +349,6 @@ def ajax_test(request):
             return JsonResponse(data)
 
 
-# 刷新缓存
 @login_required
 def refresh_memcache(request):
     try:
@@ -365,7 +363,7 @@ def refresh_memcache(request):
         return HttpResponse(e)
 
 
-# 关于
+
 def AboutView(request):
     obj = AboutBlog.objects.first()
     if obj:

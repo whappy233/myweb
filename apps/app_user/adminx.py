@@ -10,7 +10,7 @@ from django.utils.safestring import mark_safe
 
 
 class UserProfileAdmin:
-    list_display = ['user', 'photo', 'introduction', 'telephone', 'mod_date']  # 要显示的字段
+    list_display = ['user', 'photo', 'org', 'telephone', 'mod_date']  # 要显示的字段
     search_fields = ['user', 'telephone']   # 搜索字段
     list_filter = ['user']                  # 过滤器
     readonly_fields = ('user',)             # 只读字段

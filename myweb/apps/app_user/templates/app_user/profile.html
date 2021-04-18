@@ -1,0 +1,524 @@
+{% extends "app_blog/base_blog.html" %}
+{% load static %}
+
+
+{% block title %}编辑信息{% endblock %}
+
+{% block css_style %}
+<link rel="stylesheet" href="{% static 'app_user/cropperjs_v1.5.9/css/cropper.css' %}">
+<style>
+  .toolbar{
+    position: absolute;
+    bottom:12px; 
+    right:15px; 
+    opacity: 0.5;
+
+  }
+
+  .toolbar:hover{
+    opacity: 1;
+    display: block;
+  }
+
+  .avatar-body {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  .docs-demo {
+    margin-bottom: 1rem;
+    overflow: hidden;
+    padding: 2px;
+  }
+
+  .img-container,
+  .img-preview {
+    text-align: center;
+    width: 100%;
+  }
+
+  /* 圆形遮罩 */
+  .cropper-view-box,
+  .cropper-face {
+    border-radius: 50%;
+  }
+
+  .img-container {
+    height: 364px;
+    width: 100%;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, .25);
+    background-color: #fcfcfc;
+    overflow: hidden;
+  }
+
+  .img-container img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+  }
+
+  .avatar-upload {
+    overflow: hidden;
+    margin-bottom: 5px;
+  }
+
+  .avatar-upload label {
+    display: block;
+    float: left;
+    clear: left;
+    width: 100px;
+  }
+
+  .avatar-upload input {
+    display: block;
+  }
+
+  .img-container>img {
+    max-width: 100%;
+  }
+
+  .img-preview {
+    float: left;
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+
+  .img-preview>img {
+    max-width: 100%;
+  }
+
+  .preview-lg {
+    height: 150px;
+    width: 150px;
+  }
+
+  .preview-md {
+    height: 100px;
+    width: 100px;
+  }
+
+  .preview-sm {
+    height: 50px;
+    width: 50px;
+  }
+
+  @media (min-width: 1000px) {
+    .img-preview {
+      float: none;
+    }
+  }
+
+  .docs-buttons>.btn,
+  .docs-buttons>.btn-group,
+  .docs-buttons>.form-control {
+    margin-bottom: 0.5rem;
+    margin-right: 0.25rem;
+  }
+
+  .btn-upload {
+    white-space: nowrap;
+  }
+
+  .loading {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: .75;
+    filter: alpha(opacity=75);
+    z-index: 20140628;
+  }
+</style>
+{% endblock %}
+
+
+{% block blog_content_main %}
+<h1>编辑信息 <span style="font-size: 10px;">{% if message %}{{message}}{% endif %}</span></h1>
+
+<div style="display:flex">
+
+  <div data-target="#modal" data-toggle="modal">
+    <img style="border-radius: 50%;" id="image" src="{{request.user.profile.photo.url}}" data-toggle="tooltip" title="点击修改头像"
+      data-placement="bottom">
+  </div>
+
+  <div style="margin-left: 50px;">
+    <form action="." method="POST" enctype="multipart/form-data">
+      <div>
+        <table>
+          <tr>
+            <td>用户名:</td>
+            <td><input type="text" disabled value={{ request.user.username }}></td>
+          </tr>
+          <tr>
+            <td>{{ user_form.first_name.label_tag }}</td>
+            <td>{{ user_form.first_name }}</td>
+          </tr>
+          <tr>
+            <td>{{ user_form.last_name.label_tag }}</td>
+            <td>{{ user_form.last_name }}</td>
+          </tr>
+          <tr>
+            <td>{{ user_form.email.label_tag }}</td>
+            <td>{{ user_form.email }}</td>
+          </tr>
+          <tr>
+            <td>{{ profile_form.telephone.label_tag }}</td>
+            <td>{{ profile_form.telephone }}</td>
+            <td>{{ profile_form.telephone.errors }}</td>
+          </tr>
+          <tr>
+            <td>{{ profile_form.introduction.label_tag }}</td>
+            <td>{{ profile_form.introduction }}</td>
+            <td>{{ profile_form.introduction.errors }}</td>
+          </tr>
+        </table>
+        <p><input type="submit" value="保存修改" style="text-align: right;"></p>
+      </div>
+      {% csrf_token %}
+    </form>
+  </div>
+
+</div>
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form class="modal-form" action="{% url 'app_user:ajax_photo_upload' %}" enctype="multipart/form-data"
+        method="POST">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLabel">上传头像</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="avatar-body">
+            <div class="avatar-upload">
+              <input class="avatar-data" name="photo_data" type="hidden">
+              <input class="avatar-file" name="photo_file" type="file" id="inputImage" accept="image/*">
+            </div>
+
+            <div class="row">
+              <div class="col-md-9">
+                <div class="docs-demo">
+                  <div class="img-container" style="position: relative;">
+                  </div>
+                  <div class="toolbar" id="actions" >
+                    <div class="docs-buttons">
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-sm" data-method="rotate" data-option="-45" title="逆时针旋转45°"
+                          data-toggle="tooltip">↪️</button>
+  
+                        <button type="button" class="btn btn-sm" data-method="rotate" data-option="45" title="顺时针旋转45°"
+                          data-toggle="tooltip">↩️</button>
+  
+                        <button type="button" class="btn btn-sm" data-method="scaleX" data-option="-1" title="水平翻转"
+                          data-toggle="tooltip">↔️</button>
+  
+                        <button type="button" class="btn btn-sm" data-method="scaleY" data-option="-1" title="垂直翻转"
+                          data-toggle="tooltip">↕️</button>
+  
+                        <button type="button" class="btn btn-sm" data-method="reset" title="恢复图形默认大小"
+                          data-toggle="tooltip">🔄</button>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="img-preview preview-lg"></div>
+                <div class="img-preview preview-md"></div>
+                <div class="img-preview preview-sm"></div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-9">
+              </div>
+
+              <div class="col-md-3">
+                <button class="btn btn-success btn-block avatar-save" type="submit">
+                  <i class="fa fa-save"></i>
+                  保存
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% csrf_token %}
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>
+{% endblock %}
+
+
+{% block script %}
+<script src="{% static 'app_user/cropperjs_v1.5.9/js/cropper.js' %}"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+
+    var $modal_form = $('.modal-form');
+    var $image = $('#image');  // img 图像
+    var actions = document.getElementById('actions');  // 包含按钮的容器
+    var $avatarModal = $("body").find('#modal');  // 找到 model
+    var $preview = $('.img-preview');
+    var cropper, uploadedImageURL, first_open = true;
+    var $input_img = $('#inputImage');
+    var $input_data = $('.avatar-data');
+    var $loading = $('.loading');
+    var $img_upload = $('.avatar-upload');
+    var $avatarSave = $modal_form.find('.avatar-save');
+    var $img_wrapper = $('.img-container');
+
+
+    var options = {
+      aspectRatio: 1 / 1,  // 纵横比
+      preview: '.img-preview',
+      viewMode: 1,
+      autoCropArea: 0.5,
+      dragMode: 'move', // 定义cropper的拖拽模式
+      crop: function (data) {  // 剪裁框发生变化执行的函数
+        $input_data.val(JSON.stringify(data.detail));
+      }
+    };
+
+    // Tooltip
+    $('[data-toggle="tooltip"]').tooltip();
+
+    // Methods
+    actions.querySelector('.docs-buttons').onclick = function (event) {
+      var e = event || window.event;
+      var target = e.target || e.srcElement;
+      var cropped, result, input, data;
+
+      if (!cropper) {
+        return;
+      }
+
+      while (target !== this) {
+        if (target.getAttribute('data-method')) {
+          break;
+        }
+        target = target.parentNode;
+      }
+
+      if (target === this || target.disabled || target.className.indexOf('disabled') > -1) {
+        return;
+      }
+
+      data = {
+        method: target.getAttribute('data-method'),
+        target: target.getAttribute('data-target'),
+        option: target.getAttribute('data-option') || undefined,
+        secondOption: target.getAttribute('data-second-option') || undefined
+      };
+
+      cropped = cropper.cropped;
+
+      if (data.method) {
+        if (typeof data.target !== 'undefined') {
+          input = document.querySelector(data.target);
+
+          if (!target.hasAttribute('data-option') && data.target && input) {
+            try {
+              data.option = JSON.parse(input.value);
+            } catch (e) {
+              console.log(e.message);
+            }
+          }
+        }
+
+        switch (data.method) {
+          case 'rotate':
+            if (cropped && options.viewMode > 0) {
+              cropper.clear();
+            }
+            break;
+        }
+
+        result = cropper[data.method](data.option, data.secondOption);
+
+        switch (data.method) {
+          case 'rotate':
+            if (cropped && options.viewMode > 0) {
+              cropper.crop();
+            }
+
+            break;
+
+          case 'scaleX':
+          case 'scaleY':
+            target.setAttribute('data-option', -data.option);
+            break;
+        }
+
+        if (typeof result === 'object' && result !== cropper && input) {
+          try {
+            input.value = JSON.stringify(result);
+          } catch (e) {
+            console.log(e.message);
+          }
+        }
+      }
+    };
+
+    // 点击保存事件
+    $modal_form.on('submit', function () {
+      if ($input_img.val())
+        ajaxUpload();
+      return false;
+    });
+
+    // 保存时使用 ajax post 上传到服务器
+    ajaxUpload = function () {
+      var url = $modal_form.attr('action'),
+        data = new FormData($modal_form[0]),
+        _this = this;
+
+      $.ajax(url, {
+        headers: { 'X-XSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        type: 'post',
+        data: data,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+
+        beforeSend: function () {
+          submitStart();  // 提交之前
+        },
+
+        success: function (data) {
+          submitDone(data);  // 提交成功后
+        },
+
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+          submitFail(textStatus || errorThrown);
+        },
+
+        complete: function () {
+          submitEnd();
+        }
+      });
+    };
+
+    // 准备提交
+    submitStart = function () {
+      console.log('准备');
+      $loading.fadeIn();
+    };
+
+    // 提交成功
+    submitDone = function (data) {
+      console.log('提交成功');
+      if ($.isPlainObject(data)) {
+        if (data.result) {
+          this.url = data.result;
+          cropDone();
+          $input_img.val('');
+        } else if (data.msg) {
+          this.alert(data.msg);
+        }
+      } else {
+        this.alert('Failed to response');
+      }
+    };
+
+    // 提交失败
+    submitFail = function (msg) {
+      console.log(`提交失败, msg: ${msg}`);
+      alert(msg);
+    };
+
+    // 提交结束
+    submitEnd = function () {
+      console.log('提交结束');
+      $loading.fadeOut();
+    };
+
+    cropDone = function () {
+      $modal_form.get(0).reset();  // 清空form 表单
+      $image.attr('src', this.url);  // 更新 img
+
+      if (cropper) {
+        cropper.destroy(); // 销毁
+        first_open = true;
+        $img_wrapper.empty();
+      };
+
+      $avatarModal.modal('hide');  // 关闭 model
+    };
+
+    // 错误提示
+    alert = function (msg) {
+      var $alert = `<div class="alert alert-danger avater-alert"><button type="button" class="close" data-dismiss="alert">&times;</button>${msg}</div>`
+      $img_upload.after($alert);
+    };
+
+    // 导入图像
+    var inputImage = document.getElementById('inputImage');
+    var URL = window.URL || window.webkitURL;  // 打开新图像
+    if (URL) {
+      inputImage.onchange = function () {
+        var files = this.files;
+        var file;
+
+        if (files && files.length) {
+          file = files[0];
+
+          if (/^image\/\w+/.test(file.type)) {
+            if (uploadedImageURL) {
+              URL.revokeObjectURL(uploadedImageURL);
+            }
+
+            // 新文件覆旧文件
+            uploadedImageURL = URL.createObjectURL(file);  // blob:null/c90a699f-51f2-4a2e-af62-3a9c742bfa74
+
+            if (cropper) {
+              cropper.destroy(); // 销毁后新建
+            };
+
+            let $img = $('<img src="' + uploadedImageURL + '">');
+            $img_wrapper.empty().html($img);
+
+            cropper = new Cropper($img[0], options);  // 新建
+            // inputImage.value = null;
+          } else {
+            window.alert('只能打开image文件类型');
+          }
+        }
+      };
+    } else {
+      inputImage.disabled = true;
+      inputImage.parentNode.className += ' disabled';
+    }
+
+    // model show event
+    $avatarModal.on('shown.bs.modal', function () {
+      if (first_open) {
+        var url = $image.attr('src');
+        $preview.empty().html(`<img src="${url}">`);  // 使用原始图像填充预览
+        first_open = false;
+      }
+    });
+
+    // model hide event
+    $avatarModal.on('hide.bs.modal', function () {
+      `<div class="alert alert-danger avater-alert"><button type="button" class="close" data-dismiss="alert">&times;</button></div>`
+      $img_upload.siblings('.alert').remove();
+
+    });
+  });
+</script>
+{% endblock %}

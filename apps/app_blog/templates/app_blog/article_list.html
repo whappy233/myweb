@@ -1,0 +1,79 @@
+{# 文章列表 #}
+
+
+{% extends 'app_blog/base_blog.html' %}
+{% load static %}
+{% load blog_tags %}
+{% load gallery_tags %}
+{% load humanize %}
+
+
+<!-- Start Home -->
+{% block home %}
+<h2 class="title">{{ SITE_NAME }}</h2>
+{% if page_type %}
+<h4 style="color: white;">{{ page_type }}: {{tag_name}}</h4>
+<p>共 {{ page_obj.paginator.count }} 篇 </p>
+{% elif keyword %}
+<h4 style="color: white;">搜索关键词:"{{ keyword }}"</h4>
+<p>搜索到 {{ page_obj.paginator.count }} 条记录。</p>
+{% else %}
+<h4 style="color: white;">所有文章</h4>
+<p>博客共有 {{ page_obj.paginator.count }} 篇 </p>
+{% endif %}
+{% endblock home %}
+
+
+{% block blog_content_main %}
+
+<div class="categorylist">
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="card card-body bg-primary-gradient">
+                <i class="glyphicon glyphicon-fire"></i>
+                Hot
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="card card-body bg-success-gradient">
+                <i class="glyphicon glyphicon-flash"></i>
+                Recommend
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="card card-body bg-danger-gradient">
+                <i class="glyphicon glyphicon-flag"></i>
+                C
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="card card-body bg-warning-gradient">
+                <i class="glyphicon glyphicon-thumbs-up"></i>
+                D
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 推荐 -->
+<div class="card excerpt-minic excerpt-minic-index">
+    <h2><span class="red">【置顶】</span><a href="" title="">如何做事</a></h2>
+    <p class="note">
+        同时...
+    </p>
+</div>
+
+
+<!-- 文章列表 -->
+{% load_article_list article_list %}
+
+
+<!-- 分页页码 -->
+<nav class="pagination" style="display: block;">
+    {# 从 paginator.html 引入分页模板 #}
+    {% include 'pagination.html' with page_obj=page_obj %}
+</nav>
+
+
+{% endblock blog_content_main %}

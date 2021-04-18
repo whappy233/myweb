@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Gallery
+{% endblock title %}
+
+{% block css_file %}
+<link href="{% static 'img/favicon.ico' %}" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="{% static 'app_gallery/css/style.css' %}" />
+{% endblock css_file %}
+
+{% block css_style %}
+<style>
+	.rounded {
+		border-radius: .25rem !important;
+	}
+
+	.img-fluid {
+		max-width: 100%;
+		height: auto;
+	}
+
+	.grid-gallery ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.grid-gallery figure {
+		margin: 0;
+	}
+
+	.grid-gallery figure img {
+		display: block;
+		width: 100%;
+	}
+
+	.grid-gallery figcaption h3 {
+		margin: 0;
+		padding: 0 0 0.5em;
+	}
+
+	.grid-gallery figcaption p {
+		margin: 0;
+	}
+
+	/* Grid style */
+	.grid-wrap {
+		width: 100%;
+		margin: 0 auto;
+	}
+
+	.grid {
+		margin: 0 auto;
+	}
+
+	.grid li {
+		width: 25%;
+		float: left;
+		cursor: pointer;
+	}
+
+	.grid figure {
+		padding: 15px;
+		-webkit-transition: opacity 0.2s;
+		transition: opacity 0.2s;
+	}
+
+	.grid li:hover figure {
+		opacity: 0.7;
+	}
+
+	.grid figcaption {
+		background: #f1f1f1;
+		padding: 25px;
+	}
+
+	@media screen and (max-width: 60em) {
+
+		/* responsive columns; see "Element sizing" on http://masonry.desandro.com/options.html */
+		.grid li {
+			width: 33.3%;
+		}
+	}
+
+	@media screen and (max-width: 35em) {
+		.grid li {
+			width: 50%;
+		}
+	}
+
+	@media screen and (max-width: 24em) {
+		.grid li {
+			width: 100%;
+		}
+	}
+</style>
+{% endblock css_style %}
+
+
+{% block content %}
+<h3>相册</h3>
+{% if page_obj %}
+<div>
+
+	<div class="col-md-12">
+		<ul class="grid">
+			<li class="grid-sizer"></li>
+			{% for gallery in page_obj %}
+			{% with gallery_title=gallery.title %}
+			<li>
+				<div class="images">
+					<img class='image' src="{{ gallery.thumb.url }}" alt="{{gallery_title}}" />
+					<img class='image' src="{{ gallery.thumb.url }}" alt="{{gallery_title}}" />
+					<img class='image' src="{{ gallery.thumb.url }}" alt="{{gallery_title}}" />
+				</div>
+			</li>
+			{% endwith %}
+			{% endfor %}
+		</ul>
+	</div>
+
+
+	<div>
+		{# 页码 #}
+		{% include 'pagination.html' with page_obj=page_obj %}
+	</div>
+	{% else %}
+	<p>No gallery yet</p>
+	{% endif %}
+	{% endblock %}
+</div>
+
+
+

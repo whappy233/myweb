@@ -1,0 +1,25 @@
+{# 最近更新模板 (由自定义标签返回) #}
+
+
+{% url 'app_gallery:get_random_background' 220 150 as the_url %}
+<h3>最近更新</h3>
+<ul>
+    {% for article in articles %}
+    <li>
+        <a href="{{ article.get_absolute_url }}">
+            <span class="thumbnail">
+                <img class="thumb" data-original="{{the_url}}" src="{{the_url}}" alt="">
+            </span>
+            <span class="text">{{ article.title }}</span>
+            <span class="muted"><i class="glyphicon glyphicon-time"></i> {{ article.pub_time }} </span>
+            <span class="muted"><i class="glyphicon glyphicon-eye-open"></i> {{ article.views }}</span>
+        </a>
+    </li>
+    {% empty %}
+    <li>
+        <div class="widget-sentence-content">
+            <p>暂无</p>
+        </div>
+    </li>
+    {% endfor %}
+</ul>

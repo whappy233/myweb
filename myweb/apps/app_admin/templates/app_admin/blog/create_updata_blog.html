@@ -1,0 +1,56 @@
+{% extends "app_blog/base_blog.html" %}
+
+{% block blog_content_main %}
+
+
+<h3>{% if is_updata %}
+    修改文章
+    {% else %}
+    添加新文章
+    {% endif %}
+</h3>
+
+<form method="POST" class="form-horizontal" role="form" action="">
+    {% csrf_token %}
+
+    {{ form.media }} {# 使用{{ form.media }}调入ckeditor/mdeditor 静态文件 #}
+
+    {% for hidden_field in form.hidden_fields %}
+    {{ hidden_field }}
+    {% endfor %}
+
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger col-md-12" role="alert">
+        {% for error in form.non_field_errors %}
+        {{ error }}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% for field in form.visible_fields %}
+    <div class="form-group">
+        {{ field.label_tag }}
+        {% if field.help_text %}
+        <i class="form-text text-muted">{{ field.help_text }}</i>
+        {% endif %}
+        {{ field }}
+        {% if field.errors %}
+        {% for error in field.errors %}
+        <div class="invalid-feedback">
+            {{ error }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+    </div>
+    {% endfor %}
+
+    <div class="form-group">
+        <div class="col-md-12">
+            <input type="submit" class="btn btn-primary form-control" value="提交">
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+

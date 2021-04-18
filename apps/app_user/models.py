@@ -20,10 +20,9 @@ def user_directory_path(instance, filename):
 # UserProfile只是对User模型的扩展, 与User是1对1的关系
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    # photo.url  # 获取头像URL地址
     photo = models.ImageField('头像', upload_to=user_directory_path, blank=True, default="default.png")
+    org = models.CharField('组织', max_length=128, blank=True)
     telephone = models.CharField('手机号', max_length=50, blank=True, null=True)
-    introduction = models.TextField('个人简介', blank=True, null=True)
     mod_date = models.DateTimeField('最近修改', auto_now=True)
 
     class Meta:
