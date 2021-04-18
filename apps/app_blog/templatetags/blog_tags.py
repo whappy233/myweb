@@ -80,7 +80,6 @@ def recommendations_articles(count=5, temp_class='滚动'):
         article_list = Article.published.annotate(total_views=Count('views')).filter(total_views__gt=0).order_by('-total_views')[:count]
         cache.set(cache_key, article_list, 60 * 100)
         logger.info(f'设置推荐文章缓存:{cache_key}')
-    print(temp_class)
     return {'articles': article_list, 'temp_class': temp_class}
 
 
