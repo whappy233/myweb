@@ -62,8 +62,6 @@ INSTALLED_APPS = [
     'xadmin',
     'crispy_forms',
     'reversion',
-
-
 ]
 
 # 中间件
@@ -235,7 +233,6 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
-
 
 
 # Password validation
