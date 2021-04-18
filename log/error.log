@@ -108,3 +108,41 @@
 2021-04-18 15:46:32.343 | INFO     | app_blog.utils:get_blog_setting:27 - set cache get_blog_setting
 2021-04-18 15:46:32.383 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:82 - 设置推荐文章缓存:recommendations_articles
 2021-04-18 15:46:32.452 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:14:56.787 | INFO     | app_blog.views:get_queryset_from_cache:71 - 设置视图缓存, KEY: IndexView_1
+2021-04-18 16:14:56.804 | INFO     | app_blog.context_processors:seo_processor:18 - set processor cache.
+2021-04-18 16:14:56.806 | INFO     | app_blog.utils:get_blog_setting:27 - set cache get_blog_setting
+2021-04-18 16:14:56.846 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:82 - 设置推荐文章缓存:recommendations_articles
+2021-04-18 16:14:56.937 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:14:59.308 | INFO     | app_blog.views:get_queryset_from_cache:66 - 获取视图缓存, KEY: IndexView_1
+2021-04-18 16:14:59.313 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:14:59.375 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:15:01.853 | INFO     | app_blog.views:get_queryset_from_cache:66 - 获取视图缓存, KEY: IndexView_1
+2021-04-18 16:15:01.857 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:15:01.920 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:15:03.241 | INFO     | app_blog.views:get_queryset_from_cache:66 - 获取视图缓存, KEY: IndexView_1
+2021-04-18 16:15:03.246 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:15:03.314 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:15:08.957 | INFO     | app_blog.views:get_queryset_from_cache:66 - 获取视图缓存, KEY: IndexView_1
+2021-04-18 16:15:08.962 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:15:09.029 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:15:34.975 | INFO     | app_blog.views:get_queryset_from_cache:71 - 设置视图缓存, KEY: IndexView_1
+2021-04-18 16:15:34.984 | INFO     | app_blog.context_processors:seo_processor:18 - set processor cache.
+2021-04-18 16:15:34.986 | INFO     | app_blog.utils:get_blog_setting:27 - set cache get_blog_setting
+2021-04-18 16:15:35.028 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:82 - 设置推荐文章缓存:recommendations_articles
+2021-04-18 16:15:35.096 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:22:09.365 | INFO     | app_blog.views:get_queryset_from_cache:71 - 设置视图缓存, KEY: IndexView_1
+2021-04-18 16:22:09.377 | INFO     | app_blog.context_processors:seo_processor:18 - set processor cache.
+2021-04-18 16:22:09.379 | INFO     | app_blog.utils:get_blog_setting:27 - set cache get_blog_setting
+2021-04-18 16:22:09.416 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:82 - 设置推荐文章缓存:recommendations_articles
+2021-04-18 16:22:09.485 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:22:12.028 | INFO     | app_blog.views:get_queryset_from_cache:66 - 获取视图缓存, KEY: IndexView_1
+2021-04-18 16:22:12.038 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:22:12.100 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:22:57.042 | INFO     | app_blog.context_processors:seo_processor:18 - set processor cache.
+2021-04-18 16:22:57.044 | INFO     | app_blog.utils:get_blog_setting:27 - set cache get_blog_setting
+2021-04-18 16:22:59.460 | INFO     | app_blog.views:get_queryset_from_cache:71 - 设置视图缓存, KEY: IndexView_1
+2021-04-18 16:22:59.515 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:82 - 设置推荐文章缓存:recommendations_articles
+2021-04-18 16:22:59.630 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:23:01.440 | INFO     | app_blog.views:get_queryset_from_cache:66 - 获取视图缓存, KEY: IndexView_1
+2021-04-18 16:23:01.445 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles
+2021-04-18 16:23:01.509 | INFO     | app_blog.templatetags.blog_tags:recommendations_articles:78 - 获取推荐文章缓存:recommendations_articles

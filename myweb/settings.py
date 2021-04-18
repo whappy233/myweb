@@ -25,7 +25,7 @@ SECRET_KEY = 'jh*9r+p97rvldfkdnm6yvnm(m&ws$x)=squ!=rlu5s(uilhj+g'
 # SECRET_KEY= os.environ['SECRET_KEY']
 
 # 不要在生产环境打开 debug 开关
-DEBUG = True if os.environ.get('User_name') == 'Carlos' else False
+DEBUG = True if os.environ.get('USER_NAME') == 'Carlos' else False
 
 ALLOWED_HOSTS = ['*']
 
@@ -235,8 +235,6 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
-
-
 
 
 
