@@ -2069,7 +2069,7 @@ nav.template-main-menu {
   font-family: 'Poppins', sans-serif;
 }
 nav.template-main-menu ul {
-  border-radius: 0 0 10px 10px;
+  border-radius: 10px;
 }
 
 nav.template-main-menu > ul > li {
@@ -2100,7 +2100,7 @@ nav.template-main-menu > ul > li > a {
   transition: all 0.3s ease-out;
 }
 nav.template-main-menu > ul > li ul.dropdown-menu-col-1 {
-  border-top: 1px solid var(--global-color-depth0);
+  border-top: 0px solid var(--global-color-depth0);
   background-color: var(--global-background);
   min-width: 150px;
   visibility: hidden;
@@ -2131,6 +2131,9 @@ nav.template-main-menu > ul > li ul.dropdown-menu-col-1 li a:hover {
 }
 nav.template-main-menu > ul > li ul.dropdown-menu-col-1 li:last-child a {
   border-radius: 0 0 10px 10px;
+}
+nav.template-main-menu > ul > li ul.dropdown-menu-col-1 li:first-child a {
+    border-radius: 10px 10px 0 0;
 }
 nav.template-main-menu > ul > li ul.dropdown-menu-col-2 {
   display: flex;
@@ -2173,7 +2176,7 @@ nav.template-main-menu > ul > li ul.dropdown-menu-col-2 li:last-child a:last-chi
   border-radius: 0 0 10px 0;
 }
 nav.template-main-menu > ul > li .third-level {
-  border-top: 1px solid var(--global-color);
+  border-top: 0px solid var(--global-color);
   background-color: var(--global-background);
   width: 250px;
   opacity: 0;
@@ -2204,8 +2207,8 @@ nav.template-main-menu > ul > li .third-level li a:hover {
 }
 nav.template-main-menu > ul > li .template-mega-menu {
   background-color: var(--global-background);
-  border-top: 1px solid var(--global-color-depth0);
-  border-radius: 0 0 10px 10px;
+  border-top: 0px solid var(--global-color-depth0);
+  border-radius: 10px;
   position: absolute;
   width: 100%;
   left: 0;
@@ -2467,8 +2470,8 @@ nav.template-main-menu > ul > li > ul > li:hover ul.third-level {
 
 .header-action-items.submenu .user-wrap .template-mega-menu {
   background-color: var(--global-background);
-  border-top: 1px solid var(--global-color-depth0);
-  border-radius: 0 0 10px 10px;
+  border-top: 0px solid var(--global-color-depth0);
+  border-radius: 10px;
   position: absolute;
   width: 600px;
   /* left: 0; */
@@ -2556,6 +2559,9 @@ nav.template-main-menu > ul > li > ul > li:hover ul.third-level {
 }
 .header-action-items.submenu .user-wrap .template-mega-menu ul.sub-menu li a:hover {
   background-color: var(--global-hover-background)
+}
+.header-action-items.submenu .user-wrap .template-mega-menu ul.sub-menu li:first-child a:hover {
+  border-radius: 0 10px 0 0;
 }
 .header-action-items.submenu .user-wrap .template-mega-menu ul.sub-menu li a:hover i {
   color: var(--global-color);
