@@ -328,8 +328,19 @@
 
             <!-- 侧边栏 -->
             <div class="col-lg-4 sidebar-widget-area sidebar-break-md">
+
+                <!-- 文章目录 -->
+                {% include 'tp/侧边组件/侧边_文章目录.html' with page_obj=page_obj %}
+
+                <!-- 推荐文章 -->
                 {% recommendations_articles 5 '侧边_推荐文章' %}
-                {% include 'tp/侧边组件.html' with page_obj=page_obj %}
+
+                <!-- 关于我 -->
+                {% include 'tp/侧边组件/侧边_关于我.html' with page_obj=page_obj %}
+
+                <!-- 广告 -->
+                {% include 'tp/侧边组件/侧边_广告.html' with page_obj=page_obj %}
+
             </div>
 
         </div>
