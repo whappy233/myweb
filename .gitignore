@@ -1,6 +1,5 @@
 __pycache__/
 .history
-# db.sqlite3
 # media
 .DS_Store
 *.log
@@ -8,3 +7,4 @@ __pycache__/
 log/
 *.pyc
 *.pid
+db.sqlite3
