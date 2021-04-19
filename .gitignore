@@ -1,6 +1,5 @@
 __pycache__/
 .history
-# media
 .DS_Store
 *.log
 .vscode/
