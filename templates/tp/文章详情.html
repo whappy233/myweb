@@ -58,7 +58,7 @@
                     <li>
                         {% with total_likes=article.users_like.count users_like=article.users_like.all %}
                         <a href="javascript:void(0)" data-id="{{ article.id }}" data-action="{% if request.user in users_like %}un{% endif %}like">
-                            <i class="far fa-heart" style="{% if request.user in users_like %}color:red{% else %}color:white{% endif %}"></i>
+                            <i class="far fa-heart" style="{% if request.user in users_like %}color:red{% endif %}"></i>
                             {{ total_likes }}
                         </a>
                         {% endwith %}
@@ -72,8 +72,6 @@
                         <a href="#"><i class="fas fa-share"></i>302</a>
                     </li>
                 </ul>
-                {% load_breadcrumb article %}
-                
             </div>
         </div>
     </div>
@@ -197,19 +195,19 @@
                     <!-- 文章元信息 -->
                     <div class="blog-entry-meta">
                         <ul>
-                            <li class="item-tag"><i class="fas fa-bookmark"></i>
-                                <a href="#">explore,</a>
-                                <a href="#">travel,</a>
-                                <a href="#">vacation,</a>
+                            <li>
+                                <!-- 面包屑导航 -->
+                                {% load_breadcrumb article %}
                             </li>
-                            <li class="item-social">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                <a href="#"><i class="fab fa-google-plus-g"></i></a>
-                                <a href="#"><i class="fab fa-pinterest"></i></a>
+                            <li class="item-respons">
+                                <!-- <i class="far fa-heart"></i>1,230 -->
+                                {% with total_likes=article.users_like.count users_like=article.users_like.all %}
+                                <a href="javascript:void(0)" data-id="{{ article.id }}" data-action="{% if request.user in users_like %}un{% endif %}like">
+                                    <i class="far fa-heart" style="{% if request.user in users_like %}color:red{% endif %}"></i>
+                                    {{ total_likes }}
+                                </a>
+                                {% endwith %}
                             </li>
-                            <li class="item-respons"><i class="fas fa-heart"></i>1,230</li>
                         </ul>
                     </div>
 
@@ -327,6 +325,7 @@
 
                 </div>
             </div>
+
 
             <!-- 侧边栏 -->
             <div class="col-lg-4 sidebar-widget-area sidebar-break-md">

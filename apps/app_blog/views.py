@@ -182,8 +182,8 @@ class CategoryDetailView(ArticleListView):
 class ArticleDetailView(DetailView):
     '''文章详情'''
     model = Article
-    # template_name = 'tp/文章详情.html'
-    template_name = 'app_blog/article_detail.html'
+    template_name = 'tp/文章详情.html'
+    # template_name = 'app_blog/article_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -44,7 +44,7 @@ CSS INDEX 999
   --global-color-depth0:#BDBDBD;
   --global-color-depth1:#9E9E9E;
   --global-color-depth2:#616161;
-  --global-blog-detail-color:#ffffff;
+  --global-blog-detail-color:#000000;
   --global-hover-background:#E0E0E0;
   --global-shadow:0 5px 12px -5px rgba(130, 130, 130, 0.2);
   --global-shadow-hover:0 5px 12px 0px rgba(120, 120, 120, 0.2);
@@ -1555,7 +1555,7 @@ h6 {
 }
 .entry-meta.meta-color-light2 li {
   display: inline-block;
-  font-size: 14px;
+  /* font-size: 14px; */
   color: var(--global-blog-detail-color);
   margin-right: 10px;
 }
@@ -1573,7 +1573,7 @@ h6 {
 .entry-meta.meta-color-light2 li i {
   font-size: 12px;
   color: var(--global-blog-detail-color);
-  margin-right: 8px;
+  margin-right: 5px;
 }
 @media only screen and (max-width: 991px) {
   .entry-meta.meta-color-light2 li i {
@@ -1583,19 +1583,24 @@ h6 {
 .entry-meta.meta-color-light2 li a {
   color: var(--global-blog-detail-color);
   font-weight: 500;
+  /* background: var(--global-color-depth0); */
+  border-radius: 5px;
+  /* padding: 0 5px; */
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
+.entry-meta.meta-color-light2 li a:hover {
+  color: var(--global-color);
+  background-color: var(--global-color-depth0);
+  padding: 0 5px;
+}
 @media only screen and (max-width: 991px) {
   .entry-meta.meta-color-light2 li a {
     color: var(--global-blog-detail-color);
   }
-}
-.entry-meta.meta-color-light2 li a:hover {
-  color: rgb(11, 122, 220);
 }
 .entry-meta.meta-color-dark {
   /* margin-bottom: 10px; */
@@ -6669,15 +6674,20 @@ img.loading {
   right: 0;
   z-index: 2;
 }
-@media only screen and (max-width: 1199px) {
+@media only screen and (max-width: 1400px) {
   .single-blog-banner-layout1 .banner-content {
-    bottom: 50px;
+    bottom: 0px;
   }
 }
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 1100px) {
+  .single-blog-banner-layout1 .banner-content {
+    bottom: -20px;
+  }
+}
+@media only screen and (max-width: 800px) {
   .single-blog-banner-layout1 .banner-content {
     position: inherit;
-    bottom: 0;
+    bottom: 40px;
   }
 }
 .single-blog-banner-layout1 .banner-content .item-title {
@@ -6725,7 +6735,7 @@ img.loading {
 .single-blog-banner-layout1 .banner-content .item-social li a {
   display: block;
   border-radius: 4px;
-  color: var(--global-blog-detail-color);
+  color: var(--global-color);
   padding: 2px 10px;
   font-size: 12px;
   font-weight: 600;
@@ -6786,7 +6796,7 @@ img.loading {
   display: block;
 }
 .single-blog-banner-layout1 .banner-content .response-area li a i {
-  font-size: 18px;
+  /* font-size: 18px; */
   color: var(--global-blog-detail-color);
   margin-right: 12px;
 }
@@ -6896,7 +6906,7 @@ img.loading {
 .single-blog-box-layout1 .blog-entry-meta {
   border-top: 1px solid var(--global-color-depth1);
   border-bottom: 1px solid var(--global-color-depth1);
-  padding: 28px 0 13px;
+  padding: 13px 0 13px;
   margin-bottom: 42px;
 }
 .single-blog-box-layout1 .blog-entry-meta ul {
@@ -6911,7 +6921,7 @@ img.loading {
 .single-blog-box-layout1 .blog-entry-meta ul li {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
 }
 @media only screen and (max-width: 575px) {
   .single-blog-box-layout1 .blog-entry-meta ul li {
@@ -6938,9 +6948,12 @@ img.loading {
 .single-blog-box-layout1 .blog-entry-meta ul .item-respons {
   color: var(--global-color-depth1);
 }
+.single-blog-box-layout1 .blog-entry-meta ul .item-respons a {
+  color: var(--global-color-depth1)
+}
 .single-blog-box-layout1 .blog-entry-meta ul .item-respons i {
   color: var(--global-color-depth1);
-  font-size: 20px;
+  /* font-size: 20px; */
   margin-right: 10px;
 }
 .single-blog-box-layout1 .blog-author {
@@ -8953,6 +8966,52 @@ img.loading {
     display: none;
   }
 }
+
+/* 面包屑导航 */
+.cd-breadcrumb{
+  padding: 0;
+  margin: 0;
+}
+.cd-breadcrumb:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.cd-breadcrumb li {
+  display: inline-block;
+  float: left;
+  margin: 0.5em 0;
+}
+.cd-breadcrumb li::after {
+  display: inline-block;
+  content: '\00bb';
+  margin: 0 .6em;
+  color: #959fa5;
+}
+.cd-breadcrumb li:last-of-type::after {
+  display: none;
+}
+.cd-breadcrumb li > * {
+  display: inline-block;
+  /* font-size: 1.4rem; */
+  color: var(--global-color-depth1);
+}
+.cd-breadcrumb li.current > * {
+  color: var(--global-color-blue);
+  font-weight: 600;
+}
+.cd-breadcrumb a:hover {
+  color: var(--global-color-blue);
+}
+.cd-breadcrumb.custom-separator li::after {
+  content: '▸';
+  /* height: 16px; */
+  width: 16px;
+}
+
+
+
+
 /*=======================================================================
 6. Hepler Classes
 =========================================================================*/
