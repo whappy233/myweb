@@ -117,7 +117,8 @@ def blog_archives():
 
 
 # 相似文章 cache
-@register.inclusion_tag('app_blog/include_tag/similar_articles.html')
+# @register.inclusion_tag('app_blog/include_tag/similar_articles.html')
+@register.inclusion_tag('tp/推荐文章/推荐文章_相似推荐.html')
 def similar_articles(obj, count=5):
     if isinstance(obj, Article):
         cache_key = f'similar_articles_{obj.id}'

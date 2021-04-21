@@ -1,0 +1,37 @@
+{% load static %}
+{% load blog_tags %}
+{% load gallery_tags %}
+{% load humanize %}
+
+<!-- 数量为4 -->
+
+<!-- 相似推荐  -->
+{% spaceless %}
+<div class="related-item">
+    <div class="section-heading-4 heading-dark">
+        <h3 class="item-heading">相关推荐</h3>
+    </div>
+    <div class="row">
+        {% for article in articles %}
+        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+            <div class="blog-box-layout12">
+                <div class="item-img">
+                    <img onerror="this.onerror=null,this.src='{{ default_img }}'" 
+                        data-src="https://picsum.photos/id/10{{ forloop.counter|add:30 }}/510/510" 
+                        alt="{{ article.title }}">
+                    <div class="item-content">
+                        <h2 class="item-title">
+                            <a href="{{ article.get_absolute_url }}">
+                                {{ article.title }}
+                            </a>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        暂无
+        {% endfor %}
+    </div>
+</div>
+{% endspaceless %}

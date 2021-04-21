@@ -14,11 +14,14 @@
 
 <!-- 博客容器 Single Blog Banner Start Here -->
 <section class="single-blog-wrap-layout1">
+
     <!-- 顶部大图 -->
     <div class="single-blog-banner-layout1">
+        <!-- Img -->
         <div class="banner-img">
             <img src="https://picsum.photos/id/1010/1920/700" alt="{{ article.title}}">
         </div>
+        <!-- Title Meta -->
         <div class="banner-content">
             <div class="container">
                 <ul class="entry-meta meta-color-light2">
@@ -113,12 +116,12 @@
                         <div class="row gutters-20">
                             <div class="col-sm-6 col-12">
                                 <div class="single-img">
-                                    <img src="img/blog/blog209.jpg" alt="blog">
+                                    <img src="{% static 'st/img/blog/blog209.jpg' %}"  alt="blog">
                                 </div>
                             </div>
                             <div class="col-sm-6 col-12">
                                 <div class="single-img">
-                                    <img src="img/blog/blog210.jpg" alt="blog">
+                                    <img src="{% static 'st/img/blog/blog210.jpg' %}"  alt="blog">
                                 </div>
                             </div>
                         </div>
@@ -167,12 +170,12 @@
                                 data-r-extra-large="1" data-r-extra-large-nav="true" data-r-extra-large-dots="false">
                                 <div class="single-slider-box">
                                     <div class="item-img">
-                                        <img src="img/blog/blog211.jpg" alt="slider">
+                                        <img src="{% static 'st/img/blog/blog211.jpg' %}"  alt="slider">
                                     </div>
                                 </div>
                                 <div class="single-slider-box">
                                     <div class="item-img">
-                                        <img src="img/blog/blog211.jpg" alt="slider">
+                                        <img src="{% static 'st/img/blog/blog211.jpg' %}"  alt="slider">
                                     </div>
                                 </div>
                             </div>
@@ -192,7 +195,9 @@
                         </div>
                     </div>
 
-                    <!-- 文章元信息 -->
+                    <!------------------文章在此结束------------------>
+
+                    <!-- 面包屑 点赞 -->
                     <div class="blog-entry-meta">
                         <ul>
                             <li>
@@ -211,62 +216,8 @@
                         </ul>
                     </div>
 
-                    <!-- 相关推荐  -->
-                    <div class="related-item">
-                        <div class="section-heading-4 heading-dark">
-                            <h3 class="item-heading">相关推荐</h3>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 col-12">
-                                <div class="blog-box-layout1 text-left">
-                                    <div class="item-img">
-                                        <a href="single-blog.html"><img src="img/blog/blog213.jpg" alt="blog"></a>
-                                    </div>
-                                    <div class="item-content">
-                                        <ul class="entry-meta meta-color-dark">
-                                            <li><i class="fas fa-tag"></i>Fashion</li>
-                                            <li><i class="fas fa-calendar-alt"></i>October 19, 2019</li>
-                                        </ul>
-                                        <h5 class="item-title"><a href="single-blog.html">How an Island Formsn
-                                                River
-                                                And Stones</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-12">
-                                <div class="blog-box-layout1 text-left">
-                                    <div class="item-img">
-                                        <a href="single-blog.html"><img src="img/blog/blog214.jpg" alt="blog"></a>
-                                    </div>
-                                    <div class="item-content">
-                                        <ul class="entry-meta meta-color-dark">
-                                            <li><i class="fas fa-tag"></i>Fashion</li>
-                                            <li><i class="fas fa-calendar-alt"></i>October 19, 2019</li>
-                                        </ul>
-                                        <h5 class="item-title"><a href="single-blog.html">How an Island Formsn
-                                                River
-                                                And Stones</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-12">
-                                <div class="blog-box-layout1 text-left">
-                                    <div class="item-img">
-                                        <a href="single-blog.html"><img src="img/blog/blog215.jpg" alt="blog"></a>
-                                    </div>
-                                    <div class="item-content">
-                                        <ul class="entry-meta meta-color-dark">
-                                            <li><i class="fas fa-tag"></i>Fashion</li>
-                                            <li><i class="fas fa-calendar-alt"></i>October 19, 2019</li>
-                                        </ul>
-                                        <h5 class="item-title"><a href="single-blog.html">How an Island Formsn
-                                                River
-                                                And Stones</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- 相似推荐 -->
+                    {% similar_articles article 3 %}
 
                     <!-- 发表评论 -->
                     <div class="blog-form">
@@ -302,7 +253,7 @@
                     <!-- 文章评论 -->
                     <div class="blog-comment">
                         <div class="media media-none--xs">
-                            <img src="img/blog/blog216.jpg" alt="Blog Comments" class="img-fluid media-img-auto">
+                            <img src="{% static 'st/img/blog/blog216.jpg' %}"  alt="Blog Comments" class="img-fluid media-img-auto">
                             <div class="media-body">
                                 <h4 class="item-title">Jack Sparrow</h4>
                                 <div class="item-subtitle">2 Mins Ago</div>
@@ -312,7 +263,7 @@
                             </div>
                         </div>
                         <div class="media media-none--xs">
-                            <img src="img/blog/blog217.jpg" alt="Blog Comments" class="img-fluid media-img-auto">
+                            <img src="{% static 'st/img/blog/blog217.jpg' %}"  alt="Blog Comments" class="img-fluid media-img-auto">
                             <div class="media-body">
                                 <h4 class="item-title">Dakcon Nitiya</h4>
                                 <div class="item-subtitle">2 Mins Ago</div>
