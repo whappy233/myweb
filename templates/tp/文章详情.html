@@ -9,6 +9,11 @@
 {# 网页标题 #}
 {% block title %}{{ article.title }}{% endblock title %}
 
+{% block css_link %}
+<link rel="stylesheet" type="text/css" href="{% static 'app_blog/css/pre_codehilite.css' %}">
+<!-- markdown -->
+<link rel="stylesheet" href="{% static 'mdeditor/css/editormd.css' %}"/>
+{% endblock css_link %}
 
 {% block container %}
 
@@ -87,116 +92,11 @@
             <div class="col-lg-8">
                 <div class="single-blog-box-layout1">
                     <!-- 文章主体 -->
-                    <div class="blog-details">
-
-                        <p>Borem ipsum dolor sit amet, adhuc iriure dissentias est in, est
-                            ne diam graece tincidunt. Sit et liber minimum tacimates, sea no
-                            doctus fastidii.An molestiae definiebas mel. Quo everti vituperata
-                            et, quo cu omnis maiorum.soluta fierentlaboramus eum.Nam at dicant
-                            deterruisset.
-                        </p>
-
-                        <blockquote>Borem ipsum dolor sit amet, adhuc iriure dissentias est in,
-                            est ne diam graece tincidunt. Sit et liber minimum tacimates, sea no docAas
-                            mela mine.
-                            <span class="qoute-subtitle">STEVEN WILLY</span>
-                        </blockquote>
-
-                        <p>Equidem impedit officiis quo te. Illud partem sententiae mel eu, euripidis
-                            urbanitas et sit. Mediocrem reprimique an vim, veniam tibique omittantur
-                            duo ut, agam graeci in vim. Quot appetere patrioque te mea, animal aliquip
-                            te pri. Ad vis animal ceteros percipitur, eos tollit civibus percipitur no.
-                            Posse definiebas dissentiunt mel ea, nam ferri utroque invenire an. Ius te
-                            iuvaret offendit pertinax, his verear deseruisse ex. Illud elitr eam eu. Id usu
-                            putant commune, stet primis expetenda cu vel. Mea ipsum homero apeirian te.
-                            Accumsan similique instructior ad pro, te purto dicit qui. Qui ex putent suavitate
-                            adolescens, his possim tamquam fuisset.
-                        </p>
-
-                        <div class="row gutters-20">
-                            <div class="col-sm-6 col-12">
-                                <div class="single-img">
-                                    <img src="{% static 'st/img/blog/blog209.jpg' %}"  alt="blog">
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-12">
-                                <div class="single-img">
-                                    <img src="{% static 'st/img/blog/blog210.jpg' %}"  alt="blog">
-                                </div>
-                            </div>
-                        </div>
-
-                        <p>Equidem impedit officiis quo te. Illud partem sententiae mel eu,
-                            euripidis urbanitas et sit. Mediocrem reprimique an vim, veniam
-                            tibique omittantur duo ut, agam graeci in vim. Quot appetere patrioque
-                            te mea, animal aliquip te pri. Ad vis animal ceteros percipitur,
-                            eos tollit civibus percipitur no
-                        </p>
-                        
-                        <div class="more-info">
-                            <h2 class="item-title">Discover Travel Innovation 2019</h2>
-                            <p>Aeuidem impedit officiis quo te. Illud partem sententiae mel eu,
-                                euripidis urbanitas et sit. Mediocrem reprimique an vim, veniam tibique
-                                omittantur duo ut, agam graeci in vim. Quot appetere patrioque te mea,
-                                animal aliquip te pri. Ad vis animal ceteros percipitur, eos tollit civibus
-                                percipitur.
-                            </p>
-                            <ol class="info-list">
-                                <li>The feedback provided by a system is not very informative. It’s not clear
-                                    how a system
-                                    request or what exactly happens with the information.</li>
-                                <li>The feedback provided by a system is not very informative. It’s not clear
-                                    how a system
-                                    request or what exactly happens with the information.</li>
-                                <li>The feedback provided by a system is not very informative. It’s not clear
-                                    how a system
-                                    request or what exactly happens with the information.</li>
-                            </ol>
-                            <p>Muidem impedit officiis quo te. Illud partem sententiae mel eu, euripidis
-                                urbanitas et sit.
-                                Mediocrem reprimique an vim, veniam tibique omittantur duo ut, agam graeci in
-                                vim.
-                            </p>
-                        </div>
-                        <div class="single-slider">
-                            <div class="rc-carousel nav-control-layout9" data-loop="true" data-items="30"
-                                data-margin="20" data-autoplay="false" data-autoplay-timeout="5000"
-                                data-smart-speed="700" data-dots="false" data-nav="true" data-nav-speed="false"
-                                data-r-x-small="1" data-r-x-small-nav="true" data-r-x-small-dots="false"
-                                data-r-x-medium="1" data-r-x-medium-nav="true" data-r-x-medium-dots="false"
-                                data-r-small="1" data-r-small-nav="true" data-r-small-dots="false"
-                                data-r-medium="1" data-r-medium-nav="true" data-r-medium-dots="false"
-                                data-r-large="1" data-r-large-nav="true" data-r-large-dots="false"
-                                data-r-extra-large="1" data-r-extra-large-nav="true" data-r-extra-large-dots="false">
-                                <div class="single-slider-box">
-                                    <div class="item-img">
-                                        <img src="{% static 'st/img/blog/blog211.jpg' %}"  alt="slider">
-                                    </div>
-                                </div>
-                                <div class="single-slider-box">
-                                    <div class="item-img">
-                                        <img src="{% static 'st/img/blog/blog211.jpg' %}"  alt="slider">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="more-info">
-                            <h2 class="item-title">Discover Travel Innovation 2019</h2>
-                            <p>Equidem impedit officiis quo te. Illud partem sententiae mel eu,
-                                euripidis urbanitas et sit. Mediocrem reprimique an vim, veniam
-                                tibique omittantur duo ut, agam graeci in vim. Quot appetere
-                                patrioque te mea, animal aliquip te pri. Ad vis animal ceteros
-                                percipitur, eos tollit civibus percipitur noLorem ipsum proin
-                                gravida nibh vel velit auctor aliquet. Aenean sollicitudin,
-                                lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis
-                                sem nibh id elit.Duis sed odio sit amet nibh vulputate cursus a
-                                sit amet mauris.
-                            </p>
-                        </div>
+                    <div class="markdown-body">
+                        {{article.body|safe}}
                     </div>
 
                     <!------------------文章在此结束------------------>
-
                     <!-- 面包屑 点赞 -->
                     <div class="blog-entry-meta">
                         <ul>
@@ -282,7 +182,7 @@
             <div class="col-lg-4 sidebar-widget-area sidebar-break-md">
 
                 <!-- 文章目录 -->
-                {% include 'tp/侧边组件/侧边_文章目录.html' with page_obj=page_obj %}
+                {% include 'tp/侧边组件/侧边_文章目录.html' with article=article %}
 
                 <!-- 推荐文章 -->
                 {% recommendations_articles 5 '侧边_推荐文章' %}

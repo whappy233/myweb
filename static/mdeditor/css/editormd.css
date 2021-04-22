@@ -3252,6 +3252,7 @@
 .markdown-body * {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  color: var(--global-color);
 }
 
 .markdown-body input {
@@ -3636,7 +3637,7 @@
   overflow: auto;
   font-size: 85%;
   line-height: 1.45;
-  background-color: #f7f7f7;
+  background-color: var(--global-background);
   border-radius: 3px;
 }
 
