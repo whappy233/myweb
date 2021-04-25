@@ -202,3 +202,17 @@
 <!-- 博客容器 Single Blog Banner End Here -->
 
 {% endblock container %}
+
+
+<!-- js -->
+{% block script %}
+<!-- 固定侧边widget -->
+<script src="{% static 'st/js/sticksy.min.js' %}"></script>
+
+<script>
+    var stickyEl = $('.widget.is-sticky').sticksy({
+        topSpacing: 70, // 距离顶部的距离
+        listen: true,   // 侦听容器中的DOM更改
+    });     
+</script>
+{% endblock script %}

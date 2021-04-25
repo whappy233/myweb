@@ -75,6 +75,7 @@
             <div id="header-menu" class="header-menu menu-layout2 bg--transparent">
                 <div class="container">
                     <div class="row d-flex align-items-center">
+
                         <!-- 左侧logo -->
                         <div class="col-lg-2">
                             <div class="logo-area">
@@ -238,6 +239,10 @@
                                     </li>
                                     <!-- 相册 -->
                                     <li>
+                                        <a href="{% url 'app_gallery:gallery_list' %}">日记</a>
+                                    </li>
+                                    <!-- 相册 -->
+                                    <li>
                                         <a href="{% url 'app_gallery:gallery_list' %}">相册</a>
                                     </li>
                                 </ul>
@@ -373,11 +378,8 @@
         {% endblock header %}
         <!-- 头部导航 Header Area End Here -->
 
-
-
         {% block container %}
         {% endblock container %}
-
 
         <!-- 页脚 Footer Area Start Here -->
         <footer class="footer-wrap-layout2">
@@ -447,10 +449,6 @@
         <!-- 搜索界面 Search Box End Here -->
     </div>
 
-
-
-
-
     <!-- jquery-->
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Plugins js -->
@@ -465,12 +463,9 @@
     <script src="{% static 'st/js/meanmenu.js' %}"></script>
     <!-- Smooth Scroll js -->
     <script src="{% static 'st/js/jquery.smoothscroll.min.js' %}"></script>
-    <!-- Main js -->
-    <script src="{% static 'st/js/main.js' %}"></script>
-
-
 
     {% block script %}
+    {#  额外的 js #}
     {% endblock script %}
 
 	<script>
@@ -489,9 +484,10 @@
                 `
             });
         };
-
     </script>
 
+    <!-- Main js -->
+    <script src="{% static 'st/js/main.js' %}"></script>
 
 
 </body>
