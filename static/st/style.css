@@ -261,6 +261,26 @@ h6 {
 2. Bootstrap Overwrite
 =========================================================================*/
 /*------------------- 2.1 Grid -------------------*/
+@media only screen and (min-width: 770px) {
+  .container {
+    max-width: 730px;
+  }
+}
+@media only screen and (min-width: 880px) {
+  .container {
+    max-width: 840px;
+  }
+}
+@media only screen and (min-width: 990px) {
+  .container {
+    max-width: 960px;
+  }
+}
+@media only screen and (min-width: 1100px) {
+  .container {
+    max-width: 1060px;
+  }
+}
 @media only screen and (min-width: 1240px) {
   .container {
     max-width: 1200px;
@@ -3792,34 +3812,35 @@ div#wrapper.open > .offcanvas-mask {
   margin-bottom: 0 !important;
 }
 .widget-about {
-  /* text-align: center; */
+  padding: 20px 15px;
 }
-.widget-about>* {
-  padding: 0 15px;
+.widget-about .about-author-name {
+  font-weight: 600;
 }
-.widget-about>*:last-child {
-  padding: 0 15px 10px;
-}
-.widget-about figure.author-figure {
-  margin-bottom: 15px;
-}
-.widget-about figure.author-figure img {
+.widget-about .about-author-img {
+  width: 50px;
+  height: 50px;
+  margin: 20px 20px 0 20px;
+  float: right!important;
   border-radius: 50%;
-  width: 70px;
 }
-.widget-about figure.author-figure img:hover {
+.widget-about .about-author-social li{
+  background-color: #219bff;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  text-align: center;
+}
+.widget-about .about-author-social a{
+  color: #ffffff;
+  vertical-align: sub;
+}
+.widget-about .about-author-img:hover, 
+.widget-about .about-author-social li:hover {
   animation: swing 0.8s;
 }
-.widget-about figure.author-signature {
-  margin-bottom: 15px;
-}
-.widget-about figure.author-signature img {
-  -ms-filter: var(--global-invert-img);
-  -moz-filter: var(--global-invert-img);
-  -webkit-filter: var(--global-invert-img);
-  filter: var(--global-invert-img);
-  width: 200px;
-}
+
+
 .widget-about-2 {
   background-color: #f8f8f8;
   padding: 50px 45px 32px;

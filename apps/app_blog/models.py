@@ -383,7 +383,7 @@ class BlogSettings(models.Model):
     google_adsense_codes = models.TextField('广告内容', max_length=2000, null=True, blank=True, default='')
     open_site_comment = models.BooleanField('是否打开网站评论功能', default=True)
     beiancode = models.CharField('备案号', max_length=2000, null=True, blank=True, default='')
-    analyticscode = models.TextField("网站统计代码", max_length=1000, null=False, blank=False, default='')
+    analyticscode = models.TextField("网站统计代码", max_length=1000, null=False, blank=True, default='')
     show_gongan_code = models.BooleanField('是否显示公安备案号', default=False, null=False)
     gongan_beiancode = models.TextField('公安备案号', max_length=2000, null=True, blank=True, default='')
     resource_path = models.CharField("静态文件保存地址", max_length=300, null=False, default='/var/www/resource/')

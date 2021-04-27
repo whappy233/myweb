@@ -8,84 +8,36 @@
 
 {% spaceless %}
 <div class="widget">
-    <div class="section-heading heading-dark text_uppercase">
-        <h3 class="item-heading">about me</h3>
-    </div>
     <div class="widget-about">
-        <figure class="author-figure">
-            <a href="/about">
-                <img src="{{ me.profile.photo.url }}" alt="about">
-            </a>
-        </figure>
-        <figure class="author-signature"><img src="{% static 'st/img/name.png' %}" alt="about">
-        </figure>
-        <!-- <p>{{ me.profile.introduction }}</p> -->
-        <p>You should write because you love the shape of stories and sentences and the creation of different words on a page. Writing comes from reading,and reading is the finest teacher of how to write.</p>
+        <h3 class="about-author-name">Hello, I'm Carlos
+            <img class="about-author-img" src="{{ me.profile.photo.url }}" alt="">
+        </h3>
+        <p class="about-author-introduce">
+            你他娘可真是个人才! {{ me.profile.introduction }}
+        </p>
+        <ul class="about-author-social">
+            <li class="list-inline-item">
+                <a class="" target="_blank" href="#">
+                    <i class="fab fa-weixin"></i>
+                </a>
+            </li>
+            <li class="list-inline-item">
+                <a class="" target="_blank" href="#">
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </li>
+            <li class="list-inline-item">
+                <a class="" target="_blank" href="#">
+                    <i class="fab fa-github-alt"></i>
+                </a>
+            </li>
+            <li class="list-inline-item">
+                <a class="" target="_blank" href="#">
+                    <i class="fas fa-at"></i>
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
 {% endspaceless %}
 
-<style>
-.background12 {
-    background: var(--global-background);
-}
-
-.mb-50 {
-    margin-bottom: 50px!important;
-}
-.border-radius-5 {
-    border-radius: 5px;
-    overflow: hidden;
-}
-.ml-30 {
-    margin-left: 30px!important;
-    margin-top: 30px;
-}
-.about-author-img {
-    border-radius: 50%;
-    width: 52px;
-    height: 52px;
-}
-
-
-
-
-
-</style>
-
-<div class="sidebar-widget widget-about mb-50 pt-30 pr-30 pb-30 pl-30 background12 border-radius-5">
-    <h3 class="mb-20">Hello, I'm Carlos
-        <img class="about-author-img float-right ml-30" src="{{ me.profile.photo.url }}" alt="">
-    </h3>
-    <p class="font-medium">
-        You should write because you love the shape of stories and sentences and the creation of different words on a page. Writing comes from reading,and reading is the finest teacher of how to write.
-    </p>
-    <ul class="header-social-network d-inline-block list-inline color-white mb-20">
-        <li class="list-inline-item">
-            <a class="social-icon facebook-icon text-xs-center" target="_blank" href="#">
-                <i class="fab fa-facebook-f"></i>
-            </a>
-        </li>
-        <li class="list-inline-item">
-            <a class="social-icon twitter-icon text-xs-center" target="_blank" href="#">
-                <i class="fab fa-twitter"></i>
-            </a>
-        </li>
-        <li class="list-inline-item">
-            <a class="social-icon pinterest-icon text-xs-center" target="_blank" href="#">
-                <i class="fab fa-pinterest-p"></i>
-            </a>
-        </li>
-        <li class="list-inline-item">
-            <a class="social-icon instagram-icon text-xs-center" target="_blank" href="#">
-                <i class="fab fa-instagram"></i>
-            </a>
-        </li>
-    </ul>
-    <p>
-        <a class="readmore-btn font-small text-uppercase font-weight-ultra" href="contact.html">
-            Contact me
-            <i class="fas fa-arrow-right"></i>
-        </a>
-    </p>
-</div>
