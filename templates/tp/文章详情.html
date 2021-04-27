@@ -181,6 +181,9 @@
             <!-- 侧边栏 -->
             <div class="col-lg-4 sidebar-widget-area sidebar-break-md">
 
+                <!-- 关于我 -->
+                {% include 'tp/侧边组件/侧边_关于我.html' with page_obj=page_obj %}
+
                 <!-- 文章目录 -->
                 {% include 'tp/侧边组件/侧边_文章目录.html' with article=article %}
 

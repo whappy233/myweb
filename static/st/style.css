@@ -3792,7 +3792,7 @@ div#wrapper.open > .offcanvas-mask {
   margin-bottom: 0 !important;
 }
 .widget-about {
-  text-align: center;
+  /* text-align: center; */
 }
 .widget-about>* {
   padding: 0 15px;
@@ -3805,7 +3805,7 @@ div#wrapper.open > .offcanvas-mask {
 }
 .widget-about figure.author-figure img {
   border-radius: 50%;
-  width: 100px;
+  width: 70px;
 }
 .widget-about figure.author-figure img:hover {
   animation: swing 0.8s;
@@ -3818,6 +3818,7 @@ div#wrapper.open > .offcanvas-mask {
   -moz-filter: var(--global-invert-img);
   -webkit-filter: var(--global-invert-img);
   filter: var(--global-invert-img);
+  width: 200px;
 }
 .widget-about-2 {
   background-color: #f8f8f8;
