@@ -31,6 +31,8 @@
     <link rel="stylesheet" href="{% static 'st/style.css' %}">
     <!-- Modernize js -->
     <script src="{% static 'st/js/modernizr-3.6.0.min.js' %}"></script>
+    <!-- jquery-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     {% block css_link %}
     {% endblock css_link %}
@@ -365,7 +367,7 @@
                                     {% else %}
                                     <!-- 登陆 -->
                                     <li>
-                                        <i data-href="{% url 'app_user:login' %}" class="fas fa-user-astronaut" title="登陆"></i>
+                                        <i class="far fa-user-circle" name="login-form" data-toggle="modal" data-target="#login_register_Modal"></i>
                                     </li>
                                     {% endif %}
                                 </ul>
@@ -447,10 +449,14 @@
             </div>
         </div>
         <!-- 搜索界面 Search Box End Here -->
+
+
+        <!--登录注册模态框-->
+        {% include 'app_blog/login_register_model.html' %}
+
+
     </div>
 
-    <!-- jquery-->
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Plugins js -->
     <script src="{% static 'st/js/plugins.js' %}"></script>
     <!-- Popper js -->

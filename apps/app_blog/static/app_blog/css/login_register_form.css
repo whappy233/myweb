@@ -20,14 +20,23 @@
 .login_register_form {
     position: relative;
     z-index: 1;
-    background: #FFFFFF;
+    background: var(--global-background);
     max-width: 400px;
     margin: 0 auto 100px;
     padding: 45px;
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    pointer-events: auto;
 }
+/* @media only screen and (max-width: 500px) {
+    .login_register_form {
+        max-width: 300px;
+        padding: 45px 20px;
+    }
+    
+} */
+
 .login_register_form input {
     font-family: "Roboto", sans-serif;
     outline: 0;
@@ -44,7 +53,7 @@
     font-family: "Microsoft YaHei", "Roboto", sans-serif;
     text-transform: uppercase;
     outline: 0;
-    background: #12c064;
+    background: linear-gradient(230deg,#2875ff,#6296ff)!important;
     width: 100%;
     border: 0;
     padding: 15px;
@@ -71,7 +80,7 @@
     font-size: 12px;
 }
 .login_register_form .message a {
-    color: #12c064;
+    color: #568fff;
     text-decoration: none;
 }
 .login_register_form .form-hide {

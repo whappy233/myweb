@@ -15,9 +15,8 @@
 <link href="{% static 'app_blog/css/drag.css' %}" rel="stylesheet" />
 
 
-<div class="modal fade user-select" id="login_register_Modal" tabindex="-1" role="dialog"
-    aria-labelledby="loginModalLabel">
-    <div class="modal-dialog" role="document" style="width: 400px;margin: 100px auto;">
+<div class="modal fade user-select" id="login_register_Modal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
+    <div class="modal-dialog" role="document" style="margin: 100px auto;">
         <div class="login_register_form">
 
             <form class="register-form" style="display: none;">
@@ -33,7 +32,9 @@
             <form class="login-form" style="display: none;">
                 <input name="username" type="text" placeholder="用户名" id="user_name" required/>
                 <input type="password" placeholder="密码" id="password" required/>
-                <div id="drag"></div>
+                <div style="width: 100%;">
+                    <div id="drag"></div>
+                </div>
                 <p class="err-message hidden"></p>
                 <button type="submit" id="login_submit" disabled>登  录</button>
                 <div class="form-row" style="justify-content: space-between">
@@ -196,12 +197,13 @@
 
     // 点击切换Form表单
     $('.login_register_form').on('click', '.message a', form_switch);
-    $('a[data-target="#login_register_Modal"]').on('click', form_switch)
+
+    $('#main').on('click', '[data-target="#login_register_Modal"]', form_switch);
 
     function form_switch(e){
         e.preventDefault();
-        let obj = e.target || e.srcElement;
-        let form_class_name = '.'+obj.name;
+        let obj = $(e.target || e.srcElement);
+        let form_class_name = '.'+obj.attr('name');
         $('.login_register_form form').css('display', 'none');
         $(form_class_name).css('display', 'block');
     }

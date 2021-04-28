@@ -25,6 +25,7 @@
             _this.handler = handler = this.drag.find('.handler');
             var drag_bg = this.drag.find('.drag_bg');
             var maxWidth = this.drag.width() - handler.width();  //能滑动的最大间距
+            console.log(maxWidth)
 
             //鼠标按下时候的x轴的位置
             handler.mousedown(function(e){
