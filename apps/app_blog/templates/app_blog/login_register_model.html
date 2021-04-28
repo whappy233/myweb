@@ -87,7 +87,7 @@
                 $(".login_register_form").addClass('shake_effect')
             }, 10);
         }else{
-            err_mag_ele.css('color', 'black');
+            err_mag_ele.css({'color':'white', 'line-height': '1.5'});
         }
         err_mag_ele.html(data.msg);
         err_mag_ele.removeClass('hidden');
