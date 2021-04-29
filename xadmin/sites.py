@@ -9,11 +9,6 @@ from django.views.decorators.cache import never_cache
 from django.template.engine import Engine
 import inspect
 
-if six.PY2 and sys.getdefaultencoding() == 'ascii':
-    import imp
-    imp.reload(sys)
-    sys.setdefaultencoding("utf-8")
-
 
 class AlreadyRegistered(Exception):
     pass
@@ -337,6 +332,7 @@ class AdminSite(object):
 
     @property
     def urls(self):
+        # print(self.get_urls())
         return self.get_urls(), self.name, self.app_name
 
     def i18n_javascript(self, request):

@@ -50,13 +50,15 @@
 
 from django.utils.safestring import mark_safe
 from django.utils import timezone
+
 def carlos(request):
     username = request.user.username
     html = f'''
-    <i data-toggle="tooltip" title="这是一个全局context" data-placement="right">
-    当前用户:({username}){timezone.now()}
-    </i>'''
+    <p>
+    当前用户: {username if username else 'None'} TIME:{timezone.now()}
+    </p>'''
     return {'Carlos': mark_safe(html)}
+
 
 
 # usage:

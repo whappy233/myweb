@@ -24,6 +24,7 @@ def add_view_permissions(sender, **kwargs):
     """
     This syncdb hooks takes care of adding a view permission too all our
     content types.
+    这个 syncdb 钩子负责添加所有内容类型的查看权限。
     """
     # for each of our content types
     for content_type in ContentType.objects.all():
@@ -36,9 +37,10 @@ def add_view_permissions(sender, **kwargs):
             Permission.objects.create(content_type=content_type,
                                       codename=codename,
                                       name="Can view %s" % content_type.name)
-            # print "Added view permission for %s" % content_type.name
+            # print("Added view permission for %s" % content_type.name)
 
-# check for all our view permissions after a syncdb
+
+# 在 syncdb 之后检查我们所有的查看权限
 post_migrate.connect(add_view_permissions)
 
 

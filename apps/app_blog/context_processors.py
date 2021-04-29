@@ -6,6 +6,14 @@ from .utils import get_blog_setting
 
 from django.utils import timezone
 from loguru import logger
+from django.urls import reverse
+
+
+def add_article(request):
+    '''获取 admin 的文章编辑界面'''
+    info = (Article._meta.app_label, Article._meta.model_name)
+    # return {'add_article': reverse('admin:%s_%s_add' % info)}  # admin
+    return {'add_article': reverse('xadmin:%s_%s_add' % info)}   # xadmin
 
 
 
@@ -36,3 +44,4 @@ def seo_processor(requests):
             "CURRENT_YEAR": timezone.now().year}
         cache.set(key, value, 60 * 60 * 10)
         return value
+

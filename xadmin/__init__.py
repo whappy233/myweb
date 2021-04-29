@@ -9,6 +9,7 @@ class Settings(object):
 
 def autodiscover():
     """
+    自动发现INSTALLED_APPS admin.py模块
     Auto-discover INSTALLED_APPS admin.py modules and fail silently when
     not present. This forces an import on them to register any admin bits they
     may want.
@@ -29,7 +30,7 @@ def autodiscover():
     from xadmin.views import register_builtin_views
     register_builtin_views(site)
 
-    # load xadmin settings from XADMIN_CONF module
+    # 从 XADMIN_CONF 模块加载 xadmin 设置
     try:
         xadmin_conf = getattr(settings, 'XADMIN_CONF', 'xadmin_conf.py')
         conf_mod = import_module(xadmin_conf)
@@ -50,7 +51,7 @@ def autodiscover():
 
     for app_config in apps.get_app_configs():
         mod = import_module(app_config.name)
-        # Attempt to import the app's admin module.
+        # 尝试导入应用程序的管理(admin)模块。
         try:
             before_import_registry = site.copy_registry()
             import_module('%s.adminx' % app_config.name)

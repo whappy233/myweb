@@ -37,7 +37,7 @@ def check_code(request):
         request.session["CheckCode"] = code
         return HttpResponse(stream.getvalue())
     except Exception as e:
-        return HttpResponse("请求异常：{}".format(repr(e)))
+        return HttpResponse(f"请求异常：{repr(e)}")
 
 
 # 注册成功发送验证邮件以及邮箱验证

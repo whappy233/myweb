@@ -219,6 +219,11 @@ class Article(models.Model):
         info = (self._meta.app_label, self._meta.model_name)
         return reverse('admin:%s_%s_change' % info, args=(self.pk,))
 
+    def get_xadmin_url(self):
+        '''获取 admin 的文章编辑界面'''
+        info = (self._meta.app_label, self._meta.model_name)
+        return reverse('xadmin:%s_%s_change' % info, args=(self.pk,))
+
     def comment_list(self):
         '''获取对应文章的所有评论'''
         cache_key = f'article_comments_{self.id}'
@@ -354,6 +359,7 @@ class FriendLink(models.Model):
         self.is_show = True
         self.save(update_fields=['is_show'])
 
+
 # 关于
 class AboutBlog(models.Model):
     body = models.TextField(verbose_name='About 内容')
@@ -366,8 +372,6 @@ class AboutBlog(models.Model):
 
     def __str__(self):
         return 'About'
-
-
 
 
 class BlogSettings(models.Model):

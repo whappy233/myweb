@@ -1,75 +1,102 @@
 /* 
- * date 2021-02-18
+ * date 2021-04-29
  * 拖动滑块
  */
-(function($){
+(function ($) {
 
-    var Drag = function(ele, options){
-        this.x, 
-        this.drag = ele, 
-        this.isMove = false, 
-        this.defaults = {};
+    var Drag = function (ele, options) {
+        this.x,
+            this.drag = ele,
+            this.isMove = false,
+            this.defaults = {};
         this.options = $.extend(this.defaults, options);
     }
 
     Drag.prototype = {
-        init: function(){
+        init: function () {
             var _this = this;
             //添加背景，文字，滑块
-            var html = '<div class="drag_bg"></div>'+
-                        '<div class="drag_text" onselectstart="return false;" unselectable="on">拖动滑块验证</div>'+
-                        '<div class="handler handler_bg"></div>';
+            var html = '<div class="drag_bg"></div>' +
+                '<div class="drag_text" onselectstart="return false;" unselectable="on">拖动滑块验证</div>' +
+                '<div class="handler handler_bg"></div>';
             this.drag.append(html);
 
-            var handler ;
+            var handler;
             _this.handler = handler = this.drag.find('.handler');
             var drag_bg = this.drag.find('.drag_bg');
             var maxWidth = this.drag.width() - handler.width();  //能滑动的最大间距
 
+            console.log(maxWidth)
+
+            handler.on('mousedown', handleDragStart);
+            handler.on('touchstart', handleDragStart);
+
+            $(document).on('mousemove', handleDragMove);
+            $(document).on('touchmove', handleDragMove);
+
+            $(document).on('mouseup', handleDragEnd);
+            $(document).on('touchend', handleDragEnd);
+
+
             //鼠标按下时候的x轴的位置
-            handler.mousedown(function(e){
+            function handleDragStart(e) {
                 _this.isMove = true;
-                _this.x = e.pageX - parseInt(handler.css('left'), 10);
-            });
+                var originX = e.clientX || e.touches[0].pageX;
+                _this.x = originX - parseInt(handler.css('left'), 10);
+            };
 
             //鼠标指针在上下文移动时，移动距离大于0小于最大间距，滑块x轴位置等于鼠标移动距离
-            $(document).mousemove(function(e){
-                var _x = e.pageX - _this.x;
-                if(_this.isMove){
-                    if(_x > 0 && _x <= maxWidth){
-                        handler.css({'left': _x});
-                        drag_bg.css({'width': _x+20});
-                    }else if(_x > maxWidth){  //鼠标指针移动距离达到最大时清空事件
+            function handleDragMove(e) {
+                var originX = e.clientX || e.touches[0].pageX;
+                var _x = originX - _this.x;
+                if (_this.isMove) {
+                    if (_x > 0 && _x <= maxWidth) {
+                        handler.css({ 'left': _x });
+                        drag_bg.css({ 'width': _x + 20 });
+                        _this.drag.find('.drag_text').text('拖动滑块验证');
+                    } else if (_x > maxWidth) {  //鼠标指针移动距离达到最大时清空事件
+                        _this.drag.find('.drag_text').text('松开验证');
+                    }
+                }
+            };
+
+            function handleDragEnd(e) {
+                _this.isMove = false;
+                var originX = e.clientX || e.changedTouches[0].pageX;
+                var _x = originX - _this.x;
+                if (_this.x) {
+                    if (_x < maxWidth) { //鼠标松开时，如果没有达到最大距离位置，滑块就返回初始位置
+                        handler.css({ 'left': 0 });
+                        drag_bg.css({ 'width': 0 });
+                        _this.drag.find('.drag_text').text('拖动滑块验证');
+                    } else {
                         _this.dragOk();
                     }
                 }
-            }).mouseup(function(e){
-                _this.isMove = false;
-                var _x = e.pageX - _this.x;
-                if(_x < maxWidth){ //鼠标松开时，如果没有达到最大距离位置，滑块就返回初始位置
-                    handler.css({'left': 0});
-                    drag_bg.css({'width': 0});
-                }
-            });
+            };
         },
 
         //清空事件
-        dragOk: function(){
+        dragOk: function () {
 
             this.handler.removeClass('handler_bg').addClass('handler_ok_bg');
             this.drag.find('.drag_text').text('验证通过');
-            this.drag.css({'color': '#fff'});
+            this.drag.css({ 'color': '#fff' });
+
             this.handler.unbind('mousedown');
+            this.handler.unbind('touchstart');
             $(document).unbind('mousemove');
+            $(document).unbind('touchmove');
             $(document).unbind('mouseup');
+            $(document).unbind('touchend');
 
             $('#login_submit').attr('disabled', false)
         }
     }
 
-    $.fn.drag = function(options){
-		var d = new Drag(this, options);
-		d.init();
+    $.fn.drag = function (options) {
+        var d = new Drag(this, options);
+        d.init();
         return d
     };
 

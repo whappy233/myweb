@@ -45,9 +45,9 @@ class RegisterForm(UserCreationForm):
 
     def clean_check_code(self):
         checkcode = self.cleaned_data.get('check_code')
-        if not settings.DEBUG:
-            if checkcode.lower() != self._request.session['CheckCode'].lower():  # 验证验证码
-                raise forms.ValidationError("验证码错误")
+        # if not settings.DEBUG:
+        if checkcode.lower() != self._request.session['CheckCode'].lower():  # 验证验证码
+            raise forms.ValidationError("验证码错误")
         return checkcode
 
 
@@ -65,9 +65,9 @@ class LoginForm(forms.Form):
 
     def clean_check_code(self):
         checkcode = self.cleaned_data.get('check_code')
-        if not settings.DEBUG:
-            if checkcode.lower() != self._request.session['CheckCode'].lower():  # 验证验证码
-                raise forms.ValidationError("验证码错误")
+        # if not settings.DEBUG:
+        if checkcode.lower() != self._request.session['CheckCode'].lower():  # 验证验证码
+            raise forms.ValidationError("验证码错误")
         return checkcode
 
 
@@ -191,11 +191,6 @@ class UserPhotoUploadForm(forms.Form):
             # print('文件类型只能是: png,jpg,jpeg,gif')
             raise forms.ValidationError('文件类型只能是: png,jpg,jpeg,gif')
         return photo_file
-
-
-
-
-
 
 
 

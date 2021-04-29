@@ -67,8 +67,8 @@ class AdminSplitDateTime(forms.SplitDateTimeWidget):
 
     def __init__(self, attrs=None):
         widgets = [AdminDateWidget, AdminTimeWidget]
-        # Note that we're calling MultiWidget, not SplitDateTimeWidget, because
-        # we want to define widgets.
+        # Note that we're calling MultiWidget, not SplitDateTimeWidget, because we want to define widgets.
+        # 请注意，我们要调用 MultiWidget, 而不是 SplitDateTimeWidget, 因为我们要定义窗口小部件。
         forms.MultiWidget.__init__(self, widgets, attrs)
 
     def render(self, name, value, attrs=None, renderer=None):

@@ -19,22 +19,23 @@
     <div class="modal-dialog" role="document" style="margin: 100px auto;">
         <div class="login_register_form">
 
+            <!-- 注册 -->
             <form class="register-form" style="display: none;">
                 <input name="username" type="text" placeholder="用户名" id="r_username" required/>
                 <input name="password1" type="password" placeholder="密码" id="r_password" required/>
                 <input name="password2" type="password" placeholder="确认密码" id="rr_password" required/>
                 <input name="email" type="email" placeholder="邮箱" id="r_email" required/>
+                <div id="drag-register" class="drag-verification"></div>
                 <p class="err-message hidden"></p>
                 <button type="submit" id="create">注  册</button>
                 <p class="message">已有账户? <a name="login-form">立刻登录</a></p>
             </form>
 
+            <!-- 登录 -->
             <form class="login-form" style="display: none;">
                 <input name="username" type="text" placeholder="用户名" id="user_name" required/>
                 <input type="password" placeholder="密码" id="password" required/>
-                <div style="width: 100%;">
-                    <div id="drag"></div>
-                </div>
+                <div id="drag-login" class="drag-verification"></div>
                 <p class="err-message hidden"></p>
                 <button type="submit" id="login_submit" disabled>登  录</button>
                 <div class="form-row" style="justify-content: space-between">
@@ -43,6 +44,7 @@
                 </div>
             </form>
 
+            <!-- 忘记密码 -->
             <form class="forget-form" style="display: none;">
                 <div class="form-row">
                     <input name="f_email" type="email" placeholder="绑定的邮箱" id="f_email" required/>
@@ -113,15 +115,15 @@
                 }
                 else {
                     ajax_form_fail('.login-form', data);
-                    $('#drag').empty();
-                    $('#drag').drag();
+                    $('#drag-login').empty();
+                    $('#drag-login').drag();
                     $('#login_submit').attr('disabled', true)
                 }
             },
             error: function (xhr, status, error) {
                 ajax_form_fail('.login-form', { 'msg': error });
-                $('#drag').empty();
-                $('#drag').drag();
+                $('#drag-login').empty();
+                $('#drag-login').drag();
                 $('#login_submit').attr('disabled', true)
             }
         })
@@ -213,13 +215,13 @@
         $(".login_register_form").removeClass('shake_effect');
         $('.err-message').addClass('hidden')
         $('#login_submit').attr('disabled', true)
-        $('#drag').empty();
+        $('#drag-login').empty();
     });
 
     // 打开登录注册Model触发
     $('#login_register_Modal').on('show.bs.modal', function () {
         // 可以设置下拉框为初始值
-        $('#drag').drag();
+        $('#drag-login').drag();
         var e = window.event;
         let obj = e.target || e.srcElement;
     });

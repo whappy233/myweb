@@ -70,10 +70,10 @@
     </span>
     <!-- superuser -->
     {% if request.user == article.author or request.user.is_superuser %}
-    <a class="comment" href="{% url 'app_admin:update_article' article.id article.slug %}">
-        <i class="glyphicon glyphicon-pencil"></i>修改</a>
     <a class="comment" href="{{ article.get_admin_url }}">
         <i class="glyphicon glyphicon-pencil"></i>admin中编辑</a>
+    <a class="comment" href="{{ article.get_xadmin_url }}">
+        <i class="glyphicon glyphicon-pencil"></i>Xadmin中编辑</a>
     {% endif %}
 
 </div>

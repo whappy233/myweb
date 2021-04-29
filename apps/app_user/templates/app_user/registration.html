@@ -44,7 +44,7 @@
                     <td>{{ form.check_code.label_tag }}</td>
                     <td>{{ form.check_code }}</td>
                     <td>
-                        <img src="{% url 'app_user:check_code' %}" onclick="ChangeCode(this);">
+                        <img src="{% url 'app_user:check_code' %}" alt="图片验证码" onerror="this.onerror=null,this.alt='加载失败'" onclick="this.src=this.src+'?'">
                     </td>
                 </tr>
             </table>
@@ -59,13 +59,4 @@
         </div>
     </form>
 </div>
-{% endblock %}
-
-{% block script %}
-<script>
-    // 点击一次,更改图片内容,
-    function ChangeCode(ths){
-        ths.src = ths.src + '?';
-    }
-</script>
 {% endblock %}

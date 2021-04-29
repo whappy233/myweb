@@ -86,13 +86,13 @@
                             <li><a href="{% url 'app_user:profile' %}">修改信息</a></li>
                             <li><a href="{% url 'app_user:change_pw' %}">修改密码</a></li>
                             {% if request.user.is_superuser %}
-                            <li><a href="{% url 'app_admin:index' %}">ADMIN</a></li>
+                            <li><a href="{% url 'admin: ' %}">ADMIN</a></li>
                             <li><a href="/xadmin">XADMIN</a></li>
                             {% endif %}
                             <li><a href="{% url 'app_user:logout' %}">退出登陆</a></li>
                         </ul>
                     </li>
-                    <li><a href="{% url 'app_admin:create_blog' %}">新建文章</a></li>
+                    <li><a href="#">新建文章</a></li>
                     {% else %}
                     <li><a name="login-form" data-toggle="modal" data-target="#login_register_Modal" rel="nofollow">登录</a></li>
                     <li><a name="register-form" data-toggle="modal" data-target="#login_register_Modal" rel="nofollow">注册</a></li>

@@ -22,6 +22,7 @@ sitemaps = {
     'articles': ArticleSitemap,
     }
 
+
 # 对应blog/urls 中的方法1
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,7 +31,6 @@ urlpatterns = [
     path('', include('app_comments.urls', namespace='app_comments')),
     path('user/', include('app_user.urls', namespace='app_uesr')),
     path('gallery/', include('app_gallery.urls', namespace='app_gallery')),
-    path('X/', include('app_admin.urls', namespace='app_admin')),
 
     re_path(r'^media/(?P<path>.*)', serve, {'document_root': settings.MEDIA_ROOT}),  # 媒体文件
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),  # 静态文件
@@ -42,3 +42,22 @@ urlpatterns = [
 
 ] # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+
+
+
+'''
+
+info = self.model._meta.app_label, self.model._meta.model_name
+urlpatterns = [
+    path('', wrap(self.changelist_view), name='%s_%s_changelist' % info),
+    path('add/', wrap(self.add_view), name='%s_%s_add' % info),
+    path('autocomplete/', wrap(self.autocomplete_view), name='%s_%s_autocomplete' % info),
+    path('<path:object_id>/history/', wrap(self.history_view), name='%s_%s_history' % info),
+    path('<path:object_id>/delete/', wrap(self.delete_view), name='%s_%s_delete' % info),
+    path('<path:object_id>/change/', wrap(self.change_view), name='%s_%s_change' % info),
+    # For backwards compatibility (was the change url before 1.9)
+    path('<path:object_id>/', wrap(RedirectView.as_view(
+        pattern_name='%s:%s_%s_change' % ((self.admin_site.name,) + info)
+    ))),
+
+'''

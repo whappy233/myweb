@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'app_user.apps.AppUserConfig',
     'app_blog.apps.AppBlogConfig',
     'app_gallery.apps.AppGalleryConfig',
-    'app_admin.apps.AppAdminConfig',
     'app_common.apps.AppCommonConfig',
     'app_comments.apps.AppCommentsConfig',
 
@@ -113,6 +112,7 @@ TEMPLATES = [
 
                 # 自定义模版全局变量 Carlos (默认变量)
                 'myweb.contexts.carlos',
+                'app_blog.context_processors.add_article',
                 'app_blog.context_processors.seo_processor',
             ],
         },

@@ -267,7 +267,7 @@
                                     {% if request.user.is_superuser %}
                                     <!-- 新建文章 -->
                                     <li>
-                                        <i data-href="{% url 'app_admin:create_blog' %}" class="fas fa-plus" title="新建文章"></i>
+                                        <i data-href="{{ add_article }}" class="fas fa-plus" title="新建文章"></i>
                                     </li>
                                     {% endif %}
                                     {% if request.user.is_authenticated %} {# 当用户被验证 #}
@@ -354,8 +354,8 @@
                                                             <li><a href="{% url 'app_user:profile' %}"><i class="fas fa-user-edit"></i>修改信息</a></li>
                                                             <li><a href="{% url 'app_user:change_pw' %}"><i class="fas fa-key"></i>修改密码</a></li>
                                                             {% if request.user.is_superuser %}
-                                                            <li><a href="{% url 'app_admin:index' %}"><i class="fas fa-user-cog"></i>ADMIN</a></li>
-                                                            <li><a href="/xadmin"><i class="fas fa-user-shield"></i>XADMIN</a></li>
+                                                            <li><a href="{% url 'admin:index' %}"><i class="fas fa-user-cog"></i>ADMIN</a></li>
+                                                            <li><a href="{% url 'xadmin:index' %}"><i class="fas fa-user-shield"></i>XADMIN</a></li>
                                                             <li><a href="{% url 'app_blog:refresh' %}"><i class="fas fa-redo-alt"></i>刷新缓存</a></li>
                                                             {% endif %}
                                                             <li><a href="{% url 'app_user:logout' %}"><i class="fas fa-sign-out-alt"></i>退出登陆</a></li>
@@ -367,8 +367,8 @@
                                     </li>
                                     {% else %}
                                     <!-- 登陆 -->
-                                    <li>
-                                        <i class="far fa-user-circle" name="login-form" data-toggle="modal" data-target="#login_register_Modal"></i>
+                                    <li name="login-form" data-toggle="modal" data-target="#login_register_Modal">
+                                        <i class="far fa-user-circle" style="pointer-events: none;"></i>
                                     </li>
                                     {% endif %}
                                 </ul>
@@ -405,6 +405,7 @@
                         Copyright&copy;&nbsp;{{ CURRENT_YEAR }}&nbsp;
                         <a href="/" title="{{ SITE_NAME }}" style="color: dodgerblue;">{{ SITE_NAME }}</a>.
                     </div>
+                    {{ Carlos }}
                 </div>
             </div>
         </footer>
@@ -450,7 +451,6 @@
             </div>
         </div>
         <!-- 搜索界面 Search Box End Here -->
-
 
         <!--登录注册模态框-->
         {% include 'app_blog/login_register_model.html' %}
