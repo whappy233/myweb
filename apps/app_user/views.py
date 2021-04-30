@@ -40,44 +40,6 @@ def check_code(request):
         return HttpResponse(f"请求异常：{repr(e)}")
 
 
-# 注册成功发送验证邮件以及邮箱验证
-def register_result(request):
-    '''注册成功以及邮箱验证'''
-    type = request.GET.get('type')
-    id = request.GET.get('id')
-    user = get_object_or_404(User, id=id)
-    logger.info(type)
-    if user.is_active: return redirect('/')
-
-    if type and type in ['register', 'validation']:
-        if type == 'register':
-            site = get_current_site().domain
-            sign = GenerateEncrypted.encode({'id':user.id})
-            if settings.DEBUG: site = '127.0.0.1:8000'
-            path = reverse('app_user:register_result')
-            url = f"http://{site}{path}?type=validation&id={user.id}&sign={sign}"
-            text = f'<p>请点击下面链接验证您的邮箱</p><a href="{url}" rel="bookmark">{url}</a>'
-            print(text)
-            send_email(to_email=user.email, vcode_str=text)
-            content = f'恭喜您注册成功，一封验证邮件已经发送到您 {user.email} 的邮箱，请验证您的邮箱后登录本站。'
-            title = '注册成功'
-            return render(request, 'app_user/register_result.html', {'title': title, 'content': content})
-        else:
-            sign = request.GET.get('sign')
-            if sign:
-                data = GenerateEncrypted.decode(sign)
-                if data:
-                    if data.get('id', -1) == user.id:
-                        user.is_active = True
-                        user.save(update_fields=['is_active'])
-                        content = '恭喜您完成邮箱验证，您现在可以使用您的账号来登录本站。'
-                        title = '验证成功'
-                        return render(request, 'app_user/register_result.html', {'title': title, 'content': content})
-            return HttpResponseForbidden()
-    else:
-        return redirect('/')
-
-
 # 注册
 @method_decorator(never_cache, name='dispatch')
 class RegisterView(FormView):
@@ -116,6 +78,33 @@ class RegisterView(FormView):
 
         return self.render_to_response({'form': form})
 
+# ajax 注册
+def ajax_register(request):
+    if request.method == 'POST' and request.is_ajax():
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save(False)
+            user.is_active = False
+            user.save(True)
+
+            site = get_current_site().domain
+            sign = GenerateEncrypted.encode({'id':user.id})
+            if settings.DEBUG: site = '127.0.0.1:8000'
+            path = reverse('app_user:register_result')
+            url = f"http://{site}{path}?type=validation&id={user.id}&sign={sign}"
+            text = f'<p>点击下面链接验证您的邮箱</p><a href="{url}" rel="bookmark">{url}</a>'
+            print(text)
+            send_email(to_email=user.email, vcode_str=text)
+            msg = f'恭喜您注册成功，一封验证邮件已经发送到 {user.email} ，请验证邮箱后登录本站!'
+            return JsonResponse({'status':200, 'msg':msg})
+
+        else:
+            err_msg = []
+            for msg in form.errors.as_data().values():
+                err_msg.extend(msg[0].messages)
+            return JsonResponse({'status':400, 'msg':'<br>'.join(err_msg)})
+    return JsonResponse({'status':400, 'msg':'FAIL'})
+
 
 # 登录
 # @check_honeypot(field_name='12223')
@@ -145,10 +134,11 @@ def login(request):
     message = ''
     if request.method == 'POST':
 
-        form = LoginForm(request.POST, _request=request)
+        form = LoginForm(request.POST, _request=request)  #  _request 的目的是将 session(其中包含验证码) 传递给表单
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
+
             user = auth.authenticate(username=username, password=password)
             if user:
                 if user.is_active:
@@ -161,7 +151,48 @@ def login(request):
                 message = '密码错误。请重试'
     else:
         form = LoginForm()
-    return render(request, 'app_user/login.html', {'form': form, 'message': message})
+    return render(request, 'tp/用户验证.html', {'form': form, 'message': message})
+
+
+# ajax 登录
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
+def ajax_login(request):
+    if request.method == 'POST' and request.is_ajax():
+        # 在前端发送ajax json 请求时(application/json;charset=UTF-8), 数据存放在request.body中,  request.POST, 没有数据.
+        print(request.body)  # --> b'{"username":"891953720","password":"wu910hao"}'
+
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        if password and username:
+
+            user = auth.authenticate(username=username, password=password)
+            if user:
+                if user.is_active:
+                    auth.login(request, user)
+                    return JsonResponse({'status':200,'msg':'登录成功'})
+                else:
+                    url =f"{reverse('app_user:register_result')}?type=register&id={user.id}"
+                    message = f'账户未激活, 请激活后再登录.<br><a href="{url}"> 点击发送激活链接到你的邮箱({user.email})</a>'
+                    return JsonResponse({'status':400,'msg':message})
+            else:
+                message = '密码错误。请重试'
+                return JsonResponse({'status':400,'msg':message})
+        else:
+            message = '密码错误。请重试'
+            return JsonResponse({'status':400,'msg':message})
+    else:
+        return HttpResponseForbidden()
+
+
+
+from django.contrib.auth import views as auth_views
+# 退出登录
+def logout(request):
+    before = request.GET.get('before', reverse('app_blog:article_list'))
+    return auth_views.LogoutView.as_view(next_page=before)(request)
+
 
 # 修改密码
 @never_cache
@@ -191,6 +222,47 @@ def change_pw(request):
         form = PwdChangeForm(initial={'username': request.user.username})
 
     return render(request, 'app_user/change_pw.html', {'form': form, 'message': message})
+
+
+
+
+# 注册成功发送验证邮件以及邮箱验证
+def register_result(request):
+    '''注册成功以及邮箱验证'''
+    type = request.GET.get('type')
+    id = request.GET.get('id')
+    user = get_object_or_404(User, id=id)
+    logger.info(type)
+    if user.is_active: return redirect('/')
+
+    if type and type in ['register', 'validation']:
+        if type == 'register':
+            site = get_current_site().domain
+            sign = GenerateEncrypted.encode({'id':user.id})
+            if settings.DEBUG: site = '127.0.0.1:8000'
+            path = reverse('app_user:register_result')
+            url = f"http://{site}{path}?type=validation&id={user.id}&sign={sign}"
+            text = f'<p>请点击下面链接验证您的邮箱</p><a href="{url}" rel="bookmark">{url}</a>'
+            print(text)
+            send_email(to_email=user.email, vcode_str=text)
+            content = f'恭喜您注册成功，一封验证邮件已经发送到您 {user.email} 的邮箱，请验证您的邮箱后登录本站。'
+            title = '注册成功'
+            return render(request, 'app_user/register_result.html', {'title': title, 'content': content})
+        else:
+            sign = request.GET.get('sign')
+            if sign:
+                data = GenerateEncrypted.decode(sign)
+                if data:
+                    if data.get('id', -1) == user.id:
+                        user.is_active = True
+                        user.save(update_fields=['is_active'])
+                        content = '恭喜您完成邮箱验证，您现在可以使用您的账号来登录本站。'
+                        title = '验证成功'
+                        return render(request, 'app_user/register_result.html', {'title': title, 'content': content})
+            return HttpResponseForbidden()
+    else:
+        return redirect('/')
+
 
 # Ajax 发送邮箱验证码
 def send_email_vcode(request):
@@ -281,7 +353,6 @@ def forget_pwd(request):
     return HttpResponseForbidden()
 
 
-
 # 编辑资料
 @login_required
 def profile(request):
@@ -340,65 +411,4 @@ def ajax_photo_upload(request):
             return JsonResponse({"msg": "请重新上传。只能上传图片"})
 
     return redirect('app_user:profile')
-
-
-# ajax 登录
-from django.views.decorators.csrf import csrf_exempt
-@csrf_exempt
-def ajax_login(request):
-    if request.method == 'POST' and request.is_ajax():
-        # 在前端发送ajax json 请求时(application/json;charset=UTF-8), 数据存放在request.body中, 
-        # request.POST, 没有数据.
-        print(request.body)  # --> b'{"username":"891953720","password":"wu910hao"}'
-
-        print(request.POST)
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        print(username, password)
-        if password and username:
-            user = auth.authenticate(username=username, password=password)
-            if user:
-                if user.is_active:
-                    auth.login(request, user)
-                    return JsonResponse({'status':200,'msg':'登录成功'})
-                else:
-                    url =f"{reverse('app_user:register_result')}?type=register&id={user.id}"
-                    message = f'账户未激活, 请激活后再登录.<br><a href="{url}"> 点击发送激活链接到你的邮箱({user.email})</a>'
-                    return JsonResponse({'status':400,'msg':message})
-            else:
-                message = '密码错误。请重试'
-                return JsonResponse({'status':400,'msg':message})
-        else:
-            message = '密码错误。请重试'
-            return JsonResponse({'status':400,'msg':message})
-    else:
-        return HttpResponseForbidden()
-
-
-def ajax_register(request):
-    if request.method == 'POST' and request.is_ajax():
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            user = form.save(False)
-            user.is_active = False
-            user.save(True)
-
-            site = get_current_site().domain
-            sign = GenerateEncrypted.encode({'id':user.id})
-            if settings.DEBUG: site = '127.0.0.1:8000'
-            path = reverse('app_user:register_result')
-            url = f"http://{site}{path}?type=validation&id={user.id}&sign={sign}"
-            text = f'<p>请点击下面链接验证您的邮箱</p><a href="{url}" rel="bookmark">{url}</a>'
-            print(text)
-            send_email(to_email=user.email, vcode_str=text)
-            msg = f'恭喜您注册成功，一封验证邮件已经发送到您 {user.email} 的邮箱，请验证您的邮箱后登录本站!'
-            return JsonResponse({'status':200, 'msg':msg})
-
-        else:
-            err_msg = []
-            for msg in form.errors.as_data().values():
-                err_msg.extend(msg[0].messages)
-            return JsonResponse({'status':400, 'msg':'<br>'.join(err_msg)})
-    return JsonResponse({'status':400, 'msg':'FAIL'})
-
 

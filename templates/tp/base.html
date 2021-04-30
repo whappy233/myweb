@@ -52,13 +52,12 @@
         };
         document.getElementById('main').setAttribute('data-theme' , window.localStorage.getItem("theme")||theme1||'dark');
     </script>
-    <!-- 滚动到顶部 ScrollUp Start Here -->
+    <!-- 滚动到顶部 -->
     <a href="#wrapper" data-type="section-switch" class="scrollup" title="Back to the top">
         <i class="fas fa-angle-double-up"></i>
     </a>
-    <!-- 滚动到顶部 ScrollUp End Here -->
 
-    <!-- 页面加载动画 Preloader Start Here -->
+    <!-- 页面加载动画 -->
     <div class="preloader">
         <div class="loader">
             <div class="line line1"></div>
@@ -66,12 +65,10 @@
             <div class="line line3"></div>
         </div>
     </div>
-    <!-- 页面加载动画 Preloader End Here -->
 
     <div id="wrapper" class="wrapper">
-        <!-- 在此处添加您的网站或应用程序内容 -->
 
-        <!-- 头部导航 Header Area Start Here -->
+        <!-- 头部导航 -->
         {% block header %}
         <header class="has-mobile-menu">
             <div id="rt-sticky-placeholder"></div>
@@ -242,11 +239,15 @@
                                     </li>
                                     <!-- 相册 -->
                                     <li>
-                                        <a href="{% url 'app_gallery:gallery_list' %}">日记</a>
-                                    </li>
-                                    <!-- 相册 -->
-                                    <li>
+                                        {% if request.user.is_authenticated %}
                                         <a href="{% url 'app_gallery:gallery_list' %}">相册</a>
+                                        {% else %}
+                                        <a name="login-form" data-toggle="modal" data-target="#login_register_Modal" rel="nofollow" href="{% url 'app_gallery:gallery_list' %}">相册</a>
+                                        {% endif %}
+                                    </li>
+                                    <!-- 日记 -->
+                                    <li>
+                                        <a href="{% url 'app_gallery:gallery_list' %}">日记</a>
                                     </li>
                                 </ul>
                             </nav>
@@ -358,7 +359,7 @@
                                                             <li><a href="{% url 'xadmin:index' %}"><i class="fas fa-user-shield"></i>XADMIN</a></li>
                                                             <li><a href="{% url 'app_blog:refresh' %}"><i class="fas fa-redo-alt"></i>刷新缓存</a></li>
                                                             {% endif %}
-                                                            <li><a href="{% url 'app_user:logout' %}"><i class="fas fa-sign-out-alt"></i>退出登陆</a></li>
+                                                            <li><a href="{% url 'app_user:logout' %}?before={{request.get_full_path}}"><i class="fas fa-sign-out-alt"></i>退出登陆</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -379,12 +380,12 @@
             </div>
         </header>
         {% endblock header %}
-        <!-- 头部导航 Header Area End Here -->
 
+        <!-- container -->
         {% block container %}
         {% endblock container %}
 
-        <!-- 页脚 Footer Area Start Here -->
+        <!-- 页脚 -->
         <footer class="footer-wrap-layout2">
             <div class="container">
                 <div class="footer-box-layout2">
@@ -409,9 +410,8 @@
                 </div>
             </div>
         </footer>
-        <!-- 页脚 Footer Area End Here -->
 
-        <!-- 搜索界面 Search Box Start Here -->
+        <!-- 搜索界面 -->
         <div id="header-search" class="header-search">
             <button type="button" class="close">×</button>
             <div class="header-search-form">
@@ -450,11 +450,11 @@
                 </div>
             </div>
         </div>
-        <!-- 搜索界面 Search Box End Here -->
 
+        {% if not request.user.is_authenticated %} {# 当用户被验证 #}
         <!--登录注册模态框-->
         {% include 'app_blog/login_register_model.html' %}
-
+        {% endif %}
 
     </div>
 

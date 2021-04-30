@@ -8,7 +8,9 @@
         this.x,
             this.drag = ele,
             this.isMove = false,
-            this.defaults = {};
+            this.defaults = {
+				success: function () { }
+            };
         this.options = $.extend(this.defaults, options);
     }
 
@@ -26,8 +28,6 @@
             var drag_bg = this.drag.find('.drag_bg');
             var maxWidth = this.drag.width() - handler.width();  //能滑动的最大间距
 
-            console.log(maxWidth)
-
             handler.on('mousedown', handleDragStart);
             handler.on('touchstart', handleDragStart);
 
@@ -40,6 +40,7 @@
 
             //鼠标按下时候的x轴的位置
             function handleDragStart(e) {
+                console.log('down')
                 _this.isMove = true;
                 var originX = e.clientX || e.touches[0].pageX;
                 _this.x = originX - parseInt(handler.css('left'), 10);
@@ -61,17 +62,20 @@
             };
 
             function handleDragEnd(e) {
-                _this.isMove = false;
-                var originX = e.clientX || e.changedTouches[0].pageX;
-                var _x = originX - _this.x;
-                if (_this.x) {
-                    if (_x < maxWidth) { //鼠标松开时，如果没有达到最大距离位置，滑块就返回初始位置
-                        handler.css({ 'left': 0 });
-                        drag_bg.css({ 'width': 0 });
-                        _this.drag.find('.drag_text').text('拖动滑块验证');
-                    } else {
-                        _this.dragOk();
+                if (_this.isMove){
+                    var originX = e.clientX || e.changedTouches[0].pageX;
+                    var _x = originX - _this.x;
+                    if (_this.x) {
+                        if (_x < maxWidth) { //鼠标松开时，如果没有达到最大距离位置，滑块就返回初始位置
+                            console.log('reset')
+                            handler.css({ 'left': 0 });
+                            drag_bg.css({ 'width': 0 });
+                            _this.drag.find('.drag_text').text('拖动滑块验证');
+                        } else {
+                            _this.dragOk();
+                        }
                     }
+                    _this.isMove = false;
                 }
             };
         },
@@ -83,22 +87,28 @@
             this.drag.find('.drag_text').text('验证通过');
             this.drag.css({ 'color': '#fff' });
 
-            this.handler.unbind('mousedown');
-            this.handler.unbind('touchstart');
-            $(document).unbind('mousemove');
-            $(document).unbind('touchmove');
-            $(document).unbind('mouseup');
-            $(document).unbind('touchend');
+            this.handler.unbind('mousedown touchstart');
+
+            // $(document).unbind('mousemove');
+            // $(document).unbind('touchmove');
+            // $(document).unbind('mouseup');
+            // $(document).unbind('touchend');
+
+            this.options.success();
 
             $('#login_submit').attr('disabled', false)
         }
     }
 
-    $.fn.drag = function (options) {
-        var d = new Drag(this, options);
-        d.init();
-        return d
-    };
+    // window.Drag = Drag;
+
+	//在插件中使用 drag 对象
+	$.fn.drag = function (options) {
+		var d = new Drag(this, options);
+		d.init();
+	};
+
+
 
 })(jQuery);
 

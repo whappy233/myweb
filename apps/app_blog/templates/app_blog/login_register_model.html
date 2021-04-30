@@ -25,7 +25,6 @@
                 <input name="password1" type="password" placeholder="密码" id="r_password" required/>
                 <input name="password2" type="password" placeholder="确认密码" id="rr_password" required/>
                 <input name="email" type="email" placeholder="邮箱" id="r_email" required/>
-                <div id="drag-register" class="drag-verification"></div>
                 <p class="err-message hidden"></p>
                 <button type="submit" id="create">注  册</button>
                 <p class="message">已有账户? <a name="login-form">立刻登录</a></p>
@@ -37,7 +36,7 @@
                 <input type="password" placeholder="密码" id="password" required/>
                 <div id="drag-login" class="drag-verification"></div>
                 <p class="err-message hidden"></p>
-                <button type="submit" id="login_submit" disabled>登  录</button>
+                <button type="submit" id="login_submit" data-aim='' disabled>登  录</button>
                 <div class="form-row" style="justify-content: space-between">
                     <p class="message">忘记密码? <a name="forget-form">立刻重置</a></p>
                     <p class="message">还没有账户? <a name="register-form">立刻创建</a></p>
@@ -111,7 +110,12 @@
             },
             success: function (data) {
                 if (data.status == 200) {
-                    location.reload();
+                    let aim = $('#login_submit').data('aim');
+                    if (aim){
+                        window.location.href = aim;
+                    }else{
+                        location.reload();
+                    }
                 }
                 else {
                     ajax_form_fail('.login-form', data);
@@ -224,6 +228,8 @@
         $('#drag-login').drag();
         var e = window.event;
         let obj = e.target || e.srcElement;
+        console.log(obj)
+        $('#login_submit').data('aim', obj.href||'')
     });
 
 

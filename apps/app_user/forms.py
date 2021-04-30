@@ -7,7 +7,7 @@ from .models import UserProfile
 from django.core.exceptions import ValidationError
 import re
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.conf import settings
+from django.conf import FILE_CHARSET_DEPRECATED_MSG, settings
 from django.db.models import Q
 
 # 用户注册
@@ -44,9 +44,9 @@ class RegisterForm(UserCreationForm):
         return email
 
     def clean_check_code(self):
-        checkcode = self.cleaned_data.get('check_code')
+        checkcode = self.cleaned_data.get('check_code', '')
         # if not settings.DEBUG:
-        if checkcode.lower() != self._request.session['CheckCode'].lower():  # 验证验证码
+        if self._request and checkcode.lower() != self._request.session['CheckCode'].lower():  # 验证验证码
             raise forms.ValidationError("验证码错误")
         return checkcode
 
@@ -69,7 +69,6 @@ class LoginForm(forms.Form):
         if checkcode.lower() != self._request.session['CheckCode'].lower():  # 验证验证码
             raise forms.ValidationError("验证码错误")
         return checkcode
-
 
 # 修改密码
 class PwdChangeForm(forms.Form):
