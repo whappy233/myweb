@@ -53,6 +53,8 @@ from django.utils import timezone
 
 def carlos(request):
     username = request.user.username
+    # print(request.user.id)
+    # print(request.user.username)
     html = f'''
     <p>
     当前用户: {username if username else 'None'} TIME:{timezone.now()}

@@ -132,9 +132,11 @@ def login(request):
     next = request.GET.get('next', reverse('app_blog:article_list'))
 
     message = ''
+    username = request.POST.get('username', '')
     if request.method == 'POST':
 
         form = LoginForm(request.POST, _request=request)  #  _request 的目的是将 session(其中包含验证码) 传递给表单
+
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
@@ -149,9 +151,8 @@ def login(request):
                     message = f'账户未激活, 请激活后再登录.<a href="{url}"> 点击发送激活链接到邮箱({user.email})</a>'
             else:
                 message = '密码错误。请重试'
-    else:
-        form = LoginForm()
-    return render(request, 'tp/用户验证.html', {'form': form, 'message': message})
+
+    return render(request, 'tp/用户验证.html', {'username': username, 'message': message})
 
 
 # ajax 登录

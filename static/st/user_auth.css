@@ -1,0 +1,213 @@
+body {
+    background: url(https://picsum.photos/id/10/1920/1080) no-repeat center;
+    /* background: url("{% static 'st/img/bg.jpg' %}") no-repeat center; */
+    background-attachment: fixed;
+    background-size: cover;
+    overflow: auto;
+}
+
+.footer-wrap-layout2 {
+    background: transparent;
+    padding: 0;
+}
+
+input,
+button {
+    outline: none;
+    border: none;
+}
+
+.login-wrap {
+    width: 100%;
+    margin: 200px auto 400px;
+    max-width: 500px;
+    min-height: 465px;
+    font-weight: 600;
+    position: relative;
+
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+}
+
+.login-html {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border-radius: 5px;
+    padding: 45px 70px 0 70px;
+    background: rgba(40, 57, 101, .9);
+}
+
+@media only screen and (max-width:991px) {
+    .login-wrap{
+        margin: 150px auto 400px;
+    }
+}
+@media only screen and (max-width:400px) {
+    .login-wrap {
+        margin: 80px auto 400px;
+    }
+}
+@media only screen and (max-width:450px) {
+    .login-html {
+        padding: 45px 20px 0 20px;
+        background: rgba(40, 57, 101, .9);
+    }
+}
+
+.auth-form .group .button {
+    margin-top: 28px;
+}
+
+.login-html .sign-in-htm,
+.login-html .sign-up-htm {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    -webkit-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transition: all .4s linear;
+    transition: all .4s linear;
+}
+
+.login-html .sign-in,
+.login-html .sign-up,
+.auth-form .group .check {
+    display: none;
+}
+
+.login-html .tab,
+.auth-form .group .label,
+.auth-form .group .button {
+    text-transform: uppercase;
+}
+
+.login-html .tab {
+    font-size: 22px;
+    margin-right: 15px;
+    padding-bottom: 5px;
+    margin: 0 15px 15px 0;
+    display: inline-block;
+    border-bottom: 2px solid transparent;
+}
+
+.login-html .sign-in:checked+.tab,
+.login-html .sign-up:checked+.tab {
+    color: #fff;
+    border-color: #1161ee;
+}
+
+.auth-form {
+    min-height: 345px;
+    position: relative;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+
+.auth-form .group {
+    margin-bottom: 15px;
+}
+
+.auth-form .group .label,
+.auth-form .group .input,
+.auth-form .group .button {
+    width: 100%;
+    color: #fff;
+    display: block;
+}
+
+.auth-form .group .input,
+.auth-form .group .button {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, .1);
+}
+
+.auth-form .group input[data-type="password"] {
+    text-security: circle;
+    -webkit-text-security: circle;
+}
+
+.auth-form .group .label {
+    color: #aaa;
+    font-size: 12px;
+}
+
+.auth-form .group label .icon {
+    width: 15px;
+    height: 15px;
+    border-radius: 2px;
+    position: relative;
+    display: inline-block;
+    background: rgba(255, 255, 255, .1);
+}
+
+.auth-form .group label .icon:before,
+.auth-form .group label .icon:after {
+    content: '';
+    width: 10px;
+    height: 2px;
+    background: #fff;
+    position: absolute;
+    -webkit-transition: all .2s ease-in-out 0s;
+    transition: all .2s ease-in-out 0s;
+}
+
+.auth-form .group label .icon:before {
+    left: 3px;
+    width: 5px;
+    bottom: 6px;
+    -webkit-transform: scale(0) rotate(0);
+    -ms-transform: scale(0) rotate(0);
+    transform: scale(0) rotate(0);
+}
+
+.auth-form .group label .icon:after {
+    top: 6px;
+    right: 0;
+    -webkit-transform: scale(0) rotate(0);
+    -ms-transform: scale(0) rotate(0);
+    transform: scale(0) rotate(0);
+}
+
+.auth-form .group .check:checked+label {
+    color: #fff;
+}
+
+.auth-form .group .check:checked+label .icon:before {
+    -webkit-transform: scale(1) rotate(45deg);
+    -ms-transform: scale(1) rotate(45deg);
+    transform: scale(1) rotate(45deg);
+}
+
+.auth-form .group .check:checked+label .icon:after {
+    -webkit-transform: scale(1) rotate(-45deg);
+    -ms-transform: scale(1) rotate(-45deg);
+    transform: scale(1) rotate(-45deg);
+}
+
+.login-html .sign-in:checked+.tab+.sign-up+.tab+.auth-form .sign-in-htm {
+    -webkit-transform: rotate(0);
+    -ms-transform: rotate(0);
+    transform: rotate(0);
+}
+
+.login-html .sign-up:checked+.tab+.auth-form .sign-up-htm {
+    -webkit-transform: rotate(0);
+    -ms-transform: rotate(0);
+    transform: rotate(0);
+}
+
+.foot-lnk {
+    text-align: center;
+}

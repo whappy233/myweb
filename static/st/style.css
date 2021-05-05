@@ -137,6 +137,55 @@ img-gray{
 }
 
 
+.bg-primary-gradient {
+  background: -webkit-linear-gradient(220deg,#2875ff,#6296ff)!important;
+  background: -moz- oldlinear-gradient(220deg,#2875ff,#6296ff)!important;
+  background: -o-linear-gradient(220deg,#2875ff,#6296ff)!important;
+  background: linear-gradient(230deg,#2875ff,#6296ff)!important;
+  color: #fff!important
+}
+
+.bg-info-gradient {
+  background: -webkit-linear-gradient(220deg,#22b9ff,#4ae1ff)!important;
+  background: -moz- oldlinear-gradient(220deg,#22b9ff,#4ae1ff)!important;
+  background: -o-linear-gradient(220deg,#22b9ff,#4ae1ff)!important;
+  background: linear-gradient(230deg,#22b9ff,#4ae1ff)!important;
+  color: #fff!important;
+}
+
+.bg-warning-gradient {
+  background: -webkit-linear-gradient(220deg,#ffb822,#ffe04a)!important;
+  background: -moz- oldlinear-gradient(220deg,#ffb822,#ffe04a)!important;
+  background: -o-linear-gradient(220deg,#ffb822,#ffe04a)!important;
+  background: linear-gradient(230deg,#ffb822,#ffe04a)!important;
+  color: #fff!important;
+}
+
+.bg-success-gradient {
+  background: -webkit-linear-gradient(220deg,#10b759,#38df81)!important;
+  background: -moz- oldlinear-gradient(220deg,#10b759,#38df81)!important;
+  background: -o-linear-gradient(220deg,#10b759,#38df81)!important;
+  background: linear-gradient(230deg,#10b759,#38df81)!important;
+  color: #fff!important;
+}
+
+.bg-danger-gradient {
+  background: -webkit-linear-gradient(220deg,#ff3f3f,#ff6767)!important;
+  background: -moz- oldlinear-gradient(220deg,#ff3f3f,#ff6767)!important;
+  background: -o-linear-gradient(220deg,#ff3f3f,#ff6767)!important;
+  background: linear-gradient(230deg,#ff3f3f,#ff6767)!important;
+  color: #fff!important;
+}
+
+.bg-secondary-gradient {
+  background: -webkit-linear-gradient(220deg,#64737a,#8c9ba2)!important;
+  background: -moz- oldlinear-gradient(220deg,#64737a,#8c9ba2)!important;
+  background: -o-linear-gradient(220deg,#64737a,#8c9ba2)!important;
+  background: linear-gradient(230deg,#64737a,#8c9ba2)!important;
+  color: #fff!important;
+}
+
+
 
 /*=======================================================================
 01. Typography 

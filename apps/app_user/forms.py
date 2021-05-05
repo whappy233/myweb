@@ -45,8 +45,7 @@ class RegisterForm(UserCreationForm):
 
     def clean_check_code(self):
         checkcode = self.cleaned_data.get('check_code', '')
-        # if not settings.DEBUG:
-        if self._request and checkcode.lower() != self._request.session['CheckCode'].lower():  # 验证验证码
+        if self._request and checkcode.lower() != self._request.session.get('CheckCode', '').lower():  # 验证验证码
             raise forms.ValidationError("验证码错误")
         return checkcode
 
@@ -55,9 +54,9 @@ class RegisterForm(UserCreationForm):
 class LoginForm(forms.Form):
     '''用户登录'''
 
-    username = forms.CharField(label='用户名', max_length=20, min_length=6, widget=forms.TextInput(attrs={'placeholder': '用户名 手机号 邮箱'}))
+    username = forms.CharField(label='用户名', max_length=20, min_length=6, widget=forms.TextInput())
     password = forms.CharField(label='密码', widget=forms.PasswordInput)
-    check_code = forms.CharField(label='验证码', widget=forms.TextInput(attrs={'placeholder': '不区分大小写'}))
+    check_code = forms.CharField(label='验证码', widget=forms.TextInput(), required=False)
 
     def __init__(self, *args, **kwargs):
         self._request = kwargs.pop('_request', None)  # 传递额外的参数, 并在调用构造函数之前从 kwargs 中删除额外的参数
@@ -65,8 +64,7 @@ class LoginForm(forms.Form):
 
     def clean_check_code(self):
         checkcode = self.cleaned_data.get('check_code')
-        # if not settings.DEBUG:
-        if checkcode.lower() != self._request.session['CheckCode'].lower():  # 验证验证码
+        if self._request and checkcode.lower() != self._request.session.get('CheckCode', '').lower():  # 验证验证码
             raise forms.ValidationError("验证码错误")
         return checkcode
 
@@ -77,8 +75,7 @@ class PwdChangeForm(forms.Form):
     old_pw = forms.CharField(label='旧密码', widget=forms.PasswordInput)
     pw1 = forms.CharField(label='新密码', widget=forms.PasswordInput)
     pw2 = forms.CharField(label='再次输入密码', widget=forms.PasswordInput)
-    check_code = forms.CharField(
-        label='验证码', widget=forms.TextInput(attrs={'placeholder': '不区分大小写'}))
+    check_code = forms.CharField(label='验证码', widget=forms.TextInput(attrs={'placeholder': '不区分大小写'}))
 
     def clean_old_pw(self):
         old_pw = self.cleaned_data.get('old_pw', '')
