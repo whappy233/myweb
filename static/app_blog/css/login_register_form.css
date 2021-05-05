@@ -20,7 +20,7 @@
 .login_register_form {
     position: relative;
     z-index: 1;
-    background: var(--global-background);
+    background: rgba(40, 57, 101, .9);
     max-width: 400px;
     margin: 0 auto 100px;
     padding: 45px;

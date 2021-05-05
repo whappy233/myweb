@@ -226,7 +226,6 @@ def change_pw(request):
 
 
 
-
 # 注册成功发送验证邮件以及邮箱验证
 def register_result(request):
     '''注册成功以及邮箱验证'''
@@ -234,10 +233,12 @@ def register_result(request):
     id = request.GET.get('id')
     user = get_object_or_404(User, id=id)
     logger.info(type)
-    if user.is_active: return redirect('/')
+    if user.is_active:
+        return redirect('/')
 
     if type and type in ['register', 'validation']:
         if type == 'register':
+            # 注册成功 等待激活
             site = get_current_site().domain
             sign = GenerateEncrypted.encode({'id':user.id})
             if settings.DEBUG: site = '127.0.0.1:8000'
@@ -250,6 +251,7 @@ def register_result(request):
             title = '注册成功'
             return render(request, 'app_user/register_result.html', {'title': title, 'content': content})
         else:
+            # 邮箱点击激活
             sign = request.GET.get('sign')
             if sign:
                 data = GenerateEncrypted.decode(sign)
@@ -290,6 +292,7 @@ def send_email_vcode(request):
             return JsonResponse({'status':400,'msg':'电子邮箱不存在!'})
     else:
         return JsonResponse({'status':400,'msg':'方法错误!'})
+
 
 # 忘记密码
 def forget_pwd_(request):

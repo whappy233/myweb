@@ -9268,3 +9268,16 @@ img.loading {
   display: -webkit-flex;
   display: flex;
 }
+
+.icon-control {
+  position: absolute;
+  top: 70%;
+  left: 90%;
+  transform: translateY(-50%);
+  color: #ccc;
+  cursor: pointer;
+  margin-top: 0.1rem;
+}
+.icon-control:hover {
+  color: rgb(174, 174, 174);
+}

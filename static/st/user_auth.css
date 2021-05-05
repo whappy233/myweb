@@ -19,7 +19,7 @@ button {
 
 .login-wrap {
     width: 100%;
-    margin: 200px auto 400px;
+    margin: 160px auto 400px;
     max-width: 500px;
     min-height: 465px;
     font-weight: 600;
@@ -43,7 +43,7 @@ button {
 
 @media only screen and (max-width:991px) {
     .login-wrap{
-        margin: 150px auto 400px;
+        margin: 110px auto 400px;
     }
 }
 @media only screen and (max-width:400px) {
@@ -60,6 +60,7 @@ button {
 
 .auth-form .group .button {
     margin-top: 28px;
+    cursor: pointer;
 }
 
 .login-html .sign-in-htm,
@@ -115,6 +116,7 @@ button {
 
 .auth-form .group {
     margin-bottom: 15px;
+    position: relative;
 }
 
 .auth-form .group .label,

@@ -22,8 +22,14 @@
             <!-- 注册 -->
             <form class="register-form" style="display: none;">
                 <input name="username" type="text" placeholder="用户名" id="r_username" required/>
-                <input name="password1" type="password" placeholder="密码" id="r_password" required/>
-                <input name="password2" type="password" placeholder="确认密码" id="rr_password" required/>
+                <div style="position: relative;">
+                    <input name="password1" type="password" placeholder="密码" id="r_password" required/>
+                    <label for="r_password" class="icon-control" style="top: 40%;" data-event="show_hide"><i class="far fa-eye"></i></label>
+                </div>
+                <div style="position: relative;">
+                    <input name="password2" type="password" placeholder="确认密码" id="rr_password" required/>
+                    <label for="rr_password" class="icon-control" style="top: 40%;" data-event="show_hide"><i class="far fa-eye"></i></label>
+                </div>
                 <input name="email" type="email" placeholder="邮箱" id="r_email" required/>
                 <p class="err-message hidden"></p>
                 <button type="submit" id="create" class="bg-primary-gradient">注  册</button>
@@ -33,7 +39,11 @@
             <!-- 登录 -->
             <form class="login-form" style="display: none;">
                 <input name="username" type="text" placeholder="用户名" id="user_name" required/>
-                <input type="password" placeholder="密码" id="password" required/>
+
+                <div style="position: relative;">
+                    <input type="password" placeholder="密码" id="password" required/>
+                    <label for="password" class="icon-control" style="top: 40%;" data-event="show_hide"><i class="far fa-eye"></i></label>
+                </div>
                 <div id="drag-login" class="drag-verification"></div>
                 <p class="err-message hidden"></p>
                 <button type="submit" id="login_submit" class="bg-primary-gradient" data-aim='' disabled>登  录</button>

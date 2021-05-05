@@ -10,6 +10,7 @@
         });
     }
 
+
     /*-------------------------------------
     图片懒加载
     --------------------------------------*/
@@ -48,6 +49,25 @@
         console.log($(this).data("href"));
         window.location = $(this).data("href");
     });
+
+
+
+    /*-------------------------------------
+    对 data-event="show_hide" mousedown 显示密码
+    -------------------------------------*/
+    $('[data-event="show_hide"]').on('mousedown', function(e){
+        var $this = $(this);
+        e.stopPropagation();
+        e.preventDefault();
+        $this.siblings('input').prop('type', 'text')
+    }).on('mouseup', function(e){
+        var $this = $(this);
+        e.stopPropagation();
+        e.preventDefault();
+        $this.siblings('input').prop('type', 'password')
+    });
+
+
 
 
 

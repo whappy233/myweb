@@ -239,11 +239,7 @@
                                     </li>
                                     <!-- 相册 -->
                                     <li>
-                                        {% if request.user.is_authenticated %}
                                         <a href="{% url 'app_gallery:gallery_list' %}">相册</a>
-                                        {% else %}
-                                        <a name="login-form" data-toggle="modal" data-target="#login_register_Modal" rel="nofollow" href="{% url 'app_gallery:gallery_list' %}">相册</a>
-                                        {% endif %}
                                     </li>
                                     <!-- 日记 -->
                                     <li>
