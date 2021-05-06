@@ -14,6 +14,9 @@ from django.db.models import Q
 class RegisterForm(UserCreationForm):
     '''注册表单'''
 
+    error_messages = {
+        'password_mismatch': ("两个密码不一致."),
+    }
     class Meta:
         model = User
         fields = ("username", 'email')
@@ -29,22 +32,22 @@ class RegisterForm(UserCreationForm):
 
         # 添加额外的字段 initial="默认值"
         # self.fields['extra_field'].initial ="harvard"
-        self.fields['check_code'] = forms.CharField(label='验证码', widget=forms.TextInput(attrs={'placeholder': '不区分大小写', "class": "form-control"}))
+        self.fields['check_code'] = forms.CharField(label='验证码', required=False, widget=forms.TextInput(attrs={'placeholder': '不区分大小写', "class": "form-control"}))
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
         if User.objects.filter(Q(username=username) | Q(email=username) | Q(profile__telephone=username)).exists():
-            raise forms.ValidationError('用户名已存在')
+            raise forms.ValidationError(f'用户名 {username} 已存在')
         return username
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
-                raise forms.ValidationError('该邮箱已注册')
+            raise forms.ValidationError(f'邮箱 {email} 已被注册')
         return email
 
     def clean_check_code(self):
-        checkcode = self.cleaned_data.get('check_code', '')
+        checkcode = self.cleaned_data.get('check_code')
         if self._request and checkcode.lower() != self._request.session.get('CheckCode', '').lower():  # 验证验证码
             raise forms.ValidationError("验证码错误")
         return checkcode
@@ -53,10 +56,14 @@ class RegisterForm(UserCreationForm):
 # 用户登录
 class LoginForm(forms.Form):
     '''用户登录'''
-
-    username = forms.CharField(label='用户名', max_length=20, min_length=6, widget=forms.TextInput())
+    username_error_messages = {
+        'max_length': ("用户名至多包含 20 个字符(当前 %(show_value)d)"),
+        'min_length': ("用户名至少包含 6 个字符(当前 %(show_value)d)"),
+    }
+    username = forms.CharField(label='用户名', max_length=20, min_length=6, widget=forms.TextInput(), error_messages=username_error_messages)
     password = forms.CharField(label='密码', widget=forms.PasswordInput)
-    check_code = forms.CharField(label='验证码', widget=forms.TextInput(), required=False)
+    check_code = forms.CharField(label='验证码', required=False, widget=forms.TextInput())
+
 
     def __init__(self, *args, **kwargs):
         self._request = kwargs.pop('_request', None)  # 传递额外的参数, 并在调用构造函数之前从 kwargs 中删除额外的参数
@@ -67,6 +74,12 @@ class LoginForm(forms.Form):
         if self._request and checkcode.lower() != self._request.session.get('CheckCode', '').lower():  # 验证验证码
             raise forms.ValidationError("验证码错误")
         return checkcode
+
+
+
+
+
+
 
 # 修改密码
 class PwdChangeForm(forms.Form):

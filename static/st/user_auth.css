@@ -6,9 +6,21 @@ body {
     overflow: auto;
 }
 
+.header-menu.menu-layout2.rt-sticky,
+.mean-bar.rt-sticky {
+    background-color: transparent !important;
+    box-shadow: none;
+}
+
 .footer-wrap-layout2 {
     background: transparent;
     padding: 0;
+    color: #fff;
+}
+
+.footer-box-layout2 .footer-logo {
+    padding: 0;
+    margin-bottom: 15px;
 }
 
 input,
@@ -58,8 +70,18 @@ button {
     }
 }
 
+.auth-form .group {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.auth-form .group .err-message {
+    text-align:center;
+    color:#ff7e7e !important;
+    height: 28px;
+}
+
 .auth-form .group .button {
-    margin-top: 28px;
     cursor: pointer;
 }
 
@@ -114,11 +136,6 @@ button {
     transform-style: preserve-3d;
 }
 
-.auth-form .group {
-    margin-bottom: 15px;
-    position: relative;
-}
-
 .auth-form .group .label,
 .auth-form .group .input,
 .auth-form .group .button {
@@ -133,11 +150,6 @@ button {
     padding: 10px 20px;
     border-radius: 25px;
     background: rgba(255, 255, 255, .1);
-}
-
-.auth-form .group input[data-type="password"] {
-    text-security: circle;
-    -webkit-text-security: circle;
 }
 
 .auth-form .group .label {

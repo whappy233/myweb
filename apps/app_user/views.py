@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -44,9 +45,10 @@ def check_code(request):
 @method_decorator(never_cache, name='dispatch')
 class RegisterView(FormView):
     form_class = RegisterForm
-    template_name = 'app_user/registration.html'
+    template_name = 'tp/用户验证.html'
 
     def get(self, request, *args, **kwargs):
+        '''GET 请求'''
         if request.user.is_authenticated:
             return redirect('app_blog:article_list')
         return super(RegisterView, self).get(request, *args, **kwargs)
@@ -57,26 +59,42 @@ class RegisterView(FormView):
         kwargs['_request'] = self.request
         return kwargs
 
+    def get_success_url(self, id=None):
+        """表单验证成功后，返回要重定向的URL"""
+        if id:
+            return f"{reverse('app_user:register_result')}?type=register&id={id}"
+        return '/'
+
+    def form_invalid(self, form):
+        """表单验证失败 render."""
+        err_message = '\n'.join(v[0] for v in form.errors.values())
+        return self.render_to_response(self.get_context_data(err_message=err_message))
+
+    def get_context_data(self, **kwargs):
+        """在 context 添加新的值."""
+        kwargs['is_register'] = True
+        return super().get_context_data(**kwargs)
+
     def form_valid(self, form):
-        if form.is_valid():
-            user = form.save(False)
-            user.is_active = False
-            user.save(True)
-            url =f"{reverse('app_user:register_result')}?type=register&id={user.id}"
-            return redirect(url)
+        '''当表单验证成功 redirect'''
 
-            # username = form.cleaned_data['username']
-            # email = form.cleaned_data['email']
-            # password = form.cleaned_data['password2']
-            # 使用内置User自带create_user方法创建用户，不需要使用save()
-            # User.objects.create_user(username=username, password=password, email=email)
-            # 1.通过 signals, 在创建 User 对象实例时也创建 UserProfile 对象实例
-            # 2.或在创建User时同时创建与之关联的UserProfile对象
-            # user_profile = UserProfile(user=user)
-            # 如果直接使用objects.create()方法后不需要使用save()
-            # user_profile.save()
+        user = form.save(False)
+        user.is_active = False
+        user.save(True)
+        return redirect(self.get_success_url(user.id))
 
-        return self.render_to_response({'form': form})
+        # username = form.cleaned_data['username']
+        # email = form.cleaned_data['email']
+        # password = form.cleaned_data['password2']
+        # 使用内置User自带create_user方法创建用户，不需要使用save()
+        # User.objects.create_user(username=username, password=password, email=email)
+        # 1.通过 signals, 在创建 User 对象实例时也创建 UserProfile 对象实例
+        # 2.或在创建User时同时创建与之关联的UserProfile对象
+        # user_profile = UserProfile(user=user)
+        # 如果直接使用objects.create()方法后不需要使用save()
+        # user_profile.save()
+
+
 
 # ajax 注册
 def ajax_register(request):
@@ -129,7 +147,9 @@ def login(request):
     if request.user.is_authenticated:
         return redirect('app_blog:article_list')
 
-    next = request.GET.get('next', reverse('app_blog:article_list'))
+    next = request.GET.get('next', '')
+    if not next.strip():
+        next = reverse('app_blog:article_list')
 
     message = ''
     username = request.POST.get('username', '')
@@ -145,12 +165,17 @@ def login(request):
             if user:
                 if user.is_active:
                     auth.login(request, user)
-                    return redirect(next)
+                    try:
+                        return redirect(next)
+                    except:
+                        return redirect('/')
                 else:
                     url =f"{reverse('app_user:register_result')}?type=register&id={user.id}"
-                    message = f'账户未激活, 请激活后再登录.<a href="{url}"> 点击发送激活链接到邮箱({user.email})</a>'
+                    message = f'账户未激活, 请激活后再登录.<br><a href="{url}"> 点击发送激活链接到邮箱({user.email})</a>'
             else:
                 message = '密码错误。请重试'
+        else:
+            message = '\n'.join(v[0] for v in form.errors.values())
 
     return render(request, 'tp/用户验证.html', {'username': username, 'message': message})
 
@@ -163,10 +188,10 @@ def ajax_login(request):
         # 在前端发送ajax json 请求时(application/json;charset=UTF-8), 数据存放在request.body中,  request.POST, 没有数据.
         print(request.body)  # --> b'{"username":"891953720","password":"wu910hao"}'
 
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        if password and username:
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
 
             user = auth.authenticate(username=username, password=password)
             if user:
@@ -175,13 +200,12 @@ def ajax_login(request):
                     return JsonResponse({'status':200,'msg':'登录成功'})
                 else:
                     url =f"{reverse('app_user:register_result')}?type=register&id={user.id}"
-                    message = f'账户未激活, 请激活后再登录.<br><a href="{url}"> 点击发送激活链接到你的邮箱({user.email})</a>'
+                    message = f'账户未激活, 请激活后再登录.<br><a href="{url}"> 点击发送激活链接到邮箱({user.email})</a>'
                     return JsonResponse({'status':400,'msg':message})
             else:
-                message = '密码错误。请重试'
-                return JsonResponse({'status':400,'msg':message})
+                return JsonResponse({'status':400,'msg': '用名户或密码错误。请重试'})
         else:
-            message = '密码错误。请重试'
+            message = '\n'.join(v[0] for v in form.errors.values())
             return JsonResponse({'status':400,'msg':message})
     else:
         return HttpResponseForbidden()

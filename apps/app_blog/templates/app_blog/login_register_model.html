@@ -39,7 +39,6 @@
             <!-- 登录 -->
             <form class="login-form" style="display: none;">
                 <input name="username" type="text" placeholder="用户名" id="user_name" required/>
-
                 <div style="position: relative;">
                     <input type="password" placeholder="密码" id="password" required/>
                     <label for="password" class="icon-control" style="top: 40%;" data-event="show_hide"><i class="far fa-eye"></i></label>
@@ -92,7 +91,7 @@
     function ajax_form_fail(form_ele, data, success=false) {
         let err_mag_ele = $(form_ele).children('.err-message')
         if (!success){
-            err_mag_ele.css('color', 'red');
+            err_mag_ele.css('color', '#ff7e7e');
             $(".login_register_form").removeClass('shake_effect');
             setTimeout(function () {
                 $(".login_register_form").addClass('shake_effect')
@@ -193,7 +192,16 @@
     }
 
     $(".register-form").on('submit', function () {
-        to_register();
+        let password1 = $("#r_password").val(),
+            password2 = $("#rr_password").val();
+
+        if (password1 != password2){
+            ajax_form_fail('.register-form', { 'msg': '两个密码字段不一致。' });
+        }else if (password1.length < 6){
+            ajax_form_fail('.register-form', { 'msg': '密码长度太短。密码必须包含至少 8 个字符。' });
+        }else{
+            to_register();
+        }
         return false;
     })
 
@@ -238,7 +246,6 @@
         $('#drag-login').drag();
         var e = window.event;
         let obj = e.target || e.srcElement;
-        console.log(obj)
         $('#login_submit').data('aim', obj.href||'')
     });
 

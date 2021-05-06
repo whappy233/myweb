@@ -75,7 +75,7 @@
 }
 .login_register_form .err-message {
     margin: 0 0 15px;
-    color: #ff0000;
+    color: #ff7e7e;
     font-size: 12px;
 }
 .login_register_form .message a {

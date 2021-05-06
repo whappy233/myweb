@@ -80,7 +80,6 @@ CSS INDEX 999
   cursor: pointer;
 }
 
-
 svg{
   fill: var(--global-color);
 }
@@ -1993,9 +1992,9 @@ h6 {
 .footer-box-layout2 .footer-social li a:hover i {
   color: var(--global-color);
 }
-.footer-box-layout2 .copyright {
-  color: var(--global-color-depth0r);
-}
+/* .footer-box-layout2 .copyright {
+  color: var(--global-color-depth0);
+} */
 .footer-box-layout3 {
   text-align: center;
 }
@@ -9272,7 +9271,7 @@ img.loading {
 .icon-control {
   position: absolute;
   top: 70%;
-  left: 90%;
+  left: 89%;
   transform: translateY(-50%);
   color: #ccc;
   cursor: pointer;
@@ -9280,4 +9279,23 @@ img.loading {
 }
 .icon-control:hover {
   color: rgb(174, 174, 174);
+}
+
+.background-animation {
+  background-color: initial;
+  -webkit-text-fill-color: transparent;
+  background: -webkit-gradient(linear,left top,right top,color-stop(0,#9E9E9E),color-stop(.4,#9E9E9E),color-stop(.5,#e9e8e8),color-stop(.6,#9E9E9E),color-stop(1,#9E9E9E));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: slidetounlock 3s infinite;
+  -webkit-animation: slidetounlock 3s infinite;
+  -webkit-text-size-adjust: none;
+}
+
+@keyframes slidetounlock{
+  0%{background-position:-200px 0}100%{background-position:200px 0}
+}
+@-webkit-keyframes slidetounlock{
+  0%{background-position:-200px 0}100%{background-position:200px 0}
 }

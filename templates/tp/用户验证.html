@@ -16,16 +16,17 @@
 
 
 <div class="container">
-    <div class="login-wrap">
+    <div class="login-wrap" {% if is_register %} style="min-height:620px;margin-bottom:265px" {% endif %}>
         <div class="login-html">
-            <input id="tab-1" type="radio" name="tab" class="sign-in" onchange="setTimeout(function(){$('.login-wrap').css({'min-height':465,'margin-bottom':'400px'})}, 200)" checked>
+            <input id="tab-1" type="radio" name="tab"  {% if not is_register %} checked  00{% endif %} class="sign-in" onchange="setTimeout(function(){$('.login-wrap').css({'min-height':'465px','margin-bottom':'400px'})}, 200)">
             <label for="tab-1" class="tab">登录</label>
-            <input id="tab-2" type="radio" name="tab" class="sign-up" onchange="$('.login-wrap').css({'min-height':600, 'margin-bottom':'265px'})">
+            <input id="tab-2" type="radio" name="tab"  {% if is_register %} checked {% endif %} class="sign-up" onchange="$('.login-wrap').css({'min-height':'620px', 'margin-bottom':'265px'})">
             <label for="tab-2" class="tab">注册</label>
             {% if request.GET.next %}该页面需要登录才能查看{% endif %}
             <div class="auth-form">
 
-                <form action="" method="POST" class="sign-in-htm">
+                <!-- 登录 -->
+                <form action="{% url 'app_user:login' %}?next={{ request.GET.next }}" method="POST" class="sign-in-htm">
                     {% csrf_token %}
                     <div class="group">
                         <label for="user" class="label">用户名</label>
@@ -35,9 +36,8 @@
                         <label for="pass" class="label">密码</label>
                         <input id="pass" type="password" class="input" name="password" required>
                         <label for="pass" class="icon-control" data-event="show_hide"><i class="far fa-eye"></i></label>
-                        <label for="pass" class="label" style="text-align:center;color:#ff9a9a">{{message|safe}}</label>
                     </div>
-
+                    
                     {% comment %}
                     <div class="group">
                         <input id="check" type="checkbox" class="check" name="rememberme">
@@ -46,6 +46,7 @@
                     {% endcomment %}
 
                     <div class="group">
+                        <label class="label err-message">{{message|safe}}</label>
                         <input type="submit" class="button bg-primary-gradient" value="登录">
                     </div>
 
@@ -56,18 +57,19 @@
 
                 <!-- 注册 -->
                 <form action="{% url 'app_user:register' %}" method="POST" class="sign-up-htm">
+                    {% csrf_token %}
                     <div class="group">
                         <label for="user" class="label">用户名</label>
                         <input id="r-user" type="text" class="input" name="username" required>
                     </div>
                     <div class="group">
                         <label for="pass" class="label">密码</label>
-                        <input id="r-pass" type="password" class="input" name="pw1" required>
+                        <input id="r-pass" type="password" class="input" name="password1" required>
                         <label for="r-pass" class="icon-control" data-event="show_hide"><i class="far fa-eye"></i></label>
                     </div>
                     <div class="group">
                         <label for="pass" class="label">确认密码</label>
-                        <input id="r-pass-2" type="password" class="input" name="pw2" required>
+                        <input id="r-pass-2" type="password" class="input" name="password2" required>
                         <label for="r-pass-2" class="icon-control" data-event="show_hide"><i class="far fa-eye"></i></label>
                     </div>
                     <div class="group">
@@ -75,12 +77,14 @@
                         <input id="r-email" type="text" class="input" name="email" required>
                     </div>
                     <div class="group">
+                        <label class="label err-message">{{err_message|safe}}</label>
                         <input type="submit" class="button bg-primary-gradient" value="注册">
                     </div>
                     <div class="foot-lnk">
                         <label for="tab-1">已注册?</a>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
