@@ -112,8 +112,12 @@ TEMPLATES = [
 
                 # 自定义模版全局变量 Carlos (默认变量)
                 'myweb.contexts.carlos',
-                'app_blog.context_processors.add_article',
-                'app_blog.context_processors.seo_processor',
+
+                'app_blog.context_processors.contexts',
+
+                'app_common.context_processors.seo_processor',
+
+                'app_gallery.context_processors.contexts',
             ],
         },
     },

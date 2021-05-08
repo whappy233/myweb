@@ -17,7 +17,6 @@ class GalleryListView(ListView):
     queryset = Gallery.objects.filter(is_visible=True)
     paginate_by = 10
     template_name = 'app_gallery/gallery_list.html'  # 使用自定义模板渲染
-    # template_name = 'app_gallery/index.html'  # 使用自定义模板渲染
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

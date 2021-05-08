@@ -7,20 +7,19 @@
 {% load humanize %}
 
 
-{% block css_link %}
+{% block css_extra %}
 <link rel="stylesheet" href="{% static 'st/user_auth.css' %}">
-{% endblock css_link %}
+{% endblock css_extra %}
 
 
 {% block container %}
-
 
 <div class="container">
     <div class="login-wrap" {% if is_register %} style="min-height:620px;margin-bottom:265px" {% endif %}>
         <div class="login-html">
             <input id="tab-1" type="radio" name="tab"  {% if not is_register %} checked  00{% endif %} class="sign-in" onchange="setTimeout(function(){$('.login-wrap').css({'min-height':'465px','margin-bottom':'400px'})}, 200)">
             <label for="tab-1" class="tab">登录</label>
-            <input id="tab-2" type="radio" name="tab"  {% if is_register %} checked {% endif %} class="sign-up" onchange="$('.login-wrap').css({'min-height':'620px', 'margin-bottom':'265px'})">
+            <input id="tab-2" type="radio" name="tab" {% if is_register %} checked {% endif %} class="sign-up" onchange="$('.login-wrap').css({'min-height':'620px', 'margin-bottom':'265px'})">
             <label for="tab-2" class="tab">注册</label>
             {% if request.GET.next %}该页面需要登录才能查看{% endif %}
             <div class="auth-form">
@@ -58,9 +57,10 @@
                 <!-- 注册 -->
                 <form action="{% url 'app_user:register' %}" method="POST" class="sign-up-htm">
                     {% csrf_token %}
+
                     <div class="group">
                         <label for="user" class="label">用户名</label>
-                        <input id="r-user" type="text" class="input" name="username" required>
+                        <input id="r-user" type="text" class="input" name="username" value="{{r_username}}" required>
                     </div>
                     <div class="group">
                         <label for="pass" class="label">密码</label>
@@ -78,7 +78,7 @@
                     </div>
                     <div class="group">
                         <label class="label err-message">{{err_message|safe}}</label>
-                        <input type="submit" class="button bg-primary-gradient" value="注册">
+                        <input {% if not ALLOW_REGISTER %} disabled {% endif %} type="submit" class="button bg-primary-gradient" value="{% if not ALLOW_REGISTER %} 网站已停止注册 {% else %} 注册 {% endif %}">
                     </div>
                     <div class="foot-lnk">
                         <label for="tab-1">已注册?</a>

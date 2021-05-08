@@ -5,6 +5,8 @@ from imagekit.processors import ResizeToFit
 from django.urls import reverse
 from django.utils.text import slugify
 from random import randint
+from myweb.utils import AdminMixin
+
 
 
 class PhotoManager(models.Manager):
@@ -16,7 +18,7 @@ class PhotoManager(models.Manager):
 
 
 # 相册
-class Gallery(models.Model):
+class Gallery(models.Model, AdminMixin):
     slug = models.SlugField(max_length=50, blank=True)
     title = models.TextField(max_length=1024, verbose_name='相册名称')
     is_visible = models.BooleanField(default=True, verbose_name='是否可见')
@@ -45,8 +47,9 @@ class Gallery(models.Model):
         super().save(*args, **kwargs)
 
 
+
 # 一张相片
-class Photo(models.Model):
+class Photo(models.Model, AdminMixin):
     gallery = models.ForeignKey(Gallery, on_delete=models.PROTECT, related_name='photos', verbose_name='所属相册')
 
     image = ProcessedImageField(upload_to='photo', processors=[ResizeToFit(1280)], format='JPEG', options={'quality': 70})

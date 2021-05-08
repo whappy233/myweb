@@ -9,11 +9,11 @@
 {# 网页标题 #}
 {% block title %}{{ article.title }}{% endblock title %}
 
-{% block css_link %}
+{% block css_extra %}
 <link rel="stylesheet" type="text/css" href="{% static 'app_blog/css/pre_codehilite.css' %}">
 <!-- markdown -->
 <link rel="stylesheet" href="{% static 'mdeditor/css/editormd.css' %}"/>
-{% endblock css_link %}
+{% endblock css_extra %}
 
 {% block container %}
 

@@ -143,6 +143,11 @@ img-gray{
   background: linear-gradient(230deg,#2875ff,#6296ff)!important;
   color: #fff!important
 }
+.bg-primary-gradient:disabled {
+  cursor: text;
+  background: #afb8bd85 !important;
+  color: #aaa !important;
+}
 
 .bg-info-gradient {
   background: -webkit-linear-gradient(220deg,#22b9ff,#4ae1ff)!important;

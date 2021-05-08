@@ -32,7 +32,9 @@
                 </div>
                 <input name="email" type="email" placeholder="邮箱" id="r_email" required/>
                 <p class="err-message hidden"></p>
-                <button type="submit" id="create" class="bg-primary-gradient">注  册</button>
+                <button {% if not ALLOW_REGISTER %} disabled {% endif %} type="submit" id="create" class="bg-primary-gradient">
+                    {% if not ALLOW_REGISTER %}网站已停止注册{% else %}注  册{% endif %}
+                </button>
                 <p class="message">已有账户? <a name="login-form">立刻登录</a></p>
             </form>
 

@@ -5,7 +5,7 @@ from django import template
 from django.db.models import Count, Q
 from django.utils.safestring import mark_safe  # 标记为安全的html
 from django.template.defaultfilters import stringfilter
-from ..models import Article, Category, Carousel
+from ..models import Article, Category
 from myweb.utils import cache, get_current_site
 from loguru import logger
 
@@ -21,11 +21,6 @@ register = template.Library()
 ------------------------------------------------------------------------------------
 '''
 
-# 获取轮播图片列表
-@register.simple_tag
-def get_carousel_list():
-    '''获取轮播图片列表'''
-    return Carousel.objects.all()
 
 # 文章总数
 'simple_tag (处理数据并返回一个字符串或者给context设置或添加变量)  {% total_articles %}'
@@ -143,7 +138,7 @@ def similar_articles(obj, count=5):
 def load_breadcrumb(article):
     """获得文章面包屑"""
     names = article.get_category_tree()
-    from ..utils import get_blog_setting
+    from app_common.utils import get_blog_setting
     blogsetting = get_blog_setting()
     names.append((blogsetting.sitename, '/'))
     names = names[::-1]
@@ -252,7 +247,7 @@ def truncatechars_content(content):
     :return:
     """
     from django.template.defaultfilters import truncatechars_html
-    from ..utils import get_blog_setting
+    from app_common.utils import get_blog_setting
     blogsetting = get_blog_setting()
     return truncatechars_html(content, blogsetting.article_sub_length)
 

@@ -16,14 +16,16 @@ from django.contrib.auth.forms import UserCreationForm
 from loguru import logger
 from myweb.utils import GenerateEncrypted, get_current_site
 
-from app_user.models import UserProfile
-from app_user.utils import create_validate_code as CheckCode
-from app_user.utils import crop_image, generate_vcode, send_email
+from .models import UserProfile
+from .utils import create_validate_code as CheckCode
+from .utils import crop_image, generate_vcode, send_email
 
 from .forms import (EditForm, LoginForm, ProfileEditForm, PwdChangeForm,
                     RegisterForm, UserEditForm, UserPhotoUploadForm)
 
 # from app_common.decorators import check_honeypot, honeypot_exempt
+
+from app_common.utils import get_blog_setting
 
 from .utils import validateEmail
 
@@ -41,6 +43,7 @@ def check_code(request):
         return HttpResponse(f"请求异常：{repr(e)}")
 
 
+
 # 注册
 @method_decorator(never_cache, name='dispatch')
 class RegisterView(FormView):
@@ -48,10 +51,22 @@ class RegisterView(FormView):
     template_name = 'tp/用户验证.html'
 
     def get(self, request, *args, **kwargs):
-        '''GET 请求'''
+        '''处理GET请求：实例化表单的空白版本'''
         if request.user.is_authenticated:
             return redirect('app_blog:article_list')
         return super(RegisterView, self).get(request, *args, **kwargs)
+
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST requests: instantiate a form instance with the passed
+        POST variables and then check if it's valid.
+        """
+        if get_blog_setting().allow_register:
+            return super(RegisterView, self).post(request, *args, **kwargs)
+        else:
+            return self.render_to_response(self.get_context_data(err_message='网站已停止注册'))
+
 
     def get_form_kwargs(self):
         '''给 Form 表单传递额外的参数'''
@@ -67,8 +82,9 @@ class RegisterView(FormView):
 
     def form_invalid(self, form):
         """表单验证失败 render."""
+        username = self.request.POST.get('username', '')
         err_message = '\n'.join(v[0] for v in form.errors.values())
-        return self.render_to_response(self.get_context_data(err_message=err_message))
+        return self.render_to_response(self.get_context_data(err_message=err_message, r_username = username))
 
     def get_context_data(self, **kwargs):
         """在 context 添加新的值."""
@@ -93,7 +109,6 @@ class RegisterView(FormView):
         # user_profile = UserProfile(user=user)
         # 如果直接使用objects.create()方法后不需要使用save()
         # user_profile.save()
-
 
 
 # ajax 注册
@@ -173,7 +188,7 @@ def login(request):
                     url =f"{reverse('app_user:register_result')}?type=register&id={user.id}"
                     message = f'账户未激活, 请激活后再登录.<br><a href="{url}"> 点击发送激活链接到邮箱({user.email})</a>'
             else:
-                message = '密码错误。请重试'
+                message = '用户名或密码错误, 请重试'
         else:
             message = '\n'.join(v[0] for v in form.errors.values())
 

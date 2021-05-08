@@ -45,6 +45,8 @@ class UserProfile(models.Model):
 
 
 
+
+# 信号
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 # 创建 User 对象实例时也创建 Profile 对象实例

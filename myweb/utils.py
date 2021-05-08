@@ -8,7 +8,22 @@ from hashlib import md5
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.cache import cache
+from django.urls import reverse
 from loguru import logger
+
+
+
+class AdminMixin:
+    def get_admin_url(self):
+        '''获取 admin 的文章编辑界面'''
+        info = (self._meta.app_label, self._meta.model_name)
+        return reverse('admin:%s_%s_change' % info, args=(self.pk,))
+
+    def get_xadmin_url(self):
+        '''获取 admin 的文章编辑界面'''
+        info = (self._meta.app_label, self._meta.model_name)
+        return reverse('xadmin:%s_%s_change' % info, args=(self.pk,))
+
 
 
 

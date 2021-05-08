@@ -3,6 +3,7 @@
 
 <!doctype html>
 <html class="no-js" lang="zh-CN">
+
 <head>
     <meta charset="utf-8">
     <title>{% block title %}{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}{% endblock title %}</title>
@@ -35,22 +36,21 @@
     <!-- jquery-->
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    {% block css_link %}
-    {% endblock css_link %}
-
+    {% block css_extra %}
+    {% endblock css_extra %}
 
 </head>
 
 <body id="main" class="sticky-header" data-theme='light'>
     <script>
         var theme1;
-        if(window.matchMedia('(prefers-color-scheme: dark)').matches){
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
             theme1 = 'dark'
         };
-        if(window.matchMedia('(prefers-color-scheme: light)').matches){
+        if (window.matchMedia('(prefers-color-scheme: light)').matches) {
             theme1 = 'light'
         };
-        document.getElementById('main').setAttribute('data-theme' , window.localStorage.getItem("theme")||theme1||'dark');
+        document.getElementById('main').setAttribute('data-theme', window.localStorage.getItem("theme") || theme1 || 'dark');
     </script>
     <!-- 滚动到顶部 -->
     <a href="#wrapper" data-type="section-switch" class="scrollup" title="Back to the top">
@@ -266,11 +266,18 @@
                                     <li>
                                         <i data-href="{{ add_article }}" class="fas fa-plus" title="新建文章"></i>
                                     </li>
+                                    <li>
+                                        <a href="{{ add_gallery }}" title="新增相册">add gallery</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ add_photo }}" title="相册照片">add photo</a>
+                                    </li>
                                     {% endif %}
                                     {% if request.user.is_authenticated %} {# 当用户被验证 #}
                                     <!-- User -->
                                     <li class="user-wrap">
-                                        <img src="{{ request.user.profile.photo.url }}" alt="用户: {{ request.user }}" title="用户: {{ request.user }}">
+                                        <img src="{{ request.user.profile.photo.url }}" alt="用户: {{ request.user }}"
+                                            title="用户: {{ request.user }}">
                                         <div class="template-mega-menu animation">
                                             <div class="container">
                                                 <div class="row">
@@ -278,27 +285,36 @@
                                                         <div class="user-content-body">
                                                             <div class="user-msg-lists">
                                                                 <ul class="list-group list-group-flush">
-                                                                    <li class="list-group-item go_comment_detail ease-in-out " data-comment_detail='#www.abc.com'>
+                                                                    <li class="list-group-item go_comment_detail ease-in-out "
+                                                                        data-comment_detail='#www.abc.com'>
                                                                         <div class="user_pic_to_message">
-                                                                            <img src="{% static 'st/img/product/top-product1.jpg' %}" class="rounded-circle" alt="image">
+                                                                            <img src="{% static 'st/img/product/top-product1.jpg' %}"
+                                                                                class="rounded-circle" alt="image">
                                                                         </div>
                                                                         <div class="flex-grow-1 min-width-0">
-                                                                            <div class="mb-1 d-flex justify-content-between align-items-center">
+                                                                            <div
+                                                                                class="mb-1 d-flex justify-content-between align-items-center">
                                                                                 <div class="text-truncate user_name_a">
-                                                                                    <a href="#user_name">Lucas Kriebel (via Twitter)</a>
+                                                                                    <a href="#user_name">Lucas Kriebel
+                                                                                        (via Twitter)</a>
                                                                                 </div>
                                                                                 <span class="text-nowrap text-muted">
                                                                                     2021-03-16
                                                                                 </span>
                                                                             </div>
-                                                                            <div class="text-muted d-flex justify-content-between">
+                                                                            <div
+                                                                                class="text-muted d-flex justify-content-between">
                                                                                 <div class="text-truncate small">
-                                                                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum, labore?
+                                                                                    Lorem ipsum dolor sit amet,
+                                                                                    consectetur adipisicing elit. Illum,
+                                                                                    labore?
                                                                                 </div>
                                                                                 <div class="text-nowrap pl-3">
                                                                                     <ul class="list-inline">
-                                                                                        <li class="list-inline-item mb-0 comment_status">
-                                                                                            <i class="far fa-circle"></i>
+                                                                                        <li
+                                                                                            class="list-inline-item mb-0 comment_status">
+                                                                                            <i
+                                                                                                class="far fa-circle"></i>
                                                                                         </li>
                                                                                     </ul>
                                                                                 </div>
@@ -306,31 +322,43 @@
                                                                         </div>
                                                                         <div class="remove_msg">
                                                                             <i class="trash far fa-trash-alt"></i>
-                                                                            <i class="cancel fas fa-times" style="display: none;color:red"></i>
-                                                                            <i class="delete fas fa-check" style="display: none;color:#10bd47"></i>
+                                                                            <i class="cancel fas fa-times"
+                                                                                style="display: none;color:red"></i>
+                                                                            <i class="delete fas fa-check"
+                                                                                style="display: none;color:#10bd47"></i>
                                                                         </div>
                                                                     </li>
-                                                                    <li class="list-group-item go_comment_detail ease-in-out " data-comment_detail='#www.abc.com' data-isread='true'>
+                                                                    <li class="list-group-item go_comment_detail ease-in-out "
+                                                                        data-comment_detail='#www.abc.com'
+                                                                        data-isread='true'>
                                                                         <div class="user_pic_to_message">
-                                                                            <img src="{% static 'st/img/product/top-product1.jpg' %}" class="rounded-circle" alt="image">
+                                                                            <img src="{% static 'st/img/product/top-product1.jpg' %}"
+                                                                                class="rounded-circle" alt="image">
                                                                         </div>
                                                                         <div class="flex-grow-1 min-width-0">
-                                                                            <div class="mb-1 d-flex justify-content-between align-items-center">
+                                                                            <div
+                                                                                class="mb-1 d-flex justify-content-between align-items-center">
                                                                                 <div class="text-truncate user_name_a">
-                                                                                    <a href="#user_name">Lucas Kriebel (via Twitter)</a>
+                                                                                    <a href="#user_name">Lucas Kriebel
+                                                                                        (via Twitter)</a>
                                                                                 </div>
                                                                                 <span class="text-nowrap text-muted">
                                                                                     2021-03-19
                                                                                 </span>
                                                                             </div>
-                                                                            <div class="text-muted d-flex justify-content-between">
+                                                                            <div
+                                                                                class="text-muted d-flex justify-content-between">
                                                                                 <div class="text-truncate small">
-                                                                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum, labore?
+                                                                                    Lorem ipsum dolor sit amet,
+                                                                                    consectetur adipisicing elit. Illum,
+                                                                                    labore?
                                                                                 </div>
                                                                                 <div class="text-nowrap pl-3">
                                                                                     <ul class="list-inline">
-                                                                                        <li class="list-inline-item mb-0 comment_status">
-                                                                                            <i class="far fa-circle"></i>
+                                                                                        <li
+                                                                                            class="list-inline-item mb-0 comment_status">
+                                                                                            <i
+                                                                                                class="far fa-circle"></i>
                                                                                         </li>
                                                                                     </ul>
                                                                                 </div>
@@ -338,8 +366,10 @@
                                                                         </div>
                                                                         <div class="remove_msg">
                                                                             <i class="trash far fa-trash-alt"></i>
-                                                                            <i class="cancel fas fa-times" style="display: none;color:red"></i>
-                                                                            <i class="delete fas fa-check" style="display: none;color:#10bd47"></i>
+                                                                            <i class="cancel fas fa-times"
+                                                                                style="display: none;color:red"></i>
+                                                                            <i class="delete fas fa-check"
+                                                                                style="display: none;color:#10bd47"></i>
                                                                         </div>
                                                                     </li>
                                                                 </ul>
@@ -348,14 +378,21 @@
                                                     </div>
                                                     <div class="col-3 user_menu_list">
                                                         <ul class="sub-menu">
-                                                            <li><a href="{% url 'app_user:profile' %}"><i class="fas fa-user-edit"></i>修改信息</a></li>
-                                                            <li><a href="{% url 'app_user:change_pw' %}"><i class="fas fa-key"></i>修改密码</a></li>
+                                                            <li><a href="{% url 'app_user:profile' %}"><i
+                                                                        class="fas fa-user-edit"></i>修改信息</a></li>
+                                                            <li><a href="{% url 'app_user:change_pw' %}"><i
+                                                                        class="fas fa-key"></i>修改密码</a></li>
                                                             {% if request.user.is_superuser %}
-                                                            <li><a href="{% url 'admin:index' %}"><i class="fas fa-user-cog"></i>ADMIN</a></li>
-                                                            <li><a href="{% url 'xadmin:index' %}"><i class="fas fa-user-shield"></i>XADMIN</a></li>
-                                                            <li><a href="{% url 'app_blog:refresh' %}"><i class="fas fa-redo-alt"></i>刷新缓存</a></li>
+                                                            <li><a href="{% url 'admin:index' %}"><i
+                                                                        class="fas fa-user-cog"></i>ADMIN</a></li>
+                                                            <li><a href="{% url 'xadmin:index' %}"><i
+                                                                        class="fas fa-user-shield"></i>XADMIN</a></li>
+                                                            <li><a href="{% url 'app_blog:refresh' %}"><i
+                                                                        class="fas fa-redo-alt"></i>刷新缓存</a></li>
                                                             {% endif %}
-                                                            <li><a href="{% url 'app_user:logout' %}?before={{request.get_full_path}}"><i class="fas fa-sign-out-alt"></i>退出登陆</a></li>
+                                                            <li><a
+                                                                    href="{% url 'app_user:logout' %}?before={{request.get_full_path}}"><i
+                                                                        class="fas fa-sign-out-alt"></i>退出登陆</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -394,7 +431,8 @@
                         <li><a href="/links.html" title="友情链接" rel="nofollow" target="_blank">友情链接</a></li>
                         <li>
                             Powered by
-                            <a href="https://www.djangoproject.com/" target="_blank" style="color: dodgerblue;">Django</a>
+                            <a href="https://www.djangoproject.com/" target="_blank"
+                                style="color: dodgerblue;">Django</a>
                         </li>
                         <li>本页面加载耗时:<!!LOAD_TIMES!!>s</li>
                     </ul>
@@ -414,7 +452,7 @@
             <button type="button" class="close">×</button>
             <div class="header-search-form">
                 <form action="" method="get">
-                    <input type="search" name="q" placeholder="在此输入........" value="{{keyword|default_if_none:''}}"/>
+                    <input type="search" name="q" placeholder="在此输入........" value="{{keyword|default_if_none:''}}" />
                     <button type="submit" class="search-btn">
                         <i class="flaticon-magnifying-glass"></i>
                     </button>
@@ -422,7 +460,8 @@
                 <div class="header-search-result">
                     <div class="result_meta">找到<span>20</span>条结果</div>
                     <ul>
-                        <li><a href="#"><i class="fas fa-poll-h"></i>搜索界面 Search Box Start Here搜索界面 Search Box Start Here搜索界面 Search Box Start Here</a></li>
+                        <li><a href="#"><i class="fas fa-poll-h"></i>搜索界面 Search Box Start Here搜索界面 Search Box Start
+                                Here搜索界面 Search Box Start Here</a></li>
                         <li><a href="#"><i class="fas fa-poll-h"></i>1</a></li>
                         <li><a href="#"><i class="fas fa-poll-h"></i>2</a></li>
                         <li><a href="#"><i class="fas fa-poll-h"></i>3</a></li>
@@ -470,10 +509,10 @@
     <script src="{% static 'st/js/jquery.smoothscroll.min.js' %}"></script>
 
     {% block script %}
-    {#  额外的 js #}
+    {# 额外的 js #}
     {% endblock script %}
 
-	<script>
+    <script>
         /*-------------------------------------
         MeanMenu 响应式导航栏
         --------------------------------------*/

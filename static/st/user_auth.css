@@ -84,6 +84,11 @@ button {
 .auth-form .group .button {
     cursor: pointer;
 }
+.auth-form .group .button:disabled {
+    cursor: text;
+    background: #afb8bd85 !important;
+    color: #aaa !important;
+}
 
 .login-html .sign-in-htm,
 .login-html .sign-up-htm {
