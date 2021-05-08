@@ -39,7 +39,7 @@
                                 <li><i class="fas fa-calendar-alt"></i>{{ gallery.mod_date |date:"Y-m-j H:i:s" }}</li>
                             </ul>
                             <h3 class="item-title">
-                                <a href="single-blog.html">
+                                <a href="{% url 'app_gallery:gallery_detail' gallery.pk gallery.slug %}?before={{request.get_full_path}}">
                                     {{ gallery_title|truncatechars:7}}{% if gallery_title|length > 7 %}...{% endif %}
                                 </a>
                             </h3>

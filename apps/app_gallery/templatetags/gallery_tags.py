@@ -1,6 +1,6 @@
 import base64
 import io
-from app_gallery.models import Photo
+from ..models import Photo
 from django import template
 from PIL import Image
 
