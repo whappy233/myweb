@@ -58,12 +58,139 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
-'Django常用内置信号'
-# django.db.models.signals.pre_save & post_save     在模型调用 save()方法之前或之后发送。
-# django.db.models.signals.pre_init& post_init      在模型调用_init_方法之前或之后发送。
-# django.db.models.signals.pre_delete & post_delete 在模型调用delete()方法或查询集调用delete() 方法之前或之后发送。
-# django.db.models.signals.m2m_changed              在模型多对多关系改变后发送。
-# django.core.signals.request_started & request_finished Django     建立或关闭 HTTP 请求时发送。
+'''
+Django常用内置信号
+django.db.models.signals.pre_save & post_save     在模型调用 save()方法之前或之后发送。
+django.db.models.signals.pre_init& post_init      在模型调用_init_方法之前或之后发送。
+django.db.models.signals.pre_delete & post_delete 在模型调用delete()方法或查询集调用delete() 方法之前或之后发送。
+django.db.models.signals.m2m_changed              在模型多对多关系改变后发送。
+django.core.signals.request_started & request_finished Django     建立或关闭 HTTP 请求时发送。
+
+
+1.model signal类型
+pre_init                        # Django中的model对象执行其构造方法前,自动触发
+post_init                       # Django中的model对象执行其构造方法后,自动触发
+pre_save                        # Django中的model对象保存前,自动触发
+post_save                       # Django中的model对象保存后,自动触发
+pre_delete                      # Django中的model对象删除前,自动触发
+post_delete                     # Django中的model对象删除后,自动触发
+
+2.初始化时使用的signal类型
+pre_migrate                     # 执行migrate命令前,自动触发
+post_migrate                    # 执行migrate命令后,自动触发 
+例如:
+'''
+from __future__ import absolute_import, print_function, unicode_literals
+from django.apps import AppConfig
+from django.db.models.signals import post_migrate
+def app_ready_handler(sender, **kwargs):
+    from apps.zabbix.models import ModulesConfig
+    print("Modules数据初始化")
+    ModulesConfig.init_data()
+
+class ModulesConfigConfig(AppConfig):
+    name = 'apps.zabbix'
+    def ready(self):
+        post_migrate.connect(app_ready_handler, sender=self)
+
+'''
+3.请求时使用的signal类型
+request_started                 # 请求到来前,自动触发
+request_finished                # 请求结束后,自动触发
+got_request_exception           # 请求异常时,自动触发
+例如:
+'''
+from django.core.signals import request_finished
+from django.dispatch import receive
+
+@receiver(request_finished)
+def test(sender, **kwargs):
+    print("request finished!!!")
+
+'''
+4.创建数据库连接时，自动触发
+connection_created              # 创建数据库连接时,自动触发
+
+5.Test_signals
+setting_changed                 # 配置文件改变时,自动触发
+template_rendered               # 模板执行渲染操作时,自动触发
+
+6.用户登录
+from django.contrib.auth.signals import user_logged_in
+from django.dispatch import Signal
+
+user_logged_in = Signal(providing_args=['request', 'user'])
+user_login_failed = Signal(providing_args=['credentials'])
+user_logged_out = Signal(providing_args=['request', 'user'])
+'''
+
+
+
+# 举例:
+# 监测加发送邮件代码
+class PdfTask(models.Model):
+    """pdf任务表"""
+    IS_CREATE_CHOICES = (
+        (0, u'未生成'),
+        (1, u'生成中'),
+        (2, u'已生成'),
+        (3, u'异常')
+    )
+    task_url = models.TextField(verbose_name='任务详情链接')
+    pdf_path = models.TextField(verbose_name='pdf的保存的目录')
+    pdf_name = models.TextField(verbose_name='pdf的名称')
+    foreign_key_id = models.IntegerField(verbose_name='外键的id', null=True)
+
+    is_create = models.IntegerField(verbose_name=u'是否生成', choices=IS_CREATE_CHOICES, default=0)
+    result = models.BooleanField(verbose_name='生成的结果', default=False)
+    run_num = models.IntegerField(verbose_name='执行生成的次数', default=0)
+    is_delete = models.IntegerField(choices=[(0, u'未删除'), (1, u'已删除')], default=0)
+
+    class Meta:
+        verbose_name = 'pdf任务表'
+        db_table = 't_pdf_task'
+
+# 采用信号监听 能够确保邮件发送只被触发一次 PDF邮件无论是否生成正确还是不正确的
+@receiver(signals.post_save, sender=PdfTask)
+def inspect_instance(instance, created, **kwargs):
+    if not created and instance.is_create in [2, 3]:
+        logger.warning('第一步：触发邮件发送')
+        from apps.inspection_tasks.models import InspectionReport
+        inspection_report_objs = InspectionReport.objects.filter(id=instance.foreign_key_id)
+        if inspection_report_objs:
+            inspection_report = inspection_report_objs[0]
+            if inspection_report.is_send_email is False:
+                logger.warning('第二步：触发邮件状态更改')
+                inspection_report.is_send_email = True
+                inspection_report.save()
+                title = "{}巡检报告-{}".format(
+                    inspection_report.data_center.data_center_name,
+                    datetime.datetime.strftime(inspection_report.begin_time, '%Y%m%d')
+                )
+                content = """
+                                           亲爱的业务系统管理员：蓝鲸平台于{0}生成{2}系统巡检报告，巡检过程耗时{1}秒。请登录蓝鲸平台，在"系统巡检->巡检报告->巡检历史"中找到当日巡检任务，查看巡检报告内容详情！
+                                           """.format(
+                    datetime.datetime.strftime(inspection_report.begin_time, '%Y%m%d %H:%M'),
+                    inspection_report.use_time,
+                    inspection_report.data_center.data_center_name
+                )
+                receiver = inspection_report.temp_id.receiver
+                logger.warning('第三步：触发邮件信息组装')
+                pdf_name = instance.pdf_name
+                pdf_path = instance.pdf_path
+                pwd_file = pdf_path + pdf_name
+                with open(pwd_file, 'rb') as f:
+                    base64_data = base64.b64encode(f.read())
+                    file_data = base64_data.decode()
+                attachments = [{
+                    "filename": pdf_name,
+                    "content": file_data
+                }]
+                from apps.commons.cmsi_handle import send_email
+                logger.warning('第四步：执行邮件信息发送')
+                send_email(title, content, receiver, attachments)
+                logger.warning('第五步：执行邮件信息发送完毕')
+
 
 
 
@@ -83,6 +210,7 @@ from app_user.models import User, Profile
 def create_user_profile(sender, instance, created, **kwargs):
   if created:
       Profile.objects.create(user=instance)
+
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()

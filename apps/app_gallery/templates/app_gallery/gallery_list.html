@@ -6,34 +6,24 @@
 
 {% block container %}
 
+
+{% spaceless %}
 {% if page_obj %}                
 
-{% set left = 0 %}
-{% set top = 0 %}
+{% set left = 0 %} {% set top = 0 %}
 <section class="blog-wrap-layout14 article_list">
     <div class="container">
         <div class="row gutters-40 menu-list" id="no-equal-gallery" style="position: relative; height: 1891.75px;">
 
-
                 {% for gallery in page_obj %}
                 {% with gallery_title=gallery.title %}
-
-                {% set left = forloop.counter0 %}
-                {% if left > 2 %}
-                {% set left = 0 %}{% set top++ %}
-                {% endif %}
-                
-                <p>{{ left }}={{ top }}*********</p>
+                {% if left > 2 %} {% set left = 0 %} {% set top++ %} {% endif %}
 
                 <div class="col-lg-4 col-md-6 col-sm-6 col-12 no-equal-item"
-                    style="
-                    position: absolute; 
-                    left: {% widthratio left 1 403 %}px; 
-                    top: {% widthratio top 1 472 %}px;">
+                    style="position: absolute; left: {% widthratio left 1 403 %}px; top: {% widthratio top 1 472 %}px;">
                     <div class="blog-box-layout5">
                         <div class="item-img">
-                            <a
-                                href="{% url 'app_gallery:gallery_detail' gallery.pk gallery.slug %}?before={{request.get_full_path}}">
+                            <a href="{% url 'app_gallery:gallery_detail' gallery.pk gallery.slug %}?before={{request.get_full_path}}">
                                 <img src="{{ gallery.thumb.url }}" alt="{{gallery_title}}">
                             </a>
                             <a href="{% url 'app_gallery:gallery_detail' gallery.pk gallery.slug %}?before={{request.get_full_path}}"
@@ -47,7 +37,6 @@
                             <ul class="entry-meta meta-color-dark">
                                 <li><i class="fas fa-tag"></i>{{gallery.photos.count}}张</li>
                                 <li><i class="fas fa-calendar-alt"></i>{{ gallery.mod_date |date:"Y-m-j H:i:s" }}</li>
-                                <li><i class="far fa-clock"></i>5 Mins Read</li>
                             </ul>
                             <h3 class="item-title">
                                 <a href="single-blog.html">
@@ -57,6 +46,8 @@
                         </div>
                     </div>
                 </div>
+
+                {% set left++ %}
 
                 {% endwith %}
                 {% endfor %}
@@ -78,302 +69,7 @@
 {% else %}
 <p>No gallery yet</p>
 {% endif %}
-
-
-
-
-<section class="blog-wrap-layout9">
-    <div class="container">
-        <div class="row gutters-40 menu-list" id="no-equal-gallery" style="position: relative; height: 1891.75px;">
-
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12 no-equal-item" style="position: absolute; left: 0px; top: 0px;">
-                <div class="blog-box-layout5">
-                    <div class="item-img">
-                        <a href="single-blog.html"><img src="img/blog/blog46.jpg" alt="Blog"></a>
-                        <a href="single-blog.html" class="hover-icon">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </a>
-                    </div>
-                    <div class="item-content">
-                        <ul class="entry-meta meta-color-dark">
-                            <li><i class="fas fa-tag"></i>Design</li>
-                            <li><i class="fas fa-calendar-alt"></i>Jan 19, 2019</li>
-                            <li><i class="far fa-clock"></i>5 Mins Read</li>
-                        </ul>
-                        <h3 class="item-title"><a href="single-blog.html">Do designers have to collect
-                                and analyze statistics?</a></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12 no-equal-item" style="position: absolute; left: 403px; top: 0px;">
-                <div class="blog-box-layout5">
-                    <div class="item-img">
-                        <a href="single-blog.html"><img src="img/blog/blog47.jpg" alt="Blog"></a>
-                        <a href="single-blog.html" class="hover-icon">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </a>
-                    </div>
-                    <div class="item-content">
-                        <ul class="entry-meta meta-color-dark">
-                            <li><i class="fas fa-tag"></i>Apps</li>
-                            <li><i class="fas fa-calendar-alt"></i>Jan 19, 2019</li>
-                            <li><i class="far fa-clock"></i>5 Mins Read</li>
-                        </ul>
-                        <h3 class="item-title"><a href="single-blog.html">Do designers have to collect
-                                and analyze statistics?</a></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12 no-equal-item" style="position: absolute; left: 806px; top: 0px;">
-                <div class="blog-box-layout5">
-                    <div class="item-img">
-                        <a href="single-blog.html"><img src="img/blog/blog48.jpg" alt="Blog"></a>
-                        <a href="single-blog.html" class="hover-icon">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </a>
-                    </div>
-                    <div class="item-content">
-                        <ul class="entry-meta meta-color-dark">
-                            <li><i class="fas fa-tag"></i>Design</li>
-                            <li><i class="fas fa-calendar-alt"></i>Jan 19, 2019</li>
-                            <li><i class="far fa-clock"></i>5 Mins Read</li>
-                        </ul>
-                        <h3 class="item-title"><a href="single-blog.html">Do designers have to collect
-                                and analyze statistics?</a></h3>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12 no-equal-item" style="position: absolute; left: 0px; top: 472px;">
-                <div class="blog-box-layout5">
-                    <div class="item-img">
-                        <a href="single-blog.html"><img src="img/blog/blog49.jpg" alt="Blog"></a>
-                        <a href="single-blog.html" class="hover-icon">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </a>
-                    </div>
-                    <div class="item-content">
-                        <ul class="entry-meta meta-color-dark">
-                            <li><i class="fas fa-tag"></i>Fitness</li>
-                            <li><i class="fas fa-calendar-alt"></i>Jan 19, 2019</li>
-                            <li><i class="far fa-clock"></i>5 Mins Read</li>
-                        </ul>
-                        <h3 class="item-title"><a href="single-blog.html">Do designers have to collect
-                                and analyze statistics?</a></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12 no-equal-item" style="position: absolute; left: 403px; top: 472px;">
-                <div class="blog-box-layout5">
-                    <div class="item-img">
-                        <a href="single-blog.html"><img src="img/blog/blog51.jpg" alt="Blog"></a>
-                        <a href="single-blog.html" class="hover-icon">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </a>
-                    </div>
-                    <div class="item-content">
-                        <ul class="entry-meta meta-color-dark">
-                            <li><i class="fas fa-tag"></i>Food</li>
-                            <li><i class="fas fa-calendar-alt"></i>Jan 19, 2019</li>
-                            <li><i class="far fa-clock"></i>5 Mins Read</li>
-                        </ul>
-                        <h3 class="item-title"><a href="single-blog.html">Do designers have to collect
-                                and analyze statistics?</a></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12 no-equal-item" style="position: absolute; left: 806px; top: 472px;">
-                <div class="blog-box-layout5">
-                    <div class="item-img">
-                        <a href="single-blog.html"><img src="img/blog/blog50.jpg" alt="Blog"></a>
-                        <a href="single-blog.html" class="hover-icon">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </a>
-                    </div>
-                    <div class="item-content">
-                        <ul class="entry-meta meta-color-dark">
-                            <li><i class="fas fa-tag"></i>Travel</li>
-                            <li><i class="fas fa-calendar-alt"></i>Jan 19, 2019</li>
-                            <li><i class="far fa-clock"></i>5 Mins Read</li>
-                        </ul>
-                        <h3 class="item-title"><a href="single-blog.html">Do designers have to collect
-                                and analyze statistics?</a></h3>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12 no-equal-item"
-                style="position: absolute; left: 0px; top: 945px;">
-                <div class="blog-box-layout5">
-                    <div class="item-img">
-                        <a href="single-blog.html"><img src="img/blog/blog52.jpg" alt="Blog"></a>
-                        <a href="single-blog.html" class="hover-icon">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </a>
-                    </div>
-                    <div class="item-content">
-                        <ul class="entry-meta meta-color-dark">
-                            <li><i class="fas fa-tag"></i>Fitness</li>
-                            <li><i class="fas fa-calendar-alt"></i>Jan 19, 2019</li>
-                            <li><i class="far fa-clock"></i>5 Mins Read</li>
-                        </ul>
-                        <h3 class="item-title"><a href="single-blog.html">Do designers have to collect
-                                and analyze statistics?</a></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12 no-equal-item"
-                style="position: absolute; left: 403px; top: 945px;">
-                <div class="blog-box-layout5">
-                    <div class="item-img">
-                        <a href="single-blog.html"><img src="img/blog/blog53.jpg" alt="Blog"></a>
-                        <a href="single-blog.html" class="hover-icon">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </a>
-                    </div>
-                    <div class="item-content">
-                        <ul class="entry-meta meta-color-dark">
-                            <li><i class="fas fa-tag"></i>Tech</li>
-                            <li><i class="fas fa-calendar-alt"></i>Jan 19, 2019</li>
-                            <li><i class="far fa-clock"></i>5 Mins Read</li>
-                        </ul>
-                        <h3 class="item-title"><a href="single-blog.html">Do designers have to collect
-                                and analyze statistics?</a></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12 no-equal-item"
-                style="position: absolute; left: 806px; top: 945px;">
-                <div class="blog-box-layout5">
-                    <div class="item-img">
-                        <a href="single-blog.html"><img src="img/blog/blog54.jpg" alt="Blog"></a>
-                        <a href="single-blog.html" class="hover-icon">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </a>
-                    </div>
-                    <div class="item-content">
-                        <ul class="entry-meta meta-color-dark">
-                            <li><i class="fas fa-tag"></i>Finance</li>
-                            <li><i class="fas fa-calendar-alt"></i>Jan 19, 2019</li>
-                            <li><i class="far fa-clock"></i>5 Mins Read</li>
-                        </ul>
-                        <h3 class="item-title"><a href="single-blog.html">Do designers have to collect
-                                and analyze statistics?</a></h3>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12 no-equal-item"
-                style="position: absolute; left: 0px; top: 1418px;">
-                <div class="blog-box-layout5">
-                    <div class="item-img">
-                        <a href="single-blog.html"><img src="img/blog/blog55.jpg" alt="Blog"></a>
-                        <a href="single-blog.html" class="hover-icon">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </a>
-                    </div>
-                    <div class="item-content">
-                        <ul class="entry-meta meta-color-dark">
-                            <li><i class="fas fa-tag"></i>Finance</li>
-                            <li><i class="fas fa-calendar-alt"></i>Jan 19, 2019</li>
-                            <li><i class="far fa-clock"></i>5 Mins Read</li>
-                        </ul>
-                        <h3 class="item-title"><a href="single-blog.html">Do designers have to collect
-                                and analyze statistics?</a></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12 no-equal-item"
-                style="position: absolute; left: 403px; top: 1418px;">
-                <div class="blog-box-layout5">
-                    <div class="item-img">
-                        <a href="single-blog.html"><img src="img/blog/blog57.jpg" alt="Blog"></a>
-                        <a href="single-blog.html" class="hover-icon">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </a>
-                    </div>
-                    <div class="item-content">
-                        <ul class="entry-meta meta-color-dark">
-                            <li><i class="fas fa-tag"></i>Nature</li>
-                            <li><i class="fas fa-calendar-alt"></i>Jan 19, 2019</li>
-                            <li><i class="far fa-clock"></i>5 Mins Read</li>
-                        </ul>
-                        <h3 class="item-title"><a href="single-blog.html">Do designers have to collect
-                                and analyze statistics?</a></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12 no-equal-item"
-                style="position: absolute; left: 806px; top: 1418px;">
-                <div class="blog-box-layout5">
-                    <div class="item-img">
-                        <a href="single-blog.html"><img src="img/blog/blog56.jpg" alt="Blog"></a>
-                        <a href="single-blog.html" class="hover-icon">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </a>
-                    </div>
-                    <div class="item-content">
-                        <ul class="entry-meta meta-color-dark">
-                            <li><i class="fas fa-tag"></i>Design</li>
-                            <li><i class="fas fa-calendar-alt"></i>Jan 19, 2019</li>
-                            <li><i class="far fa-clock"></i>5 Mins Read</li>
-                        </ul>
-                        <h3 class="item-title"><a href="single-blog.html">Do designers have to collect
-                                and analyze statistics?</a></h3>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="loadmore-btn-layout1">
-            <a href="#" class="item-btn">LOAD MORE</a>
-        </div>
-    </div>
-</section>
-
+{% endspaceless %}
 
 {% endblock container %}
 
-{% block css_style %}
-<style>
-    .box {
-        display: inline-block;
-        /* div 水平排列 */
-        border: 0px;
-        margin: 10px;
-        width: 200px;
-        height: 250px;
-        margin-bottom: 100px;
-    }
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-</style>
-{% endblock %}
