@@ -25,8 +25,8 @@ class Gallery(models.Model, AdminMixin):
     mod_date = models.DateTimeField(auto_now=True, verbose_name='更新日期')
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建日期')
     # 图片上传文件夹(/albums/)
-    thumb = ProcessedImageField(upload_to='albums', processors=[ResizeToFit(300)], format='JPEG',
-                                options={'quality': 90}, verbose_name='缩略图')
+    thumb = ProcessedImageField(upload_to='albums', processors=[ResizeToFit(300, 300, mat_color=(255,255,255))], format='JPEG',
+                                options={'quality': 100}, verbose_name='缩略图')
     is_delete = models.BooleanField(default=False)
 
     def __str__(self):

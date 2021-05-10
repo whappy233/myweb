@@ -1,11 +1,12 @@
 import io
+from os import readlink
 
 from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.generic import DetailView, ListView
 from PIL import Image
-
+from django.shortcuts import render
 from .models import Gallery, Photo
 
 
@@ -16,7 +17,7 @@ from .models import Gallery, Photo
 class GalleryListView(ListView):
     queryset = Gallery.objects.filter(is_visible=True)
     paginate_by = 10
-    template_name = 'app_gallery/gallery_list.html'  # 使用自定义模板渲染
+    template_name = 'tp/gallery_index.html'  # 使用自定义模板渲染
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,3 +60,6 @@ def get_random_background(request, x, y):  # 定义标签
 
 
 
+
+def abb(request):
+    return render(request, 'tp/gallery_index.html')
