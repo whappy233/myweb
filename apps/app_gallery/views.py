@@ -16,7 +16,7 @@ from .models import Gallery, Photo
 @method_decorator(login_required, name='dispatch')
 class GalleryListView(ListView):
     queryset = Gallery.objects.filter(is_visible=True)
-    paginate_by = 10
+    paginate_by = 20
     template_name = 'tp/gallery_index.html'  # 使用自定义模板渲染
 
     def get_context_data(self, **kwargs):
