@@ -7,3 +7,4 @@ log/
 *.pyc
 *.pid
 db.sqlite3
+media/

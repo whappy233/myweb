@@ -17,7 +17,7 @@ from .models import Gallery, Photo
 class GalleryListView(ListView):
     queryset = Gallery.objects.filter(is_visible=True)
     paginate_by = 20
-    template_name = 'tp/gallery_index.html'  # 使用自定义模板渲染
+    template_name = 'tp/gallery_index3.html'  # 使用自定义模板渲染
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -43,20 +43,22 @@ class GalleryDetail(DetailView):
 # 剪裁随机图片
 def get_random_background(request, x, y):  # 定义标签
     photo = Photo.objects.get_random_photo()
-    photo = Image.open(photo.image.path)
-    size_ = photo.size
+    if photo:
+        photo = Image.open(photo.image.path)
+        size_ = photo.size
 
-    x = int(x)
-    y = int(y)
-    if x and y:
-        size = (x ,y)
-    else: size = size_
+        x = int(x)
+        y = int(y)
+        if x and y:
+            size = (x ,y)
+        else: size = size_
 
-    crop_im = photo.resize(size, Image.ANTIALIAS)
-    img_buffer = io.BytesIO()
-    crop_im.save(img_buffer, format='png')
-    byte_data = img_buffer.getvalue()
-    return HttpResponse(byte_data)
+        crop_im = photo.resize(size, Image.ANTIALIAS)
+        img_buffer = io.BytesIO()
+        crop_im.save(img_buffer, format='png')
+        byte_data = img_buffer.getvalue()
+        return HttpResponse(byte_data)
+    return HttpResponse('')
 
 
 

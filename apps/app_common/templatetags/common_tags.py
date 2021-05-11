@@ -2,9 +2,9 @@ from django import template
 from django.conf import settings
 from django.template.defaultfilters import stringfilter
 from ..models import Carousel
-
-
 register = template.Library()
+
+
 
 # 渲染蜜罐
 @register.inclusion_tag('app_common/snippets/honeypot_field.html', takes_context=True)
@@ -20,6 +20,54 @@ def render_honeypot_field(context, field_name=None):
     return {'fieldname': field_name, 'value': value}
 
 
+
+
+# Django 模板调用带参数的函数
+'''
+instance.method(*args, **kwargsn)
+{% call_func instance method *args **kwargs as photos %}
+eg:
+如要调用 re 的 compile 方法 re.compile('ABC'):
+{% call_func re 'compile' 'ABC' as photos %}
+'''
+@register.simple_tag(name='call_func')
+def Call_func(instance, method, *args, **kwargs):
+    method = getattr(instance, method)
+    res = method(*args, **kwargs)
+    return res
+
+
+# -------------------------------------------------------
+# Django 模板调用带参数的函数
+'''
+instance.method(X1, ..., Xn)
+{{ instance|arg:X1|...|arg:Xn|call:"method" }}
+eg:
+如要调用 re 的 compile 方法 re.compile('ABC'):
+{{ re|arg:'ABC'|call:"compile" }}
+'''
+@register.filter(name='arg')
+def template_args(instance, arg):
+    """将参数存储在单独的实例属性中"""
+    if not hasattr(instance, "_TemplateArgs"):
+        setattr(instance, "_TemplateArgs", [])
+    instance._TemplateArgs.append(arg)
+    return instance
+
+@register.filter(name='call')
+def template_method(instance, method):
+    """检索参数（如果有）并调用方法"""
+    method = getattr(instance, method)
+    if hasattr(instance, "_TemplateArgs"):
+        to_return = method(*instance._TemplateArgs)
+        delattr(instance, '_TemplateArgs')
+        return to_return
+    return method()
+# -------------------------------------------------------
+
+
+
+
 # 获取轮播图片列表
 @register.simple_tag
 def get_carousel_list():
@@ -29,7 +77,6 @@ def get_carousel_list():
 
 
 # django/template/context.py
-
 # 在模板定义变量
 @register.tag(name='set')
 def set_var(parser, token):
@@ -52,7 +99,6 @@ def set_var(parser, token):
     else:
         raise template.TemplateSyntaxError("'set'标签的格式必须为: {％set <var_name> = <var_value>％}")
 
-
 class SetVarNode(template.Node):
     def __init__(self, var_name, var_value):
         self.var_name = var_name
@@ -65,8 +111,9 @@ class SetVarNode(template.Node):
             context.set_upward(self.var_name, self.var_value)
         except template.VariableDoesNotExist:
             context[self.var_name] = self.var_value
-        return ""
 
+        print(context)
+        return ""
 
 class VarAddOneNode(template.Node):
     ''' ++ '''
@@ -85,6 +132,7 @@ class VarAddOneNode(template.Node):
         return ""
 
 
+
 # 在模板定义 list
 @register.tag(name='setList')
 def set_list(parser, token):
@@ -101,7 +149,6 @@ def set_list(parser, token):
         return SetListNode(items, listName)
     else:
         raise template.TemplateSyntaxError("'setList'标签的格式必须为 : {% setList par1 par2 ... parN as listName %}")
-
 
 class SetListNode(template.Node):
     def __init__(self, items, listName):

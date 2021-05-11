@@ -34,8 +34,11 @@ register = template.Library()
 @register.simple_tag  # 注册模板标签和过滤器, 默认使用函数名作为标签名字，也可自定义 @register.simple_tag(name='name')
 def get_random_background(size=None, box=None, r=0):  # 定义标签
     photo = Photo.objects.get_random_photo()
-    image = crop_image(photo.image.path, size, box, r)
-    return pil_base64(image)
+    if photo:
+        image = crop_image(photo.image.path, size, box, r)
+        return pil_base64(image)
+    else:
+        return ''
 
 def pil_base64(image):
     img_buffer = io.BytesIO()

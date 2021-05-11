@@ -41,9 +41,6 @@ def query(queryset, **kwargs):
     return queryset.filter(**kwargs)
 
 
-
-
-
 # 返回文章列表模板
 @register.inclusion_tag('app_blog/include_tag/list.html')
 def load_article_list(articles):
