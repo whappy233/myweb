@@ -12,7 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>浩瀚星海|Gallery</title>
   <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:400,700" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="{% static 'gallery3/css/demo.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'gallery/css/demo.css' %}" />
   <script>document.documentElement.className = 'js';</script>
 </head>
 
@@ -48,9 +48,11 @@
   <div class="container">
     <div class="scroller">
       {% set has_current = False %}
+      {% setList '' as galleryitems %}
       {% for gallery in page_obj %}
       {% call_func gallery 'get_some_photo' 8 as photos %}
       {% if photos|length > 0 %}
+      {% setList galleryitems gallery as galleryitems %}
       <div class="room {% if has_current == 'False' %}room--current{% set has_current = True %}{% endif %}">
         <div class="room__side room__side--back">
           <img class="room__img" src="{{photos.0.image.url}}" alt="Some image" />
@@ -70,7 +72,6 @@
       </div>
       {% endif %}
       {% endfor %}
-
     </div>
   </div>
 
@@ -100,61 +101,36 @@
       <!-- 菜单详情 -->
       <div class="overlay overlay--menu">
         <ul class="menu">
-          <li class="menu__item menu__item--current"><a class="menu__link" href="#">ASD</a></li>
-          <li class="menu__item"><a class="menu__link" href="#">ZXC</a></li>
-          <li class="menu__item"><a class="menu__link" href="#">QWE</a></li>
-          <li class="menu__item"><a class="menu__link" href="#">CVB</a></li>
+          {% for gallery in galleryitems %}
+          <li class="menu__item  {% if forloop.first %}menu__item--current{% endif %}">
+            <a class="menu__link" href="#">{{gallery.title}}</a>
+          </li>
+          {% endfor %}
         </ul>
       </div>
       <!-- info 详情 -->
       <div class="overlay overlay--info">
-        <p class="info">&ldquo;3D炫酷房间</p>
+        <p class="info">&ldquo;今天是个好日子啊</p>
       </div>
     </header>
     <!-- 侧边文字 -->
-    <h4 class="location">Mirai Art Gallery &amp; Exhibition Center, Sapporo, Japan</h4>
+    <h4 class="location">Today is a good day</h4>
     <!-- 对应room文字描述 -->
     <div class="slides">
+
+      {% for gallery in galleryitems %}
       <div class="slide">
-        <h2 class="slide__name">Kato <br /> Yatsumoto</h2>
+        <h2 class="slide__name">Carlos <br /> {{ gallery.title|truncatechars:7}}{% if gallery.title|length > 7 %}...{% endif %}</h2>
         <h3 class="slide__title">
           <span>&ldquo;Understanding Life&rdquo;</span>
-          <div class="slide__number">Room <strong>Tenjin</strong></div>
+          <div class="slide__number"><strong>{{gallery.photos.count}}</strong> Pic</div>
+          <a href="{% url 'app_gallery:gallery_detail' gallery.pk gallery.slug %}?before={{request.get_full_path}}">Export</a>
         </h3>
-        <p class="slide__date">25 Mar - 11 May 2017</p>
+        <p class="slide__date">{{gallery.mod_date}}</p>
+        <!-- <p class="slide__date">{{ gallery.mod_date |date:"Y-m-j H:i:s" }}</p> -->
       </div>
-      <div class="slide">
-        <h2 class="slide__name">Aiko <br />Akiyama</h2>
-        <h3 class="slide__title">
-          <span>&ldquo;Faces of Peace&rdquo;</span>
-          <div class="slide__number">Room <strong>Suijin</strong></div>
-        </h3>
-        <p class="slide__date">31 Mar - 25 Apr 2017</p>
-      </div>
-      <div class="slide">
-        <h2 class="slide__name">Misako <br />Shiraishi</h2>
-        <h3 class="slide__title">
-          <span>&ldquo;Instant Gratification&rdquo;</span>
-          <div class="slide__number">Room <strong>Izanami</strong></div>
-        </h3>
-        <p class="slide__date">4 Apr - 30 Apr 2017</p>
-      </div>
-      <div class="slide">
-        <h2 class="slide__name">Tadashi <br />Takayama</h2>
-        <h3 class="slide__title">
-          <span>&ldquo;Facts of Blossoms&rdquo;</span>
-          <div class="slide__number">Room <strong>Raijin</strong></div>
-        </h3>
-        <p class="slide__date">15 Apr - 18 May 2017</p>
-      </div>
-      <div class="slide">
-        <h2 class="slide__name">Etsuko <br />Hamasaki</h2>
-        <h3 class="slide__title">
-          <span>&ldquo;In Loving Memory&rdquo;</span>
-          <div class="slide__number">Room <strong>Hachiman</strong></div>
-        </h3>
-        <p class="slide__date">5 May - 17 Jun 2017</p>
-      </div>
+      {% endfor %}
+
     </div>
     <!-- room 切换 -->
     <nav class="nav">
@@ -174,8 +150,8 @@
       </button>
     </nav>
   </div>
-  <script src="{% static 'gallery3/js/anime.min.js' %}"></script>
-  <script src="{% static 'gallery3/js/main.js' %}"></script>
+  <script src="{% static 'gallery/js/anime.min.js' %}"></script>
+  <script src="{% static 'gallery/js/main.js' %}"></script>
 </body>
 
 </html>

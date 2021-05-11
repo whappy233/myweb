@@ -67,7 +67,6 @@ def template_method(instance, method):
 
 
 
-
 # 获取轮播图片列表
 @register.simple_tag
 def get_carousel_list():
@@ -111,8 +110,6 @@ class SetVarNode(template.Node):
             context.set_upward(self.var_name, self.var_value)
         except template.VariableDoesNotExist:
             context[self.var_name] = self.var_value
-
-        print(context)
         return ""
 
 class VarAddOneNode(template.Node):

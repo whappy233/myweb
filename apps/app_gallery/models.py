@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 from random import choice
 from myweb.utils import AdminMixin
-
+from django.db.models import Count
 
 class PhotoManager(models.Manager):
     def get_random_photo(self, total: int = 1):
@@ -19,6 +19,16 @@ class PhotoManager(models.Manager):
         return []
 
 
+# 自定义的管理器
+class GalleryNotNullManager(models.Manager):
+    '''不为空的相册'''
+    def get_queryset(self):
+        return super(GalleryNotNullManager, self).get_queryset().\
+        annotate(photo_num=Count('photos')).filter(photo_num__gt=0)
+
+
+
+
 # 相册
 class Gallery(models.Model, AdminMixin):
     slug = models.SlugField(max_length=50, blank=True)
@@ -30,6 +40,10 @@ class Gallery(models.Model, AdminMixin):
     thumb = ProcessedImageField(upload_to='albums', processors=[ResizeToFit(300, 300, mat_color=(255, 255, 255))],
                                 format='JPEG', options={'quality': 100}, verbose_name='缩略图')
     is_delete = models.BooleanField(default=False)
+
+    objects = models.Manager()  # 默认管理器
+    notNull = GalleryNotNullManager()  # 自定义的管理器应在默认管理器的后面
+
 
     def __str__(self):
         return self.title
