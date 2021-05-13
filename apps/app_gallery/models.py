@@ -7,6 +7,7 @@ from random import choice
 from myweb.utils import AdminMixin
 from django.db.models import Count
 
+
 class PhotoManager(models.Manager):
     def get_random_photo(self, total: int = 1):
         '''随机获取一张图片'''
@@ -79,7 +80,9 @@ class Photo(models.Model, AdminMixin):
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建日期')
     is_delete = models.BooleanField(default=False)
 
-    objects = PhotoManager()  # 自定义的管理器应在默认管理器的后面
+    objects = PhotoManager()
+
+
 
     class Meta:
         verbose_name = '相片'

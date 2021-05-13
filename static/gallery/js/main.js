@@ -64,6 +64,7 @@
 	DOM.menuItems = DOM.menuOverlay.querySelectorAll('.menu > .menu__item');
 	// The info button.
 	DOM.infoCtrl = DOM.content.querySelector('.btn--info');
+	DOM.exportCtrl = DOM.content.querySelectorAll('.slides .btn--export');
 	// The info overlay.
 	DOM.infoOverlay = DOM.content.querySelector('.overlay--info');
 	// The info text.
@@ -86,12 +87,14 @@
 		// Room moving transition. 房间移动过渡
 		roomTransition = { speed: '0.4s', easing: 'ease' },
 		// View from top transition. 顶部视角过渡
-		menuTransition = { speed: '1.5s', easing: 'cubic-bezier(0.2,1,0.3,1)' },
+		menuTransition = { speed: '1.5s', easing: 'cubic-bezier(0.2,1,0.3,1)' },  // cubicBezier 
 		// Info transition.  Info过渡
 		infoTransition = { speed: '15s', easing: 'cubic-bezier(0.3,1,0.3,1)' },
 		// Tilt transition  倾斜过渡
 		tiltTransition = { speed: '0.2s', easing: 'ease-out' },
 		tilt = false,
+
+		simulateEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true }),
 
 		isMouseDown = false,
 		MouseDownPos = {},
@@ -232,6 +235,14 @@
 
 		// Info click.
 		DOM.infoCtrl.addEventListener('click', toggleInfo);
+		DOM.exportCtrl.forEach(function(v){
+			v.addEventListener('click', SimulateClick);
+		}) 
+	}
+
+    function SimulateClick(e) {
+		console.log(e.target.dataset)
+		DOM.infoCtrl.dispatchEvent(simulateEvent);
 	}
 
 	function applyRoomTransform(transform) {
@@ -255,13 +266,11 @@
 
 		anime.remove([name, title, date]);
 		var animeOpts = {
-			targets: [name, title, date],
-			duration: dir === 'in' ? 400 : 400,
+			targets: [name, title, date],  // 动画的目标对象
+			duration: dir === 'in' ? 400 : 400,  // 动画的持续时间（以毫秒为单位)
 			//delay: 0,//dir === 'in' ? 150 : 0,
-			delay: function (t, i, c) {
-				return delay + 75 + i * 75;
-			},
-			easing: [0.25, 0.1, 0.25, 1],
+			delay: function (t, i, c) { return delay + 75 + i * 75; },  // 动画的延迟（以毫秒为单位）
+			easing: "cubicBezier(0.25, 0.1, 0.25, 1)",  // 定义动画的时间曲线
 			opacity: {
 				value: dir === 'in' ? [0, 1] : [1, 0],
 				duration: dir === 'in' ? 550 : 250
@@ -381,7 +390,7 @@
 		anime({
 			targets: DOM.menuItems,
 			duration: 500,
-			easing: [0.2, 1, 0.3, 1],
+			easing: "cubicBezier(0.2, 1, 0.3, 1)",
 			delay: function (t, i) {
 				return 250 + 50 * i;
 			},
@@ -389,7 +398,7 @@
 			opacity: {
 				value: [0, 1],
 				duration: 200,
-				easing: 'linear'
+				easing: 'linear'  // 匀速, 对于opacity和colors过渡很有用
 			},
 			begin: function () {
 				DOM.menuOverlay.classList.add('overlay--active');
@@ -399,7 +408,7 @@
 		anime({
 			targets: DOM.menuOverlay,
 			duration: 1000,
-			easing: [0.25, 0.1, 0.25, 1],
+			easing: "cubicBezier(0.25, 0.1, 0.25, 1)",
 			opacity: [0, 1]
 		});
 	}
@@ -422,7 +431,7 @@
 		anime({
 			targets: DOM.menuItems,
 			duration: 250,
-			easing: [0.25, 0.1, 0.25, 1],
+			easing: "cubicBezier(0.25, 0.1, 0.25, 1)",
 			delay: function (t, i, c) {
 				return 40 * (c - i - 1);
 			},
@@ -439,7 +448,7 @@
 		anime({
 			targets: DOM.menuOverlay,
 			duration: 400,
-			easing: [0.25, 0.1, 0.25, 1],
+			easing: "cubicBezier(0.25, 0.1, 0.25, 1)",
 			opacity: [1, 0]
 		});
 	}
@@ -505,7 +514,7 @@
 			duration: function () {
 				return anime.random(15000, 30000);
 			},
-			easing: [0.3, 1, 0.3, 1],
+			easing: "cubicBezier(0.3, 1, 0.3, 1)",
 			translateY: function () {
 				return anime.random(-50, 50);
 			},
@@ -527,7 +536,7 @@
 			delay: function (t, i) {
 				return !i ? 0 : 150;
 			},
-			easing: [0.25, 0.1, 0.25, 1],
+			easing: "cubicBezier(0.25, 0.1, 0.25, 1)",
 			opacity: [0, 1],
 			translateY: function (t, i) {
 				return !i ? 0 : [30, 0];
@@ -557,7 +566,7 @@
 		anime({
 			targets: photos,
 			duration: 400,
-			easing: [0.3, 1, 0.3, 1],
+			easing: "cubicBezier(0.3, 1, 0.3, 1)",
 			translateY: 0,
 			rotateX: 0,
 			rotateZ: 0,
@@ -568,7 +577,7 @@
 		var animeInfoOpts = {
 			targets: [DOM.infoOverlay, DOM.infoText],
 			duration: 400,
-			easing: [0.25, 0.1, 0.25, 1],
+			easing: "cubicBezier(0.25, 0.1, 0.25, 1)",
 			opacity: [1, 0],
 			translateY: function (t, i) {
 				return !i ? 0 : [0, 30];

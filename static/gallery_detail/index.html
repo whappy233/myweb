@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh" class>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>基于Anime.js的炫酷网格图片交互动画特效</title>
+	<link rel="stylesheet" type="text/css" href="css/base.css" />
+	<script>
+		document.documentElement.className = "js";
+		var supportsCssVars = function () {
+			var e, t = document.createElement("style");
+			return t.innerHTML = "root: { --tmp-var: bold; }", document.head.appendChild(t), e = !!(window.CSS && window.CSS.supports && window.CSS.supports("font-weight", "var(--tmp-var)")), t.parentNode.removeChild(t), e
+		};
+		supportsCssVars() || alert("请在支持CSS变量的现代浏览器中观看此演示.");
+	</script>
+</head>
+
+<body class="loading">
+
+	<main>
+		<div class="frame">
+			<span class="frame__main">Photostream</span>
+		</div>
+		<div class="content">
+			<div class="info">
+				<h2 class="title">浩瀚星海</h2>
+				<h2 class="time"></h2>
+			</div>
+		</div>
+		<div class="grid-wrap">
+			<div class="grid">
+				<div class="grid__item" data-time='2021' data-title="London"><div class="grid__item-inner" style="background-image:url(img/1.jpg)"></div></div>
+				<div class="grid__item" data-time='2021' data-title="Yerevan"><div class="grid__item-inner" style="background-image:url(img/2.jpg)"></div></div>
+				<div class="grid__item" data-time='2021' data-title="Paris"><div class="grid__item-inner" style="background-image:url(img/3.jpg)"></div></div>
+				<div class="grid__item" data-time='2021' data-title="Madrid"><div class="grid__item-inner" style="background-image:url(img/4.jpg)"></div></div>
+				<div class="grid__item" data-time='2021' data-title="Moscow"><div class="grid__item-inner" style="background-image:url(img/5.jpg)"></div></div>
+				<div class="grid__item" data-time='2021' data-title="Lagos"><div class="grid__item-inner" style="background-image:url(img/6.jpg)"></div></div>
+				<div class="grid__item" data-time='2021' data-title="Dublin"><div class="grid__item-inner" style="background-image:url(img/7.jpg)"></div></div>
+				<div class="grid__item" data-time='2021' data-title="Bangkok"><div class="grid__item-inner" style="background-image:url(img/8.jpg)"></div></div>
+				<div class="grid__item" data-time='2021' data-title="Luanda"><div class="grid__item-inner" style="background-image:url(img/9.jpg)"></div></div>
+				<div class="grid__item" data-time='2021' data-title="Buenos Aires"><div class="grid__item-inner" style="background-image:url(img/10.jpg)"></div></div>
+				<div class="grid__item" data-time='2021' data-title="Berlin"><div class="grid__item-inner" style="background-image:url(img/11.jpg)"></div></div>
+				<div class="grid__item" data-time='2021' data-title="Vienna"><div class="grid__item-inner" style="background-image:url(img/12.jpg)"></div></div>
+				<div class="grid__item" data-time='2021' data-title="Minsk"><div class="grid__item-inner" style="background-image:url(img/13.jpg)"></div></div>
+				<div class="grid__item" data-time='2021' data-title="Brussels"><div class="grid__item-inner" style="background-image:url(img/14.jpg)"></div></div>
+				<div class="grid__item" data-time='2021' data-title="Lisbon"><div class="grid__item-inner" style="background-image:url(img/15.jpg)"></div></div>
+			</div>
+		</div>
+	</main>
+	<div class="cursor">
+		<div class="cursor__inner cursor__inner--circle"></div>
+		<span class="cursor__inner cursor__inner--text">&nbsp;</span>
+	</div>
+	<script src="js/imagesloaded.pkgd.min.js"></script>
+	<script src="js/anime.min.js"></script>
+	<script src="js/demo1.js"></script>
+</body>
+
+</html>

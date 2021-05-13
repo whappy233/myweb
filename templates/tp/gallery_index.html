@@ -1,9 +1,6 @@
 {% load static %}
 {% load common_tags %}
 
-
-
-
 <!DOCTYPE html>
 <html lang="zh" class="no-js">
 
@@ -40,11 +37,19 @@
     </symbol>
     <symbol id="icon-info" viewBox="0 0 20 20">
       <title>info</title>
-      <circle style="fill:#fff" cx="10" cy="10" r="9.1" />
+      <circle style="fill:rgba(0, 0, 0, 0)" cx="10" cy="10" r="9.1" />
       <path
         d="M10,0C4.5,0,0,4.5,0,10s4.5,10,10,10s10-4.5,10-10S15.5,0,10,0z M10,18.6c-4.7,0-8.6-3.9-8.6-8.6S5.3,1.4,10,1.4s8.6,3.9,8.6,8.6S14.7,18.6,10,18.6z M10.7,5C10.9,5.2,11,5.5,11,5.7s-0.1,0.5-0.3,0.7c-0.2,0.2-0.4,0.3-0.7,0.3c-0.3,0-0.5-0.1-0.7-0.3C9.1,6.2,9,6,9,5.7S9.1,5.2,9.3,5C9.5,4.8,9.7,4.7,10,4.7C10.3,4.7,10.5,4.8,10.7,5z M9.3,8.3h1.4v7.2H9.3V8.3z" />
     </symbol>
+    <symbol id="icon-export" viewBox="0 0 16 16">
+      <title>info</title>
+      <circle style="fill:rgba(0, 0, 0, 0)" cx="10" cy="10" r="9.1" />
+      <path
+        d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z" />
+    </symbol>
+
   </svg>
+
   <div class="container">
     <div class="scroller">
       {% set has_current = False %}
@@ -69,8 +74,17 @@
           <img class="room__img" src="{{photos.7.image.url}}" alt="Some image" />
         </div>
         <div class="room__side room__side--bottom"></div>
+        <!-- <div class="room__side room__side--top"></div> -->
       </div>
       {% endif %}
+      {% empty %}
+      <div class="room {% if has_current == 'False' %}room--current{% set has_current = True %}{% endif %}">
+        <div class="room__side room__side--back"></div>
+        <div class="room__side room__side--left"></div>
+        <div class="room__side room__side--right"></div>
+        <div class="room__side room__side--bottom"></div>
+        <!-- <div class="room__side room__side--top"></div> -->
+      </div>
       {% endfor %}
     </div>
   </div>
@@ -82,13 +96,13 @@
       <!-- logo -->
       <a class="codrops-header__title" href="/"><img src="{% static 'st/img/logo.png' %}" alt="logo"></a>
       <!-- button -->
-      <button class="btn btn--info btn--toggle">
+      <button class="btn btn--info btn--toggle" id="btn_info">
         <svg class="icon icon--info">
           <use xlink:href="#icon-info"></use>
         </svg>
         <svg class="icon icon--cross">
           <use xlink:href="#icon-cross"></use>
-        </svg> 
+        </svg>
       </button>
       <button class="btn btn--menu btn--toggle">
         <svg class="icon icon--menu">
@@ -108,9 +122,33 @@
           {% endfor %}
         </ul>
       </div>
-      <!-- info 详情 -->
+      <!-- 相册 详情 -->
       <div class="overlay overlay--info">
-        <p class="info">&ldquo;今天是个好日子啊</p>
+        <div class="info">
+
+          <link rel="stylesheet" type="text/css" href="{% static 'gallery_detail/css/base.css' %}" />
+
+          <div class="frame"></div>
+          <div class="detail-content">
+            <div class="info">
+              <h2 class="title"></h2>
+              <h2 class="time"></h2>
+            </div>
+          </div>
+          <div class="grid-wrap">
+            <div class="grid" id="photo_grid">
+
+              <div class="grid__item" data-time='2021' data-title="London">
+                <div class="grid__item-inner" style="background-image:url({% static 'gallery_detail/img/1.jpg' %})"></div>
+              </div>
+
+            </div>
+          </div>
+          <div class="cursor">
+            <div class="cursor__inner cursor__inner--circle"></div>
+            <span class="cursor__inner cursor__inner--text">&nbsp;</span>
+          </div>
+        </div>
       </div>
     </header>
     <!-- 侧边文字 -->
@@ -120,14 +158,16 @@
 
       {% for gallery in galleryitems %}
       <div class="slide">
-        <h2 class="slide__name">Carlos <br /> {{ gallery.title|truncatechars:7}}{% if gallery.title|length > 7 %}...{% endif %}</h2>
+        <h2 class="slide__name">ABCD <br /> {{ gallery.title|truncatechars:9}}{% if gallery.title|length > 9 %}...{%endif %}</h2>
         <h3 class="slide__title">
-          <span>&ldquo;Understanding Life&rdquo;</span>
-          <div class="slide__number"><strong>{{gallery.photos.count}}</strong> Pic</div>
-          <a href="{% url 'app_gallery:gallery_detail' gallery.pk gallery.slug %}?before={{request.get_full_path}}">Export</a>
+          <button class="btn btn--export" data-pk="{{gallery.pk}}" data-slug="{{gallery.slug}}">
+            <svg class="icon">
+              <use xlink:href="#icon-export"></use>
+            </svg>Export
+          </button>
+          <div class="slide__number"><strong>{{gallery.photos.count}}</strong> Pcs</div>
         </h3>
         <p class="slide__date">{{gallery.mod_date}}</p>
-        <!-- <p class="slide__date">{{ gallery.mod_date |date:"Y-m-j H:i:s" }}</p> -->
       </div>
       {% endfor %}
 
@@ -150,8 +190,47 @@
       </button>
     </nav>
   </div>
-  <script src="{% static 'gallery/js/anime.min.js' %}"></script>
+
+  <!-- jquery-->
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+
+      $('.slides .btn--export').on('click', function (e) {
+        var data = $(this).data();
+        $.ajax({   
+          url: "{% url 'app_gallery:detail_ajax'  %}",  // 规定发送请求的URL, 默认是当前页面
+          // url: `/gallery/detail/${data.pk}/${data.slug}/`,  // 规定发送请求的URL, 默认是当前页面
+          type: "GET",  // 规定请求的类型(GET 或 POST)
+          data: data,
+          dataType: 'json',  // 预期的服务器响应的数据类型
+          beforeSend: function (xhr, settings) {  // 发送前运行的函数
+            console.log('beforeSend')
+          },
+          success: function(data){  // 请求成功时运行的函数
+            console.log(data);
+          },
+          error: function (xhr, status, error) {  // 请求失败运行的函数
+            console.log(xhr, status, error)
+          },
+          complete: function () {  // 请求完成时运行, 无论成功或失败(在 success 或 error 之后)
+            console.log('complete')
+          }
+        });
+      });
+
+  </script>
+
+
+
+
+  <script src="{% static 'gallery_detail/js/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'gallery_detail/js/anime.min.js' %}"></script>
+  <script src="{% static 'gallery_detail/js/demo1.js' %}"></script>
   <script src="{% static 'gallery/js/main.js' %}"></script>
+
+
+
+
 </body>
 
 </html>
