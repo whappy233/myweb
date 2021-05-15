@@ -1,4 +1,8 @@
+
 from django.apps import AppConfig
+from django.core.serializers.python import Serializer as Builtin_Serializer
+from django.db import models
+from django.utils.encoding import is_protected_type
 
 
 class AppGalleryConfig(AppConfig):
@@ -7,34 +11,32 @@ class AppGalleryConfig(AppConfig):
 
 
 
-
-import datetime
-import decimal
-from django.core.serializers.json import DjangoJSONEncoder
-from django.db.models.base import ModelBase
-from django.utils.encoding import smart_text
-from django.core.serializers.json import Serializer as Builtin_Serializer
-
 class Serializer(Builtin_Serializer):
-    # {
-    #     "pk":1,
-    #     "model":"events.phone",
-    #     "alt": 'xxx', 
-    #     "thumb": 'xxx', 
-    #     "image": 'xxx', 
-    #     "create_date": 'xxx'
-    # }
+    '''
+    {
+        "pk":1,
+        "model":"events.phone",
+        "alt": 'xxx', 
+        "thumb": 'xxx', 
+        "image": 'xxx', 
+        "create_date": 'xxx'
+    }
+    '''
 
-    def _init_options(self):
-        self._current = None
-        self.json_kwargs = self.options.copy()
-        self.json_kwargs.pop('stream', None)
-        self.json_kwargs.pop('fields', None)
-        if self.options.get('indent'):
-            # Prevent trailing spaces
-            self.json_kwargs['separators'] = (',', ': ')
-        self.json_kwargs.setdefault('cls', JSONEncoder)
+    def _value_from_field(self, obj, field):
+        '''在给定的模型实例中返回此字段的值'''
 
+        value = field.value_from_object(obj)
+
+        # 对于 ImageField 返回url
+        if isinstance(field, models.ImageField):  
+            return value.url
+
+        # 受保护的类型（例如，无，数字，日期和小数之类的基元）按原样传递。
+        # 所有其他值都将首先转换为字符串。
+        if is_protected_type(value):
+            return value
+        return  field.value_to_string(obj)
 
     def get_dump_object(self, obj):
         # self._current['id'] = smart_text(obj._get_pk_val(), strings_only=True)
@@ -44,20 +46,4 @@ class Serializer(Builtin_Serializer):
 from django.core.serializers import BUILTIN_SERIALIZERS
 BUILTIN_SERIALIZERS['json'] = 'app_gallery.apps'
 
-
-class JSONEncoder(DjangoJSONEncoder):
-    def default(self, o):
-        if isinstance(o, datetime.datetime):
-            return o.strftime('%Y年%m月%d日 %H:%M:%S')
-        elif isinstance(o, datetime.date):
-            return o.strftime('%Y-%m-%d')
-        elif isinstance(o, decimal.Decimal):
-            return str(o)
-        elif isinstance(o, ModelBase):
-            return '%s.%s' % (o._meta.app_label, o._meta.model_name)
-        else:
-            try:
-                return super(JSONEncoder, self).default(o)
-            except Exception:
-                return smart_text(o)
 

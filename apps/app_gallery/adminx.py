@@ -7,10 +7,10 @@ from django.core.files.base import ContentFile
 from .models import Gallery, Photo
 from .forms import GalleryForm
 from django.utils.html import format_html
-import xadmin
+from xadmin.sites import register
 from loguru import logger
 
-
+@register(Gallery)
 class GalleryModelAdmin:
     form = GalleryForm
     prepopulated_fields = {'slug': ('title',)}
@@ -82,10 +82,10 @@ class GalleryModelAdmin:
         return format_html(f'<img style="width:20%;height:20%" src="{url}"></img>')
     show_thumb_img.short_description = '封面'  # 设置表头
 
-xadmin.site.register(Gallery, GalleryModelAdmin)
 
 
 
+@register(Photo)
 class PhotoModelAdmin:
     list_display = ('alt', 'gallery', 'create_date', 'is_delete', 'show_thumb_img')
     list_filter = ('gallery', 'create_date')
@@ -112,6 +112,6 @@ class PhotoModelAdmin:
         return format_html(f'<img style="width:20%;height:20%" src="{url}"></img>')
     show_thumb_img.short_description = '缩略图'  # 设置表头
 
-xadmin.site.register(Photo, PhotoModelAdmin)
+
 
 

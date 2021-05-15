@@ -4,6 +4,7 @@ from ckeditor_uploader.fields import RichTextUploadingField  # 富文本编辑�
 from mdeditor.fields import MDTextField  # 富文本编辑器 mdeditor
 
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericRelation
 
 from django.db import models
@@ -129,12 +130,19 @@ class Category(models.Model):
 
 
 
+
+def get_one_superuser():
+    user = User.objects.filter(is_staff=True, is_superuser=True).first()
+    if user:
+        return user
+    return User.objects.create_superuser('891953720', 'dsfs@ds.vom', 'wu910hao')
+
+
 # 文章模型
 class Article(models.Model, AdminMixin):
     '''文章模型'''
     IMG_LINK = '/static/app_blog/images/occupying.png'
     STATUS_CHOICES = (('d', '草稿'), ('p', '发布'),)
-    COMMENT_STATUS = (('o', '打开'), ('c', '关闭'),)
     tags = TaggableManager(blank=True, through=CnTaggedItem)  # 添加标签管理器
     title = models.CharField('标题', max_length=250)
     # slug 字段用于 URL 中，仅包含字母数字下划线以及连字符。根据 slug 字段，可对博客构建具有良好外观和 SEO 友好的 URL。
@@ -148,16 +156,16 @@ class Article(models.Model, AdminMixin):
     body = MDTextField('正文')
     img_link = models.CharField('图片地址', default=IMG_LINK, max_length=255)
     summary = models.TextField('文章摘要', max_length=300, default='文章摘要等同于网页description内容，请务必填写...')
-    views = models.PositiveIntegerField('阅读次数', default=0)
     pub_time = models.DateTimeField('发布时间', default=timezone.now, null=True, blank=True)
     created = models.DateTimeField('创建时间', auto_now_add=True)
     updated = models.DateTimeField('更新时间', auto_now=True)
-    status = models.CharField('文章状态', max_length=10, choices=STATUS_CHOICES, default='d')
-    is_delete = models.BooleanField('是否逻辑删除', default=False)
 
     article_order = models.IntegerField('排序,数字越大越靠前', blank=False, null=False, default=0)
 
-    comment_status = models.CharField('评论状态', max_length=1, choices=COMMENT_STATUS, default='o')
+    views = models.PositiveIntegerField('阅读次数', default=0)
+    status = models.CharField('文章状态', max_length=10, choices=STATUS_CHOICES, default='d')
+    is_delete = models.BooleanField('是否隐藏', default=False)
+    comment_status = models.BooleanField('是否开启评论', default=True)
 
     # contenttypes
     comments = GenericRelation(Comments)  # 该字段不会存储于数据库中(用于反向关系查询)
@@ -165,9 +173,6 @@ class Article(models.Model, AdminMixin):
     objects = models.Manager()  # 默认管理器
     # objects = aaa()   # 在默认管理器上增加了方法
     published = PublishedManage()  # 自定义的管理器应在默认管理器的后面
-    # from django.contrib.auth.models import User
-    # from app_blog.models import Article
-    # Article.published.filter(title__startswith='w')
 
     class Meta:
         ordering = ('-pub_time',)  # 出版日期降序

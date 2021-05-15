@@ -28,8 +28,6 @@ class GalleryNotNullManager(models.Manager):
         annotate(photo_num=Count('photos')).filter(photo_num__gt=0)
 
 
-
-
 # 相册
 class Gallery(models.Model, AdminMixin):
     slug = models.SlugField(max_length=50, blank=True)
@@ -81,8 +79,6 @@ class Photo(models.Model, AdminMixin):
     is_delete = models.BooleanField(default=False)
 
     objects = PhotoManager()
-
-
 
     class Meta:
         verbose_name = '相片'

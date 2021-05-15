@@ -1,12 +1,16 @@
-import xadmin
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import format_html
+from taggit.models import Tag
+from xadmin.layout import Fieldset, FormHelper, Main, Row, Side
+from xadmin.sites import register
 
-from app_blog.models import Article, Category
+from .models import Article, Category
 
 
 # 文章
+# xadmin.site.register(Article, ArticleAdmin)  # 注册方式1
+@register(Article)  # 注册方式2
 class ArticleAdmin:
     list_display = ['id', 'show_tags', 'tags', 'link_to_categoryinfo', 
                     'title', 'link_to_userinfo', 'created', 'pub_time', 
@@ -19,8 +23,8 @@ class ArticleAdmin:
     # filter_vertical = ['users_like']  # 多对多
     actions_on_top = True   # 执行动作的位置
     # actions_on_bottom = False
-    ordering = ['author']  # 默认排序
-    # fields = ['title', 'slug', 'author', 'body', 'pub_time', 'status']  # 在详细编辑页面的显示字段
+    ordering = ['created']  # 默认排序
+    # fields = ['title', 'slug', 'author', 'body', 'status']  # 在详细编辑页面的显示字段
 
     empty_value_display = '<span>-</span>'  # 字段值为空时显示的文本(可为纯文本,可为html)
     # admin_order_field = ('title', 'updated')  # 设置需要排序的字段
@@ -33,14 +37,14 @@ class ArticleAdmin:
     # 链接到用户信息
     def link_to_userinfo(self, obj):
         info = (obj.author._meta.app_label, obj.author._meta.model_name)
-        link = reverse('admin:%s_%s_change' % info, args=(obj.author.id,))
+        link = reverse('xadmin:%s_%s_change' % info, args=(obj.author.id,))
         return format_html(u'<a href="%s">%s</a>' %(link, obj.author.username))
-    link_to_userinfo.short_description = '用户'
+    link_to_userinfo.short_description = '作者'
 
     # 链接到分类信息
     def link_to_categoryinfo(self, obj):
         info = (obj.category._meta.app_label, obj.category._meta.model_name)
-        link = reverse('admin:%s_%s_change' % info, args=(obj.category.id,))
+        link = reverse('xadmin:%s_%s_change' % info, args=(obj.category.id,))
         return format_html(u'<a href="%s">%s</a>' %(link, obj.category.name))
     link_to_categoryinfo.short_description = '分类'
 
@@ -79,9 +83,6 @@ class ArticleAdmin:
     open_article_commentstatus.short_description = '打开文章评论'
 
 
-
-
-
     # 对批量选择进行某些操作
     # 如果想对queryset中的对象一个一个修改或导出
     def action_func(self, request, queryset):
@@ -98,6 +99,14 @@ class ArticleAdmin:
             if 'delete_selected' in actions:
                 del actions['delete_selected']
         return actions
+
+    # xadmin根据当前登录用户动态设置表单字段默认值方式
+    # 需要重写instance_forms方法，此方法作用是生成表单实例
+    def instance_forms(self):
+        super().instance_forms()
+        # 判断是否为新建操作，新建操作才会设置creator的默认值
+        if not self.org_obj:
+            self.form_obj.initial['author'] = self.request.user.id
 
     # 如果我们想实现根据不同的用户显示不同表单form，我们可以通过重写get_form方法实现。
     # 如下例中给Superuser显示了不同的表单
@@ -120,11 +129,11 @@ class ArticleAdmin:
 
 
     # model form 保存方法  (重写)
-    # def save_model(self, request, obj, form, change):
-    #     if form.is_valid():
-    #         if not form.cleaned_data['slug']:
-    #             obj.slug = uuid4().hex[:10]
-    #         super().save_model(request, obj, form, change)
+    # def save_models(self):
+    #     if self.form_obj.is_valid():
+    #         if not self.form_obj.cleaned_data['slug']:
+    #             self.new_obj.slug = uuid4().hex[:10]
+    #         super().save_models()
 
     # Django的admin默认会展示所有对象。
     # 通过重写get_queryset方法，我们可以控制所需要获取的对象。
@@ -144,17 +153,26 @@ class ArticleAdmin:
                 tag_list.append(tag.name)
             return ','.join(tag_list)
         else:
-            return format_html('<span style="color:red;">文章{}无标签</span>', obj.id,)
+            return format_html('<span>null</span>', obj.id,)
     show_tags.short_description = '标签'  # 设置表头
-xadmin.site.register(Article, ArticleAdmin)
+
+
+
+
+
+
+@register(Tag)
+class TagAdmin:
+    ...
+
 
 # 分类
+@register(Category)
 class CategoryAdmin:
     list_display = ['id', 'name', 'parent_category', 'slug']
     prepopulated_fields = {'slug':('name',)}  # 自动生成slug, 根据name填充slug
     search_fields = ['name',]
     ordering = ['parent_category'] 
-xadmin.site.register(Category, CategoryAdmin)
 
 
 

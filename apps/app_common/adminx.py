@@ -1,7 +1,7 @@
 'xadmin 全局配置'
 
-from typing import Callable
 import xadmin
+from xadmin.sites import register
 from django.contrib.auth.models import Group, Permission
 from .models import BlogSettings, Carousel
 from django.utils.safestring import mark_safe
@@ -13,21 +13,38 @@ from app_comments.models import Comments
 
 
 
+@register(xadmin.views.base.BaseAdminView)
 class BaseSetting:
     """xadmin的基本配置"""
     enable_themes = True      # 开启主题切换功能
     use_bootswatch = True     # 支持切换主题
+    user_themes = [{"name": "Cerulean", "css": "https://bootswatch.com/3/cerulean/bootstrap.css",},
+                    {"name": "Cosmo", "css": "https://bootswatch.com/3/cosmo/bootstrap.css",},
+                    {"name": "Cyborg", "css": "https://bootswatch.com/3/cyborg/bootstrap.css",},
+                    {"name": "Darkly", "css": "https://bootswatch.com/3/darkly/bootstrap.css",},
+                    {"name": "Flatly", "css": "https://bootswatch.com/3/flatly/bootstrap.css",},
+                    {"name": "Journal", "css": "https://bootswatch.com/3/journal/bootstrap.css",},
+                    {"name": "Lumen",  "css": "https://bootswatch.com/3/lumen/bootstrap.css",},
+                    {"name": "Paper", "css": "https://bootswatch.com/3/paper/bootstrap.css",},
+                    {"name": "Readable", "css": "https://bootswatch.com/3/readable/bootstrap.css",},
+                    {"name": "Sandstone", "css": "https://bootswatch.com/3/sandstone/bootstrap.css",},
+                    {"name": "Simplex", "css": "https://bootswatch.com/3/simplex/bootstrap.css",},
+                    {"name": "Slate", "css": "https://bootswatch.com/3/slate/bootstrap.css",},
+                    {"name": "Spacelab", "css": "https://bootswatch.com/3/spacelab/bootstrap.css",},
+                    {"name": "Superhero", "css": "https://bootswatch.com/3/superhero/bootstrap.css",},
+                    {"name": "United", "css": "https://bootswatch.com/3/united/bootstrap.css",},
+                    {"name": "Yeti", "css": "https://bootswatch.com/3/yeti/bootstrap.css",}]
 
-xadmin.site.register(xadmin.views.BaseAdminView, BaseSetting)
 
 
-
+@register(xadmin.views.CommAdminView)
 class GlobalSettings:
     """xadmin的全局配置"""
 
     site_title = "浩瀚星海"         # 设置站点标题
     site_footer = "浩瀚星海 2021"   # 设置站点的页脚
     # menu_style = "accordion"     # 设置菜单折叠，在左侧，默认的
+    list_display = ['go_to']
 
     global_search_models = [UserProfile]
 
@@ -63,20 +80,18 @@ class GlobalSettings:
             )},
         )
 
-xadmin.site.register(xadmin.views.CommAdminView, GlobalSettings)
-
 
 
 
 # 轮播图
+@register(Carousel)
 class CarouselAdmin:
     list_display = ['id', 'number', 'title', 'content', 'img_url', 'url']
     search_fields = ['title',]
     ordering = ['number', '-id'] 
-xadmin.site.register(Carousel, CarouselAdmin)
 
 
 # 网站配置
+@register(BlogSettings)
 class BlogSettingsAdmin:
     pass
-xadmin.site.register(BlogSettings, BlogSettingsAdmin)

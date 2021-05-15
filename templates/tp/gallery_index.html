@@ -7,9 +7,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
   <title>浩瀚星海|Gallery</title>
   <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:400,700" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="{% static 'gallery/css/demo.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'gallery/css/gallery_room.css' %}" />
   <script>document.documentElement.className = 'js';</script>
 </head>
 
@@ -36,13 +39,13 @@
         d="M13.4,12l7.8,7.8l-1.4,1.4l-7.8-7.8l-7.8,7.8l-1.4-1.4l7.8-7.8L2.7,4.2l1.4-1.4l7.8,7.8l7.8-7.8l1.4,1.4L13.4,12z" />
     </symbol>
     <symbol id="icon-info" viewBox="0 0 20 20">
-      <title>info</title>
+      <title>detail</title>
       <circle style="fill:rgba(0, 0, 0, 0)" cx="10" cy="10" r="9.1" />
       <path
         d="M10,0C4.5,0,0,4.5,0,10s4.5,10,10,10s10-4.5,10-10S15.5,0,10,0z M10,18.6c-4.7,0-8.6-3.9-8.6-8.6S5.3,1.4,10,1.4s8.6,3.9,8.6,8.6S14.7,18.6,10,18.6z M10.7,5C10.9,5.2,11,5.5,11,5.7s-0.1,0.5-0.3,0.7c-0.2,0.2-0.4,0.3-0.7,0.3c-0.3,0-0.5-0.1-0.7-0.3C9.1,6.2,9,6,9,5.7S9.1,5.2,9.3,5C9.5,4.8,9.7,4.7,10,4.7C10.3,4.7,10.5,4.8,10.7,5z M9.3,8.3h1.4v7.2H9.3V8.3z" />
     </symbol>
     <symbol id="icon-export" viewBox="0 0 16 16">
-      <title>info</title>
+      <title>detail</title>
       <circle style="fill:rgba(0, 0, 0, 0)" cx="10" cy="10" r="9.1" />
       <path
         d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z" />
@@ -53,6 +56,7 @@
   <div class="container">
     <div class="scroller">
       {% set has_current = False %}
+      {% set isEmpty = 0 %}
       {% setList '' as galleryitems %}
       {% for gallery in page_obj %}
       {% call_func gallery 'get_some_photo' 8 as photos %}
@@ -78,6 +82,7 @@
       </div>
       {% endif %}
       {% empty %}
+      {% set isEmpty = 1 %}
       <div class="room {% if has_current == 'False' %}room--current{% set has_current = True %}{% endif %}">
         <div class="room__side room__side--back"></div>
         <div class="room__side room__side--left"></div>
@@ -95,22 +100,15 @@
     <header class="codrops-header">
       <!-- logo -->
       <a class="codrops-header__title" href="/"><img src="{% static 'st/img/logo.png' %}" alt="logo"></a>
+
       <!-- button -->
-      <button class="btn btn--info btn--toggle" id="btn_info">
-        <svg class="icon icon--info">
-          <use xlink:href="#icon-info"></use>
-        </svg>
-        <svg class="icon icon--cross">
-          <use xlink:href="#icon-cross"></use>
-        </svg>
+      <button class="btn btn--info btn--toggle {% if isEmpty == '1' %}hidden{% endif %}" id="btn_info">
+        <svg class="icon icon--info"><use xlink:href="#icon-info"></use></svg>
+        <svg class="icon icon--cross"><use xlink:href="#icon-cross"></use></svg>
       </button>
       <button class="btn btn--menu btn--toggle">
-        <svg class="icon icon--menu">
-          <use xlink:href="#icon-menu"></use>
-        </svg>
-        <svg class="icon icon--cross">
-          <use xlink:href="#icon-cross"></use>
-        </svg>
+        <svg class="icon icon--menu"><use xlink:href="#icon-menu"></use></svg>
+        <svg class="icon icon--cross"><use xlink:href="#icon-cross"></use></svg>
       </button>
       <!-- 菜单详情 -->
       <div class="overlay overlay--menu">
@@ -119,6 +117,10 @@
           <li class="menu__item  {% if forloop.first %}menu__item--current{% endif %}">
             <a class="menu__link" href="#">{{gallery.title}}</a>
           </li>
+          {% empty %}
+          <li class="menu__item" style="color: rgb(255 255 255 / 26%) !important;">
+            暂无相册
+          </li>
           {% endfor %}
         </ul>
       </div>
@@ -126,7 +128,7 @@
       <div class="overlay overlay--info">
         <div class="info">
 
-          <link rel="stylesheet" type="text/css" href="{% static 'gallery_detail/css/base.css' %}" />
+          <link rel="stylesheet" type="text/css" href="{% static 'gallery/css/gallery_detail.css' %}" />
 
           <div class="frame"></div>
           <div class="detail-content">
@@ -135,15 +137,12 @@
               <h2 class="time"></h2>
             </div>
           </div>
+
           <div class="grid-wrap">
             <div class="grid" id="photo_grid">
-
-              <div class="grid__item" data-time='2021' data-title="London">
-                <div class="grid__item-inner" style="background-image:url({% static 'gallery_detail/img/1.jpg' %})"></div>
-              </div>
-
             </div>
           </div>
+
           <div class="cursor">
             <div class="cursor__inner cursor__inner--circle"></div>
             <span class="cursor__inner cursor__inner--text">&nbsp;</span>
@@ -169,11 +168,17 @@
         </h3>
         <p class="slide__date">{{gallery.mod_date}}</p>
       </div>
+      {% empty %}
+      <div class="slide">
+        <h2 class="slide__name slide__empty">暂无相册</h2>
+        <h3 class="slide__title"></h3>
+        <p class="slide__date">{{gallery.mod_date}}</p>
+      </div>
       {% endfor %}
 
     </div>
     <!-- room 切换 -->
-    <nav class="nav">
+    <nav class="nav {% if isEmpty == '1' %}hidden{% endif %}">
       <!-- 上一个 -->
       <button class="btn btn--nav btn--nav-left">
         <svg class="nav-icon nav-icon--left" width="42px" height="12px" viewBox="0 0 70 20">
@@ -193,6 +198,10 @@
 
   <!-- jquery-->
   <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/animejs/3.1.0/anime.min.js"></script>
+
+  <script src="{% static 'gallery/js/gallery_room.js' %}"></script>
+  <script src="{% static 'gallery/js/gallery_detail.js' %}"></script>
   <script>
 
       $('.slides .btn--export').on('click', function (e) {
@@ -204,29 +213,64 @@
           data: data,
           dataType: 'json',  // 预期的服务器响应的数据类型
           beforeSend: function (xhr, settings) {  // 发送前运行的函数
-            console.log('beforeSend')
+            // console.log('beforeSend')
           },
           success: function(data){  // 请求成功时运行的函数
-            console.log(data);
+            qqq(data);
           },
           error: function (xhr, status, error) {  // 请求失败运行的函数
             console.log(xhr, status, error)
           },
           complete: function () {  // 请求完成时运行, 无论成功或失败(在 success 或 error 之后)
-            console.log('complete')
+            // console.log('complete')
           }
         });
       });
+
+
+      String.prototype.format = function(args) {
+        if (arguments.length > 0) {
+          var result = this;
+          if (arguments.length == 1 && typeof(args) == "object") {
+            for (var key in args) {
+              var reg = new RegExp("({" + key + "})", "g");
+              result = result.replace(reg, args[key]);
+            }
+          } else {
+            for (var i = 0; i < arguments.length; i++) {
+              if (arguments[i] == undefined) {
+                return "";
+              } else {
+                var reg = new RegExp("({[" + i + "]})", "g");
+                result = result.replace(reg, arguments[i]);
+              }
+            }
+          }
+          return result;
+        } else {
+          return this;
+        }
+      }
+
+
+      function qqq(data){
+        var $photo_grid = $('#photo_grid'),
+            a = `<div class="grid__item" data-time="{create_date}" data-title="{alt}" data-src="{image}"><div class="grid__item-inner" style="background-image:url('{thumb}')"></div></div>`;
+        // data.items_count    // 查询到的总数目
+        // data.current_page   // 当前页码
+        // data.page_total     // 总页数
+        $photo_grid.empty();
+        data.items.forEach(ele => {
+          $photo_grid.append(a.format(ele));
+        });
+        new Grid(document.querySelector('.grid-wrap'));
+      }
 
   </script>
 
 
 
 
-  <script src="{% static 'gallery_detail/js/imagesloaded.pkgd.min.js' %}"></script>
-  <script src="{% static 'gallery_detail/js/anime.min.js' %}"></script>
-  <script src="{% static 'gallery_detail/js/demo1.js' %}"></script>
-  <script src="{% static 'gallery/js/main.js' %}"></script>
 
 
 

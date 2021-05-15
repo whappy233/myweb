@@ -1,10 +1,11 @@
-import xadmin
 from django.urls import reverse
 from django.utils.html import format_html
+from xadmin.sites import register
 
 from .models import Comments
 
 
+@register(Comments)
 class CommentAdmin:
     list_display = ['id', 'body', 'link_to_userinfo', 'parent_comment', 'link_to_article', 'created_time', 'is_active']  # 显示字段
     search_fields = ['author', 'body', 'content_object']  # 搜索字段
@@ -40,4 +41,3 @@ class CommentAdmin:
         text= f'({"/".join(info)}: {obj.content_object.id}) {obj.content_object.title}'
         return format_html(u'<a href="%s">%s</a>' % (link, text))
     link_to_article.short_description = '关联对象详情'
-xadmin.site.register(Comments, CommentAdmin)

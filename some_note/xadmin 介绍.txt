@@ -9,7 +9,7 @@ free_query_filter       默认为 True , 指定是否可以自由搜索. 如果�
 search_fields           可以通过搜索框搜索的字段名称，xadmin使用的是 模糊查询，存在外键 同 list_filter 一样  注意：只能包括 字符类型，不能有 非字符类型 如：SBBH-20180515-0002
 list_filter             可以进行过滤操作的列，例如：存在外键字段class ---》student__class 获取值
 ordering                默认排序的字段
-readonly_fields         在编辑页面的只读字段
+readonly_fields         在编辑页面的只读字段, 不能包含 models.BinaryField 类型字段,否则可能会报编码错误
 exclude                 在编辑页面隐藏的字段
 list_editable           在列表页可以快速直接编辑的字段
 show_detail_fileds      在列表页显示详情信息
@@ -27,7 +27,16 @@ relfield_style          后台自定义不是下拉选择框，而是搜索框�
 exclude                 在编辑和查看列表时指定不显示的字段
 list_editable           列表显示的时候，指定的字段可以直接页面一键编辑
 list_display_links      设置默认可编辑字段
-
+form_layout             表单布局
+from xadmin.layout import Fieldset
+form_layout = (
+        Fieldset(None,
+                 'pc_name','pc_icorn','pc_link','sort'
+                 ),
+        Fieldset(None,
+                 'pc_id','pc_parent',**{"style":"display:None"}  # 对不想显示的字段添加 **{"style":"display:None"}
+                 ),
+    )
 
 empty_value_display = "列数据为空时，显示默认值"
 aggregate_fields = {"expire": "max"}  #  列聚合，可用的值："count","min","max","avg",  "sum"
