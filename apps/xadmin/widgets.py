@@ -227,7 +227,7 @@ class M2MFilterWidget(forms.SelectMultiple):
 
     # render方法是渲染你要展示字段的样式，通常返回html字符串
     def render(self, name, value, attrs=None):
-        # 将数据库中已经被选中的值展示到页面，要将value（[1,3,5,8...]列表格式）转化为value_str（‘1,3,5,8’字符串格式）
+        # 将数据库中已经被选中的值展示到页面，要将value（[1,3,5,8...]列表格式）转化为value_str（'1,3,5,8' 字符串格式）
         value_str = ','.join(map(str, value)) if value else ''
         
         # 可以用self.attrs获取之前传递的request相关的参数

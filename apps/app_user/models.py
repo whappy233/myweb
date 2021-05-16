@@ -24,7 +24,7 @@ class UserProfile(models.Model):
     photo = models.ImageField('头像', upload_to=user_directory_path, blank=True, default="default.png")
     telephone = models.CharField('手机号', max_length=50, blank=True, null=True)
     introduction = models.TextField('个人简介', blank=True, null=True)
-    mod_date = models.DateTimeField('最近修改', auto_now=True)
+    mod_date = models.DateTimeField('修改日期', auto_now=True)
 
     class Meta:
         verbose_name = 'User Profile'
@@ -44,18 +44,4 @@ class UserProfile(models.Model):
             return self.photo.url
 
 
-
-
-# 信号
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-# 创建 User 对象实例时也创建 Profile 对象实例
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-   if created:
-       UserProfile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
 

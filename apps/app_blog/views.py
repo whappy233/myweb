@@ -1,4 +1,4 @@
-from django.http.response import HttpResponse, HttpResponseForbidden
+from django.http.response import Http404, HttpResponse, HttpResponseForbidden
 from app_comments.forms import CommentForm
 from django import forms
 from django.contrib.auth.decorators import login_required, permission_required
@@ -211,6 +211,10 @@ class ArticleDetailView(DetailView):
 
     def get_object(self, queryset=None):
         obj = super(ArticleDetailView, self).get_object(queryset=queryset)
+
+        # 普通用户无权浏览未发布文章
+        if obj.status == 'd' and not self.request.user.is_superuser:
+            raise Http404
 
         # 设置浏览量增加时间判断,同一篇文章两次浏览超过半小时才重新统计阅览量,作者浏览忽略
         u = self.request.user

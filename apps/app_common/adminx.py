@@ -18,23 +18,6 @@ class BaseSetting:
     """xadmin的基本配置"""
     enable_themes = True      # 开启主题切换功能
     use_bootswatch = True     # 支持切换主题
-    user_themes = [{"name": "Cerulean", "css": "https://bootswatch.com/3/cerulean/bootstrap.css",},
-                    {"name": "Cosmo", "css": "https://bootswatch.com/3/cosmo/bootstrap.css",},
-                    {"name": "Cyborg", "css": "https://bootswatch.com/3/cyborg/bootstrap.css",},
-                    {"name": "Darkly", "css": "https://bootswatch.com/3/darkly/bootstrap.css",},
-                    {"name": "Flatly", "css": "https://bootswatch.com/3/flatly/bootstrap.css",},
-                    {"name": "Journal", "css": "https://bootswatch.com/3/journal/bootstrap.css",},
-                    {"name": "Lumen",  "css": "https://bootswatch.com/3/lumen/bootstrap.css",},
-                    {"name": "Paper", "css": "https://bootswatch.com/3/paper/bootstrap.css",},
-                    {"name": "Readable", "css": "https://bootswatch.com/3/readable/bootstrap.css",},
-                    {"name": "Sandstone", "css": "https://bootswatch.com/3/sandstone/bootstrap.css",},
-                    {"name": "Simplex", "css": "https://bootswatch.com/3/simplex/bootstrap.css",},
-                    {"name": "Slate", "css": "https://bootswatch.com/3/slate/bootstrap.css",},
-                    {"name": "Spacelab", "css": "https://bootswatch.com/3/spacelab/bootstrap.css",},
-                    {"name": "Superhero", "css": "https://bootswatch.com/3/superhero/bootstrap.css",},
-                    {"name": "United", "css": "https://bootswatch.com/3/united/bootstrap.css",},
-                    {"name": "Yeti", "css": "https://bootswatch.com/3/yeti/bootstrap.css",}]
-
 
 
 @register(xadmin.views.CommAdminView)

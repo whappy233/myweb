@@ -188,15 +188,18 @@ class FormatTimeNode(template.Node):
     def __init__(self, date_to_be_formatted, format_string):
         self.date_to_be_formatted = template.Variable(date_to_be_formatted)
         self.format_string = format_string
- 
+
     def render(self, context):
         try:
             actual_date = self.date_to_be_formatted.resolve(context)
-            return actual_date.strftime(self.format_string)  # 2020-12-30 04:28 PM  (str)
+            if actual_date:
+                return actual_date.strftime(self.format_string)  # 2020-12-30 04:28 PM  (str)
+            else:
+                return mark_safe('<span style="font-size: 24px; background-color: red;">暂未发布</span>')
             # 可以通过 context 给模板传递其它的变量（如下所示)。当render方法不返回一个具体的值的时候，需要返回一个空字符串
             # context['formatted_time'] = actual_date.strftime(self.format_string)  #  {{ formatted_time }}
             # return ''
-        except template.VariableDoesNotExist:
+        except:
             return ''
 
 

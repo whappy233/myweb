@@ -86,8 +86,8 @@ class ModelFormAdminView(ModelAdminView):
 
     @filter_hook
     def formfield_for_dbfield(self, db_field, **kwargs):
-        # If it uses an intermediary model that isn't auto created, don't show
-        # a field in admin.
+        # If it uses an intermediary model that isn't auto created, don't show a field in admin.
+        # 如果它使用的不是自动创建的中间模型，则不要在admin中显示字段
         if isinstance(db_field, models.ManyToManyField) and not db_field.remote_field.through._meta.auto_created:
             return None
 
@@ -156,8 +156,7 @@ class ModelFormAdminView(ModelAdminView):
     @filter_hook
     def get_model_form(self, **kwargs):
         """
-        Returns a Form class for use in the admin add view. This is used by
-        add_view and change_view.
+        返回要在 admin add 视图中使用的 Form 类。 add_view 和 change_view 使用它.
         """
         if self.exclude is None:
             exclude = []

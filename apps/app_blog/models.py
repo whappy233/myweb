@@ -130,7 +130,6 @@ class Category(models.Model):
 
 
 
-
 def get_one_superuser():
     user = User.objects.filter(is_staff=True, is_superuser=True).first()
     if user:
@@ -210,10 +209,8 @@ class Article(models.Model, AdminMixin):
 
     # 标准 urls
     def get_absolute_url(self):  # 构建URL
-        # <int:year>/<int:month>/<int:day>/<slug:slug>/self.id/
-        # /2020/1/10/markdown/3
-        a = [self.pub_time.year, self.pub_time.month, self.pub_time.day, self.slug, self.id]
-        return reverse('app_blog:article_detail', args=a)
+        # /detail/<slug:slug>/
+        return reverse('app_blog:article_detail', args=(self.slug,))
 
     def comment_list(self):
         '''获取对应文章的所有评论'''

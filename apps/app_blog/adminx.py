@@ -1,58 +1,47 @@
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import format_html
-from taggit.models import Tag
-from xadmin.layout import Fieldset, FormHelper, Main, Row, Side
 from xadmin.sites import register
 
+from .cn_taggit import CnTag
 from .models import Article, Category
 
 
-# 文章
-# xadmin.site.register(Article, ArticleAdmin)  # 注册方式1
-@register(Article)  # 注册方式2
-class ArticleAdmin:
-    list_display = ['id', 'show_tags', 'tags', 'link_to_categoryinfo', 
-                    'title', 'link_to_userinfo', 'created', 'pub_time', 
-                    'updated', 'status', 'is_delete', 'slug', 'comment_status']  # 显示字段
-    search_fields = ['title', 'body']  # 搜索字段
-    list_filter = ['pub_time', 'created', 'updated', 'status']  # 过滤字段
-    prepopulated_fields = {'slug':('title',)}  # 自动生成slug, 根据title填充slug
-    raw_id_fields = ['author',]  # 下拉框改为微件(多个外键使建议使用)
-    filter_horizontal = ['users_like']  # 多对多
-    # filter_vertical = ['users_like']  # 多对多
-    actions_on_top = True   # 执行动作的位置
-    # actions_on_bottom = False
-    ordering = ['created']  # 默认排序
-    # fields = ['title', 'slug', 'author', 'body', 'status']  # 在详细编辑页面的显示字段
+class ShortDescriptionMixin:
 
-    empty_value_display = '<span>-</span>'  # 字段值为空时显示的文本(可为纯文本,可为html)
-    # admin_order_field = ('title', 'updated')  # 设置需要排序的字段
-    list_per_page = 20  # 每页显示条目数
-    list_editable = ('status', 'is_delete', 'comment_status')  # 设置可编辑字段
-    date_hierarchy = 'pub_time'  # 按日期月份筛选
-    list_display_links = ['title',]  # 设置带连接的字段
-
-    # admin/accounts/bloguser/2/change/
-    # 链接到用户信息
-    def link_to_userinfo(self, obj):
+    # 链接到用户信息 xadmin/auth/user/1/update/
+    def user_info(self, obj):
         info = (obj.author._meta.app_label, obj.author._meta.model_name)
         link = reverse('xadmin:%s_%s_change' % info, args=(obj.author.id,))
-        return format_html(u'<a href="%s">%s</a>' %(link, obj.author.username))
-    link_to_userinfo.short_description = '作者'
+        return format_html(f'<a href="{link}">{obj.author.username}</a>')
+    user_info.short_description = '作者'
 
-    # 链接到分类信息
-    def link_to_categoryinfo(self, obj):
+    # 链接到分类信息 /xadmin/app_blog/category/1/update/
+    def category_info(self, obj):
         info = (obj.category._meta.app_label, obj.category._meta.model_name)
         link = reverse('xadmin:%s_%s_change' % info, args=(obj.category.id,))
-        return format_html(u'<a href="%s">%s</a>' %(link, obj.category.name))
-    link_to_categoryinfo.short_description = '分类'
+        return format_html(f'<a href="{link}">{obj.category.name}</a>')
+    category_info.short_description = '分类'
 
-    actions = ['make_published', 'make_published_false', 
-                'make_delete_true', 'make_delete_false', 
-                'action_func', 'close_article_commentstatus',
-                'open_article_commentstatus']  # 自定义actions
+    # 连接到标签信息 /xadmin/taggit/tag/4/update/
+    def tag_info(self, obj):
+        tag_list = []
+        tags = obj.tags.all()
+        for tag in tags:
+            # ('app_blog', 'cntag')
+            info = (tag._meta.app_label, tag._meta.model_name)
+            link = reverse('xadmin:%s_%s_change' % info, args=(tag.id,))
+            tag_list.append(f'<a href="{link}">{tag.name}</a>')
+        return format_html(', '.join(tag_list))
+    tag_info.short_description = '标签'
 
+    def detail_view(self, obj):
+        link = reverse('app_blog:article_detail', args=(obj.slug,))
+        return format_html(f'<a href="{link}">👀</a>')
+    detail_view.short_description = '预览'
+
+
+    # ACTION -------------------------------------
     def make_published(self, request, queryset):
         # 注意: 此操作不会触发模型的 clean 方法!
         queryset.update(status='p', pub_time=timezone.now())
@@ -82,14 +71,57 @@ class ArticleAdmin:
         queryset.update(comment_status='o')
     open_article_commentstatus.short_description = '打开文章评论'
 
-
-    # 对批量选择进行某些操作
-    # 如果想对queryset中的对象一个一个修改或导出
+    # 对批量选择进行某些操作. 如果想对queryset中的对象一个一个修改或导出
     def action_func(self, request, queryset):
         for obj in queryset:
             # do_something(obj)
             pass
     action_func.short_description = "对批量选择进行某些操作"
+
+
+
+# 文章
+# xadmin.site.register(Article, ArticleAdmin)  # 注册方式1
+@register(Article)  # 注册方式2
+class ArticleAdmin(ShortDescriptionMixin):
+    list_display = ['id', 'tag_info', 'category_info', 'user_info', 'detail_view',
+                    'title', 'created', 'pub_time', 'updated',
+                    'status', 'is_delete', 'slug', 'comment_status']  # 显示字段
+
+    search_fields = ['title', 'body']  # 搜索字段
+
+    list_filter = ['pub_time', 'created', 'updated', 'status', 'tags', 'category__name']  # 过滤字段
+
+    prepopulated_fields = {'slug':('title',)}  # 自动生成slug, 根据title填充slug
+
+    raw_id_fields = ['author',]  # 下拉框改为微件(多个外键使建议使用)
+
+    filter_horizontal = ['users_like']  # 多对多
+
+    # filter_vertical = ['users_like']  # 多对多
+
+    actions_on_top = True   # 执行动作的位置
+    # actions_on_bottom = False
+
+    ordering = ['created']  # 默认排序
+
+    # fields = ['title', 'slug', 'author', 'body', 'status']  # 在详细编辑页面的显示字段
+
+    empty_value_display = '<span>-</span>'  # 字段值为空时显示的文本(可为纯文本,可为html)
+
+    # admin_order_field = ('title', 'updated')  # 设置需要排序的字段
+
+    list_per_page = 20  # 每页显示条目数
+
+    list_editable = ('status', 'is_delete', 'comment_status')  # 设置可编辑字段
+
+    date_hierarchy = 'pub_time'  # 按日期月份筛选
+
+    list_display_links = ['title']  # 设置带连接的字段, 连接到updata 页面
+
+    actions = ['make_published', 'make_published_false', 'make_delete_true',
+                'make_delete_false', 'action_func', 'close_article_commentstatus',
+                'open_article_commentstatus']  # 自定义actions
 
     # 重写了 get_actions 方法，只给了用户名为 891953720 批量删除对象的权限。
     # 如果用户名不为 891953720,我们把 delete_selected 动作从下拉菜单中删除
@@ -116,16 +148,17 @@ class ArticleAdmin:
     #     return super().get_form(request, obj, **kwargs)
 
     # 自定义显示表单的Choice字段
-    # 下例中通过重写formfiled_for_choice_field方法给superuser多了一个选择
-    # def formfield_for_choice_field(self, db_field, request, **kwargs):
-    #     if db_field.name == "status":
-    #         kwargs['choices'] = (
-    #             ('accepted', 'Accepted'),
-    #             ('denied', 'Denied'),
-    #         )
-    #         if request.user.is_superuser:
-    #             kwargs['choices'] += (('ready', 'Ready for deployment'),)
-    #     return super().formfield_for_choice_field(db_field, request, **kwargs)
+    # 下例中通过重写 formfield_for_dbfield 方法给superuser多了一个选择
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        print(db_field,  kwargs)
+        if db_field.name == "status":
+            kwargs['choices'] = (
+                ('accepted', 'Accepted'),
+                ('denied', 'Denied'),
+            )
+            if self.request.user.is_superuser:
+                kwargs['choices'] += (('ready', 'Ready for deployment'),)
+        return super().formfield_for_dbfield(db_field, **kwargs)
 
 
     # model form 保存方法  (重写)
@@ -144,24 +177,9 @@ class ArticleAdmin:
             return qs
         return qs.filter(author=request.user)
 
-    def show_tags(self, obj):
-        '''展示tags'''
-        tag_list = []
-        tags = obj.tags.all()
-        if tags:
-            for tag in tags:
-                tag_list.append(tag.name)
-            return ','.join(tag_list)
-        else:
-            return format_html('<span>null</span>', obj.id,)
-    show_tags.short_description = '标签'  # 设置表头
 
 
-
-
-
-
-@register(Tag)
+@register(CnTag)
 class TagAdmin:
     ...
 
@@ -173,7 +191,3 @@ class CategoryAdmin:
     prepopulated_fields = {'slug':('name',)}  # 自动生成slug, 根据name填充slug
     search_fields = ['name',]
     ordering = ['parent_category'] 
-
-
-
-

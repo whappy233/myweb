@@ -15,7 +15,6 @@ class AdminAuthenticationForm(AuthenticationForm):
     """
     A custom authentication form used in the admin app.
     管理应用中使用的自定义身份验证表单。
-
     """
     this_is_the_login_form = forms.BooleanField(
         widget=forms.HiddenInput, initial=1,
