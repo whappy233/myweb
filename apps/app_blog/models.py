@@ -1,28 +1,22 @@
 import base64
+from uuid import uuid4
 
+import markdown
 from ckeditor_uploader.fields import RichTextUploadingField  # 富文本编辑器 ckeditor
-from mdeditor.fields import MDTextField  # 富文本编辑器 mdeditor
-
 from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericRelation
-
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+from loguru import logger
+from mdeditor.fields import MDTextField  # 富文本编辑器 mdeditor
 from taggit.managers import TaggableManager  # 第三方标签应用
 
-from .cn_taggit import CnTaggedItem
-from myweb.utils import AdminMixin, cache_decorator, cache
-from uuid import uuid4
+from myweb.utils import AdminMixin, cache, cache_decorator
 from app_comments.models import Comments
-
-from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
-
-import markdown
-
-from loguru import logger
+from .cn_taggit import CnTaggedItem
 
 # 无论在自定义的 Manager 中添加了什么特性，都必须能够对 Manager 实例进行简单的复制:
 # 也就是说, 以下代码必须有效:
@@ -30,27 +24,33 @@ from loguru import logger
 # manager = MyManager()
 # my_copy = copy.copy(manager)
 # Django 在某些查询期间对管理器对象进行浅拷贝；如果您的管理器无法被复制，那么这些查询将失败。
-# 对于大多数的资源管理器来说，这不是问题。若你只是为 Manager 添加简单的方法，一般不会疏忽地把 Manager 变的不可拷贝。但是，若重写了 Manager 对象用于控制对象状态的 __getattr__ 或其它私有方法，你需要确认你的修改不会影响 Manager 被复制。
+# 对于大多数的资源管理器来说，这不是问题。若你只是为 Manager 添加简单的方法，一般不会疏忽地把 Manager 变的不可拷贝。
+# 但是，若重写了 Manager 对象用于控制对象状态的 __getattr__ 或其它私有方法，你需要确认你的修改不会影响 Manager 被复制。
 
-# 自定义的管理器
-class PublishedManage(models.Manager):
+
+# 自定义 Article 管理器. 在默认管理器上增加方法
+class ModelManager(models.Manager):
+    def contain_comments_obj(self):
+        '''包含评论的文章'''
+        return  self.all().annotate(c=models.Count('comments')).filter(c__gt=0)
+
+class PublishedManager(ModelManager):
     def get_queryset(self):
         # 修改管理器的初始 QuerySet
         # 状态为发布且发布时间小于现在的blog
-        return super(PublishedManage, self).get_queryset().filter(pub_time__lte=timezone.now(), status='p')
+        return super(PublishedManager, self).get_queryset().filter(pub_time__lte=timezone.now(), status='p')
 
 
-# 在默认管理器上增加方法
-class aaa(models.Manager):
-    def get_status(self):
-        try:
-            a = self.get(status='p')
-        except:
-            a = None
-        return  a
+# 获取第一个 Superuser
+def get_one_superuser():
+    '''获取第一个 Superuser'''
+    user = User.objects.filter(is_staff=True, is_superuser=True).first()
+    if user:
+        return user
+    return User.objects.create_superuser('891953720', 'dsfs@ds.vom', 'wu910hao')
 
 
-# 文章分类
+# 文章分类 Model
 class Category(models.Model):
     """文章分类"""
     name = models.CharField('分类名', max_length=30, unique=True)
@@ -129,26 +129,19 @@ class Category(models.Model):
         super().save(*args, **kwargs)
 
 
-
-def get_one_superuser():
-    user = User.objects.filter(is_staff=True, is_superuser=True).first()
-    if user:
-        return user
-    return User.objects.create_superuser('891953720', 'dsfs@ds.vom', 'wu910hao')
-
-
-# 文章模型
+# 文章 Model
 class Article(models.Model, AdminMixin):
     '''文章模型'''
     IMG_LINK = '/static/app_blog/images/occupying.png'
     STATUS_CHOICES = (('d', '草稿'), ('p', '发布'),)
+
     tags = TaggableManager(blank=True, through=CnTaggedItem)  # 添加标签管理器
     title = models.CharField('标题', max_length=250)
     # slug 字段用于 URL 中，仅包含字母数字下划线以及连字符。根据 slug 字段，可对博客构建具有良好外观和 SEO 友好的 URL。
     # 使用 unique_for_date 参数可采用发布日期与 slug 对帖子构建URL
     slug = models.SlugField('slug', unique_for_date='pub_time', blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_articles', verbose_name='作者')
-    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='blog_articles', verbose_name='分类', blank=False, null=False)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='blog_articles', verbose_name='分类', blank=False, null=False)
     users_like = models.ManyToManyField(User, related_name='blog_liked', blank=True)
 
     # body = RichTextUploadingField('正文')
@@ -159,19 +152,18 @@ class Article(models.Model, AdminMixin):
     created = models.DateTimeField('创建时间', auto_now_add=True)
     updated = models.DateTimeField('更新时间', auto_now=True)
 
-    article_order = models.IntegerField('排序,数字越大越靠前', blank=False, null=False, default=0)
+    article_order = models.IntegerField('排序,数字越大越靠前', blank=True, null=False, default=0)
 
-    views = models.PositiveIntegerField('阅读次数', default=0)
+    views = models.PositiveIntegerField('阅读次数', default=0, blank=True)
     status = models.CharField('文章状态', max_length=10, choices=STATUS_CHOICES, default='d')
-    is_delete = models.BooleanField('是否隐藏', default=False)
+    is_delete = models.BooleanField('已删除', default=False)
     comment_status = models.BooleanField('是否开启评论', default=True)
 
     # contenttypes
     comments = GenericRelation(Comments)  # 该字段不会存储于数据库中(用于反向关系查询)
 
-    objects = models.Manager()  # 默认管理器
-    # objects = aaa()   # 在默认管理器上增加了方法
-    published = PublishedManage()  # 自定义的管理器应在默认管理器的后面
+    objects = ModelManager()  # 默认管理器
+    published = PublishedManager()  # 自定义的管理器应在默认管理器的后面
 
     class Meta:
         ordering = ('-pub_time',)  # 出版日期降序
@@ -220,7 +212,7 @@ class Article(models.Model, AdminMixin):
             logger.info(f'获取评论缓存:{cache_key}')
             return value
         else:
-            comments = self.comments.filter(is_active=True)  # 查询所有评论
+            comments = self.comments.filter(is_visible=True)  # 查询所有评论
             cache.set(cache_key, comments, 60 * 100)
             logger.info(f'设置评论缓存:{cache_key}')
             return comments
@@ -245,11 +237,7 @@ class Article(models.Model, AdminMixin):
     # 重写save方法
     def save(self, *args, **kwargs):
         if not self.slug:
-            # slug = base64.urlsafe_b64encode(self.title.encode()).decode().rstrip('=')
-            # print(base64.urlsafe_b64decode(
-            #     slug + '=' * (4 - len(slug) % 4)).decode())  # 解码
-            slug = uuid4().hex[:10]
-            self.slug = slug
+            self.slug = uuid4().hex[:10]
 
         # 模型的验证器不会在调用save()方法的时候自动执行
         # 表单的验证器会在调用save()方法的时候自动执行

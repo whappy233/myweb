@@ -49,7 +49,7 @@ class GalleryModelAdmin(admin.ModelAdmin):
                             img.gallery = gallery
                             filename = '{0}{1}.jpg'.format(
                                 gallery.slug[:8], str(uuid.uuid4())[-13:])
-                            img.alt = filename
+                            img.title = filename
                             img.image.save(filename, contentfile)
 
                             img.thumb.save(
@@ -79,7 +79,7 @@ class GalleryModelAdmin(admin.ModelAdmin):
 
 @admin.register(Photo)
 class PhotoModelAdmin(admin.ModelAdmin):
-    list_display = ('alt', 'gallery', 'create_date', 'is_delete', 'show_thumb_img')
+    list_display = ('title', 'gallery', 'create_date', 'is_delete', 'show_thumb_img')
     list_filter = ('gallery', 'create_date')
     exclude = ['thumb']
     ordering = ['-create_date']
@@ -90,7 +90,7 @@ class PhotoModelAdmin(admin.ModelAdmin):
             slug = form.cleaned_data['gallery'].slug
             # 文件重命名
             filename = '{0}{1}.jpg'.format(slug[:8], str(uuid.uuid4())[-13:])
-            img.alt = filename
+            img.title = filename
             img.image.save(filename, form.cleaned_data['image'])
             img.thumb.save('thumb-{0}'.format(filename),
                            form.cleaned_data['image'])

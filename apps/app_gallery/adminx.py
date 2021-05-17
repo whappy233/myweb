@@ -7,14 +7,15 @@ from django.core.files.base import ContentFile
 from .models import Gallery, Photo
 from .forms import GalleryForm
 from django.utils.html import format_html
-from xadmin.sites import register
 from loguru import logger
+from xadmin.sites import register
+
 
 @register(Gallery)
 class GalleryModelAdmin:
     form = GalleryForm
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ('title', 'is_visible', 'create_date', 'mod_date', 'slug', 'is_delete', 'show_thumb_img')
+    list_display = ('id', 'title', 'is_visible', 'create_date', 'mod_date', 'slug', 'is_delete', 'show_thumb_img')
     list_filter = ('create_date',)
     ordering = ['-mod_date']
     list_editable = ['title', 'is_visible']
@@ -55,7 +56,7 @@ class GalleryModelAdmin:
                             img.gallery = gallery
                             filename = '{0}{1}.jpg'.format(
                                 gallery.slug[:8], str(uuid.uuid4())[-13:])
-                            img.alt = filename
+                            img.title = filename
                             img.image.save(filename, contentfile)
 
                             img.thumb.save(
@@ -87,7 +88,7 @@ class GalleryModelAdmin:
 
 @register(Photo)
 class PhotoModelAdmin:
-    list_display = ('alt', 'gallery', 'create_date', 'is_delete', 'show_thumb_img')
+    list_display = ('id', 'title', 'gallery', 'create_date', 'is_delete', 'show_thumb_img')
     list_filter = ('gallery', 'create_date')
     exclude = ['thumb']
     ordering = ['-create_date']
@@ -99,7 +100,7 @@ class PhotoModelAdmin:
             slug = self.form_obj.cleaned_data['gallery'].slug
             # 文件重命名
             filename = '{0}{1}.jpg'.format(slug[:8], str(uuid.uuid4())[-13:])
-            img.alt = filename
+            img.title = filename
             img.image.save(filename, self.form_obj.cleaned_data['image'])
             img.thumb.save('thumb-{0}'.format(filename),
                            self.form_obj.cleaned_data['image'])

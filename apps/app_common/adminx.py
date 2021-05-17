@@ -10,7 +10,7 @@ from app_user.models import UserProfile
 from app_blog.models import Article, Category
 from app_gallery.models import Gallery, Photo
 from app_comments.models import Comments
-
+from app_blog.cn_taggit import CnTag
 
 
 @register(xadmin.views.base.BaseAdminView)
@@ -41,6 +41,7 @@ class GlobalSettings:
         Comments: "glyphicon glyphicon-comment",
         BlogSettings: "glyphicon glyphicon-cog",
         Carousel: "glyphicon glyphicon-sound-stereo",
+        CnTag: "glyphicon glyphicon-tag",
     }
 
     def go_to(self):  # 设置列表页跳转

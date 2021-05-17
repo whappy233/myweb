@@ -11,3 +11,4 @@ class AppUserConfig(AppConfig):
 
     def ready(self):  # 执行初始化任务,例如注册信号和连接non-SQL数据库
         from . import signals
+        return super().ready()

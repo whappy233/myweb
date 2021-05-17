@@ -40,6 +40,19 @@ class ShortDescriptionMixin:
         return format_html(f'<a href="{link}">👀</a>')
     detail_view.short_description = '预览'
 
+    def comments_count(self, obj):
+        comments = obj.comments
+        count= comments.count()
+        c_t_id = comments.content_type.id
+        if count > 0:
+            info = (comments.model._meta.app_label, comments.model._meta.model_name)
+            extra = f'?_p_content_type__id__exact={c_t_id}&_p_object_id__exact={obj.id}'
+            link = reverse('xadmin:%s_%s_changelist' % info)
+            return format_html(f'<a href="{link}{extra}">{count}条</a>')
+        else:
+            return f'{count}条'
+    comments_count.short_description = '评论数量'
+
 
     # ACTION -------------------------------------
     def make_published(self, request, queryset):
@@ -84,13 +97,26 @@ class ShortDescriptionMixin:
 # xadmin.site.register(Article, ArticleAdmin)  # 注册方式1
 @register(Article)  # 注册方式2
 class ArticleAdmin(ShortDescriptionMixin):
-    list_display = ['id', 'tag_info', 'category_info', 'user_info', 'detail_view',
-                    'title', 'created', 'pub_time', 'updated',
-                    'status', 'is_delete', 'slug', 'comment_status']  # 显示字段
+    # 显示字段
+    list_display = ['id',
+                    'tag_info',
+                    'category_info',
+                    'user_info',
+                    'detail_view',
+                    'title',
+                    'created',
+                    'pub_time',
+                    'updated',
+                    'slug',
+                    'status',
+                    'is_delete',
+                    'comment_status',
+                    'comments_count'
+                    ]
 
     search_fields = ['title', 'body']  # 搜索字段
 
-    list_filter = ['pub_time', 'created', 'updated', 'status', 'tags', 'category__name']  # 过滤字段
+    list_filter = ['pub_time', 'created', 'updated', 'status', 'tags', 'category__name', 'is_delete']  # 过滤字段
 
     prepopulated_fields = {'slug':('title',)}  # 自动生成slug, 根据title填充slug
 
@@ -113,7 +139,7 @@ class ArticleAdmin(ShortDescriptionMixin):
 
     list_per_page = 20  # 每页显示条目数
 
-    list_editable = ('status', 'is_delete', 'comment_status')  # 设置可编辑字段
+    list_editable = ['status', 'is_delete', 'comment_status']  # 设置可编辑字段
 
     date_hierarchy = 'pub_time'  # 按日期月份筛选
 
@@ -150,12 +176,8 @@ class ArticleAdmin(ShortDescriptionMixin):
     # 自定义显示表单的Choice字段
     # 下例中通过重写 formfield_for_dbfield 方法给superuser多了一个选择
     def formfield_for_dbfield(self, db_field, **kwargs):
-        print(db_field,  kwargs)
         if db_field.name == "status":
-            kwargs['choices'] = (
-                ('accepted', 'Accepted'),
-                ('denied', 'Denied'),
-            )
+            kwargs['choices'] = (('d', '草稿'), ('p', '发布'),)
             if self.request.user.is_superuser:
                 kwargs['choices'] += (('ready', 'Ready for deployment'),)
         return super().formfield_for_dbfield(db_field, **kwargs)
@@ -190,4 +212,4 @@ class CategoryAdmin:
     list_display = ['id', 'name', 'parent_category', 'slug']
     prepopulated_fields = {'slug':('name',)}  # 自动生成slug, 根据name填充slug
     search_fields = ['name',]
-    ordering = ['parent_category'] 
+    ordering = ['parent_category']

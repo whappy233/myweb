@@ -7,14 +7,15 @@ import os
 
 # 用户上传文件进行重命名并保存到用户文件夹, 
 def user_directory_path(instance, filename):
-    ext = filename.rsplit('.', 1)[-1]
-    filename = f'{uuid4().hex[:10]}.{ext}'
-    sub_folder = 'file'
-    if ext.lower() in ["jpg", "png", "gif", "jpeg"]:
+    ext = os.path.splitex(filename)[-1]
+    newname = uuid4().hex[:10] + ext
+    if ext.lower() in [".jpg", ".png", ".gif", ".jpeg"]:
         sub_folder = "photo"
-    if ext.lower() in ["pdf", "docx"]:
+    elif ext.lower() in [".pdf", ".docx"]:
         sub_folder = "document"
-    return os.path.join('users', str(instance.user.id), sub_folder, filename)
+    else:
+        sub_folder = 'file'
+    return os.path.join('users', str(instance.user.id), sub_folder, newname)
 
 
 # UserProfile只是对User模型的扩展, 与User是1对1的关系
