@@ -55,9 +55,11 @@ class Category(models.Model):
     """文章分类"""
     name = models.CharField('分类名', max_length=30, unique=True)
     slug = models.SlugField('slug', max_length=40, blank=True)
-    # category.parent_category  判断是否有父类别
-    parent_category = models.ForeignKey(  # 自关联
-        'self', verbose_name="父级分类", blank=True, null=True, on_delete=models.CASCADE, related_name='child_category')
+    # 自关联 category.parent_category  判断是否有父类别
+    parent_category = models.ForeignKey('self', on_delete=models.CASCADE,
+                                        related_name='child_category',
+                                        blank=True, null=True,
+                                        verbose_name="父级分类")
 
     def __str__(self):
         return self.name

@@ -13,12 +13,13 @@ from xadmin.sites import register
 
 @register(Gallery)
 class GalleryModelAdmin:
-    form = GalleryForm
+    # form = GalleryForm
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ('id', 'title', 'is_visible', 'create_date', 'mod_date', 'slug', 'is_delete', 'show_thumb_img')
+    list_display = ('id', 'title', 'slug', 'create_date', 'mod_date', 'show_thumb_img', 'is_delete', 'is_visible')
     list_filter = ('create_date',)
     ordering = ['-mod_date']
-    list_editable = ['title', 'is_visible']
+    list_editable = ['title', 'thumb', 'is_delete', 'is_visible']
+    list_display_links = ['title']
 
     # 为什么要重写save_model方法?
     # 当我们通过 GalleryForm 创建 gallery 对象时，默认的form.save()方法只能将相关字段存入到 Gallery 模型对应的表单里。
