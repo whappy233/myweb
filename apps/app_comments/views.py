@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic.edit import FormView
 from loguru import logger
 from .forms import CommentForm
+from django.views.decorators.http import require_POST
 
 
 
@@ -47,7 +48,7 @@ class CommentPostView(FormView):
         })
 
     def form_valid(self, form):
-        """提交的数据验证合法后的逻辑"""
+        """表单验证成功后的逻辑"""
         article_id = self.kwargs['article_id']
 
         model_class = apps.get_model('app_blog', 'article')
@@ -77,9 +78,8 @@ class CommentPostView(FormView):
             return redirect(url + "#comments_你已经评论过了, 五分钟后可再次评论")
 
 
-
+@require_POST
 def ajax_delete_comment(request):
-
     if request.method == 'POST':
         # <QueryDict: {
         # 'comment_id': ['9'], 
@@ -99,3 +99,4 @@ def ajax_delete_comment(request):
         return JsonResponse({'status':500})
     logger.error('不允许GET请求!')
     raise Http404()
+

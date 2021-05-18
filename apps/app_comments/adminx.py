@@ -10,16 +10,22 @@ class CommentAdmin:
     # 显示字段
     list_display = ['id', 'body', 'link_to_UserInfo', 
                     'link_to_WandererInfo', 'parent_comment',
-                    'link_to_article', 'created_time', 'is_visible']
+                    'link_to_article', 'created_time', 'is_overhead', 'is_visible']
     # 搜索字段
     search_fields = ['body']  
     # 过滤器
-    list_filter = ['created_time', 'is_visible', 'object_id', 'content_type']  
-    list_editable = ['is_visible']
+    list_filter = ['created_time', 'is_overhead', 'is_visible', 'object_id', 'content_type', 'parent_comment']  
+    list_editable = ['is_overhead', 'is_visible']
     actions = ['disable_commentstatus', 'enable_commentstatus']
     # 可点击的项
     list_display_links = ('body',)  
     # raw_id_fields = ['article',]  # 下拉框改为微件
+
+    # 当 user 和 wanderer 同时存在时, 清除 wanderer 
+    def save_models(self):
+        if self.new_obj.author and self.new_obj.wanderer:
+            self.new_obj.wanderer = None
+        super().save_models()
 
     def disable_commentstatus(self, request, queryset):
         '''隐藏评论'''

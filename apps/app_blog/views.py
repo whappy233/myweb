@@ -198,10 +198,9 @@ class ArticleDetailView(DetailView):
             comment_form.fields["email"].initial = user.email
             comment_form.fields["name"].initial = user.username
 
-        comments = self.object.comment_list()
         context.update({
-            'comments': comments,
             'comment_form': comment_form,
+            'comments': self.object.comment_list(),
             'section': 'blog',
             'next_article': self.object.next_article,
             'prev_article': self.object.prev_article,

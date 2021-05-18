@@ -13,7 +13,7 @@ from xadmin.sites import register
 
 @register(Gallery)
 class GalleryModelAdmin:
-    # form = GalleryForm
+    form = GalleryForm
     prepopulated_fields = {'slug': ('title',)}
     list_display = ('id', 'title', 'slug', 'create_date', 'mod_date', 'show_thumb_img', 'is_delete', 'is_visible')
     list_filter = ('create_date',)
@@ -55,18 +55,16 @@ class GalleryModelAdmin:
 
                             img = Photo()
                             img.gallery = gallery
-                            filename = '{0}{1}.jpg'.format(
-                                gallery.slug[:8], str(uuid.uuid4())[-13:])
+                            filename = f'{gallery.slug[:8]}{str(uuid.uuid4())[-13:]}.jpg'
                             img.title = filename
                             img.image.save(filename, contentfile)
 
-                            img.thumb.save(
-                                'thumb-{0}'.format(filename), contentfile)
+                            img.thumb.save(f'thumb-{filename}', contentfile)
                             img.save()
                         except Exception as e:
                             print('ERROR: ')
-                            logger.error(e)
                             print(e)
+                            logger.error(e)
                     zip.close()
             except:
                 pass

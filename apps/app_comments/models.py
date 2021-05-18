@@ -23,21 +23,26 @@ class Wanderer(models.Model):
 class Comments(models.Model):
     '''评论模型'''
     body = models.TextField('评论内容', max_length=500)
+
+    # user_obj.comments.all() 某 user 下的所有评论
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='comments',
                                blank=True, null=True,
                                verbose_name='作者')
 
+    # wanderer_obj.comments.all() 某 wanderer 下的所有评论
     wanderer = models.ForeignKey(Wanderer, on_delete=models.CASCADE,
                                  related_name='comments',
                                  blank=True, null=True,
                                  verbose_name='散人')
 
+    # comment_obj.child_comments.all() 某评论下的所有子评论
     parent_comment = models.ForeignKey('self', on_delete=models.CASCADE,
                                        related_name='child_comments',
                                        blank=True, null=True,
                                        verbose_name="上级评论")
 
+    is_overhead = models.BooleanField('是否顶置', default=False)
     is_visible = models.BooleanField('是否可见', default=True)
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
     last_mod_time = models.DateTimeField('修改时间', default=now)
@@ -61,12 +66,23 @@ class Comments(models.Model):
         verbose_name = '评论'
         verbose_name_plural = verbose_name
 
-        constraints = [ #  添加约束
-            # 条件约束确保一个模型实例只有满足一定的规则条件后才被创建，不满足条件的数据不会存入到数据库。
-            # 只有 user 或 wanderer 存在才正确
+        # 添加约束
+        # 条件约束确保一个模型实例只有满足一定的规则条件后才被创建，不满足条件的数据不会存入到数据库。
+        constraints = [ 
+            # 只有 user 或 wanderer 存在才允许存到数据库
             models.CheckConstraint(check=Q(author__isnull=False)|Q(wanderer__isnull=False), 
-            name='User 或 Wanderer 必须存在其中一个!')
+            name='User 或 Wanderer 至少存在其中一个!'),
         ]
 
+    def save(self, *args, **kwargs):
+        if self.is_overhead == True and self.parent_comment:
+            raise ValueError('不允许顶置非顶级评论')
+
+        # 当 user 和 wanderer 同时存在时, 清除 wanderer 
+        if self.author and self.wanderer:
+            self.wanderer = None
+        super().save(*args, **kwargs)
+
+
     def __str__(self):
-        return f'{self.id} (关联对象:{self.content_type} id:{self.object_id})'
+        return f'{self.id}:{self.body} (关联对象:{self.content_type} id:{self.object_id})'
