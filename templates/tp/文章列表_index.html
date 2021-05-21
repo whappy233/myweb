@@ -57,7 +57,7 @@
                             <ul class="response-area">
                                 <li><a href="javascript:void(0)" title="热度 {{ article.views }}"><i class="fas fa-thermometer-full"></i>{{ article.views }}</a></li>
                                 <li><a href="javascript:void(0)" title="点赞数 {{ article.users_like.count }}"><i class="far fa-heart"></i>{{ article.users_like.count }}</a></li>
-                                <li><a href="{{ article.get_absolute_url }}#comment" title="article.comments.count }} 条评论"><i class="far fa-comment"></i>{{ article.comments.count }}</a></li>
+                                <li><a href="{{ article.get_absolute_url }}#comment" title="{{ article.comment_list.count }} 条评论"><i class="far fa-comment"></i>{{ article.comment_list.count }}</a></li>
                             </ul>
                         </div>
                     </div>

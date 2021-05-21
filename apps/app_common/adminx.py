@@ -3,13 +3,13 @@
 import xadmin
 from xadmin.sites import register
 from django.contrib.auth.models import Group, Permission
-from .models import BlogSettings, Carousel
 from django.utils.safestring import mark_safe
-
+from django.contrib.auth.models import User
+from .models import BlogSettings, Carousel
 from app_user.models import UserProfile
 from app_blog.models import Article, Category
 from app_gallery.models import Gallery, Photo
-from app_comments.models import Comments
+from app_comments.models import Comments, Wanderer
 from app_blog.cn_taggit import CnTag
 
 
@@ -31,18 +31,6 @@ class GlobalSettings:
 
     global_search_models = [UserProfile]
 
-    # 设置models的全局图标
-    global_models_icon = {
-        UserProfile: "glyphicon glyphicon-user",
-        Article: "glyphicon glyphicon-leaf",
-        Category: "glyphicon glyphicon-th-list",
-        Gallery: "glyphicon glyphicon-book",
-        Photo: "glyphicon glyphicon-picture",
-        Comments: "glyphicon glyphicon-comment",
-        BlogSettings: "glyphicon glyphicon-cog",
-        Carousel: "glyphicon glyphicon-sound-stereo",
-        CnTag: "glyphicon glyphicon-tag",
-    }
 
     def go_to(self):  # 设置列表页跳转
         return mark_safe('<a href="http://www.fishc.com.cn">跳转</a>')
@@ -52,15 +40,25 @@ class GlobalSettings:
         '''自定义导航菜单顺序'''
         return (
             {'title': '用户管理', 'menus': (
-                {'title': '用户信息', 'url': self.get_model_url(UserProfile, 'changelist')},
-                # {'title': '用户验证', 'url': self.get_model_url(EmailVerifyRecord, 'changelist')},
-                # {'title': '用户课程', 'url': self.get_model_url(UserCourse, 'changelist')},
-                # {'title': '用户收藏', 'url': self.get_model_url(UserFavorite, 'changelist')},
-                # {'title': '用户消息', 'url': self.get_model_url(UserMessage, 'changelist')},
+                {'title': 'User', 'url': self.get_model_url(User, 'changelist'), 'icon': 'glyphicon glyphicon-user'},
+                {'title': 'Profile', 'url': self.get_model_url(UserProfile, 'changelist'), 'icon': 'glyphicon glyphicon-user'},
             )},
-            {'title': '系统管理', 'menus': (
-                {'title': '用户分组', 'url': self.get_model_url(Group, 'changelist')},
-                {'title': '用户权限', 'url': self.get_model_url(Permission, 'changelist')},
+            {'title': '博客管理', 'menus': (
+                {'title': '文章', 'url': self.get_model_url(Article, 'changelist') ,'icon': "glyphicon glyphicon-leaf"},
+                {'title': '分类', 'url': self.get_model_url(Category, 'changelist') ,'icon': "glyphicon glyphicon-th-list"},
+                {'title': '标签', 'url': self.get_model_url(CnTag, 'changelist') ,'icon': "glyphicon glyphicon-tag"},
+            )},
+            {'title': '相册', 'menus': (
+                {'title': '相册', 'url': self.get_model_url(Gallery, 'changelist') ,'icon': "glyphicon glyphicon-book"},
+                {'title': '相片', 'url': self.get_model_url(Photo, 'changelist') ,'icon': "glyphicon glyphicon-picture"},
+            )},
+            {'title': '评论系统', 'menus': (
+                {'title': '所有评论', 'url': self.get_model_url(Comments, 'changelist') ,'icon': "glyphicon glyphicon-comment"},
+                {'title': '游民信息', 'url': self.get_model_url(Wanderer, 'changelist')},
+            )},
+            {'title': '通用', 'menus': (
+                {'title': '轮播图', 'url': self.get_model_url(Carousel, 'changelist'),'icon': "glyphicon glyphicon-sound-stereo"},
+                {'title': '站点配置', 'url': self.get_model_url(BlogSettings, 'changelist') ,'icon': "glyphicon glyphicon-cog"},
             )},
         )
 

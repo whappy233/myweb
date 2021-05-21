@@ -5736,7 +5736,7 @@ img.loading {
 .blog-box-layout4 .item-content .action-area .response-area li a i {
   font-size: 16px;
   color: var(--global-color-depth0);
-  margin-right: 10px;
+  margin-right: 5px;
 }
 .blog-box-layout4:hover .item-img img {
   transform: scale(1.1) rotate(2deg);
@@ -6904,7 +6904,7 @@ img.loading {
 .single-blog-banner-layout1 .banner-content .response-area li a i {
   /* font-size: 18px; */
   color: var(--global-blog-detail-color);
-  margin-right: 12px;
+  margin-right: 5px;
 }
 @media only screen and (max-width: 991px) {
   .single-blog-banner-layout1 .banner-content .response-area li:after {
@@ -7176,14 +7176,22 @@ img.loading {
   font-size: 16px;
   margin-bottom: 0px;
 }
+.single-blog-box-layout1 .blog-comment .media .media-body .item-nickname {
+  vertical-align: middle;
+}
+.single-blog-box-layout1 .blog-comment .media .media-body .item-meta {
+  vertical-align: middle;
+  margin-left: 8px;
+}
 .single-blog-box-layout1 .blog-comment .media .media-body .item-subtitle {
   font-size: 12px;
-  color: var(--global-color-depth0);
+  color: var(--global-color-depth1);
   font-weight: 400;
   margin-left: 10px;
 }
-.single-blog-box-layout1 .blog-comment .media .media-body .item-btn {
+.single-blog-box-layout1 .blog-comment .media .item-btn {
   display: inline-block;
+  z-index: 2;
   font-size: 12px;
   background-color: var(--global-body-background);
   border-radius: 20px;
@@ -7192,19 +7200,25 @@ img.loading {
   position: absolute;
   transition: 0.3s ease-in-out;
 }
-.single-blog-box-layout1 .blog-comment .media .media-body .item-btn.reply {
-  top: 0px;
-  right: 0;
-  padding: 0px 12px;
-}
-.single-blog-box-layout1 .blog-comment .media .media-body .item-btn.overhead {
-  right: 55px;
-  top: 1px;
+.single-blog-box-layout1 .blog-comment .media .item-btn.visible {
+  right: 137px;
+  top: 16px;
   background-color: transparent;
   padding: 0px 9px;
 }
-.single-blog-box-layout1 .blog-comment .media .media-body .item-btn.extend {
-  right: 10px;
+.single-blog-box-layout1 .blog-comment .media  .item-btn.overhead {
+  right: 70px;
+  top: 16px;
+  background-color: transparent;
+  padding: 0px 9px;
+}
+.single-blog-box-layout1 .blog-comment .media .item-btn.reply {
+  top: 16px;
+  right: 16px;
+  padding: 0px 12px;
+}
+.single-blog-box-layout1 .blog-comment .media .item-btn.extend {
+  right: 26px;
   bottom: 0px;
   background-color: transparent;
   padding: 0px 9px;
@@ -7229,17 +7243,11 @@ img.loading {
   font-weight: 900;
   transform: rotate(30deg);
 }
-.single-blog-box-layout1 .blog-comment .media .media-body .item-btn.delete {
-  right: 85px;
-  top: 0;
-  background-color: transparent;
-  padding: 0px 9px;
-}
-.single-blog-box-layout1 .blog-comment .media .media-body .item-btn:hover {
+.single-blog-box-layout1 .blog-comment .media .item-btn:hover {
   background: var(--global-hover-background);
   color: #007bff;
 }
-.single-blog-box-layout1 .blog-comment .media .media-body .item-btn.delete:hover {
+.single-blog-box-layout1 .blog-comment .media .item-btn.visible:hover {
   background: #ff2828;
   color: var(--global-color);
 }
@@ -7280,7 +7288,7 @@ img.loading {
 .single-blog-box-layout1 .contact-form-box .form-group .item-btn {
   margin-bottom: 1.5rem;
   display: block;
-  border: 1px solid var(--global-color-depth1);
+  border: 0px;
   background: var(--global-background);
   color: var(--global-color);
   letter-spacing: 1px;
@@ -7299,7 +7307,6 @@ img.loading {
 .single-blog-box-layout1 .contact-form-box .form-group .item-btn:hover {
   color: var(--global-color);
   background-color: var(--global-hover-background);
-  border: 1px solid var(--global-color);
 }
 .single-blog-wrap-layout2 {
   margin-bottom: -20px;
@@ -9417,4 +9424,84 @@ figure {
 }
 .avatar.avatar-lg .avatar-title {
   font-size: 20px;
+}
+
+
+
+
+.custom-control-input:checked~.custom-control-label::before {
+  color: #fff;
+  border-color: #007bff;
+  background-color: #007bff
+}
+.custom-control-input:focus~.custom-control-label::before {
+  box-shadow: 0 0 0 .2rem rgba(0, 123, 255, .25)
+}
+.custom-switch .custom-control-input:checked~.custom-control-label::after {
+  background-color: #fff;
+  -webkit-transform: translateX(.75rem);
+  transform: translateX(.75rem);
+}
+.custom-control-input:focus:not(:checked)~.custom-control-label::before {
+  border-color: #80bdff
+}
+.custom-control-input:not(:disabled):active~.custom-control-label::before {
+  color: #fff;
+  background-color: #b3d7ff;
+  border-color: #b3d7ff
+}
+.custom-control-input:disabled~.custom-control-label {
+  color: #6c757d
+}
+.custom-control-input:disabled~.custom-control-label::before {
+  background-color: #e9ecef
+}
+.custom-control-label::before {
+  position: absolute;
+  top: 0.85rem;
+  left: -1.5rem;
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  pointer-events: none;
+  content: "";
+  background-color: #fff;
+  border: #adb5bd solid 1px
+}
+.custom-control-label::after {
+  position: absolute;
+  top: .25rem;
+  left: -1.5rem;
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  content: "";
+  background: no-repeat 50%/50% 50%
+}
+.custom-control-label::before,
+.custom-file-label,
+.custom-select {
+  transition: background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+.custom-switch {
+  padding-left: 2.25rem;
+  margin-right: 0;
+  user-select: none;
+}
+.custom-switch .custom-control-label::before {
+  left: -2.25rem;
+  width: 1.75rem;
+  pointer-events: all;
+  border-radius: .5rem
+}
+.custom-switch .custom-control-label::after {
+  top: calc(0.85rem + 2px);
+  left: calc(-2.25rem + 2px);
+  width: calc(1rem - 4px);
+  height: calc(1rem - 4px);
+  background-color: #adb5bd;
+  border-radius: .5rem;
+  transition: background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out, -webkit-transform .15s ease-in-out;
+  transition: transform .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  transition: transform .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out, -webkit-transform .15s ease-in-out
 }

@@ -72,8 +72,8 @@
                         {% endwith %}
                     </li>
                     <li>
-                        <a href="#comment" title="article.comments.count }} 条评论">
-                            <i class="far fa-comment"></i>{{ article.comments.count }}
+                        <a href="#comment" title="{{comments.count }} 条评论">
+                            <i class="far fa-comment"></i>{{comments.count}}
                         </a>
                     </li>
                     <li>
@@ -119,20 +119,9 @@
                     <!-- 相似推荐 -->
                     {% similar_articles article 3 %}
 
-                    <!-- 发表评论 -->
-                    {% include "app_comments/post_comment_new.html" with obj=article form=comment_form %}
+                    <!-- 评论系统 -->
+                    {% include "app_comments/comment_system.html" with object=article comments=comments %}
 
-                    <!-- 文章评论 -->
-                    <div class="blog-comment">
-                        {% if comments.count > 0 %}
-                        {% query comments parent_comment=None as parent_comments %}
-                        {% for comment_item in parent_comments %}
-                            {% with 0 as depth %}
-                            {% include "app_comments/comment_item_tree.html" with obj=article %}
-                            {% endwith %}
-                        {% endfor %}
-                        {% endif %}
-                    </div>
                 </div>
             </div>
 

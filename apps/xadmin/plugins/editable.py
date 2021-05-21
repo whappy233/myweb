@@ -148,6 +148,7 @@ class EditPatchView(ModelFormAdminView, ListAdminView):
         form_class = modelform_factory(self.model, **defaults)
         form = form_class(
             instance=self.org_obj, data=request.POST, files=request.FILES)
+        print(request.get_full_path())
 
         result = {}
         if form.is_valid():

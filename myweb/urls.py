@@ -28,7 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('xadmin/', xadmin.site.urls),
     path('', include('app_blog.urls', namespace='app_blog')),
-    path('', include('app_comments.urls', namespace='app_comments')),
+    path('comment/', include('app_comments.urls', namespace='app_comments')),
     path('user/', include('app_user.urls', namespace='app_uesr')),
     path('gallery/', include('app_gallery.urls', namespace='app_gallery')),
 

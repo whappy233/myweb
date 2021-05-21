@@ -157,10 +157,10 @@ class CategoryDetailView(ArticleListView):
         category = get_object_or_404(Category, slug=slug)
         self.category_name = category.name
 
-        # category_names = list(map(lambda c: c.name, category.get_sub_categorys()))
+        # category_names = list(map(lambda c: c.name, category.get_all_children()))
         # article_list = Article.published.filter(category__name__in=category_names)
 
-        a = '|'.join(f'Q(category={i.id})' for i in category.get_sub_categorys())
+        a = '|'.join(f'Q(category={i.id})' for i in category.get_all_children())
         article_list = Article.published.filter(eval(a))
 
         return article_list
@@ -188,20 +188,19 @@ class ArticleDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        comment_form = CommentForm()
-        user = self.request.user
-        if user.is_authenticated and not user.is_anonymous and user.email and user.username:
-            comment_form.fields.update({
-                'email': forms.CharField(widget=forms.HiddenInput()),
-                'name': forms.CharField(widget=forms.HiddenInput()),
-            })
-            comment_form.fields["email"].initial = user.email
-            comment_form.fields["name"].initial = user.username
+        # comment_form = CommentForm()
+        # user = self.request.user
+        # if user.is_authenticated and not user.is_anonymous and user.email and user.username:
+        #     comment_form.fields.update({
+        #         'email': forms.CharField(widget=forms.HiddenInput()),
+        #         'name': forms.CharField(widget=forms.HiddenInput()),
+        #     })
+        #     comment_form.fields["email"].initial = user.email
+        #     comment_form.fields["name"].initial = user.username
 
         context.update({
-            'comment_form': comment_form,
-            'comments': self.object.comment_list(),
             'section': 'blog',
+            'comments': self.object.comment_list(self.request.user.is_superuser),
             'next_article': self.object.next_article,
             'prev_article': self.object.prev_article,
         })

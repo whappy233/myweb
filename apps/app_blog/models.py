@@ -75,27 +75,27 @@ class Category(models.Model):
         return False
 
     @cache_decorator(60 * 60 * 10)
-    def get_category_tree(self):
-        """递归获得分类目录的父级"""
+    def get_all_parents(self):
+        """获取所有父级"""
         categorys = []
-        def parse(category):
-            categorys.append(category)
-            if category.parent_category:
-                return parse(category.parent_category)
+        def parse(c):
+            categorys.append(c)
+            if c.parent_category:
+                return parse(c.parent_category)
         parse(self)
         return categorys
 
     @cache_decorator(60 * 60 * 10)
-    def get_sub_categorys(self):
-        """获得当前分类目录所有子集"""
+    def get_all_children(self):
+        """获取所有子级"""
         categorys = []
         all_categorys = Category.objects.all()
-        def parse(category):
-            if category not in categorys:
-                categorys.append(category)
-            childs = all_categorys.filter(parent_category=category)
+        def parse(c):
+            if c not in categorys:
+                categorys.append(c)
+            childs = all_categorys.filter(parent_category=c)
             for child in childs:
-                if category not in categorys:
+                if c not in categorys:
                     categorys.append(child)
                 return parse(child)
         parse(self)
@@ -206,22 +206,25 @@ class Article(models.Model, AdminMixin):
         # /detail/<slug:slug>/
         return reverse('app_blog:article_detail', args=(self.slug,))
 
-    def comment_list(self):
+    def comment_list(self, is_superuser=False):
         '''获取对应文章的所有评论'''
+        if is_superuser:
+            return self.comments.all() # 查询所有评论
+
         cache_key = f'article_comments_{self.id}'
         value = cache.get(cache_key)
         if value:
             logger.info(f'获取评论缓存:{cache_key}')
             return value
         else:
-            comments = self.comments.filter(is_visible=True)  # 查询所有评论
+            comments = self.comments.filter(is_hide=False)  # 查询所有评论
             cache.set(cache_key, comments, 60 * 100)
             logger.info(f'设置评论缓存:{cache_key}')
             return comments
 
     @cache_decorator(60 * 60 * 10)
     def get_category_tree(self):
-        tree = self.category.get_category_tree()
+        tree = self.category.get_all_parents()
         names = list(map(lambda c: (c.name, c.get_absolute_url()), tree))
         return names
 
@@ -234,7 +237,6 @@ class Article(models.Model, AdminMixin):
     def prev_article(self):
         # 前一篇
         return Article.published.filter(id__lt=self.id).first()
-
 
     # 重写save方法
     def save(self, *args, **kwargs):

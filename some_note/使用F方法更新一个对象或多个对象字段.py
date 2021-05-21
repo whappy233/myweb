@@ -7,7 +7,6 @@
 # 假如我们需要对所有产品的价格涨20%，我们通常做法如下。
 # 当产品很少的时候，对网站性能没影响。
 # 但如果产品数量非常多，把它们信息全部先载入内存会造成很大性能浪费。
-
 products = Product.objects.all()
 for product in products:
     product.price *= 1.2

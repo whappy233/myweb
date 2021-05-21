@@ -1,9 +1,12 @@
-from django.urls import path
-from app_comments import views
+from django.urls import path, re_path
+from . import views
 
 
 app_name = 'app_comments'
 urlpatterns = [
-    path('article/<int:article_id>/postcomment', views.CommentPostView.as_view(), name='postcomment'),
-    path('ajax_delete_comment/', views.ajax_delete_comment, name='ajax_delete_comment')
+    path('article/<slug:article_slug>/postcomment', views.CommentPostView.as_view(), name='postcomment'),
+
+    path('', views.CommentsView.as_view(), name='view'),
+    # re_path(r'^(?P<content_obj>.+)/patch/$', views.CommentsView.as_view(), name='view'),
+
 ]
