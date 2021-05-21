@@ -124,13 +124,14 @@ class Comments(models.Model):
         if self.parent_comment in self.get_all_children():
             raise ValidationError("不能将自己或其子级之一作为父级.")
 
-        p_obj_type = type(self.parent_comment.content_object)
-        curr_obj_type = type(self.content_object)
-        if p_obj_type != curr_obj_type:
-            raise ValidationError(
-                '父评论关联对象类型与新建评论的关联对象类型应该相同. 父评论关联对象:'
-                f'"{self.parent_comment.content_object._meta.verbose_name}"'
-                f', 当前评论关联对象: "{self.content_type.name}"')
+        if self.parent_comment:
+            p_obj_type = type(self.parent_comment.content_object)
+            curr_obj_type = type(self.content_object)
+            if p_obj_type != curr_obj_type:
+                raise ValidationError(
+                    '父评论关联对象类型与新建评论的关联对象类型应该相同. 父评论关联对象:'
+                    f'"{self.parent_comment.content_object._meta.verbose_name}"'
+                    f', 当前评论关联对象: "{self.content_type.name}"')
 
     def save(self, *args, **kwargs):
         if self.is_overhead == True and self.parent_comment:
