@@ -4,7 +4,7 @@ from app_user.utils import validateEmail
 from django import forms
 from django.apps import apps
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from django.forms.models import modelform_factory
 from django.forms.utils import ErrorDict
@@ -22,7 +22,6 @@ from .forms import CommentForm
 from .models import Comments, Wanderer
 
 # model_class = apps.get_model('app_blog', 'article')
-
 
 
 # 增加评论 old
@@ -87,8 +86,6 @@ class CommentPostView(FormView):
             return redirect(url + "#comments_你已经评论过了, 五分钟后可再次评论")
 
 
-
-
 class CommentsView(View):
 
     def get(self, request, *args, **kwargs):
@@ -106,8 +103,6 @@ class CommentsView(View):
             username = request.POST.get('username', '')
             nickname = request.POST.get('nickname', '')
             email = request.POST.get('email', '')
-
-            print(len(str(email)))
 
             if article_slug and comment_body:
                 try:
@@ -128,7 +123,7 @@ class CommentsView(View):
                     if not validateEmail(email):
                         return JsonResponse({'status': 401, 'msg':'请求数据非法(Email 格式错误)'}) 
                     if Wanderer.objects.filter(email=email).exists():
-                        return JsonResponse({'status': 401, 'msg':'Email 已存在'})
+                        return JsonResponse({'status': 401, 'msg':f'{email} 已存在'})
                     try:
                         wanderer = Wanderer.objects.create(username=nickname, email=email)
                         author = None
@@ -147,7 +142,7 @@ class CommentsView(View):
                     if wanderer:
                         wanderer.delete()
                     return JsonResponse({'status': 401, 'msg':e})
-                return JsonResponse({'status': 200, 'msg':'ok'})
+                return JsonResponse({'status': 200, 'msg':'评论成功'})
             else:
                 return JsonResponse({'status': 401, 'msg':'请求数据非法'})
         else:
@@ -172,7 +167,7 @@ class CommentsView(View):
         try:
             uuid = Comments._meta.get_field('uuid').to_python(uuid)
             obj = Comments.objects.get(uuid=uuid)
-        except (models.DoesNotExist, ValidationError):
+        except (ObjectDoesNotExist, ValidationError):
             return JsonResponse({'status':404, 'msg': 'uuid查询失败, 数据不存在'})
 
         fields = [f for f in data.keys() if f in model_fields]
@@ -188,14 +183,16 @@ class CommentsView(View):
         result = {}
         if form.is_valid():
             try:
-                print(form.data)
                 form.save(commit=True)
-                result['result'] = 'success'
+                result['msg'] = 'success'
+                result['status'] = 200
+
             except Exception as e:
-                result['errors'] = str(e)
+                result['msg'] = str(e)
+                result['status'] = 403
         else:
-            result['result'] = 'error'
-            result['errors'] = ErrorDict(form.errors).as_json()
+            result['msg'] = ErrorDict(form.errors).as_json()
+            result['status'] = 403
 
         return JsonResponse(result)
 

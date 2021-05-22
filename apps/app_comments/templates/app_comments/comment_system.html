@@ -1,24 +1,18 @@
 {% load blog_tags %}
 
 
-
 {% comment %}
-
 参数:
-    object: 模型的一条实例, 比如某篇文章, 某张相片
-    comments: object下面的所有评论
-
+object: 模型的一条实例, 比如某篇文章, 某张相片
+comments: object下面的所有评论
 {% endcomment %}
-
-
-<button id="7845">6555</button>
 
 
 <!-- 评论表单  -->
 {% if object.comment_status and OPEN_SITE_COMMENT %}
 <div id="comment" class="blog-form">
     <div class="section-heading-4 heading-dark">
-        <h3 class="item-heading">评论</h3>
+        <h3 class="item-heading">评论 {{article.visible_comments_count}}</h3>
     </div>
     <form class="contact-form-box" name="add_comment">
         <div class="row gutters-15">
@@ -27,19 +21,22 @@
             {% if not request.user.is_authenticated %}
             {# 如果登录就不显示 name 和 email Form #}
             <div class="col-md-6 form-group">
-                <input type="text" placeholder="Nickname* 20个字符内" class="form-control" name="nickname" value="6646" required>
+                <input type="text" placeholder="Nickname* 20个字符内" class="form-control" name="nickname" value="6646"
+                    required>
             </div>
             <div class="col-md-6 form-group">
-                <input type="email" placeholder="E-mail*" class="form-control" name="email" value="891953720@qq.com" required>
+                <input type="email" placeholder="E-mail*" class="form-control" name="email" value="891953720@qq.com"
+                    required>
             </div>
             {% else %}
             <input type="hidden" name="username" value="{{request.user}}">
             {% endif %}
             <div class="col-12 form-group">
-                <textarea placeholder="来说点什么..." class="textarea form-control" name="comment_body" rows="4" required></textarea>
+                <textarea placeholder="来说点什么..." class="textarea form-control" name="comment_body" rows="4"
+                    required></textarea>
             </div>
             <div class="col-12 form-group RL_layer">
-                <p style="color:red; margin-right:10px;">error</p>
+                <p class="error-info"></p>
                 <a href="#" class="btn item-btn cancel-comment">取消回复</a>
                 <button id="send_comment" class="item-btn">发送</button>
             </div>
@@ -48,95 +45,128 @@
 </div>
 {% endif %}
 
-
 <!-- 文章评论 -->
 <div class="blog-comment">
 
     {% if comments.count > 0 %}
     {% query comments parent_comment=None as parent_comments %}
     {% for comment_item in parent_comments %}
-        {% with 0 as depth %}
-        {% include "app_comments/comment_tree.html" with object=object %}
-        {% endwith %}
+    {% with 0 as depth %}
+    {% include "app_comments/comment_tree.html" with object=object %}
+    {% endwith %}
     {% endfor %}
     {% endif %}
 </div>
 
 
-
 <script>
-
     $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
+        beforeSend: function (xhr, settings) {
             xhr.setRequestHeader("X-CSRFToken", $("[name='csrfmiddlewaretoken']").val())
         }
     });
 
-    var $from = $('[name=add_comment]');
-        $from.on('submit', add_comment);
+    var $form = $('form[name=add_comment]'),
+        $err_info_ele = $form.find('.error-info');
+
+    $form.on('submit', add_comment);  // 添加评论
+    $('a.cancel-comment').on('click', form_cancel);  // 取消回复某条评论
+    $('a.reply').on('click', form_reply);  // 回复某条评论
+    $("input[id^='do_action_']").on('change', do_action);  // 置顶评论/隐藏评论  ajax Patch
+
+    $('.blog-comment .item-btn.extend').on('click', toggleChildrenComments);  // 显示或隐藏子评论
+
+    // 显示或隐藏子评论
+    function toggleChildrenComments() {
+        var $this = $(this);
+        $.when($this.parent().nextAll('.child-comment').slideToggle()).done(function (data) {
+            if ($(data[0]).is(":visible")) {
+                $this.find('i').css('transform', 'rotate(180deg)');
+                $this.find('span').text('折叠');
+            } else {
+                $this.find('i').css('transform', 'rotate(0deg)');
+                $this.find('span').text('展开');
+            }
+        })
+        return false;
+    };
 
     // 取消回复某条评论
-    $('a.cancel-comment').on('click', function(e){
-        $from.data('replyto', '')
+    function form_cancel() {
+        $form.data('replyto', '')
         $('#comment form').remove();
-        // $from[0].reset();  // reset form 表单
-        $('#comment').append($from);
+        // $form[0].reset();  // reset form 表单
+        $form.hide(200, () => { $('#comment').append($form); }).slideDown(400);
         return false;
-    });
+    };
 
     // 回复某条评论
-    $('a.reply').on('click', function(e){
-        var $this = ($(this)),
+    function form_reply(e) {
+        var $this = $(this),
             $parent = $this.parent();
-        // $from[0].reset();  // reset form 表单
-        $parent.after($from);
-        $from.data('replyto', $parent[0].id)
-        $from.find('textarea').focus();
+        $form.data('replyto', $parent[0].id)
+        // $form[0].reset();  // reset form 表单
+        $form.hide(200, () => { $parent.after($form); }).slideDown(400, () => {
+            $form.find('textarea').focus();
+        });
         return false;
-    });
+    };
 
     // 添加评论 ajax Post
-    function add_comment(e){
-        var replyto = $from.data('replyto');
+    function add_comment(e) {
+        var replyto = $form.data('replyto');
         $.ajax({
             url: "{% url 'app_comments:view' %}",
-            data: $from.serialize()+`&replyto=${replyto?replyto:''}`,
+            data: $form.serialize() + `&replyto=${replyto ? replyto : ''}`,
             type: 'POST',
             dataType: 'json',
             // 发送数据到服务器时所使用的内容类型
             contentType: "application/x-www-form-urlencoded",
             success: function (data) {
-                if (data['status']==200){
-                    console.log('成功!', data['msg']);
-                }else{
-                    console.log(data['msg']);
+                if (data['status'] == 200) {
+                    toastr.success(data['msg'])
+                    $err_info_ele.text('评论成功');
+                    form_cancel();
+                } else {
+                    toastr.error(data['msg']);
+                    $err_info_ele.text(data['msg']);
                 }
             },
             error: function (xhr, status, error) {  // 请求失败运行的函数
-                console.log(xhr, status, error);
+                toastr.error(status);
+                $err_info_ele.text(status + ', 请稍后再试');
             }
         });
         return false;
     };
 
-    // 置顶评论 ajax Patch
-    $("input[id^='overhead-']").on('click', sss);
-    // 隐藏评论 ajax Patch
-    $("input[id^='hide-']").on('click', sss);
-
-    function sss(e){
-        let ele = e.currentTarget;
-        let data = `${ele.name}=${ele.checked}&uid=${ele.id.split('-')[1]}`;
+    // 置顶评论/隐藏评论  ajax Patch
+    function do_action(e) {
+        let ele = e.currentTarget,
+            init_status = ele.checked;
+        let data = `${ele.name}=${init_status}&uid=${ele.id.split('-')[1]}`;
         $.ajax({
-            url:  "{% url 'app_comments:view' %}",
+            url: "{% url 'app_comments:view' %}",
             data: data,
             type: 'PATCH',
             dataType: 'json',
             success: function (data) {
-                console.log(data);
-            }
+                if (data['status'] == 200) {
+                    toastr.success(data['msg']);
+                } else {
+                    toastr.error(data['msg']);
+                    // ele.checked = init_status?'':'on';
+                    setTimeout(() => { ele.checked = init_status ? '' : 'on'; }, 100);
+                }
+            },
+            error: function (xhr, status, error) {  // 请求失败运行的函数
+                toastr.error(status);
+                // ele.checked = init_status?'':'on';
+                setTimeout(() => { ele.checked = init_status ? '' : 'on'; }, 100);
+            },
         });
-        // $('#overhead-d24186cc94754d38b032d89477e2bc2c')[0].checked = ''
     };
+
+
 
 </script>

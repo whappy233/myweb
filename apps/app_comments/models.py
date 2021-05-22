@@ -17,7 +17,7 @@ class Wanderer(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self) -> str:
-        return f'{self.username}-{self.email}'
+        return self.username
 
 
 import uuid
@@ -144,4 +144,4 @@ class Comments(models.Model):
 
 
     def __str__(self):
-        return f'{self.id}:{self.body} (关联对象:{self.content_type} id:{self.object_id})'
+        return f'{self.id}:{self.body[:10]}... (关联对象:{self.content_type} id:{self.object_id})'

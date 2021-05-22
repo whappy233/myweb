@@ -8,18 +8,18 @@ from .models import Comments, Wanderer
 @register(Comments)
 class CommentAdmin:
     # 显示字段
-    list_display = ['id', 'uuid', 'body', 'parent_comment',
+    list_display = ['id', 'link_to_uuid', 'link_to_body', 'parent_comment',
                     'link_to_commenter',
                     'content_type', 'link_to_article',
-                    'created_time', 'is_overhead', 'is_hide']
+                    'last_mod_time', 'is_overhead', 'is_hide']
     # 搜索字段
     search_fields = ['body']  
     # 过滤器
-    list_filter = ['created_time', 'is_overhead', 'is_hide', 'object_id', 'content_type', 'parent_comment']  
+    list_filter = ['last_mod_time', 'is_overhead', 'is_hide', 'object_id', 'content_type', 'parent_comment']  
     list_editable = ['is_overhead', 'is_hide']
     actions = ['enable_commentstatus', 'disable_commentstatus', 'enable_overhead', 'disable_overhead']
     # 可点击的项
-    list_display_links = ('body', 'uuid')  
+    list_display_links = ('link_to_body', 'link_to_uuid')
 
     # 当 user 和 wanderer 同时存在时, 清除 wanderer 
     def save_models(self):
@@ -75,6 +75,15 @@ class CommentAdmin:
         text = f'(ID: {c_id}) {c_obj.title}'
         return format_html(f'<a href="{link}">{text}</a>')
     link_to_article.short_description = '关联对象详情'
+
+    def link_to_uuid(self, obj):
+        uuid = obj.uuid
+        return format_html(f'{uuid[:5]}...<a href="#" title="点击复制" onclick="copytext(`{uuid}`)">🔖</a>')
+    link_to_uuid.short_description = 'uuid'
+
+    def link_to_body(self, obj):
+        return f'{obj.body[:10]}...'
+    link_to_body.short_description = '评论内容'
 
 
     # def save_models(self):

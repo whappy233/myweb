@@ -206,6 +206,10 @@ class Article(models.Model, AdminMixin):
         # /detail/<slug:slug>/
         return reverse('app_blog:article_detail', args=(self.slug,))
 
+    @cache_decorator(60 * 60 * 10)
+    def visible_comments_count(self):
+        return self.comments.show_count()
+
     def comment_list(self, is_superuser=False):
         '''获取对应文章的所有评论'''
         if is_superuser:

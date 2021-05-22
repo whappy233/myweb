@@ -10,6 +10,23 @@
         });
     }
 
+    // 消息提示插件
+    toastr.options = {
+        timeOut: 3000,
+        progressBar: true,
+        showMethod: "slideDown",
+        hideMethod: "slideUp",
+        showDuration: 200,
+        hideDuration: 200
+    };
+    // toastr.success('Successfully completed');
+    // toastr.error('Something went wrong');
+    // toastr.info('This is an informational message');
+    // toastr.warning('You are currently not authorized');
+    // toastr.clear();
+
+
+
 
     /*-------------------------------------
     图片懒加载
