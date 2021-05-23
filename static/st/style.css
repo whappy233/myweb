@@ -7181,8 +7181,10 @@ img.loading {
     color: gray;
     background-color: #28a74433;
 }
-
 .single-blog-box-layout1 .blog-comment .media .media-body .item-nickname {
+  vertical-align: middle;
+}
+.single-blog-box-layout1 .blog-comment .media .media-body .reply .item-nickname {
   vertical-align: middle;
   margin-left: 5px;
 }
@@ -7227,13 +7229,14 @@ img.loading {
 .single-blog-box-layout1 .blog-comment .media .item-btn.extend {
   right: 0;
   bottom: 0;
-  padding: 0px 9px;
-  width: 100%;
-  border-radius: 10px 10px 0 0;
-  background-color: var(--global-color-blue);
+  width: 70px;
+  border-radius: 40px 0 0;
+  background: linear-gradient(125deg,#90c7ff61,#2d6af5)!important;
   opacity: 0.5;
   text-align: center;
-  color: #fff;
+  color: var(--global-color-depth2);;
+  padding-left: 5px;
+  cursor: pointer;
 }
 .single-blog-box-layout1 .blog-comment .media .is-overhead {
   background-image: var(--global-gradient-color); 
@@ -7262,6 +7265,9 @@ img.loading {
 .single-blog-box-layout1 .blog-comment .media .item-btn.visible:hover {
   background: #ff2828;
   color: var(--global-color);
+}
+.single-blog-box-layout1 .blog-comment .media .item-btn.extend:hover {
+  color: var(--global-color);;
 }
 
 .single-blog-box-layout1 .contact-form-box {

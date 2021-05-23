@@ -8,6 +8,8 @@ from django.template.defaultfilters import stringfilter
 from ..models import Article, Category
 from myweb.utils import cache, get_current_site
 from loguru import logger
+from django.apps import apps
+
 
 register = template.Library()
 

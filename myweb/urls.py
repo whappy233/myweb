@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include, re_path
-
+import debug_toolbar
 import xadmin
 
 # 添加网站地图
@@ -37,6 +37,8 @@ urlpatterns = [
 
     # path('ckeditor/', include('ckeditor_uploader.urls')),
     path('mdeditor/', include('mdeditor.urls')),  # mdeditor 富文本上传图片
+
+    path('__debug__/', include(debug_toolbar.urls)), # django-debug-toolbar
 
     path('sitemap.xml', sitemap, {'sitemaps':sitemaps}, name='django.contrib.sitemaps.views.sitemap'),  # 网站地图
 

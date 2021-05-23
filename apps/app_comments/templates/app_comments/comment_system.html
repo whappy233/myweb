@@ -31,9 +31,13 @@ comments: object下面的所有评论
             {% else %}
             <input type="hidden" name="username" value="{{request.user}}">
             {% endif %}
-            <div class="col-12 form-group">
-                <textarea placeholder="来说点什么..." class="textarea form-control" name="comment_body" rows="4"
-                    required></textarea>
+            <div class="col-12 form-group" style="position: relative;">
+                <textarea placeholder="来说点什么..." class="textarea form-control" name="comment_body" rows="4" required></textarea>
+                <div style="position:absolute;bottom: 10px; left: 29px;">
+                    <span style="margin-right: 5px;">😆</span>
+                    <span style="margin-right: 5px;">😌</span>
+                    <span style="margin-right: 5px;">🤪</span>
+                </div>
             </div>
             <div class="col-12 form-group RL_layer">
                 <p class="error-info"></p>
@@ -47,15 +51,12 @@ comments: object下面的所有评论
 
 <!-- 文章评论 -->
 <div class="blog-comment">
-
-    {% if comments.count > 0 %}
     {% query comments parent_comment=None as parent_comments %}
     {% for comment_item in parent_comments %}
     {% with 0 as depth %}
     {% include "app_comments/comment_tree.html" with object=object %}
     {% endwith %}
     {% endfor %}
-    {% endif %}
 </div>
 
 

@@ -67,6 +67,7 @@ class Comments(models.Model):
                                        blank=True, null=True,
                                        verbose_name="上级评论")
 
+    ip_address = models.GenericIPAddressField('IP 地址', unpack_ipv4=True, blank=True, null=True)
     is_overhead = models.BooleanField('是否顶置', default=False)
     is_hide = models.BooleanField('是否隐藏', default=False)
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
@@ -74,7 +75,6 @@ class Comments(models.Model):
 
     # 使用admin呈现此字段时，设置对此字段(limit_choices_to)的可用选项的限制(默认情况下, 查询集中的所有对象都可供选择).
     # 可以使用字典、Q对象或可调用返回字典或Q对象.
-
     # step1 内容类型，代表了模型的名字(比如Article, Picture)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,
                                      limit_choices_to={
@@ -131,7 +131,7 @@ class Comments(models.Model):
                 raise ValidationError(
                     '父评论关联对象类型与新建评论的关联对象类型应该相同. 父评论关联对象:'
                     f'"{self.parent_comment.content_object._meta.verbose_name}"'
-                    f', 当前评论关联对象: "{self.content_type.name}"')
+                    f', 当前评论关联对象: "{self.content_type}"')
 
     def save(self, *args, **kwargs):
         if self.is_overhead == True and self.parent_comment:
@@ -144,4 +144,5 @@ class Comments(models.Model):
 
 
     def __str__(self):
-        return f'{self.id}:{self.body[:10]}... (关联对象:{self.content_type} id:{self.object_id})'
+        return f'ID:{self.id}-{self.body[:10]}... (🔗 {self.content_type}-ID:{self.object_id})'
+

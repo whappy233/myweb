@@ -24,3 +24,5 @@ django-formtools==2.1
 future==0.15.2
 httplib2==0.9.2
 six==1.10.0
+
+django-debug-toolbar==3.2.1

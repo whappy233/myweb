@@ -22,10 +22,10 @@ class CommentAdmin:
     list_display_links = ('link_to_body', 'link_to_uuid')
 
     # 当 user 和 wanderer 同时存在时, 清除 wanderer 
-    def save_models(self):
-        if self.new_obj.author and self.new_obj.wanderer:
-            self.new_obj.wanderer = None
-        super().save_models()
+    # def save_models(self):
+    #     if self.new_obj.author and self.new_obj.wanderer:
+    #         self.new_obj.wanderer = None
+    #     super().save_models()
 
     def enable_commentstatus(self, request, queryset):
         '''显示评论'''

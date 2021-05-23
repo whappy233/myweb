@@ -1,8 +1,8 @@
+
 from django.db.models.signals import post_save
 from .models import Comments
 from django.dispatch import receiver
-
-
+from app_common.email import send_email_by_template
 
 
 # 新建评论通知
@@ -22,5 +22,40 @@ def notify_handler(sender, instance, created, **kwargs):
         print('评论的对象', f'({c_type}: {c_id}) {c_obj.title}')
         print('当前评论作者', instance.author or instance.wanderer)
         print('当前评论内容', instance.body)
+
+        try:
+            #设置模版对应的参数
+            email_data = {
+                'comment_name' : instance.author or instance.wanderer, 
+                'comment_content' : instance.body,
+                'comment_url' : u'http://yshblog.com/blog/'}
+            subject = ''    #邮件主题
+            template = ''   #使用的模版
+            to_list = []    #收件人
+
+            if not parent_comment:
+                subject = u'[浩瀚星海]博文评论'
+                template = 'app_comments/comments_email.html'
+                #发送给自己（可以写其他邮箱）
+                to_list.append('whh369@foxmail.com')
+            else:
+                subject = u'[浩瀚星海]评论回复'
+                template = 'app_comments/comments_email_reply.html'
+                #获取评论对象，找到回复对应的评论
+                # comment_model = django_comments.get_model()
+                # cams = comment_model.objects.filter(id = comment.reply_to)
+                # if cams:
+                    # to_list.append(cams[0].user_email)
+                # else:
+                    #没有找到评论，就发给自己（可以修改其他邮箱）
+                to_list.append('whh369@foxmail.com')
+
+            #根据模版发送邮件
+            send_email_by_template(subject, template, email_data, to_list)
+
+        except Exception as e:
+            print(20*'-')
+            print(e)
+
 
 # post_save.connect(notify_handler, sender=Comments)  # 激活方式二

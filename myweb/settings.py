@@ -30,6 +30,9 @@ ALLOWED_HOSTS = ['*']
 
 SITE_ID = 1  # 设置站点ID
 
+
+INTERNAL_IPS = ['127.0.0.1',]  # django-debug-toolbar
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',         # 管理员站点
@@ -55,6 +58,8 @@ INSTALLED_APPS = [
     # 'ckeditor_uploader',            # 第三方富文本编辑器_文件上传组件
 
     'mdeditor',                     # 第三方富文本编辑器
+
+    'debug_toolbar',                # django-debug-toolbar
 
     # xadmin 模块
     'xadmin',
@@ -83,9 +88,11 @@ MIDDLEWARE = [
     # 'django.middleware.common.CommonMiddleware',
     # 'django.middleware.cache.FetchFromCacheMiddleware'
 
+    'debug_toolbar.middleware.DebugToolbarMiddleware',  # django-debug-toolbar
+
     # 'django.middleware.http.SetRemoteAddrFromForwardedFor',  #  当部署在负载平衡proxy(如nginx)上, 该中间件用于获取用户实际的 ip 地址
     # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', '')  # 获取真实ip
-    # if x_forwarded_for: p = x_forwarded_for.split(',')[0]  # 所以这里是真实的ip
+    # if x_forwarded_for: ip = x_forwarded_for.split(',')[0]  # 所以这里是真实的ip
     # else: ip = request.META.get('REMOTE_ADDR')  # 这里获得代理ip
 ]
 
@@ -281,14 +288,17 @@ LOGIN_URL = 'app_user:login'  # 用户重定向并实现登陆的URL(例如使�
 LOGOUT_URL = 'app_user:logout'   # 用户重定向并实现退出登陆的URL
 
 # 邮箱配置 #####################################################3
-# EMAIL_HOST =  smtp.gmail.com      SMTP 服务器主机  默认localhost
-# EMAIL_PORT = 587                  SMTP 端口 默认25
-# EMAIL_HOST_USER = xxxx@gmail.com  SMTP 服务器用户名
-# EMAIL_HOST_PASSEORD =  password   SMTP 服务器密码
-# EMAIL_USE_TLS = True              是否采用 TLS 安全连接
-# EMAIL_USE_SSL = False             是否采用隐式 TLS 安全连接
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # 输出到 Shell
+EMAIL_HOST =  'smtp.qq.com'      # SMTP 服务器主机  默认localhost
+EMAIL_PORT = 465                  # SMTP 端口 默认25
+EMAIL_HOST_USER = '891953720@qq.com'  # SMTP 服务器用户名
+EMAIL_HOST_PASSWORD =  'vthfpiorurwubebf'   # SMTP 服务器密码
+# EMAIL_USE_TLS / EMAIL_USE_SSL 是互斥的，因此只能将这些设置之一设置为True。
+# EMAIL_USE_TLS = True              # 是否采用 TLS 安全连接
+EMAIL_USE_SSL = True             # 是否采 SSL 安全连接
+EMAIL_SUBJECT_PREFIX = '[浩瀚星海]' #邮件标题前缀,默认是'[django]'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # 输出到 Shell
+
 
 # 自定义验证后端,实现用户名邮箱手机号登录
 AUTHENTICATION_BACKENDS = ('app_user.user_login_backend.CustomBackend',)

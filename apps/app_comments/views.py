@@ -2,7 +2,6 @@
 from app_blog.models import Article
 from app_user.utils import validateEmail
 from django import forms
-from django.apps import apps
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
@@ -21,6 +20,7 @@ from loguru import logger
 from .forms import CommentForm
 from .models import Comments, Wanderer
 
+from django.apps import apps
 # model_class = apps.get_model('app_blog', 'article')
 
 
@@ -137,7 +137,19 @@ class CommentsView(View):
                 else:
                     parent_comment = None
                 try:
-                    comment = Comments.objects.create(body=comment_body, author=author, wanderer=wanderer, parent_comment=parent_comment, content_object=article)
+                    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')  # 获取真实ip
+                    if x_forwarded_for: 
+                        ip = x_forwarded_for.split(',')[0]  # 所以这里是真实的ip
+                    else: 
+                        ip = request.META.get('REMOTE_ADDR')  # 这里获得代理ip
+                    comment = Comments.objects.create(
+                        body=comment_body,
+                        author=author,
+                        wanderer=wanderer,
+                        parent_comment=parent_comment,
+                        ip_address=ip,
+                        content_object=article
+                    )
                 except Exception as e:
                     if wanderer:
                         wanderer.delete()
