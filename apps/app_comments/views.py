@@ -18,7 +18,7 @@ from django.views.generic.edit import FormView
 from loguru import logger
 
 from .forms import CommentForm
-from .models import Comments, Wanderer
+from .models import Comments, Wanderer, MpComments
 
 from django.apps import apps
 # model_class = apps.get_model('app_blog', 'article')
@@ -150,6 +150,17 @@ class CommentsView(View):
                         ip_address=ip,
                         content_object=article
                     )
+                    # mpcomment = MpComments.objects.create(
+                    #     body=comment_body,
+                    #     author=author,
+                    #     wanderer=wanderer,
+                    #     parent=parent_comment,
+                    #     ip_address=ip,
+                    #     content_object=article
+                    # )
+
+                    # print(20*'++++++++++++++')
+                    # print(mpcomment)
                 except Exception as e:
                     if wanderer:
                         wanderer.delete()

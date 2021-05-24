@@ -3,13 +3,14 @@
 import xadmin
 from xadmin.sites import register
 from django.contrib.auth.models import Group, Permission
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
 from .models import BlogSettings, Carousel
 from app_user.models import UserProfile
 from app_blog.models import Article, Category
 from app_gallery.models import Gallery, Photo
-from app_comments.models import Comments, Wanderer
+from app_comments.models import Comments, Wanderer, MpComments
 from app_blog.cn_taggit import CnTag
 
 
@@ -31,13 +32,9 @@ class GlobalSettings:
 
     global_search_models = [UserProfile]
 
-
-    def go_to(self):  # 设置列表页跳转
-        return mark_safe('<a href="http://www.fishc.com.cn">跳转</a>')
-    go_to.short_description = '链接hjfgj'
-
     def get_site_menu(self):
         '''自定义导航菜单顺序'''
+        url = reverse('admin:%s_%s_changelist' % (MpComments._meta.app_label, MpComments._meta.model_name))
         return (
             {'title': '用户管理', 'menus': (
                 {'title': 'User', 'url': self.get_model_url(User, 'changelist'), 'icon': 'glyphicon glyphicon-user'},
@@ -54,15 +51,15 @@ class GlobalSettings:
             )},
             {'title': '评论系统', 'menus': (
                 {'title': '所有评论', 'url': self.get_model_url(Comments, 'changelist') ,'icon': "glyphicon glyphicon-comment"},
-                {'title': '游民信息', 'url': self.get_model_url(Wanderer, 'changelist')},
+                {'title': 'MP Comments', 'url': self.get_model_url(MpComments, 'changelist') ,'icon': "glyphicon glyphicon-tree-conifer"},
+                {'title': 'MP Admin', 'url': url, 'icon': 'glyphicon glyphicon-move'},
+                {'title': '游民信息', 'url': self.get_model_url(Wanderer, 'changelist'), 'icon': 'glyphicon glyphicon-user'},
             )},
             {'title': '通用', 'menus': (
                 {'title': '轮播图', 'url': self.get_model_url(Carousel, 'changelist'),'icon': "glyphicon glyphicon-sound-stereo"},
                 {'title': '站点配置', 'url': self.get_model_url(BlogSettings, 'changelist') ,'icon': "glyphicon glyphicon-cog"},
             )},
         )
-
-
 
 
 # 轮播图

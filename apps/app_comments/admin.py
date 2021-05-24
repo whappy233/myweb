@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
-from .models import Comments
-
+from .models import Comments, Wanderer, MpComments
+from mptt.admin import DraggableMPTTAdmin
 
 # admin.site.register(Comments)  # 注册方式1
 @admin.register(Comments)  # 注册方式2（使用包装）
@@ -43,4 +43,47 @@ class CommentAdmin(admin.ModelAdmin):
         text= f'({"/".join(info)}: {obj.content_object.id}) {obj.content_object.title}'
         return format_html(u'<a href="%s">%s</a>' % (link, text))
     link_to_article.short_description = '关联对象详情'
+
+
+admin.site.register(Wanderer)
+
+
+
+@admin.register(MpComments)
+class CategoryAdmin(DraggableMPTTAdmin):
+    mptt_indent_field = "body"
+
+    # 搜索字段
+    search_fields = ['body']
+    # 过滤器
+    list_filter = ['is_overhead', 'is_hide', 'object_id', 'content_type', 'parent']  
+    actions = ['enable_commentstatus', 'disable_commentstatus', 'enable_overhead', 'disable_overhead']
+    # 可点击的项
+    list_display_links = ('indented_title',)
+
+    # 当 user 和 wanderer 同时存在时, 清除 wanderer 
+    # def save_models(self):
+    #     if self.new_obj.author and self.new_obj.wanderer:
+    #         self.new_obj.wanderer = None
+    #     super().save_models()
+
+    def enable_commentstatus(self, request, queryset):
+        '''显示评论'''
+        queryset.update(is_hide=False)
+    enable_commentstatus.short_description = '显示评论'
+
+    def disable_commentstatus(self, request, queryset):
+        '''隐藏评论'''
+        queryset.update(is_hide=True)
+    disable_commentstatus.short_description = '隐藏评论'
+
+    def enable_overhead(self, request, queryset):
+        '''顶置评论'''
+        queryset.update(is_overhead=True)
+    enable_overhead.short_description = '顶置评论'
+
+    def disable_overhead(self, request, queryset):
+        '''取消顶置'''
+        queryset.update(is_overhead=False)
+    disable_overhead.short_description = '取消顶置'
 

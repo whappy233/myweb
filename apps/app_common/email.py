@@ -10,13 +10,14 @@ import threading
 class SendHtmlEmail(threading.Thread):
     """send html email"""
     def __init__(self, subject, html_content, send_from, to_list, fail_silently = True):
+        super(SendHtmlEmail, self).__init__()
+        # super().__init__()
         self.subject = subject
         self.html_content = html_content
         self.send_from = send_from
         self.to_list = to_list
         self.fail_silently = fail_silently  # 默认发送异常不报错
         self.daemon = True
-        super().__init__()
 
     def run(self):
         msg = EmailMessage(self.subject, self.html_content, self.send_from, self.to_list)
