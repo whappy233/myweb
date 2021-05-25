@@ -17,16 +17,16 @@ def notify_handler(sender, instance, created, **kwargs):
     # 判断是否是第一次生成评论，后续修改评论不会再次激活信号
     if created:
         if parent_comment:  # 是否有父级
-            print('回复的作者', parent_comment.author or parent_comment.wanderer)
+            print('回复的作者', parent_comment.author)
             print('回复的评论', parent_comment.body)
         print('评论的对象', f'({c_type}: {c_id}) {c_obj.title}')
-        print('当前评论作者', instance.author or instance.wanderer)
+        print('当前评论作者', instance.author)
         print('当前评论内容', instance.body)
 
         try:
             #设置模版对应的参数
             email_data = {
-                'comment_name' : instance.author or instance.wanderer, 
+                'comment_name' : instance.author, 
                 'comment_content' : instance.body,
                 'comment_url' : u'http://yshblog.com/blog/'}
             subject = ''    #邮件主题

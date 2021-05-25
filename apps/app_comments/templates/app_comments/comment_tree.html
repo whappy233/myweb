@@ -7,10 +7,10 @@
 
     <!-- 头像 -->
     <figure style="margin-left: {% widthratio depth 1 40 %}px" class="avatar avatar-lg">
-        {% if comment_item.author %}
-        <img src="{{ comment_item.author.profile.photo.url }}" class="rounded-circle" alt="avatar">
+        {% if comment_item.author.photo %}
+        <img src="{{ comment_item.author.photo.url }}" class="rounded-circle" alt="avatar">
         {% else %}
-        <span class="avatar-title bg-primary rounded-circle">{{comment_item.wanderer.username|first}}</span>
+        <span class="avatar-title bg-primary rounded-circle">{{comment_item.author.username|first}}</span>
         {% endif %}
     </figure>
 
@@ -18,13 +18,13 @@
     <div class="media-body" id="content-{{uid}}">
         <!-- 昵称 -->
         <div class="item-title">
-            {% with user=comment_item.author|default:comment_item.wanderer %}
-            <span class="item-nickname">{{ user.username }}</span>
+            {% with user=comment_item.author.username %}
+            <span class="item-nickname">{{ user }}</span>
             {% if object.author == user %}<span class="item-meta badge badge-success">作者</span>{% endif %}
             {% endwith %}
 
             {% if parent %}
-            {% with pp=parent.author|default:parent.wanderer %}
+            {% with pp=parent.author.username %}
             <div class="reply">
                 <span class="item-nickname">回复: {{pp}}</em></span>
                 {% if object.author == pp %}<span class="badge badge-success">作者</span>{% endif %}

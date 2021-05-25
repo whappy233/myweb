@@ -275,8 +275,14 @@
                                     {% if request.user.is_authenticated %} {# 当用户被验证 #}
                                     <!-- User -->
                                     <li class="user-wrap">
-                                        <img src="{{ request.user.profile.photo.url }}" alt="用户: {{ request.user }}"
-                                            title="用户: {{ request.user }}">
+                                        <!-- 头像 -->
+                                        <figure class="avatar avatar-lg">
+                                            {% if request.user.profile.photo %}
+                                            <img src="{{ request.user.profile.photo.url }}" class="about-author-img rounded-circle" alt="{{request.user.username}}">
+                                            {% else %}
+                                            <span class="avatar-title bg-primary rounded-circle">{{request.user.username|first}}</span>
+                                            {% endif %}
+                                        </figure>
                                         <div class="template-mega-menu animation">
                                             <div class="container">
                                                 <div class="row">

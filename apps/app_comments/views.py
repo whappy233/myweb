@@ -18,7 +18,10 @@ from django.views.generic.edit import FormView
 from loguru import logger
 
 from .forms import CommentForm
-from .models import Comments, Wanderer, MpComments
+from .models import Comments, MpComments
+
+
+from app_user.models import UserProfile
 
 from django.apps import apps
 # model_class = apps.get_model('app_blog', 'article')
@@ -111,8 +114,8 @@ class CommentsView(View):
                     return JsonResponse({'status': 404, 'msg':'数据获取失败'})
 
                 if request.user.is_authenticated and request.user.username==username:
-                    wanderer = None
-                    author = request.user
+                    wanderer = False
+                    author = request.user.profile
                 elif username and not (nickname and email):
                     return JsonResponse({'status': 402, 'msg':'页面过期请刷新页面'}) 
                 else:
@@ -122,11 +125,11 @@ class CommentsView(View):
                         return JsonResponse({'status': 401, 'msg':'请求数据非法(email 控制在50字以内)'}) 
                     if not validateEmail(email):
                         return JsonResponse({'status': 401, 'msg':'请求数据非法(Email 格式错误)'}) 
-                    if Wanderer.objects.filter(email=email).exists():
+                    if UserProfile.objects.filter(w_email=email).exists():
                         return JsonResponse({'status': 401, 'msg':f'{email} 已存在'})
                     try:
-                        wanderer = Wanderer.objects.create(username=nickname, email=email)
-                        author = None
+                        author = UserProfile.objects.create(w_name=nickname, w_email=email)
+                        wanderer = True
                     except Exception as e:
                         return JsonResponse({'status': 401, 'msg':e})
                 if replyto:
@@ -145,7 +148,6 @@ class CommentsView(View):
                     comment = Comments.objects.create(
                         body=comment_body,
                         author=author,
-                        wanderer=wanderer,
                         parent_comment=parent_comment,
                         ip_address=ip,
                         content_object=article
@@ -153,7 +155,6 @@ class CommentsView(View):
                     # mpcomment = MpComments.objects.create(
                     #     body=comment_body,
                     #     author=author,
-                    #     wanderer=wanderer,
                     #     parent=parent_comment,
                     #     ip_address=ip,
                     #     content_object=article
@@ -163,7 +164,7 @@ class CommentsView(View):
                     # print(mpcomment)
                 except Exception as e:
                     if wanderer:
-                        wanderer.delete()
+                        author.delete()
                     return JsonResponse({'status': 401, 'msg':e})
                 return JsonResponse({'status': 200, 'msg':'评论成功'})
             else:

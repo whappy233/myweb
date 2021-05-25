@@ -7,6 +7,8 @@ from loguru import logger
 from .models import UserProfile
 
 
+
+
 @receiver(user_logged_in)
 def post_login(sender, user, request, **kwargs):
     logger.info(f'USER: {user}(id:{user.id}) 登录.')
@@ -37,7 +39,11 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=USER_MODEL)
 def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+    try:
+        instance.profile.save()
+    except UserProfile.DoesNotExist:
+        UserProfile.objects.create(user=instance)
+
 
 
 # 当删除 UserProfile 时, 同时删除关联的 User 对象.

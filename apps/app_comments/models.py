@@ -1,29 +1,19 @@
-from django.core.exceptions import ValidationError
-from django.db import models
+from uuid import uuid4
+
+from app_user.models import UserProfile
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.utils.timezone import now
+from django.core.exceptions import ValidationError
+from django.db import models
 from django.db.models import Q
+from django.utils.timezone import now
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
-import uuid
-uuid4_hex = lambda:uuid.uuid4().hex
 
-
-# 游民信息表
-class Wanderer(models.Model):
-    username = models.CharField('昵称', max_length=20)
-    email = models.EmailField('邮箱', max_length=50, unique=True)
-    created_time = models.DateTimeField('创建时间', auto_now_add=True)
-
-    class Meta:
-        verbose_name = '游民信息'
-        verbose_name_plural = verbose_name
-
-    def __str__(self) -> str:
-        return self.username
+def uuid4_hex():
+    return uuid4().hex
 
 
 # 自定义 Comments 管理器. 在默认管理器上增加方法
@@ -40,6 +30,14 @@ class ModelManager(models.Manager):
         '''可见评论的数量'''
         return self.count() - self.hidden_count()
 
+    def show(self, start=None, end=None):
+        '''可见评论'''
+        s = []
+        h = self.filter(is_hide=False, parent_comment=None)[start:end]
+        for commnet in h:
+            s.append(commnet.get_show_children())
+        return s
+
 
 # 评论模型
 class Comments(models.Model):
@@ -48,17 +46,10 @@ class Comments(models.Model):
     uuid = models.CharField('唯一标识', max_length=32, unique=True, default=uuid4_hex, editable=False)
 
     # user_obj.comments.all() 某 user 下的所有评论
-    author = models.ForeignKey(User, on_delete=models.CASCADE,
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE,
                                related_name='comments',
                                blank=True, null=True,
-                               verbose_name='作者')
-
-    # wanderer_obj.comments.all() 某 wanderer 下的所有评论
-    wanderer = models.ForeignKey(Wanderer, on_delete=models.CASCADE,
-                                 related_name='comments',
-                                 blank=True, null=True,
-                                 verbose_name='散人', 
-                                 help_text='当作者(Author)和散人(Wanderer)同时设置时,置Wanderer=None')
+                               verbose_name='评论作者')
 
     # comment_obj.child_comments.all() 某评论下的所有子评论
     parent_comment = models.ForeignKey('self', on_delete=models.CASCADE,
@@ -92,13 +83,6 @@ class Comments(models.Model):
         verbose_name = '评论'
         verbose_name_plural = verbose_name
 
-        # 添加约束
-        # 条件约束确保一个模型实例只有满足一定的规则条件后才被创建，不满足条件的数据不会存入到数据库。
-        constraints = [ 
-            # 只有 user 或 wanderer 存在才允许存到数据库
-            models.CheckConstraint(check=Q(author__isnull=False)|Q(wanderer__isnull=False), 
-            name='User 或 Wanderer 至少存在其中一个!'),
-        ]
 
     def get_all_parents(self):
         '''获取所有父级'''
@@ -119,6 +103,21 @@ class Comments(models.Model):
             children.extend(child.get_all_children())
         return children
 
+    def get_show_children(self):
+        show = []
+        if self.is_hide:
+            return show
+        else:
+            show.append(self)
+        try:
+            child_list = self.child_comments.filter(is_hide=False)
+        except AttributeError:
+            return show
+        for child in child_list:
+            show.append(child.get_all_children())
+        return show
+
+
     def clean(self):
         if self.parent_comment in self.get_all_children():
             raise ValidationError("不能将自己或其子级之一作为父级.")
@@ -136,9 +135,6 @@ class Comments(models.Model):
         if self.is_overhead == True and self.parent_comment:
             raise ValueError('不允许顶置非顶级评论')
 
-        # 当 author 和 wanderer 同时存在时, 清除 wanderer 
-        if self.author and self.wanderer:
-            self.wanderer = None
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -152,25 +148,17 @@ class MpComments(MPTTModel):
     uuid = models.CharField('唯一标识', max_length=32, unique=True, default=uuid4_hex, editable=False)
 
     # user_obj.comments.all() 某 user 下的所有评论
-    author = models.ForeignKey(User, on_delete=models.CASCADE,
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE,
                                related_name='mp_comments',
                                blank=True, null=True,
-                               verbose_name='作者')
+                               verbose_name='评论作者')
 
-    # wanderer_obj.comments.all() 某 wanderer 下的所有评论
-    wanderer = models.ForeignKey(Wanderer, on_delete=models.CASCADE,
-                                 related_name='mp_comments',
-                                 blank=True, null=True,
-                                 verbose_name='散人', 
-                                 help_text='当作者(Author)和散人(Wanderer)同时设置时,置Wanderer=None')
-
-    # 上级评论 (parent 必须字段, 请勿修改)
-    parent= TreeForeignKey('self', on_delete=models.CASCADE,
+    # 上级评论 (parent 为默认字段, 如要修改则在 MPTTMeta 中修改 parent_attr='parent')
+    parent_comment= TreeForeignKey('self', on_delete=models.CASCADE,
                                 related_name='children',
                                 blank=True, null=True,
                                 db_index=True, 
                                 verbose_name="上级评论")
-
 
     ip_address = models.GenericIPAddressField('IP 地址', unpack_ipv4=True, blank=True, null=True)
     is_overhead = models.BooleanField('是否顶置', default=False)
@@ -195,10 +183,9 @@ class MpComments(MPTTModel):
         return f'ID:{self.id}-{self.body} {hide} (🔗 {self.content_type}-ID:{self.object_id})'
 
     class MPTTMeta:
+        parent_attr = 'parent_comment'
         order_insertion_by = ['-created_time']
 
-
-from django_comments_xtd.models import XtdComment
 
 # 隐藏的评论数
 # MpComments.objects.filter(is_hide=True).get_descendants(True).count()
@@ -207,6 +194,21 @@ from django_comments_xtd.models import XtdComment
 # MpComments.objects.filter(parent=None, is_hide=False).get_descendants(True)  # good
 # MpComments.objects.filter(is_hide=False).get_descendants(True)  # bad
 
+
+'''
+要显示的评论
+1. 
+a = MpComments.objects.values_list('tree_id','created_time', 'body')
+b = MpComments.objects.filter(is_hide=True).get_descendants(True).values_list('tree_id', 'created_time','body')
+x = set(a)^set(b)
+
+2.
+b = MpComments.objects.filter(is_hide=True).get_descendants(True).values_list('pk')
+show = MpComments.objects.exclude(pk__in=list(zip(*b))[0])
+'''
+
+
+from django.template import Context
 
 # mp = MpComments()
 

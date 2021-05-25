@@ -10,7 +10,7 @@ from .models import BlogSettings, Carousel
 from app_user.models import UserProfile
 from app_blog.models import Article, Category
 from app_gallery.models import Gallery, Photo
-from app_comments.models import Comments, Wanderer, MpComments
+from app_comments.models import Comments, MpComments
 from app_blog.cn_taggit import CnTag
 
 
@@ -53,7 +53,6 @@ class GlobalSettings:
                 {'title': '所有评论', 'url': self.get_model_url(Comments, 'changelist') ,'icon': "glyphicon glyphicon-comment"},
                 {'title': 'MP Comments', 'url': self.get_model_url(MpComments, 'changelist') ,'icon': "glyphicon glyphicon-tree-conifer"},
                 {'title': 'MP Admin', 'url': url, 'icon': 'glyphicon glyphicon-move'},
-                {'title': '游民信息', 'url': self.get_model_url(Wanderer, 'changelist'), 'icon': 'glyphicon glyphicon-user'},
             )},
             {'title': '通用', 'menus': (
                 {'title': '轮播图', 'url': self.get_model_url(Carousel, 'changelist'),'icon': "glyphicon glyphicon-sound-stereo"},

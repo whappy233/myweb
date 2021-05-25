@@ -9,10 +9,16 @@ from xadmin.sites import register
 
 @register(UserProfile)
 class UserProfileAdmin:
-    list_display = ['user', 'show_img', 'email', 'telephone', 
-            'introduction', 'mod_date', 'is_active', 'is_superuser']  # 要显示的字段
+    list_display = ['id', 'link_to_uuid', 'is_wanderer',
+            'user', 'email', 'w_name', 'w_email',
+            'show_img', 'telephone', 'introduction',
+            'mod_date', 'is_active', 'is_superuser']  # 要显示的字段
+
     search_fields = ['user__username', 'user__email', 'telephone']   # 搜索字段
-    list_filter = ['user__is_active', 'user__is_superuser', 'user__date_joined']  # 过滤器
+    
+    list_display_links = ['id', 'link_to_uuid', 'user', 'w_name']
+
+    list_filter = ['is_wanderer','user__is_active', 'user__is_superuser', 'user__date_joined']  # 过滤器
     # readonly_fields = ('user',)  # 只读字段
 
     def show_img(self, obj):
@@ -30,6 +36,11 @@ class UserProfileAdmin:
     def is_superuser(self, obj):
         return xadmin.util.boolean_icon(obj.user.is_superuser)
     is_superuser.short_description = '超级用户'
+
+    def link_to_uuid(self, obj):
+        uuid = obj.uuid
+        return format_html(f'{uuid} <a href="#" title="点击复制" onclick="copytext(`{uuid}`)">🔖</a>')
+    link_to_uuid.short_description = 'uuid'
 
     # def get_readonly_fields(self, **kwargs):
     #     """ 重新定义此函数，限制普通用户所能修改的字段  """
