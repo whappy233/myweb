@@ -7189,6 +7189,7 @@ img.loading {
 .single-blog-box-layout1 .blog-comment .media .media-body .reply .badge-success {
     color: gray;
     background-color: #28a74433;
+    vertical-align: middle;
 }
 .single-blog-box-layout1 .blog-comment .media .media-body .item-nickname {
   vertical-align: middle;
@@ -7196,6 +7197,7 @@ img.loading {
 .single-blog-box-layout1 .blog-comment .media .media-body .reply .item-nickname {
   vertical-align: middle;
   margin-left: 5px;
+  margin-right: 5px;
 }
 .single-blog-box-layout1 .blog-comment .media .media-body .item-meta {
   vertical-align: middle;
@@ -7338,6 +7340,10 @@ img.loading {
   transition: all 0.3s ease-out;
 }
 .single-blog-box-layout1 .contact-form-box .form-group .item-btn:hover {
+  color: var(--global-color);
+  background-color: var(--global-hover-background);
+}
+.single-blog-box-layout1 .contact-form-box .form-group .item-btn:disabled {
   color: var(--global-color);
   background-color: var(--global-hover-background);
 }

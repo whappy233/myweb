@@ -2,8 +2,26 @@
 {% load humanize %}
 
 
+
+
+{% comment %}
+用法:
+在需要评论的模板中, 应用如下几行. 引入自定义的模板标签'{% load blog_tags %}'
+comments: 查询到关联的所有评论.
+
+{% query comments parent_comment=None as parent_comments %}
+{% for comment_item in parent_comments %}
+{% include "app_comments/comment_tree.html" with object=object %}
+{% endfor %}
+
+{% endcomment %}
+
+
+
+
+
 {% with uid=comment_item.uuid is_overhead=comment_item.is_overhead is_hide=comment_item.is_hide parent=comment_item.parent_comment %}
-<div {% if parent %}class="media media-none--xs child-comment" style="display: none;"{% endif %} class="media media-none--xs" id="{{uid}}" data-author="{{comment_item.author.uuid}}">
+<div id="{{uid}}" {% if parent %}class="media media-none--xs child-comment" style="display: none;"{% endif %} class="media media-none--xs" data-author="{{comment_item.author.uuid}}">
 
     <!-- 头像 -->
     <figure style="margin-left: {% if parent %}40{% else %}0{% endif %}px" class="avatar avatar-lg">
@@ -26,8 +44,10 @@
             {% if parent %}
             {% with pp=parent.author.username %}
             <div class="reply" data-reply="{{parent.uuid}}-{{parent.author.uuid}}">
-                <span class="item-nickname">回复: {{pp}}</em></span>
-                {% if object.author == pp %}<span class="badge badge-success">作者</span>{% endif %}
+                <span class="item-nickname">回复: {{pp}}</span>
+                {% if object.author == pp %}
+                <span class="badge badge-success">作者</span>
+                {% endif %}
             </div>
             {% endwith %}
             {% endif %}

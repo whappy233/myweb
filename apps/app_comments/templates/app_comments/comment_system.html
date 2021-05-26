@@ -1,5 +1,3 @@
-{% load blog_tags %}
-
 
 {% comment %}
 参数:
@@ -15,7 +13,7 @@ comments: object下面的所有评论
     <div class="section-heading-4 heading-dark">
         <h3 class="item-heading">评论 {{article.visible_comments_count}}</h3>
     </div>
-    <form class="contact-form-box" name="add_comment">
+    <form class="contact-form-box" name="add_comment" method="POST">
         <div class="row gutters-15">
             {% csrf_token %}
             <input type="hidden" name="object_slug" value="{{object.slug}}">
@@ -44,7 +42,7 @@ comments: object下面的所有评论
             <div class="col-12 form-group RL_layer">
                 <p class="error-info"></p>
                 <a href="#" class="btn item-btn cancel-comment">取消回复</a>
-                <button id="send_comment" class="item-btn">发送</button>
+                <input type="button" id="send_comment" class="item-btn" value="发送">
             </div>
         </div>
     </form>
@@ -52,15 +50,11 @@ comments: object下面的所有评论
 {% endif %}
 
 <!-- 文章评论 -->
-<div class="blog-comment">
-    {% query comments parent_comment=None as parent_comments %}
-    {% for comment_item in parent_comments %}
-    {% include "app_comments/comment_tree.html" with object=object %}
-    {% endfor %}
-</div>
+<div class="blog-comment"></div>
 
 
 <script>
+(function ($) {
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
             xhr.setRequestHeader("X-CSRFToken", $("[name='csrfmiddlewaretoken']").val());
@@ -68,23 +62,30 @@ comments: object下面的所有评论
     });
 
     var $form = $('form[name=add_comment]'),
+        $submit_button = $('#send_comment'),
         $err_info_ele = $form.find('.error-info'),
         $comment_container = $('.blog-comment'),
         AUTHOR_UUID = '{{object.author.profile.uuid}}',
         AUTHOR_SP = '{{request.user.is_superuser}}';
 
-    $form.on('submit', add_comment);  // 添加评论
-    $('a.cancel-comment').on('click', form_cancel);  // 取消回复某条评论
-    $('a.reply').on('click', form_reply);  // 回复某条评论
-    $("input[id^='do_action_']").on('change', do_action);  // 置顶评论/隐藏评论  ajax Patch
+    // $submit_button.on('click', add_comment);  // 添加评论
+        
+    $('#comment').on('click', '#send_comment', add_comment);  // 添加评论
 
-    $('.blog-comment .item-btn.extend').on('click', toggleChildrenComments);  // 显示或隐藏子评论
+    $comment_container.on('click', 'a.cancel-comment', form_cancel);  // 取消回复某条评论
 
-    $('.reply[data-reply]').mouseover(HighlightComment).mouseleave(HighlightComment);  // 高亮回复的评论
+    $comment_container.on('click', 'a.reply', form_reply);  // 回复某条评论
+
+    $comment_container.on('change', "input[id^='do_action_']", do_action);  // 置顶评论/隐藏评论  ajax Patch
+
+    $comment_container.on('click', '.item-btn.extend', toggleChildrenComments);  // 显示或隐藏子评论
+
+    $comment_container.on('mouseover', '.reply[data-reply]', HighlightComment).on('mouseleave', '.reply[data-reply]', HighlightComment);  // 高亮回复的评论
 
     // 显示或隐藏子评论
     function toggleChildrenComments() {
         var $this = $(this);
+        console.log($this.parent().nextAll('.child-comment'));
         $.when($this.parent().nextAll('.child-comment').slideToggle()).done(function (data) {
             if ($(data[0]).is(":visible")) {
                 $this.find('i').css('transform', 'rotate(180deg)');
@@ -120,7 +121,10 @@ comments: object下面的所有评论
 
     // 添加评论 ajax Post
     function add_comment(e) {
-        var replyto = $form.data('replyto');
+        var replyto = $form.data('replyto'),
+            $this = $(this);
+        // e.preventDefault();   // 阻止事件的默认行为
+        // e.stopPropagation();  // 阻止事件向上冒泡
         $.ajax({
             url: "{% url 'app_comments:view' %}",
             data: $form.serialize() + `&replyto=${replyto ? replyto : ''}`,
@@ -141,7 +145,16 @@ comments: object下面的所有评论
             error: function (xhr, status, error) {  // 请求失败运行的函数
                 toastr.error(status);
                 $err_info_ele.text(status + ', 请稍后再试');
-            }
+            },
+            beforeSend: function () {
+                // 设置提交按钮失效，以实现防止按钮重复点击
+                $this.attr('disabled', true);
+                $this.val('提交中...');
+            },
+            complete: function () {
+                $this.removeAttr('disabled');
+                $this.val('发送');
+            },
         });
         return false;
     };
@@ -190,7 +203,6 @@ comments: object下面的所有评论
     };
 
     $('#load_comment').on('click', function () {
-        console.log('load_comments');
         $.getJSON('/comment', { a: 123, b: 456 }, function (data, status, xhr) {
             console.log(data);
             data.forEach(d => {
@@ -268,11 +280,12 @@ comments: object下面的所有评论
                     one_comment_container.append(extend_child);
                 };
 
-
                 $comment_container.append(one_comment_container);
             });
         })
     });
 
 
+
+})(jQuery)
 </script>
