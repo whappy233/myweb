@@ -2,8 +2,7 @@
 from django.apps import AppConfig
 from django.core.serializers.python import Serializer as Builtin_Serializer
 from django.db import models
-from django.utils.encoding import is_protected_type
-
+from django.utils.encoding import is_protected_type, smart_text
 
 class AppGalleryConfig(AppConfig):
     name = 'app_gallery'
@@ -39,7 +38,11 @@ class Serializer(Builtin_Serializer):
         return  field.value_to_string(obj)
 
     def get_dump_object(self, obj):
-        # self._current['id'] = smart_text(obj._get_pk_val(), strings_only=True)
+        if self.selected_fields:
+            if 'pk' in self.selected_fields:
+                self._current['pk'] = smart_text(obj._get_pk_val(), strings_only=True)
+            if 'id' in self.selected_fields:
+                self._current['id'] = smart_text(obj._get_pk_val(), strings_only=True)
         # self._current['model'] = smart_text(obj._meta)
         return self._current
 

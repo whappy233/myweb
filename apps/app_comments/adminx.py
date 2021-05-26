@@ -10,11 +10,11 @@ class CommentAdmin:
     list_display = ['id', 'link_to_uuid', 'link_to_body', 'parent_comment',
                     'link_to_commenter',
                     'content_type', 'link_to_article',
-                    'last_mod_time', 'is_overhead', 'is_hide']
+                    'created_time', 'is_overhead', 'is_hide']
     # 搜索字段
     search_fields = ['body']  
     # 过滤器
-    list_filter = ['last_mod_time', 'is_overhead', 'is_hide', 'object_id', 'content_type', 'parent_comment']  
+    list_filter = ['created_time', 'is_overhead', 'is_hide', 'object_id', 'content_type', 'parent_comment']  
     list_editable = ['is_overhead', 'is_hide']
     actions = ['enable_commentstatus', 'disable_commentstatus', 'enable_overhead', 'disable_overhead']
     # 可点击的项

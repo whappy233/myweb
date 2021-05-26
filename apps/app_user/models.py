@@ -87,3 +87,6 @@ class UserProfile(models.Model):
     def img_url(self):
         if self.photo and hasattr(self.photo, 'url'):
             return self.photo.url
+
+    def natural_key(self):
+        return {'uuid': self.uuid, 'username': self.username, 'photo': self.img_url, 'is_wanderer': self.is_wanderer}

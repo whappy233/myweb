@@ -7,9 +7,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
-from django.utils.timezone import now
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
+from django.core import serializers
 
 
 def uuid4_hex():
@@ -30,20 +30,21 @@ class ModelManager(models.Manager):
         '''可见评论的数量'''
         return self.count() - self.hidden_count()
 
-    def show(self, start=None, end=None):
+    def show(self, start=None, end=None, serialize=False, fields=None):
         '''可见评论'''
-        s = []
+        data = []
         h = self.filter(is_hide=False, parent_comment=None)[start:end]
         for commnet in h:
-            s.append(commnet.get_show_children())
-        return s
+            data.extend(commnet.get_show_children(serialize, fields))
+        return data
 
 
 # 评论模型
 class Comments(models.Model):
     '''评论模型'''
     body = models.TextField('评论内容', max_length=500)
-    uuid = models.CharField('唯一标识', max_length=32, unique=True, default=uuid4_hex, editable=False)
+    uuid = models.CharField('唯一标识', max_length=32,
+                            unique=True, default=uuid4_hex, editable=False)
 
     # user_obj.comments.all() 某 user 下的所有评论
     author = models.ForeignKey(UserProfile, on_delete=models.CASCADE,
@@ -55,13 +56,13 @@ class Comments(models.Model):
     parent_comment = models.ForeignKey('self', on_delete=models.CASCADE,
                                        related_name='child_comments',
                                        blank=True, null=True,
+                                       db_index=True,
                                        verbose_name="上级评论")
 
-    ip_address = models.GenericIPAddressField('IP 地址', unpack_ipv4=True, blank=True, null=True)
+    ip_address = models.GenericIPAddressField('IP地址', unpack_ipv4=True, blank=True, null=True)
     is_overhead = models.BooleanField('是否顶置', default=False)
     is_hide = models.BooleanField('是否隐藏', default=False)
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
-    last_mod_time = models.DateTimeField('修改时间', default=now)
 
     # 使用admin呈现此字段时，设置对此字段(limit_choices_to)的可用选项的限制(默认情况下, 查询集中的所有对象都可供选择).
     # 可以使用字典、Q对象或可调用返回字典或Q对象.
@@ -79,10 +80,13 @@ class Comments(models.Model):
     objects = ModelManager()
 
     class Meta:
-        ordering = ('-is_overhead', '-last_mod_time')
+        ordering = ('-is_overhead', '-created_time')
         verbose_name = '评论'
         verbose_name_plural = verbose_name
 
+    def to_serialize(self, fields=None):
+        data = serializers.serialize("json", [self], fields=fields, use_natural_foreign_keys=True)[0]
+        return data
 
     def get_all_parents(self):
         '''获取所有父级'''
@@ -103,20 +107,22 @@ class Comments(models.Model):
             children.extend(child.get_all_children())
         return children
 
-    def get_show_children(self):
+    def get_show_children(self, serialize=False, fields=None):
         show = []
         if self.is_hide:
-            return show
+            return []
         else:
-            show.append(self)
+            if serialize:
+                show.append(self.to_serialize(fields))
+            else:
+                show.append(self)
         try:
             child_list = self.child_comments.filter(is_hide=False)
         except AttributeError:
             return show
         for child in child_list:
-            show.append(child.get_all_children())
+            show.extend(child.get_show_children(serialize, fields))
         return show
-
 
     def clean(self):
         if self.parent_comment in self.get_all_children():
@@ -140,6 +146,8 @@ class Comments(models.Model):
     def __str__(self):
         return f'ID:{self.id}-{self.body[:10]}... (🔗 {self.content_type}-ID:{self.object_id})'
 
+    def natural_key(self):
+        return {'uuid': self.uuid, 'author_uuid': self.author.uuid, 'username': self.author.username}
 
 
 class MpComments(MPTTModel):
@@ -154,13 +162,18 @@ class MpComments(MPTTModel):
                                verbose_name='评论作者')
 
     # 上级评论 (parent 为默认字段, 如要修改则在 MPTTMeta 中修改 parent_attr='parent')
-    parent_comment= TreeForeignKey('self', on_delete=models.CASCADE,
-                                related_name='children',
-                                blank=True, null=True,
-                                db_index=True, 
-                                verbose_name="上级评论")
+    parent_comment = TreeForeignKey('self', on_delete=models.CASCADE,
+                                    related_name='child_comments',
+                                    blank=True, null=True,
+                                    db_index=True,
+                                    verbose_name="上级评论")
 
-    ip_address = models.GenericIPAddressField('IP 地址', unpack_ipv4=True, blank=True, null=True)
+    # # 记录二级评论回复给谁, str
+    # reply_to = models.ForeignKey(UserProfile, on_delete=models.CASCADE,
+    #                             blank=True,null=True,
+    #                             related_name='replyers')
+
+    ip_address = models.GenericIPAddressField('IP地址', unpack_ipv4=True, blank=True, null=True)
     is_overhead = models.BooleanField('是否顶置', default=False)
     is_hide = models.BooleanField('是否隐藏', default=False)
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
@@ -169,22 +182,20 @@ class MpComments(MPTTModel):
     # 可以使用字典、Q对象或可调用返回字典或Q对象.
     # step1 内容类型，代表了模型的名字(比如Article, Picture)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,
-                                     limit_choices_to={
-                                         "model__in": ("article", 'photo')
-                                     },
+                                     limit_choices_to={"model__in": ("article", 'photo')},
                                      verbose_name='关联对象类型')
     # step2 传入对象的id
     object_id = models.PositiveIntegerField('关联对象ID')
     # step3 传入的实例化对象，其包含两个属性content_type和object_id
     content_object = GenericForeignKey('content_type', 'object_id')
 
+    class MPTTMeta:
+        parent_attr = 'parent_comment'
+        order_insertion_by = ['-is_overhead', '-created_time']
+
     def __str__(self):
         hide = '❌'if self.is_hide else '✅'
         return f'ID:{self.id}-{self.body} {hide} (🔗 {self.content_type}-ID:{self.object_id})'
-
-    class MPTTMeta:
-        parent_attr = 'parent_comment'
-        order_insertion_by = ['-created_time']
 
 
 # 隐藏的评论数
@@ -208,15 +219,13 @@ show = MpComments.objects.exclude(pk__in=list(zip(*b))[0])
 '''
 
 
-from django.template import Context
-
 # mp = MpComments()
 
 '''创建一个包含此模型实例祖先的 QuerySet.  所有祖先
 ascending 默认情况是按降序排列(根祖先第一, 直接父母最后).
 如果include_self为True，则QuerySet也将包含此模型实例.
 如果实例还没有保存，则ValueError.'''
-# mp.get_ancestors(ascending=False, include_self=False)  
+# mp.get_ancestors(ascending=False, include_self=False)
 
 '''创建包含模型实例的后代的 QuerySet.  所有后代
 如果include_self为True，则QuerySet也将包含此模型实例.

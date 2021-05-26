@@ -1,6 +1,7 @@
 import datetime
 import decimal
 
+from django.contrib.humanize.templatetags import humanize
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.base import ModelBase
 from django.utils.encoding import smart_text
@@ -37,9 +38,11 @@ def get_blog_setting():
 
 
 class JSONEncoder(DjangoJSONEncoder):
+
     def default(self, o):
         if isinstance(o, datetime.datetime):
-            return o.strftime('%Y年%m月%d日 %H:%M:%S')
+            return humanize.naturaltime(o)
+            # return o.strftime('%Y年%m月%d日 %H:%M:%S')
         elif isinstance(o, datetime.date):
             return o.strftime('%Y-%m-%d')
         elif isinstance(o, decimal.Decimal):
@@ -51,3 +54,10 @@ class JSONEncoder(DjangoJSONEncoder):
                 return super(JSONEncoder, self).default(o)
             except Exception:
                 return smart_text(o)
+
+
+
+
+
+
+

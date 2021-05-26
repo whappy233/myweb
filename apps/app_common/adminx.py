@@ -50,7 +50,7 @@ class GlobalSettings:
                 {'title': '相片', 'url': self.get_model_url(Photo, 'changelist') ,'icon': "glyphicon glyphicon-picture"},
             )},
             {'title': '评论系统', 'menus': (
-                {'title': '所有评论', 'url': self.get_model_url(Comments, 'changelist') ,'icon': "glyphicon glyphicon-comment"},
+                {'title': '评论', 'url': self.get_model_url(Comments, 'changelist') ,'icon': "glyphicon glyphicon-comment"},
                 {'title': 'MP Comments', 'url': self.get_model_url(MpComments, 'changelist') ,'icon': "glyphicon glyphicon-tree-conifer"},
                 {'title': 'MP Admin', 'url': url, 'icon': 'glyphicon glyphicon-move'},
             )},

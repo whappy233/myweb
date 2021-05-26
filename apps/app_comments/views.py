@@ -1,14 +1,13 @@
 
-from app_blog.models import Article
-from app_user.utils import validateEmail
+
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from django.forms.models import modelform_factory
 from django.forms.utils import ErrorDict
-from django.http import JsonResponse, QueryDict, request
-from django.http.response import Http404, HttpResponse, HttpResponseForbidden
+from django.http import QueryDict, request
+from django.http.response import Http404, HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -16,14 +15,17 @@ from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 from django.views.generic.edit import FormView
 from loguru import logger
-
+from django.apps import apps
+import json
 from .forms import CommentForm
 from .models import Comments, MpComments
 
-
 from app_user.models import UserProfile
+from app_common.utils import JSONEncoder
+from app_blog.models import Article
+from app_user.utils import validateEmail
 
-from django.apps import apps
+
 # model_class = apps.get_model('app_blog', 'article')
 
 
@@ -90,9 +92,11 @@ class CommentPostView(FormView):
 
 
 class CommentsView(View):
-
+    # 查询评论
     def get(self, request, *args, **kwargs):
-        return HttpResponse('评论系统')
+        data = Comments.objects.show(serialize=True)
+        json_data = json.dumps(data, cls=JSONEncoder, separators=(',',':'))
+        return HttpResponse(json_data, content_type="application/json; charset=UTF-8")
 
     # 增加评论
     def post(self, request, *args, **kwargs):

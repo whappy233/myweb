@@ -3,10 +3,10 @@
 
 
 {% with uid=comment_item.uuid is_overhead=comment_item.is_overhead is_hide=comment_item.is_hide parent=comment_item.parent_comment %}
-<div {% if depth > 0 %}class="media media-none--xs child-comment" style="display: none;"{% endif %} class="media media-none--xs" id="{{uid}}" data-depth="{{depth}}" >
+<div {% if parent %}class="media media-none--xs child-comment" style="display: none;"{% endif %} class="media media-none--xs" id="{{uid}}" data-author="{{comment_item.author.uuid}}">
 
     <!-- 头像 -->
-    <figure style="margin-left: {% widthratio depth 1 40 %}px" class="avatar avatar-lg">
+    <figure style="margin-left: {% if parent %}40{% else %}0{% endif %}px" class="avatar avatar-lg">
         {% if comment_item.author.photo %}
         <img src="{{ comment_item.author.photo.url }}" class="rounded-circle" alt="avatar">
         {% else %}
@@ -25,7 +25,7 @@
 
             {% if parent %}
             {% with pp=parent.author.username %}
-            <div class="reply">
+            <div class="reply" data-reply="{{parent.uuid}}-{{parent.author.uuid}}">
                 <span class="item-nickname">回复: {{pp}}</em></span>
                 {% if object.author == pp %}<span class="badge badge-success">作者</span>{% endif %}
             </div>
@@ -37,6 +37,7 @@
 
             <span class="item-subtitle">{{ comment_item.created_time|naturaltime }}</span>
         </div>
+
         <!-- content -->
         <div class="item-body">
             {{ comment_item.body |escape|markdown_format|safe }}
@@ -64,18 +65,16 @@
     {% endif %}
 
     <!-- 回复 -->
-    <a href="#" class="item-btn reply">回复</a>
+    <a href="#" class="item-btn reply">
+        <i class="far fa-comment-dots"></i>
+    </a>
 
-    {% if depth == 0 and comment_item.child_comments.exists %}
+    {% if not parent and comment_item.child_comments.exists %}
     <!-- 折叠顶级评论的子评论 -->
     <div href="#" class="item-btn extend" title="展开子评论">
         <i class="fas fa-chevron-circle-down"></i>
         <span>展开</span>
-    </div>{% endif %}
-
-    {% if is_overhead %}
-    <!-- 顶置评论 status -->
-    <div class="is-overhead"><i class="fas fa-thumbtack"></i></div>
+    </div>
     {% endif %}
 
 </div>
@@ -84,7 +83,7 @@
 
 {% query comments parent_comment=comment_item as cc_comments %}
 {% for cc in cc_comments %}
-{% with comment_item=cc depth=depth|add:1 %}
+{% with comment_item=cc %}
 {% include "app_comments/comment_tree.html" %}
 {% endwith %}
 {% endfor %}

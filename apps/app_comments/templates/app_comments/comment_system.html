@@ -7,6 +7,7 @@ object: 模型的一条实例, 比如某篇文章, 某张相片
 comments: object下面的所有评论
 {% endcomment %}
 
+<button id="load_comment">加载评论</button>
 
 <!-- 评论表单  -->
 {% if object.comment_status and OPEN_SITE_COMMENT %}
@@ -32,7 +33,8 @@ comments: object下面的所有评论
             <input type="hidden" name="username" value="{{request.user}}">
             {% endif %}
             <div class="col-12 form-group" style="position: relative;">
-                <textarea placeholder="来说点什么..." class="textarea form-control" name="comment_body" rows="4" required></textarea>
+                <textarea placeholder="来说点什么..." class="textarea form-control" name="comment_body" rows="4"
+                    required></textarea>
                 <div style="position:absolute;bottom: 10px; left: 29px;">
                     <span style="margin-right: 5px;">😆</span>
                     <span style="margin-right: 5px;">😌</span>
@@ -53,9 +55,7 @@ comments: object下面的所有评论
 <div class="blog-comment">
     {% query comments parent_comment=None as parent_comments %}
     {% for comment_item in parent_comments %}
-    {% with 0 as depth %}
     {% include "app_comments/comment_tree.html" with object=object %}
-    {% endwith %}
     {% endfor %}
 </div>
 
@@ -63,12 +63,15 @@ comments: object下面的所有评论
 <script>
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
-            xhr.setRequestHeader("X-CSRFToken", $("[name='csrfmiddlewaretoken']").val())
+            xhr.setRequestHeader("X-CSRFToken", $("[name='csrfmiddlewaretoken']").val());
         }
     });
 
     var $form = $('form[name=add_comment]'),
-        $err_info_ele = $form.find('.error-info');
+        $err_info_ele = $form.find('.error-info'),
+        $comment_container = $('.blog-comment'),
+        AUTHOR_UUID = '{{object.author.profile.uuid}}',
+        AUTHOR_SP = '{{request.user.is_superuser}}';
 
     $form.on('submit', add_comment);  // 添加评论
     $('a.cancel-comment').on('click', form_cancel);  // 取消回复某条评论
@@ -76,6 +79,8 @@ comments: object下面的所有评论
     $("input[id^='do_action_']").on('change', do_action);  // 置顶评论/隐藏评论  ajax Patch
 
     $('.blog-comment .item-btn.extend').on('click', toggleChildrenComments);  // 显示或隐藏子评论
+
+    $('.reply[data-reply]').mouseover(HighlightComment).mouseleave(HighlightComment);  // 高亮回复的评论
 
     // 显示或隐藏子评论
     function toggleChildrenComments() {
@@ -168,6 +173,106 @@ comments: object下面的所有评论
         });
     };
 
+    // 高亮回复的评论
+    function HighlightComment(e) {
+        var $this = $(this),
+            c = u = '';
+        var comment_user = $this.data('reply');
+        [c, u] = comment_user.split('-');
+        var tar = $(`[id=${c}][data-author=${u}]`);
+        if (tar) {
+            if (e.type == 'mouseover') {
+                tar.addClass('HighlightBox');
+            } else {
+                tar.removeClass('HighlightBox');
+            };
+        };
+    };
+
+    $('#load_comment').on('click', function () {
+        console.log('load_comments');
+        $.getJSON('/comment', { a: 123, b: 456 }, function (data, status, xhr) {
+            console.log(data);
+            data.forEach(d => {
+                var cls = sty = '',
+                    margin_left = '0px';
+                if (d.parent_comment) {
+                    cls = ' child-comment';
+                    sty = "display: none;";
+                    margin_left = '40px';
+                };
+
+                // 容器
+                var one_comment_container = $(`<div id="${d.uuid}" class="media media-none--xs${cls}" style="${sty}" data-author="${d.author.uuid}"></div>`);
+
+                // 头像
+                var avatar_container = $(`<figure style="margin-left: ${margin_left}" class="avatar avatar-lg"></figure>`);
+                if (d.author.photo){
+                    var avatar = $(`<img src="${d.author.photo}" class="rounded-circle" alt="avatar" />`);
+                }else{
+                    var avatar = $(`<span class="avatar-title bg-primary rounded-circle">${d.author.username}</span>`);
+                };
+
+                avatar_container.append(avatar);
+                one_comment_container.append(avatar_container);
+
+                var comment_body = $(`<div class="media-body" id="content-${d.uuid}"></div>`);
+                var nickname = $('<div class="item-title"></div>');
+                var content = $(`<div class="item-body"><p>${d.body}</p></div>`);
+                var z = `<span class="item-nickname">${d.author.username}</span>`;
+                var x = AUTHOR_UUID==d.author.uuid?'<span class="item-meta badge badge-success">作者</span>':'';
+                var y = '';
+
+                // 回复的用户
+                if (d.parent_comment){
+                    var b = `<div class="reply" data-reply="${d.parent_comment.uuid}-${d.parent_comment.author_uuid}"><span class="item-nickname">回复: ${d.parent_comment.username}</em></span>`;
+                    var h = AUTHOR_UUID==d.parent_comment.author_uuid?'<span class="badge badge-success">作者</span>':'';
+                    y = b + h + '</div>';
+                };
+
+                // 顶置评论
+                var k = d.is_overhead?'<span class="item-meta badge badge-warning">顶置</span>':'';
+                // 评论日期
+                var t = `<span class="item-subtitle">${d.created_time}</span>`
+
+                nickname.append(z+x+y+k+t);
+                comment_body.append(nickname);
+                comment_body.append(content);
+                one_comment_container.append(comment_body);
+
+                // 超级用户控制
+                if (AUTHOR_SP=='True'){
+                    var hide_switch = `<div class="item-btn visible">
+                                            <div class="custom-control custom-switch custom-control-inline">
+                                                <input name='is_hide' type="checkbox" class="custom-control-input" id="do_action_hide-${d.uuid}" ${d.is_hide?'checked':''}>
+                                                <label class="custom-control-label" for="do_action_hide-${d.uuid}">隐藏</label>
+                                            </div>
+                                        </div>`;
+                    one_comment_container.append(hide_switch);
+                    if (!d.parent_comment){
+                        var to_overhead = `<div class="item-btn overhead">
+                                                <div class="custom-control custom-switch custom-control-inline">
+                                                    <input name='is_overhead' type="checkbox" class="custom-control-input" id="do_action_overhead-${d.uuid}" ${d.is_overhead?'checked':''}>
+                                                    <label class="custom-control-label" for="do_action_overhead-${d.uuid}">置顶</label>
+                                                </div>
+                                            </div>`;
+                        one_comment_container.append(to_overhead);
+                    }
+                };
+
+                // 回复按钮
+                one_comment_container.append('<a href="#" class="item-btn reply"><i class="far fa-comment-dots"></i></a>');
+
+                if (!d.parent_comment){
+                    var extend_child = '<div href="#" class="item-btn extend" title="展开子评论"><i class="fas fa-chevron-circle-down"></i> <span>展开</span></div>';
+                    one_comment_container.append(extend_child);
+                };
+
+
+                $comment_container.append(one_comment_container);
+            });
+        })
+    });
 
 
 </script>

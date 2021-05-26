@@ -7172,10 +7172,19 @@ img.loading {
   margin-bottom: 0px;
   display: -webkit-box;
 }
+.single-blog-box-layout1 .blog-comment .media .media-body .item-body p {
+  margin: 0;
+  margin-bottom: 1rem;
+}
 .single-blog-box-layout1 .blog-comment .media .media-body .reply {
   color: gray;
   font-size: 14px;
   font-weight: 500;
+  /* padding: 0 5px; */
+}
+.single-blog-box-layout1 .blog-comment .media .media-body .reply span:hover {
+  background: var(--global-hover-background);
+  border-radius: 5px;
 }
 .single-blog-box-layout1 .blog-comment .media .media-body .reply .badge-success {
     color: gray;
@@ -7208,23 +7217,24 @@ img.loading {
   font-weight: 500;
   position: absolute;
   transition: 0.3s ease-in-out;
+  width: auto;
 }
 .single-blog-box-layout1 .blog-comment .media .item-btn.visible {
-  right: 70px;
+  right: 45px;
   top: 16px;
   background-color: transparent;
-  padding: 0px 9px;
+  padding: 0px 8px;
 }
 .single-blog-box-layout1 .blog-comment .media  .item-btn.overhead {
-  right: 137px;
+  right: 109px;
   top: 16px;
   background-color: transparent;
-  padding: 0px 9px;
+  padding: 0px 8px;
 }
 .single-blog-box-layout1 .blog-comment .media .item-btn.reply {
-  top: 16px;
-  right: 16px;
-  padding: 0px 12px;
+  top: 15px;
+  right: 15px;
+  padding: 0px 8px;
 }
 .single-blog-box-layout1 .blog-comment .media .item-btn.extend {
   right: 0;
@@ -9181,7 +9191,6 @@ img.loading {
   clear: both;
 }
 .cd-breadcrumb li {
-  display: inline-block;
   float: left;
   margin: 0.5em 0;
 }
@@ -9718,4 +9727,39 @@ button.toast-close-button {
     padding: 15px 15px 15px 50px;
     width: 25em;
   }
+}
+.headerBox {
+  animation: highlight 600ms ease-in-out 3;
+}
+
+@keyframes highlight {
+  from {
+      opacity: 1.0;
+      background-color: var(--global-background)
+  }
+  50% {
+      opacity: 0.6;
+      background-color: var(--global-hover-background);
+  }
+  to {
+      opacity: 1.0;
+      background-color: var(--global-background)
+  }
+}
+@-webkit-keyframes highlight {
+  from {
+      opacity: 1.0;
+      background-color: var(--global-background)
+  }
+  50% {
+      opacity: 0.6;
+      background-color: var(--global-hover-background);
+  }
+  to {
+      opacity: 1.0;
+      background-color: var(--global-background)
+  }
+}
+.HighlightBox {
+  animation: highlight 600ms ease-in-out 2;
 }
