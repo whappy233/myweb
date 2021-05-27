@@ -4381,19 +4381,6 @@ hr.editormd-page-break {
 }
 
 @media screen {
-  .editormd-preview-theme-dark {
-    /* string content */
-    /* a keyword */
-    /* a comment */
-    /* a type name */
-    /* a literal value */
-    /* punctuation, lisp open bracket, lisp close bracket */
-    /* a markup tag name */
-    /* a markup attribute name */
-    /* a markup attribute value */
-    /* a declaration; a variable name */
-    /* a function name */
-  }
   .editormd-preview-theme-dark .str {
     color: #080;
   }
