@@ -200,7 +200,6 @@ class ArticleDetailView(DetailView):
 
         context.update({
             'section': 'blog',
-            'comments': self.object.comment_list(self.request.user.is_superuser),
             'next_article': self.object.next_article,
             'prev_article': self.object.prev_article,
         })
@@ -243,6 +242,8 @@ class ArticleDetailView(DetailView):
                 'markdown.extensions.codehilite',
                 TocExtension(slugify=slugify),
             ])
+            # # 把换行符替换成两个空格+换行符，这样经过markdown转换后才可以转成前端的br标签
+            # obj.body = md.convert(obj.body.replace("\r\n", '  \n'))
             obj.body = md.convert(obj.body)
             obj.toc = md.toc  # 目录
             cache.set(md_key, (obj.body, obj.toc), 60 * 60 * 12)

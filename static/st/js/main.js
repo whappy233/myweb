@@ -51,13 +51,11 @@
             el.src = source;
             $(el).animate({opacity:'1'}, 500);
             $(el).removeClass('loading').addClass('img-animation').removeAttr('data-src');
-
         }
     };
     window.onload = window.onscroll = function () { //onscroll()在滚动条滚动的时候触发
         check();
     };
-
 
     /*-------------------------------------
     对带有 data-href 属性的元素进行跳转
@@ -66,8 +64,6 @@
         console.log($(this).data("href"));
         window.location = $(this).data("href");
     });
-
-
 
     /*-------------------------------------
     对 data-event="show_hide" mousedown 显示密码
@@ -83,9 +79,6 @@
         e.preventDefault();
         $this.siblings('input').prop('type', 'password')
     });
-
-
-
 
 
     /*-------------------------------------
@@ -324,6 +317,7 @@
 
     /*-------------------------------------
     Masonry
+    画廊
     -------------------------------------*/
     var galleryIsoContainer = $("#no-equal-gallery");
     if (galleryIsoContainer.length) {
@@ -341,6 +335,7 @@
 
         /*-------------------------------------
         Video Popup
+        视频弹出
         -------------------------------------*/
         var yPopup = $(".popup-youtube");
         if (yPopup.length) {
@@ -356,6 +351,7 @@
 
         /*-------------------------------------
         Carousel slider initiation
+        轮播图
         -------------------------------------*/
         if ($.fn.owlCarousel) {
             $('.rc-carousel').each(function () {

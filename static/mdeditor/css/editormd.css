@@ -3095,7 +3095,6 @@
 .editormd-logo-7x,
 .editormd-logo-8x {
   font-family: 'editormd-logo';
-  speak: none;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -3638,9 +3637,32 @@
   font-size: 85%;
   line-height: 1.45;
   background-color: var(--global-background);
-  border-radius: 3px;
+  border-radius: var(--root-border-radius);
+  max-height: 500px;
 }
 
+.markdown-body .codehilite {
+  position: relative;
+}
+/* .markdown-body pre:hover>span::before{
+  opacity: 0.5;
+} */
+.markdown-body pre>span:hover::before{
+  opacity: 1;
+}
+.markdown-body pre>span::before {
+  background-color: var(--global-color-depth0);
+  color: var(--global-color-depth2);
+  content: '复制';
+  position: absolute;
+  right: 10px;
+  top: 17px;
+  border-radius: 5px;
+  font-size: 14px;
+  padding: 0px 3px;
+  cursor: pointer;
+  opacity: 0.4;
+}
 .markdown-body .highlight pre {
   margin-bottom: 0;
   word-break: normal;
@@ -4212,9 +4234,6 @@ li.L9 {
 
 .markdown-body .editormd-toc-menu ul {
   padding-left: 0;
-}
-.markdown-body .highlight pre, .markdown-body pre {
-  line-height: 1.6;
 }
 
 hr.editormd-page-break {

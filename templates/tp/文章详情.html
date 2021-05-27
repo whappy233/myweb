@@ -72,8 +72,8 @@
                         {% endwith %}
                     </li>
                     <li>
-                        <a href="#comment" title="{{article.visible_comments_count}} 条评论">
-                            <i class="far fa-comment"></i>{{article.visible_comments_count}}
+                        <a href="#comment" title="{{article.comments.count}} 条评论">
+                            <i class="far fa-comment"></i>{{article.comments.count}}
                         </a>
                     </li>
                     <li>
@@ -91,26 +91,22 @@
             <!-- 文章 -->
             <div class="col-lg-8">
                 <div class="single-blog-box-layout1">
+
                     <!-- 文章主体 -->
                     <div class="markdown-body">
                         {{article.body|safe}}
                     </div>
 
-                    <!------------------文章在此结束------------------>
                     <!-- 面包屑 点赞 -->
                     <div class="blog-entry-meta">
                         <ul>
                             <li>
-                                <!-- 面包屑导航 -->
                                 {% load_breadcrumb article %}
                             </li>
-                            <li class="item-respons">
-                                <!-- <i class="far fa-heart"></i>1,230 -->
+                            <li class="item-like">
                                 {% with total_likes=article.users_like.count users_like=article.users_like.all %}
                                 <a href="javascript:void(0)" data-id="{{ article.id }}" data-action="{% if request.user in users_like %}un{% endif %}like">
-                                    <i class="far fa-heart" style="{% if request.user in users_like %}color:red{% endif %}"></i>
-                                    {{ total_likes }}
-                                </a>
+                                    <i class="far fa-heart" style="{% if request.user in users_like %}color:red{% endif %}"></i>{{ total_likes }}</a>
                                 {% endwith %}
                             </li>
                         </ul>
@@ -120,7 +116,7 @@
                     {% similar_articles article 3 %}
 
                     <!-- 评论系统 -->
-                    {% include "app_comments/comment_system.html" with object=article comments=comments %}
+                    {% include "app_comments/comment_system.html" with object=article %}
 
                 </div>
             </div>

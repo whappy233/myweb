@@ -10,6 +10,9 @@ from django.db.models import Q
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 from django.core import serializers
+from mdeditor.fields import MDTextField  # 富文本编辑器 mdeditor
+
+
 
 
 def uuid4_hex():
@@ -42,7 +45,7 @@ class ModelManager(models.Manager):
 # 评论模型
 class Comments(models.Model):
     '''评论模型'''
-    body = models.TextField('评论内容', max_length=500)
+    body = MDTextField('评论内容')
     uuid = models.CharField('唯一标识', max_length=32,
                             unique=True, default=uuid4_hex, editable=False)
 

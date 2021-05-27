@@ -218,7 +218,8 @@ def markdown_format(content):
     # markdown.extensions.extra 用于标题、表格、引用这些基本转换
     # markdown.extensions.codehilite 用于语法高亮
     # markdown.extensions.toc 用于生成目录
-    return markdown.markdown(content,extensions=[
+    # content = content.replace("\r\n", '  \n')  # 把换行符替换成两个空格+换行符，这样经过markdown转换后才可以转成前端的br标签
+    return markdown.markdown(content, extensions=[
                                      'markdown.extensions.extra',
                                      'markdown.extensions.codehilite',
                                   ])
