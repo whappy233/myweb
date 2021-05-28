@@ -263,7 +263,7 @@
                                     {% if request.user.is_superuser %}
                                     <!-- 新建文章 -->
                                     <li>
-                                        <i data-href="{{ add_article }}" class="fas fa-plus" title="新建文章"></i>
+                                        <a href="{{ add_article }}" title="新建文章"><i class="fas fa-plus"></i></a>
                                     </li>
                                     <li>
                                         <a href="{{ add_gallery }}" title="新增相册"><i class="fab fa-envira"></i></a>
@@ -519,6 +519,9 @@
     <script src="{% static 'st/js/jquery.smoothscroll.min.js' %}"></script>
     
     <script src="{% static 'st/js/toastr.min.js' %}"></script>
+    
+    <script src="{% static 'st/js/placeholder.min.js' %}"></script>
+
 
 
     {% block script %}

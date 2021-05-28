@@ -16,9 +16,7 @@
         <div class="col-lg-4 col-md-4 col-sm-12 col-12">
             <div class="blog-box-layout12">
                 <div class="item-img">
-                    <img onerror="this.onerror=null,this.src='{{ default_img }}'" 
-                        data-src="https://picsum.photos/id/10{{ forloop.counter|add:30 }}/510/510" 
-                        alt="{{ article.title }}">
+                    <img data-src="https://picsum.photos/id/10{{ forloop.counter|add:30 }}/510/510" alt="{{ article.title }}" />
                     <div class="item-content">
                         <h2 class="item-title">
                             <a href="{{ article.get_absolute_url }}">

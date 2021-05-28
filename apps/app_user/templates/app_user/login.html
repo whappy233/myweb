@@ -26,7 +26,7 @@
                 <tr>
                     <td>{{ form.check_code.label_tag }}</td>
                     <td>{{ form.check_code }}</td>
-                    <td><img src="{% url 'app_user:check_code' %}" alt="图片验证码" onerror="this.onerror=null,this.alt='加载失败'" onclick="this.src=this.src+'?'"></td>
+                    <td><img src="{% url 'app_user:check_code' %}" alt="图片验证码" onclick="this.src=this.src+'?'"></td>
                 </tr>
             </table>
         </div>

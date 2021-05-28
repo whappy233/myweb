@@ -51,12 +51,10 @@
             data-r-extra-large-dots="false"
             >
 
-            {% static 'st/img/financial_fail (1).png' as default_img %}
             {% for article in articles %}
             <div class="blog-box-layout13">
                 <div class="item-img">
-                    <img onerror="this.onerror=null,this.src='{{ default_img }}'" 
-                        data-src="https://picsum.photos/id/10{{ forloop.counter|add:20 }}/262/196" 
+                    <img data-src="https://picsum.photos/id/10{{ forloop.counter|add:20 }}/262/196" 
                         alt="{{ article.title }}">
                     <div class="item-content">
                         <ul class="entry-meta meta-color-light">

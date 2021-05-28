@@ -11,13 +11,11 @@
     </div>
     <div class="widget-latest">
         <ul class="block-list">
-            {% static 'st/img/financial_fail (1).png' as default_img %}
             {% for article in articles %}
             <li class="single-item ease-out">
                 <div class="item-img">
                     <a href="{{ article.get_absolute_url }}">
-                        <img onerror="this.onerror=null,this.src='{{ default_img }}'" 
-                            data-src="https://picsum.photos/id/10{{ forloop.counter|add:50 }}/100/80">
+                        <img data-src="https://picsum.photos/id/10{{ forloop.counter|add:50 }}/100/80">
                     </a>
                 </div>
                 <div class="item-content">

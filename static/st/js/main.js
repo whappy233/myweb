@@ -57,13 +57,46 @@
         check();
     };
 
+    // 图片加载失败占位图
+    window.addEventListener('error', function (e) {
+        let target = e.target, // 当前dom节点
+            tagName = target.tagName,
+            default_src = target.src,
+            count = Number(target.dataset.count) || 0, // 以失败的次数，默认为0
+            max = 2, // 总失败次数，此时设定为3, 总共加载了 max + 1 次
+            ett_text = 'Image 404 🥶';
+
+        // 当前异常是由图片加载异常引起的
+        if (tagName.toUpperCase() === 'IMG') {
+            if (count >= max) {
+                let s = Math.max(target.offsetWidth, target.offsetHeight);
+                console.log(`${s}x${s}`);
+                target.src = placeholder.getData({ size: `${s}x${s}`, text: ett_text, bgcolor: '#7dbcff', color: '#fff' });
+            } else {
+                target.dataset.count = count + 1;
+                target.src = default_src;
+            }
+        };
+    }, true)
+
+
     /*-------------------------------------
     对带有 data-href 属性的元素进行跳转
     -------------------------------------*/
-    $('#main').on('click', '[data-href]', function () {
-        console.log($(this).data("href"));
-        window.location = $(this).data("href");
+
+    $('#main').on('click', '[data-href]', function (e) {
+        let target = e.target,
+            currtarget = e.currentTarget;
+        var target_href = target.href || target.parentNode.href;
+        if (target_href == undefined){
+            target_href = target.dataset.href || currtarget.dataset.href || '';
+        }
+        console.log('跳转到: ', target_href);
+        window.location.href = target_href;
+        e.stopPropagation();   // 阻止事件冒泡
+        return false;
     });
+
 
     /*-------------------------------------
     对 data-event="show_hide" mousedown 显示密码

@@ -19,16 +19,14 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-                {% static 'st/img/financial_fail (1).png' as default_img %}
 
                 {% url 'app_gallery:get_random_background' 220 150 as the_url %}
                 {% spaceless %}
                 {% for article in article_list %}
-                <div class="blog-box-layout4">
+                <div class="blog-box-layout4" data-href="{{ article.get_absolute_url }}">
                     <div class="item-img">
-                        
                         <a href="{{ article.get_absolute_url }}" title="{{ article.title }}">
-                            <img class="loading" onerror="this.onerror=null,this.src='{{default_img}}'" data-src="https://picsum.photos/id/10{{forloop.counter}}/380/240">
+                            <img class="loading" data-src="https://picsum.photos/id/10{{forloop.counter}}/380/240">
                         </a>
                     </div>
                     <a class="article-meta__categories" href="{% url 'app_blog:category_detail' article.category.slug %}" title="文章分类"><i class="far fa-newspaper"></i> {{ article.category }}</a>
@@ -46,16 +44,15 @@
                         </ul>
                         <h3 class="item-title">
                             <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
-                            <i class="fas fa-arrow-right"></i>
                         </h3>
                         <p>{{ article.summary }}</p>
                         <div class="action-area">
-                            <a href="{{ article.get_absolute_url }}" class="item-btn" style="display: none;">
-                                READ MORE
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
+                            <div class="eye-container item-btn">
+                                <div class="eye"></div>
+                                <div class="eye"></div>
+                            </div>
                             <ul class="response-area">
-                                <li><a href="javascript:void(0)" title="热度 {{ article.views }}"><i class="fas fa-thermometer-full"></i>{{ article.views }}</a></li>
+                                <li><a href="#3" data-rr="666" title="热度 {{ article.views }}"><i class="fas fa-thermometer-full"></i>{{ article.views }}</a></li>
                                 <li><a href="javascript:void(0)" title="点赞数 {{ article.users_like.count }}"><i class="far fa-heart"></i>{{ article.users_like.count }}</a></li>
                                 <li><a href="{{ article.get_absolute_url }}#comment" title="{{ article.visible_comments_count }} 条评论"><i class="far fa-comment"></i>{{ article.visible_comments_count }}</a></li>
                             </ul>
