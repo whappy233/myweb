@@ -32,7 +32,6 @@
 
 
 
-
 # 1. 函数实现中间件
 from django.contrib.auth.models import User
 def front_user_middleware(get_response):

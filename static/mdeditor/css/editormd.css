@@ -3658,8 +3658,8 @@
   right: 10px;
   top: 17px;
   border-radius: 5px;
-  font-size: 14px;
-  padding: 0px 3px;
+  font-size: 12px;
+  padding: 3px 3px 0;
   cursor: pointer;
   opacity: 0.4;
 }

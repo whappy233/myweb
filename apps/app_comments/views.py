@@ -144,11 +144,7 @@ class CommentsView(View):
                 else:
                     parent_comment = None
                 try:
-                    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')  # 获取真实ip
-                    if x_forwarded_for: 
-                        ip = x_forwarded_for.split(',')[0]  # 所以这里是真实的ip
-                    else: 
-                        ip = request.META.get('REMOTE_ADDR')  # 这里获得代理ip
+                    ip = request.META.get('REMOTE_ADDR')  # 这里获得代理ip
                     comment = Comments.objects.create(
                         body=comment_body,
                         author=author,

@@ -91,7 +91,7 @@ MIDDLEWARE = [
 
     'debug_toolbar.middleware.DebugToolbarMiddleware',  # django-debug-toolbar
 
-    # 'django.middleware.http.SetRemoteAddrFromForwardedFor',  #  当部署在负载平衡proxy(如nginx)上, 该中间件用于获取用户实际的 ip 地址
+    'app_common.middleware.SetRemoteAddrFromForwardedFor',  #  当部署在负载平衡proxy(如nginx)上, 该中间件用于获取用户实际的 ip 地址
     # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', '')  # 获取真实ip
     # if x_forwarded_for: ip = x_forwarded_for.split(',')[0]  # 所以这里是真实的ip
     # else: ip = request.META.get('REMOTE_ADDR')  # 这里获得代理ip
@@ -275,8 +275,10 @@ USE_TZ = False  # 默认值True。若使用了本地时间，必须设为False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+if DEBUG:
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 # 媒体文件

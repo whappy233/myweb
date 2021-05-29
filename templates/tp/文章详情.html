@@ -10,6 +10,7 @@
 {% block title %}{{ article.title }}{% endblock title %}
 
 {% block css_extra %}
+<!-- 代码高亮 -->
 <link rel="stylesheet" type="text/css" href="{% static 'app_blog/css/pre_codehilite.css' %}">
 <!-- markdown -->
 <link rel="stylesheet" href="{% static 'mdeditor/css/editormd.css' %}"/>
@@ -127,17 +128,17 @@
                 <!-- 关于我 -->
                 {% include 'tp/侧边组件/侧边_关于我.html' with page_obj=page_obj %}
 
-                <!-- 文章目录 -->
-                {% include 'tp/侧边组件/侧边_文章目录.html' with article=article %}
-
-                <!-- 推荐文章 -->
-                {% recommendations_articles 5 '侧边_推荐文章' %}
-
-                <!-- 关于我 -->
-                {% include 'tp/侧边组件/侧边_关于我.html' with page_obj=page_obj %}
-
-                <!-- 广告 -->
-                {% include 'tp/侧边组件/侧边_广告.html' with page_obj=page_obj %}
+                <div class="aaaaaa" style="position: sticky; top: 75px;">
+                <!-- <div class="aaaaaa"> -->
+                    <!-- 文章目录 -->
+                    {% include 'tp/侧边组件/侧边_文章目录.html' with article=article %}
+    
+                    <!-- 推荐文章 -->
+                    {% recommendations_articles 5 '侧边_推荐文章' %}
+    
+                    <!-- 广告 -->
+                    {% include 'tp/侧边组件/侧边_广告.html' with page_obj=page_obj %}
+                </div>
 
             </div>
 
@@ -154,11 +155,14 @@
 {% block script %}
 <!-- 固定侧边widget -->
 <script src="{% static 'st/js/sticksy.min.js' %}"></script>
-
+<!-- <script src="{% static 'st/js/jquery.autofix_anything.js' %}"></script> -->
 <script>
-    var stickyEl = $('.widget.is-sticky').sticksy({
-        topSpacing: 70, // 距离顶部的距离
-        listen: true,   // 侦听容器中的DOM更改
-    });     
-</script>
+
+    // var stickyEl = $('.widget.is-sticky').sticksy({
+    //     topSpacing: 70, // 距离顶部的距离
+    //     listen: true,   // 侦听容器中的DOM更改
+    // });
+
+
+// <!-- </script> -->
 {% endblock script %}

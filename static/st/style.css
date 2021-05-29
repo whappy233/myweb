@@ -9837,3 +9837,16 @@ button.toast-close-button {
   }
 }
 
+.autofix_sb.fixed {
+  position: sticky;
+  left: auto;
+  top: 76px !important;
+  right: auto;
+  bottom: auto;
+  z-index: 10;
+  overflow: auto;
+}
+
+.autofix_sb.fixed.bottom {
+  position: unset !important;
+}
