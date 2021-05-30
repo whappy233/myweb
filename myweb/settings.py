@@ -66,6 +66,9 @@ INSTALLED_APPS = [
     'xadmin',
     'crispy_forms',
     'reversion',
+
+    # 'django_extensions',
+
 ]
 
 # 中间件
@@ -383,8 +386,23 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # 引擎（默认）
 SESSION_COOKIE_NAME = "sessionid"  # Session的cookie保存在浏览器上时的key，
 SESSION_COOKIE_PATH = "/"  # Session的cookie保存的路径（默认）
 SESSION_COOKIE_DOMAIN = None  # Session的cookie保存的域名（默认）
-SESSION_COOKIE_SECURE = False  # 是否只有HTTPS连接才能发送cookie
+# SESSION_COOKIE_SECURE = False  # 是否只有HTTPS连接才能发送cookie
 SESSION_COOKIE_HTTPONLY = True  # 是否Session的cookie只支持http传输（默认）
 SESSION_COOKIE_AGE = 60 * 30  # Session的cookie失效日期（30min）（默认）
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # 是否关闭浏览器使得Session过期（默认）
 SESSION_SAVE_EVERY_REQUEST = True  # 是否每次请求都保存Session，默认修改之后才保存
+
+
+
+# SECURITY安全设置 - 支持https时建议开启
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = True # 将所有非SSL请求永久重定向到SSL
+SECURE_HSTS_SECONDS = 60
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True # 严格要求使用https协议传输
+SECURE_CONTENT_TYPE_NOSNIFF = True # 防止浏览器猜测资产的内容类型
+SESSION_COOKIE_SECURE = True # 仅通过https传输cookie
+CSRF_COOKIE_SECURE = True # 仅通过https传输cookie
+SECURE_HSTS_PRELOAD = True # HSTS为
+SECURE_FRAME_DENY = True  # 避免让自己的网页的框架和保护他们免受[点击劫持]
+SECURE_BROWSER_XSS_FILTER = True  # 启用浏览器的XSS过滤保护
+SESSION_COOKIE_HTTPONLY = True  # 防止COOKIE窃听，使客户端到服务端总是COOKIE加密传输
