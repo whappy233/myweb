@@ -7,11 +7,13 @@ from random import choice
 from myweb.utils import AdminMixin
 from django.db.models import Count
 from django.contrib.contenttypes.fields import GenericRelation
+
+import os
+
 from app_comments.models import Comments
+from app_common.models import BaseModel
 
 
-
-# 默认 Photo 管理器增加方法
 class PhotoManager(models.Manager):
     def get_random_photo(self, total: int = 1):
         '''随机获取一张图片'''
@@ -24,7 +26,6 @@ class PhotoManager(models.Manager):
         return []
 
 
-# 自定义 Gallery 管理器
 class GalleryNotNullManager(models.Manager):
     '''不为空的相册'''
 
@@ -33,25 +34,32 @@ class GalleryNotNullManager(models.Manager):
             annotate(photo_num=Count('photos')).filter(photo_num__gt=0)
 
 
-# 相册
-class Gallery(models.Model, AdminMixin):
-    slug = models.SlugField(max_length=50, blank=True)
+
+# 用户上传文件进行重命名并保存到用户文件夹,
+def gallery_directory_path(instance, filename):
+    gallery_title = instance.title
+    return os.path.join('gallery', str(gallery_title), filename)
+
+
+class Gallery(BaseModel, AdminMixin):
+    '''相册'''
+
     title = models.CharField('相册名称', max_length=100)
-    is_visible = models.BooleanField('是否可见', default=True)
-    mod_date = models.DateTimeField('更新日期', auto_now=True)
-    create_date = models.DateTimeField('创建日期', auto_now_add=True)
+    # 图片上传文件夹(media/gallery/)
+    thumb = ProcessedImageField(processors=[ResizeToFit(300)],
+                                format='JPEG',
+                                options={'quality': 100},
+                                verbose_name='缩略图',
+                                upload_to=gallery_directory_path)
+
     is_delete = models.BooleanField('已删除', default=False)
-    # 图片上传文件夹(media/albums/)
-    thumb = ProcessedImageField(upload_to='albums', processors=[ResizeToFit(300)], format='JPEG', options={'quality': 100}, verbose_name='缩略图')
+    is_visible = models.BooleanField('是否可见', default=True)
 
     # contenttypes
     comments = GenericRelation(Comments)  # 该字段不会存储于数据库中(用于反向关系查询)
 
-
-    # 默认管理器
-    objects = models.Manager()
-    # 自定义的管理器应在默认管理器的后面
-    notNull = GalleryNotNullManager()
+    objects = models.Manager()  # 默认管理器
+    nonEmpty = GalleryNotNullManager()
 
     def __str__(self):
         return self.title
@@ -59,28 +67,52 @@ class Gallery(models.Model, AdminMixin):
     def get_some_photo(self, total=1):
         return self.photos.get_random_photo(total)
 
-    class Meta:
-        verbose_name = '相册'
-        ordering = ('-mod_date',)
-        verbose_name_plural = verbose_name
-
     def get_absolute_url(self):
-        return reverse('app_gallery:photo_detail', kwargs={'pk': self.pk, 'slug': self.slug})
+        return reverse('app_gallery:gallery_detail', args=(self.uuid,))
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            slug = slugify(self.title, True)[:8]
-            self.slug = slug
         super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = '相册'
+        ordering = ('-last_mod_time',)
+        verbose_name_plural = verbose_name
+
+
+
+def photo_directory_path(instance, filename):
+    gallery_title = instance.gallery
+    return os.path.join('gallery', str(gallery_title), 'photo', filename)
+
+def thumb_directory_path(instance, filename):
+    gallery_title = instance.gallery
+    return os.path.join('gallery', str(gallery_title), 'thumb', filename)
 
 
 # 一张相片
 class Photo(models.Model, AdminMixin):
-    gallery = models.ForeignKey(Gallery, on_delete=models.PROTECT, related_name='photos', verbose_name='所属相册')
+    gallery = models.ForeignKey(Gallery,
+                                on_delete=models.PROTECT,
+                                related_name='photos',
+                                verbose_name='所属相册')
 
-    image = ProcessedImageField(upload_to='photo', processors=[ResizeToFit(1280)], format='JPEG', options={'quality': 70})
+    # image = ProcessedImageField(processors=[ResizeToFit(1280)],
+    #                             format='JPEG',
+    #                             options={'quality': 1000},
+    #                             upload_to='photo')
+
+    # image.url  # 图像URL地址
+    image = models.ImageField('图片', upload_to=photo_directory_path)
+
+
     # 缩略图目的文件夹(media/photo/thumb/)
-    thumb = ProcessedImageField(upload_to='photo/thumbs/', processors=[ResizeToFit(300)], format='JPEG', options={'quality': 80}, blank=True, null=True, verbose_name='缩略图')
+    thumb = ProcessedImageField(processors=[ResizeToFit(300)],
+                                format='JPEG',
+                                options={'quality': 80},
+                                blank=True, null=True,
+                                verbose_name='缩略图', upload_to=thumb_directory_path)
+
+
     title = models.CharField('标题', max_length=255, default='', blank=True)
     create_date = models.DateTimeField('创建日期', auto_now_add=True)
     is_delete = models.BooleanField('已删除', default=False)

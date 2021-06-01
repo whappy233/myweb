@@ -1,11 +1,38 @@
+from abc import abstractmethod
 from django.db import models
 
 from django.core.exceptions import ValidationError
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
-from myweb.utils import cache
+from myweb.utils import cache, get_current_site
 
 import re
+
+from uuid import uuid4
+
+def uuid4_hex():
+    return uuid4().hex[:10]
+
+
+class BaseModel(models.Model):
+    id = models.AutoField(primary_key=True)
+    uuid = models.CharField('唯一标识', max_length=10, unique=True, default=uuid4_hex, editable=False)
+    created_time = models.DateTimeField('创建时间', auto_now_add=True)
+    last_mod_time = models.DateTimeField('修改时间', auto_now=True)
+
+    def get_full_url(self):
+        site = get_current_site().domain
+        url = f"https://{site}{self.get_absolute_url()}"
+        return url
+
+    class Meta:
+        abstract = True
+
+    @abstractmethod
+    def get_absolute_url(self):
+        pass
+
 
 
 class BlogSettings(models.Model):

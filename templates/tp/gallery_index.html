@@ -159,7 +159,7 @@
       <div class="slide">
         <h2 class="slide__name">ABCD <br /> {{ gallery.title|truncatechars:9}}{% if gallery.title|length > 9 %}...{%endif %}</h2>
         <h3 class="slide__title">
-          <button class="btn btn--export" data-pk="{{gallery.pk}}" data-slug="{{gallery.slug}}">
+          <button class="btn btn--export" data-pk="{{gallery.pk}}" data-uuid="{{gallery.uuid}}">
             <svg class="icon">
               <use xlink:href="#icon-export"></use>
             </svg>Export
@@ -208,7 +208,7 @@
         var data = $(this).data();
         $.ajax({   
           url: "{% url 'app_gallery:detail_ajax'  %}",  // 规定发送请求的URL, 默认是当前页面
-          // url: `/gallery/detail/${data.pk}/${data.slug}/`,  // 规定发送请求的URL, 默认是当前页面
+          // url: `/gallery/detail/${data.pk}/${data.uuid}/`,  // 规定发送请求的URL, 默认是当前页面
           type: "GET",  // 规定请求的类型(GET 或 POST)
           data: data,
           dataType: 'json',  // 预期的服务器响应的数据类型

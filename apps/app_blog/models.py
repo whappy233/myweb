@@ -184,6 +184,7 @@ class Article(models.Model, AdminMixin):
         self.views += 1
         # 只需要更新views的字段，而不是更新全表，减轻数据库写入的工作量
         self.save(update_fields=['views'])
+        # Article.objects.filter(id=article_id).update(pv=F('views')+1)  # 数据库自加, 无竞态问题
 
     def to_publish(self):
         self.status = 'p'

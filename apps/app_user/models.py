@@ -4,8 +4,9 @@ from uuid import uuid4
 import os
 
 
-def uuid4_hex():
-    return uuid4().hex[:10]
+from app_common.models import BaseModel
+
+
 
 
 # 用户上传文件进行重命名并保存到用户文件夹,
@@ -23,24 +24,21 @@ def user_directory_path(instance, filename):
 
 
 # UserProfile只是对User模型的扩展, 与User是1对1的关系
-class UserProfile(models.Model):
+class UserProfile(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE,
                                 related_name='profile',
                                 blank=True, null=True,
                                 verbose_name='关联的用户信息')
+
     # photo.url  # 获取头像URL地址
     photo = models.ImageField('头像', upload_to=user_directory_path, blank=True, null=True)
     telephone = models.CharField('手机号', max_length=50, blank=True, null=True)
     introduction = models.TextField('个人简介', blank=True, null=True)
-    mod_date = models.DateTimeField('修改日期', auto_now=True)
-    created_time = models.DateTimeField('创建时间', auto_now_add=True)
 
     # 游民必填
     w_name = models.CharField('昵称(游民)', max_length=20, blank=True, null=True)
     w_email = models.EmailField('邮箱(游民)', max_length=50, blank=True, null=True)
     is_wanderer = models.BooleanField('是否是游民', default=False)
-
-    uuid = models.CharField('唯一标识', max_length=10, unique=True, default=uuid4_hex, editable=False)
 
     class Meta:
         verbose_name = 'User Profile'
@@ -80,9 +78,6 @@ class UserProfile(models.Model):
         else:
             return self.user.email
 
-    def __str__(self):
-        return str(self.username)
-
     @property
     def img_url(self):
         if self.photo and hasattr(self.photo, 'url'):
@@ -90,3 +85,7 @@ class UserProfile(models.Model):
 
     def natural_key(self):
         return {'uuid': self.uuid, 'username': self.username, 'photo': self.img_url, 'is_wanderer': self.is_wanderer}
+
+    def __str__(self):
+        return str(self.username)
+

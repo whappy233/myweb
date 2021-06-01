@@ -142,14 +142,8 @@
 <div style="display:flex">
 
   <div data-target="#modal" data-toggle="modal">
-    <!-- <img style="border-radius: 50%;" id="image" src="{{request.user.profile.photo}}" data-toggle="tooltip" title="点击修改头像" data-placement="bottom"> -->
-    <!-- 头像 -->
-    <figure id="image" class="avatar avatar-lg" data-toggle="tooltip" title="点击修改头像" data-placement="bottom">
-      {% if request.user.profile.photo %}
-      <img src="{{ request.user.profile.photo.url }}" class="about-author-img rounded-circle" alt="{{request.user.username}}">
-      {% else %}
-      <span class="avatar-title bg-primary rounded-circle">{{request.user.username|first}}</span>
-      {% endif %}
+    <img style="border-radius: 50%;" id="image" src="{{request.user.profile.img_url}}" data-toggle="tooltip" title="点击修改头像" data-placement="bottom">
+
   </figure>
   </div>
 

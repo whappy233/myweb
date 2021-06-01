@@ -67,8 +67,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'reversion',
 
-    # 'django_extensions',
-
 ]
 
 # 中间件
@@ -95,9 +93,8 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',  # django-debug-toolbar
 
     'app_common.middleware.SetRemoteAddrFromForwardedFor',  #  当部署在负载平衡proxy(如nginx)上, 该中间件用于获取用户实际的 ip 地址
-    # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', '')  # 获取真实ip
-    # if x_forwarded_for: ip = x_forwarded_for.split(',')[0]  # 所以这里是真实的ip
-    # else: ip = request.META.get('REMOTE_ADDR')  # 这里获得代理ip
+    'app_common.middleware.RequestBlockingMiddleware',
+
 ]
 
 # 表示Python模块，定义程序的根URL路径
@@ -393,8 +390,9 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # 是否关闭浏览器使得Session过�
 SESSION_SAVE_EVERY_REQUEST = True  # 是否每次请求都保存Session，默认修改之后才保存
 
 
-if DEBUG:
+
 # SECURITY安全设置 - 支持https时建议开启
+if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = True # 将所有非SSL请求永久重定向到SSL
     SECURE_HSTS_SECONDS = 60

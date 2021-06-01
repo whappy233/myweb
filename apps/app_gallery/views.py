@@ -19,7 +19,7 @@ from .models import Gallery, Photo
 # 或者在url中使用 path('', login_required(views.GalleryListView.as_view()), name='gallery_list')
 @method_decorator(login_required, name='dispatch')
 class GalleryListView(ListView):
-    queryset = Gallery.notNull.filter(is_visible=True)
+    queryset = Gallery.nonEmpty.filter(is_visible=True)
     paginate_by = 20
     template_name = 'tp/gallery_index.html'  # 使用自定义模板渲染
 
@@ -39,8 +39,8 @@ class GalleryDetail(ListView):
     def get_queryset(self):
         queryset = super(GalleryDetail, self).get_queryset()
         gallery_pk = self.request.GET.get('pk')
-        gallery_slug = self.request.GET.get('slug')
-        queryset = queryset.filter(gallery__pk=gallery_pk, gallery__slug=gallery_slug)
+        gallery_uuid = self.request.GET.get('uuid')
+        queryset = queryset.filter(gallery__pk=gallery_pk, gallery__uuid=gallery_uuid)
         return queryset
 
     def get(self, request, *args, **kwargs):

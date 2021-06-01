@@ -45,7 +45,6 @@ def save_user_profile(sender, instance, **kwargs):
         UserProfile.objects.create(user=instance)
 
 
-
 # 当删除 UserProfile 时, 同时删除关联的 User 对象.
 @receiver(post_delete, sender=UserProfile)
 def post_delete_user(sender, instance, *args, **kwargs):

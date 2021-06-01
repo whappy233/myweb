@@ -119,8 +119,6 @@ def mobile_validate(value):
 #                             widget=forms.TextInput(attrs={'class': "form-control", 'placeholder': u'手机号码'}))
 
 
-
-
 # 可以不使用类定义，而是使用独立函数 modelform_factory() 来创建给定模型的表单。
 # 如果您没有很多自定义设置，这可能会更方便
 from django.forms import modelform_factory

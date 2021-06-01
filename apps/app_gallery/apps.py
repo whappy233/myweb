@@ -18,7 +18,7 @@ class Serializer(Builtin_Serializer):
         "alt": 'xxx', 
         "thumb": 'xxx', 
         "image": 'xxx', 
-        "create_date": 'xxx'
+        "created_time": 'xxx'
     }
     '''
 

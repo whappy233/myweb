@@ -14,10 +14,9 @@ from xadmin.sites import register
 @register(Gallery)
 class GalleryModelAdmin:
     form = GalleryForm
-    prepopulated_fields = {'slug': ('title',)}
-    list_display = ('id', 'title', 'slug', 'create_date', 'mod_date', 'show_thumb_img', 'is_delete', 'is_visible')
-    list_filter = ('create_date',)
-    ordering = ['-mod_date']
+    list_display = ('id', 'title', 'created_time', 'last_mod_time', 'show_thumb_img', 'is_delete', 'is_visible')
+    list_filter = ('created_time',)
+    ordering = ['-last_mod_time']
     list_editable = ['title', 'thumb', 'is_delete', 'is_visible']
     list_display_links = ['title']
 
@@ -55,7 +54,7 @@ class GalleryModelAdmin:
 
                             img = Photo()
                             img.gallery = gallery
-                            filename = f'{gallery.slug[:8]}{str(uuid.uuid4())[-13:]}.jpg'
+                            filename = f'{gallery.uuid}{uuid.uuid4().hex[:10]}.jpg'
                             img.title = filename
                             img.image.save(filename, contentfile)
 
@@ -79,7 +78,7 @@ class GalleryModelAdmin:
     def show_thumb_img(self, obj):
         '''展示封面'''
         url = obj.thumb.url
-        return format_html(f'<img style="width:20%;height:20%" src="{url}"></img>')
+        return format_html(f'<img style="width:50%;" src="{url}"></img>')
     show_thumb_img.short_description = '封面'  # 设置表头
 
 
@@ -96,20 +95,23 @@ class PhotoModelAdmin:
     def save_models(self):
         if self.form_obj.is_valid():
             img = self.form_obj.save(commit=False)
-            slug = self.form_obj.cleaned_data['gallery'].slug
+            uid = self.form_obj.cleaned_data['gallery'].uuid
             # 文件重命名
-            filename = '{0}{1}.jpg'.format(slug[:8], str(uuid.uuid4())[-13:])
+            filename = '{0}{1}.jpg'.format(uid, str(uuid.uuid4())[-13:])
             img.title = filename
             img.image.save(filename, self.form_obj.cleaned_data['image'])
-            img.thumb.save('thumb-{0}'.format(filename),
-                           self.form_obj.cleaned_data['image'])
+            img.thumb.save('thumb-{0}'.format(filename), self.form_obj.cleaned_data['image'])
             img.save()
             super().save_models()
 
     def show_thumb_img(self, obj):
         '''展示缩略图'''
-        url = obj.thumb.url
-        return format_html(f'<img style="width:20%;height:20%" src="{url}"></img>')
+        try:
+            url = obj.thumb.url
+            return format_html(f'<img style="width:50%;" src="{url}"></img>')
+        except Exception as e:
+            print(e)
+            return 'ddd'
     show_thumb_img.short_description = '缩略图'  # 设置表头
 
 

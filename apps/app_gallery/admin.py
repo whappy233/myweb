@@ -12,10 +12,9 @@ from django.utils.html import format_html
 @admin.register(Gallery)
 class GalleryModelAdmin(admin.ModelAdmin):
     form = GalleryForm
-    prepopulated_fields = {'slug': ('title',)}
-    list_display = ('title', 'is_visible', 'create_date', 'mod_date', 'slug', 'is_delete', 'show_thumb_img')
-    list_filter = ('create_date',)
-    ordering = ['-mod_date']
+    list_display = ('title', 'is_visible', 'created_time', 'last_mod_time', 'is_delete', 'show_thumb_img')
+    list_filter = ('created_time',)
+    ordering = ['-last_mod_time']
 
     # 为什么要重写save_model方法?
     # 当我们通过 GalleryForm 创建 gallery 对象时，默认的form.save()方法只能将相关字段存入到 Gallery 模型对应的表单里。
@@ -47,8 +46,7 @@ class GalleryModelAdmin(admin.ModelAdmin):
 
                             img = Photo()
                             img.gallery = gallery
-                            filename = '{0}{1}.jpg'.format(
-                                gallery.slug[:8], str(uuid.uuid4())[-13:])
+                            filename = '{0}{1}.jpg'.format(gallery.uuid, str(uuid.uuid4())[-13:])
                             img.title = filename
                             img.image.save(filename, contentfile)
 
@@ -87,9 +85,9 @@ class PhotoModelAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if form.is_valid():
             img = form.save(commit=False)
-            slug = form.cleaned_data['gallery'].slug
+            uid = form.cleaned_data['gallery'].uuid
             # 文件重命名
-            filename = '{0}{1}.jpg'.format(slug[:8], str(uuid.uuid4())[-13:])
+            filename = '{0}{1}.jpg'.format(uid, str(uuid.uuid4())[-13:])
             img.title = filename
             img.image.save(filename, form.cleaned_data['image'])
             img.thumb.save('thumb-{0}'.format(filename),

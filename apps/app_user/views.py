@@ -56,7 +56,6 @@ class RegisterView(FormView):
             return redirect('app_blog:article_list')
         return super(RegisterView, self).get(request, *args, **kwargs)
 
-
     def post(self, request, *args, **kwargs):
         """
         Handle POST requests: instantiate a form instance with the passed
@@ -66,7 +65,6 @@ class RegisterView(FormView):
             return super(RegisterView, self).post(request, *args, **kwargs)
         else:
             return self.render_to_response(self.get_context_data(err_message='网站已停止注册'))
-
 
     def get_form_kwargs(self):
         '''给 Form 表单传递额外的参数'''
@@ -448,6 +446,7 @@ def ajax_photo_upload(request):
 
             # 向前台返回一个json，result值是图片路径
             data = {"result": user_profile.photo.url, }
+            print(data)
             return JsonResponse(data)
 
         else:
