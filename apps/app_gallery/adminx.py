@@ -4,6 +4,7 @@ import os
 import uuid
 import zipfile
 from django.core.files.base import ContentFile
+import loguru
 from .models import Gallery, Photo
 from .forms import GalleryForm
 from django.utils.html import format_html
@@ -11,14 +12,32 @@ from loguru import logger
 from xadmin.sites import register
 
 
+lightense = '''
+<script src="/static/st/js/lightense.min.js"></script>
+<script>
+window.addEventListener('load', function () {
+    var el = document.querySelectorAll('td>img.field_img');
+    Lightense(el, {
+        time: 300,
+        padding: 40,
+        offset: 40,
+        keyboard: true,
+        cubicBezier: 'cubic-bezier(.2, 0, .1, 1)',
+        background: 'rgba(0, 0, 0, .8)',
+        zIndex: 2147483647
+    })
+}, false);
+</script>'''
+
+
 @register(Gallery)
 class GalleryModelAdmin:
     form = GalleryForm
-    list_display = ('id', 'title', 'created_time', 'last_mod_time', 'show_thumb_img', 'is_delete', 'is_visible')
+    list_display = ('id', 'title', 'uuid', 'created_time', 'last_mod_time', 'is_delete', 'is_visible', 'show_thumb_img')
     list_filter = ('created_time',)
     ordering = ['-last_mod_time']
     list_editable = ['title', 'thumb', 'is_delete', 'is_visible']
-    list_display_links = ['title']
+    list_display_links = ['uuid']
 
     # 为什么要重写save_model方法?
     # 当我们通过 GalleryForm 创建 gallery 对象时，默认的form.save()方法只能将相关字段存入到 Gallery 模型对应的表单里。
@@ -44,26 +63,27 @@ class GalleryModelAdmin:
                 if self.form_obj.cleaned_data['zip'] is not None:
                     zip = zipfile.ZipFile(self.form_obj.cleaned_data['zip'])
                     for filename in sorted(zip.namelist()):
+                        file_name = os.path.basename(filename)
+                        if not file_name:
+                            continue
                         try:
-                            file_name = os.path.basename(filename)
-                            if not file_name:
-                                continue
-
                             data = zip.read(filename)
                             contentfile = ContentFile(data)
-
-                            img = Photo()
-                            img.gallery = gallery
-                            filename = f'{gallery.uuid}{uuid.uuid4().hex[:10]}.jpg'
-                            img.title = filename
-                            img.image.save(filename, contentfile)
-
-                            img.thumb.save(f'thumb-{filename}', contentfile)
-                            img.save()
+                            size = contentfile.size
+                            if size < 1024:
+                                logger.warning(f'small size photo({size}>1024 Bytes): "{filename}"')
+                                continue
+                            photo = Photo()
+                            photo.gallery = gallery
+                            newname = f'{gallery.uuid}{uuid.uuid4().hex[:10]}.jpg'
+                            photo.title = newname
+                            photo.image.save(newname, contentfile)
+                            photo.thumb.save(f'thumb-{newname}', contentfile)
                         except Exception as e:
-                            print('ERROR: ')
-                            print(e)
                             logger.error(e)
+                        else:
+                            photo.save()
+
                     zip.close()
             except:
                 pass
@@ -71,49 +91,57 @@ class GalleryModelAdmin:
 
     def form_valid(self, form):
         # form.instance.author = self.request.user  # 初始化表单数据
-        print(20*'*')
-        print(form.cleaned_data)
         return super().form_valid(form)
 
     def show_thumb_img(self, obj):
         '''展示封面'''
         url = obj.thumb.url
-        return format_html(f'<img style="width:50%;" src="{url}"></img>')
+        return format_html(f'<img src="{url}" class="field_img">')
+
     show_thumb_img.short_description = '封面'  # 设置表头
 
+
+    def block_extrabody(self, context, node):
+        return lightense
 
 
 
 @register(Photo)
 class PhotoModelAdmin:
-    list_display = ('id', 'title', 'gallery', 'create_date', 'is_delete', 'show_thumb_img')
+    list_display = ('id', 'title', 'description', 'gallery', 'create_date', 'is_delete', 'show_thumb_img')
     list_filter = ('gallery', 'create_date')
     exclude = ['thumb']
     ordering = ['-create_date']
+    list_display_links = ['title']
+    list_editable = ['is_delete']
     list_per_page = 20  # 每页显示20个
 
     def save_models(self):
         if self.form_obj.is_valid():
-            img = self.form_obj.save(commit=False)
-            uid = self.form_obj.cleaned_data['gallery'].uuid
-            # 文件重命名
-            filename = '{0}{1}.jpg'.format(uid, str(uuid.uuid4())[-13:])
-            img.title = filename
-            img.image.save(filename, self.form_obj.cleaned_data['image'])
-            img.thumb.save('thumb-{0}'.format(filename), self.form_obj.cleaned_data['image'])
-            img.save()
-            super().save_models()
+            try:
+                img = self.form_obj.save(commit=False)
+                uid = self.form_obj.cleaned_data['gallery'].uuid
+                # 文件重命名
+                filename = '{0}{1}.jpg'.format(uid, str(uuid.uuid4())[-13:])
+                img.title = filename
+                img.image.save(filename, self.form_obj.cleaned_data['image'])
+                img.thumb.save('thumb-{0}'.format(filename), self.form_obj.cleaned_data['image'])
+            except Exception as e:
+                ...
+            else:
+                img.save()
+                super().save_models()
+
 
     def show_thumb_img(self, obj):
         '''展示缩略图'''
         try:
             url = obj.thumb.url
-            return format_html(f'<img style="width:50%;" src="{url}"></img>')
+            return format_html(f'<img src="{url}" class="field_img">')
         except Exception as e:
-            print(e)
-            return 'ddd'
+            logger.error(e)
+            return 'null'
     show_thumb_img.short_description = '缩略图'  # 设置表头
 
-
-
-
+    def block_extrabody(self, context, node):
+        return lightense

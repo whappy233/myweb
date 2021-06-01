@@ -34,17 +34,18 @@ class GalleryNotNullManager(models.Manager):
             annotate(photo_num=Count('photos')).filter(photo_num__gt=0)
 
 
-
-# 用户上传文件进行重命名并保存到用户文件夹,
+# gallery/{gallery_title}/{thumb_name}
 def gallery_directory_path(instance, filename):
+    ext = os.path.splitext(filename)[-1]
     gallery_title = instance.title
-    return os.path.join('gallery', str(gallery_title), filename)
+    newname = gallery_title + ext
+    return os.path.join('gallery', gallery_title, newname)
 
 
 class Gallery(BaseModel, AdminMixin):
     '''相册'''
 
-    title = models.CharField('相册名称', max_length=100)
+    title = models.CharField('相册名称', max_length=100, unique=True)
     # 图片上传文件夹(media/gallery/)
     thumb = ProcessedImageField(processors=[ResizeToFit(300)],
                                 format='JPEG',
@@ -79,11 +80,12 @@ class Gallery(BaseModel, AdminMixin):
         verbose_name_plural = verbose_name
 
 
-
+# gallery/{gallery_title}/photo/{image_name}
 def photo_directory_path(instance, filename):
     gallery_title = instance.gallery
     return os.path.join('gallery', str(gallery_title), 'photo', filename)
 
+# gallery/{gallery_title}/thumb/thumb-{image_name}
 def thumb_directory_path(instance, filename):
     gallery_title = instance.gallery
     return os.path.join('gallery', str(gallery_title), 'thumb', filename)
@@ -96,10 +98,7 @@ class Photo(models.Model, AdminMixin):
                                 related_name='photos',
                                 verbose_name='所属相册')
 
-    # image = ProcessedImageField(processors=[ResizeToFit(1280)],
-    #                             format='JPEG',
-    #                             options={'quality': 1000},
-    #                             upload_to='photo')
+    # image = ProcessedImageField(processors=[ResizeToFit(1280)], ormat='JPEG', options={'quality': 1000}, upload_to='photo')
 
     # image.url  # 图像URL地址
     image = models.ImageField('图片', upload_to=photo_directory_path)
@@ -112,8 +111,8 @@ class Photo(models.Model, AdminMixin):
                                 blank=True, null=True,
                                 verbose_name='缩略图', upload_to=thumb_directory_path)
 
-
     title = models.CharField('标题', max_length=255, default='', blank=True)
+    description = models.TextField('描述', default='', blank=True)
     create_date = models.DateTimeField('创建日期', auto_now_add=True)
     is_delete = models.BooleanField('已删除', default=False)
 
