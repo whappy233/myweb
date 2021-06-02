@@ -19,9 +19,9 @@ from myweb.utils import cache
 from .forms import EmailArticleForm, SearchForm
 from .models import Article, Category
 import time
-import markdown
-from markdown.extensions.toc import TocExtension  # 锚点的拓展
-from django.utils.text import slugify
+
+
+from .utils import MarkdownRender
 
 
 class ArticleListView(ListView):
@@ -237,15 +237,7 @@ class ArticleDetailView(DetailView):
             obj.body, obj.toc = cache_md
             logger.info(f'获取文章Markdown缓存, KEY: {md_key}')
         else:
-            md = markdown.Markdown(extensions=[
-                'markdown.extensions.extra',
-                'markdown.extensions.codehilite',
-                TocExtension(slugify=slugify),
-            ])
-            # # 把换行符替换成两个空格+换行符，这样经过markdown转换后才可以转成前端的br标签
-            # obj.body = md.convert(obj.body.replace("\r\n", '  \n'))
-            obj.body = md.convert(obj.body)
-            obj.toc = md.toc  # 目录
+            obj.body, obj.toc = MarkdownRender(obj.body)
             cache.set(md_key, (obj.body, obj.toc), 60 * 60 * 12)
             logger.info(f'设置文章Markdown缓存, KEY: {md_key}')
 
@@ -354,6 +346,12 @@ def ajax_test(request):
             return JsonResponse(data)
 
 
+
+
+
+
+
+
 # 刷新缓存
 @login_required
 def refresh_memcache(request):
@@ -368,13 +366,12 @@ def refresh_memcache(request):
         logger.error(e)
         return HttpResponse(e)
 
-
-
 # 400
 def page_not_found_view(request, exception, template_name='blog/error_page.html'):
-    if exception: logger.error(exception)
+    if exception: 
+        logger.error(exception)
     url = request.get_full_path()
-    return render(request, template_name, {'message': f'页面"{url}"不存在', 'statuscode': '404'}, status=404)
+    return render(request, template_name, {'message': f'404 页面"{url}"不存在', 'statuscode': '404'}, status=404)
 
 # 500
 def server_error_view(request, template_name='blog/error_page.html'):

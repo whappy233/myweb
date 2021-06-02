@@ -276,13 +276,11 @@
                                     <!-- User -->
                                     <li class="user-wrap">
                                         <!-- 头像 -->
-                                        <figure class="avatar avatar-lg">
-                                            {% if request.user.profile.photo %}
-                                            <img src="{{ request.user.profile.photo.url }}" class="about-author-img rounded-circle" alt="{{request.user.username}}">
-                                            {% else %}
-                                            <span class="avatar-title bg-primary rounded-circle">{{request.user.username|first}}</span>
-                                            {% endif %}
-                                        </figure>
+                                        {% if request.user.profile.photo %}
+                                        <img src="{{ request.user.profile.photo.url }}" class="about-author-img rounded-circle" alt="{{request.user.username}}">
+                                        {% else %}
+                                        <img options="size=25x25&text={{request.user.username|first}}&fstyle=oblique&fweight=bold&fsize=40&ffamily=consolas" class="placeholder about-author-img rounded-circle" alt="{{request.user.username}}">
+                                        {% endif %}
                                         <div class="template-mega-menu animation">
                                             <div class="container">
                                                 <div class="row">

@@ -24,13 +24,11 @@ comments: 查询到关联的所有评论.
 <div id="{{uid}}" {% if parent %}class="media media-none--xs child-comment" style="display: none;"{% endif %} class="media media-none--xs" data-author="{{comment_item.author.uuid}}">
 
     <!-- 头像 -->
-    <figure style="margin-left: {% if parent %}40{% else %}0{% endif %}px" class="avatar avatar-lg">
-        {% if comment_item.author.photo %}
-        <img src="{{ comment_item.author.photo.url }}" class="rounded-circle" alt="avatar">
-        {% else %}
-        <span class="avatar-title bg-primary rounded-circle">{{comment_item.author.username|first}}</span>
-        {% endif %}
-    </figure>
+    {% if comment_item.author.photo %}
+    <img src="{{ comment_item.author.photo.url }}" class="rounded-circle" alt="avatar">
+    {% else %}
+    <img ptions="size=50x50&text={{me.username|first}}&fstyle=oblique&fweight=bold&fsize=40&ffamily=consolas" class="placeholder rounded-circle" alt="avatar">
+    {% endif %}
 
     <!-- body -->
     <div class="media-body" id="content-{{uid}}">

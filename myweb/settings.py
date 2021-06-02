@@ -23,7 +23,8 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # 不要在生产环境打开 debug 开关
-DEBUG = os.environ.get('USER_NAME') == 'Carlos'
+# DEBUG = os.environ.get('USER_NAME') == 'Carlos'
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -100,6 +101,27 @@ MIDDLEWARE = [
 # 表示Python模块，定义程序的根URL路径
 ROOT_URLCONF = 'myweb.urls'
 
+# 自定义验证后端,实现用户名邮箱手机号登录
+AUTHENTICATION_BACKENDS = ('app_user.user_login_backend.CustomBackend',)
+
+WSGI_APPLICATION = 'myweb.wsgi.application'
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+# 模板配置
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -169,8 +191,6 @@ TEMPLATES = [
 # <a href="{{ url('admin:index') }}">Administration</a>
 # ------------------------------------------------------------------------------------
 
-
-WSGI_APPLICATION = 'myweb.wsgi.application'
 
 # 数据库 mysql
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -246,25 +266,6 @@ CACHES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
-# Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
 LANGUAGE_CODE = 'zh-hans'
 TIME_ZONE = 'Asia/Shanghai'  # 设置时区
 USE_I18N = True  # 默认为True，是否启用自动翻译系统
@@ -272,43 +273,39 @@ USE_L10N = True  # 默认False，以本地化格式显示数字和时间
 USE_TZ = False  # 默认值True。若使用了本地时间，必须设为False
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
+# 静态文件
 STATIC_URL = '/static/'
 if DEBUG:
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-
 # 媒体文件
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 
-LOGIN_REDIRECT_URL = 'app_blog:article_list'  # 如果请求中没有出现next参数, 在成功登陆后通知 Django 重定向到该地址
-LOGIN_URL = 'app_user:login'  # 用户重定向并实现登陆的URL(例如使用login_required装饰器的视图)
-LOGOUT_URL = 'app_user:logout'   # 用户重定向并实现退出登陆的URL
+# 如果请求中没有出现next参数, 在成功登陆后通知 Django 重定向到该地址
+LOGIN_REDIRECT_URL = 'app_blog:article_list'  
+# 用户重定向并实现登陆的URL(例如使用login_required装饰器的视图)
+LOGIN_URL = 'app_user:login'  
+# 用户重定向并实现退出登陆的URL
+LOGOUT_URL = 'app_user:logout'   
 
 
-# 邮箱配置 #####################################################3
-
-if DEBUG:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # 输出到 Shell
+# 邮箱配置
+if DEBUG:  # 输出到 Shell
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST =  'smtp.qq.com'      # SMTP 服务器主机  默认localhost
-EMAIL_PORT = 465                  # SMTP 端口 默认25
+EMAIL_PORT = 465                 # SMTP 端口 默认25
 EMAIL_HOST_USER = os.environ.get('USER_EMAIL')  # SMTP 服务器用户名
 EMAIL_HOST_PASSWORD = os.environ.get('USER_EMAIL_PW')    # SMTP 服务器密码
 # EMAIL_USE_TLS / EMAIL_USE_SSL 是互斥的，因此只能将这些设置之一设置为True。
 # EMAIL_USE_TLS = True              # 是否采用 TLS 安全连接
-EMAIL_USE_SSL = True             # 是否采 SSL 安全连接
-EMAIL_SUBJECT_PREFIX = '[浩瀚星海]' #邮件标题前缀,默认是'[django]'
-
-
-# 自定义验证后端,实现用户名邮箱手机号登录
-AUTHENTICATION_BACKENDS = ('app_user.user_login_backend.CustomBackend',)
+EMAIL_USE_SSL = True                # 是否采 SSL 安全连接
+EMAIL_SUBJECT_PREFIX = '[浩瀚星海]'  # 邮件标题前缀,默认是'[django]'
 
 
 # CkEditor 富文本编辑器配置
@@ -392,15 +389,15 @@ SESSION_SAVE_EVERY_REQUEST = True  # 是否每次请求都保存Session，默认
 
 
 # SECURITY安全设置 - 支持https时建议开启
-if not DEBUG:
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-    SECURE_SSL_REDIRECT = True # 将所有非SSL请求永久重定向到SSL
-    SECURE_HSTS_SECONDS = 60
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True # 严格要求使用https协议传输
-    SECURE_CONTENT_TYPE_NOSNIFF = True # 防止浏览器猜测资产的内容类型
-    SESSION_COOKIE_SECURE = True # 仅通过https传输cookie
-    CSRF_COOKIE_SECURE = True # 仅通过https传输cookie
-    SECURE_HSTS_PRELOAD = True # HSTS为
-    SECURE_FRAME_DENY = True  # 避免让自己的网页的框架和保护他们免受[点击劫持]
-    SECURE_BROWSER_XSS_FILTER = True  # 启用浏览器的XSS过滤保护
-    SESSION_COOKIE_HTTPONLY = True  # 防止COOKIE窃听，使客户端到服务端总是COOKIE加密传输
+# if not DEBUG:
+#     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+#     SECURE_SSL_REDIRECT = True # 将所有非SSL请求永久重定向到SSL
+#     SECURE_HSTS_SECONDS = 60
+#     SECURE_HSTS_INCLUDE_SUBDOMAINS = True # 严格要求使用https协议传输
+#     SECURE_CONTENT_TYPE_NOSNIFF = True # 防止浏览器猜测资产的内容类型
+#     SESSION_COOKIE_SECURE = True # 仅通过https传输cookie
+#     CSRF_COOKIE_SECURE = True # 仅通过https传输cookie
+#     SECURE_HSTS_PRELOAD = True # HSTS为
+#     SECURE_FRAME_DENY = True  # 避免让自己的网页的框架和保护他们免受[点击劫持]
+#     SECURE_BROWSER_XSS_FILTER = True  # 启用浏览器的XSS过滤保护
+#     SESSION_COOKIE_HTTPONLY = True  # 防止COOKIE窃听，使客户端到服务端总是COOKIE加密传输

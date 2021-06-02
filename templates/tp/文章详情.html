@@ -30,7 +30,7 @@
     <div class="single-blog-banner-layout1">
         <!-- Img -->
         <div class="banner-img">
-            <img src="https://picsum.photos/id/1010/1920/700" alt="{{ article.title}}">
+            <img data-src="https://picsum.photos/id/1010/1920/700" alt="{{ article.title}}">
         </div>
         <!-- Title Meta -->
         <div class="banner-content">
@@ -168,6 +168,7 @@
     //     topSpacing: 70, // 距离顶部的距离
     //     listen: true,   // 侦听容器中的DOM更改
     // });
+    +function(){
 
     window.addEventListener('load', function () {
         var el = document.querySelectorAll('.markdown-body img');
@@ -182,6 +183,7 @@
         })
     }, false);
 
+    }();
 
 </script>
 {% endblock script %}

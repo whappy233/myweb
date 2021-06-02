@@ -18,12 +18,10 @@ object: 模型的一条实例, 比如某篇文章, 某张相片
             {% if not request.user.is_authenticated %}
             {# 如果登录就不显示 name 和 email Form #}
             <div class="col-md-6 form-group">
-                <input type="text" placeholder="Nickname* 20个字符内" class="form-control" name="nickname" value="6646"
-                    required>
+                <input type="text" placeholder="Nickname* 20个字符内" class="form-control" name="nickname" required>
             </div>
             <div class="col-md-6 form-group">
-                <input type="email" placeholder="E-mail*" class="form-control" name="email" value="891953720@qq.com"
-                    required>
+                <input type="email" placeholder="E-mail*" class="form-control" name="email" required>
             </div>
             {% else %}
             <input type="hidden" name="username" value="{{request.user}}">
@@ -224,7 +222,8 @@ object: 模型的一条实例, 比如某篇文章, 某张相片
                 if (d.author.photo) {
                     var avatar = $(`<img src="${d.author.photo}" class="rounded-circle" alt="avatar" />`);
                 } else {
-                    var avatar = $(`<span class="avatar-title bg-primary rounded-circle">${d.author.username[0]}</span>`);
+                    // var avatar = $(`<span class="avatar-title bg-primary rounded-circle">${d.author.username[0]}</span>`);
+                    var avatar = $(`<img options="size=25x25&color=#fff&text=${d.author.username[0]}&fstyle=oblique&fsize=20&ffamily=consolas" class="placeholder rounded-circle" alt="avatar" />`);
                 };
 
                 avatar_container.append(avatar);
@@ -306,7 +305,7 @@ object: 模型的一条实例, 比如某篇文章, 某张相片
         if ($code) {
             let transfer = document.createElement('textarea');
             let original_code = $code.text();
-            let copytext = `${original_code}\n${new Array(40).join('-')}\n浩瀚星海|${document.title}\n${document.location.href}\n${new Date()}`;
+            let copytext = `${original_code}\n${new Array(40).join('-')}\n{{SITE_NAME}}|${document.title}\n${document.location.href} (转载请备注来源😚)\n${new Date()}`;
             document.body.appendChild(transfer);
             transfer.value = copytext;  // 这里表示想要复制的内容
             transfer.select();

@@ -56,13 +56,11 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <!-- 头像 -->
-                            <figure class="avatar avatar-lg">
-                                {% if request.user.profile.photo %}
-                                <img src="{{ request.user.profile.photo.url }}" class="rounded-circle" alt="{{request.user.username}}">
-                                {% else %}
-                                <span class="avatar-title bg-primary rounded-circle">{{request.user.username|first}}</span>
-                                {% endif %}
-                            </figure>
+                            {% if request.user.profile.photo %}
+                            <img src="{{ request.user.profile.photo.url }}" class="about-author-img rounded-circle" alt="{{request.user.username}}">
+                            {% else %}
+                            <img options="size=25x25&text={{request.user.username|first}}&fstyle=oblique&fweight=bold&fsize=40&ffamily=consolas" class="placeholder about-author-img rounded-circle" alt="{{request.user.username}}">
+                            {% endif %}
                             <span class="badge">3</span>
                         </a>
                         <ul class="dropdown-menu">

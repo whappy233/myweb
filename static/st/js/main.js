@@ -46,30 +46,48 @@
         })
     };
     function loadImg(el) {
-        if(!el.src){
+        if (!el.src) {
+            // el.src = '/static/st/img/loading.gif'
             var source = el.dataset.src;
-            el.src = source;
-            $(el).animate({opacity:'1'}, 500);
-            $(el).removeClass('loading').addClass('img-animation').removeAttr('data-src');
+            var img = new Image();
+            img.src = source;
+            img.onload = function () {  // 图片下载完毕时异步调用callback函数
+                el.style.opacity = 0;
+                el.src = img.src;
+                $(el).animate({ opacity: '1' }, 300);
+                $(el).removeClass('loading').addClass('img-animation').removeAttr('data-src');
+            };
+            img.onerror = function () {
+                let ett_text = 'Image 404 🥶';
+                let s = Math.max(el.offsetWidth, el.offsetHeight, 25);
+                console.log(`${s}x${s}`);
+                el.style.opacity = 0;
+                el.src = placeholder.getData({ size: `${s}x${s}`, text: ett_text, bgcolor: '#7dbcff', color: '#fff' });
+                $(el).animate({ opacity: '1' }, 300);
+                $(el).removeClass('loading').addClass('img-animation').removeAttr('data-src');
+            };
         }
     };
     window.onload = window.onscroll = function () { //onscroll()在滚动条滚动的时候触发
         check();
     };
 
-    // 图片加载失败占位图
-    window.addEventListener('error', function (e) {
+    function ImgLoadError(e) {
+        console.log(this.el, e);
         let target = e.target, // 当前dom节点
             tagName = target.tagName,
-            default_src = target.src,
-            count = Number(target.dataset.count) || 0, // 以失败的次数，默认为0
-            max = 2, // 总失败次数，此时设定为3, 总共加载了 max + 1 次
+            default_src = target.src;
+
+        console.log(target);
+
+        let count = Number(target.dataset.count) || 0, // 以失败的次数，默认为0
+            max = 2, // 总失败次数，总共加载 max + 1 次
             ett_text = 'Image 404 🥶';
 
         // 当前异常是由图片加载异常引起的
         if (tagName.toUpperCase() === 'IMG') {
             if (count >= max) {
-                let s = Math.max(target.offsetWidth, target.offsetHeight);
+                let s = Math.max(target.offsetWidth, target.offsetHeight, 25);
                 console.log(`${s}x${s}`);
                 target.src = placeholder.getData({ size: `${s}x${s}`, text: ett_text, bgcolor: '#7dbcff', color: '#fff' });
             } else {
@@ -77,7 +95,10 @@
                 target.src = default_src;
             }
         };
-    }, true)
+    };
+
+    // 图片加载失败占位图
+    window.addEventListener('error', ImgLoadError, true)
 
 
     /*-------------------------------------
@@ -317,8 +338,16 @@
             }
         }
     };
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', listeners.dark);
-    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', listeners.light);
+
+    try {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', listeners.dark);
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', listeners.light);
+    } catch (error) {
+        // Safari
+        window.matchMedia('(prefers-color-scheme: dark)').addListener(listeners.dark);
+        window.matchMedia('(prefers-color-scheme: light)').addListener(listeners.light);
+    }
+
 
     // 手动切换
     $('.sticky-header').on('click', '.dark_mode', function(){

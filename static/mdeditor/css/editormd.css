@@ -3598,6 +3598,7 @@
   max-width: 100%;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  border-radius: 10px;
 }
 
 .markdown-body code {

@@ -17,18 +17,18 @@ def get_blog_setting():
         from .models import BlogSettings
         if not BlogSettings.objects.count():
             setting = BlogSettings()
-            setting.sitename = 'DjangoBlog'
-            setting.site_description = '基于Django的博客系统'
+            setting.sitename = '浩瀚星海'
+            setting.site_description = '该说些什么好呢?啊哈哈哈'
             setting.site_seo_description = '基于Django的博客系统'
             setting.site_keywords = 'Django,Python'
             setting.article_sub_length = 10   # 文章摘要长度
             setting.sidebar_article_count = 10
             setting.sidebar_comment_count = 5
             setting.show_google_adsense = False
-            setting.allow_register = False
-            setting.open_site_comment = True
-            setting.analyticscode = ''
-            setting.beiancode = ''
+            setting.allow_register = False  # 允许注册?
+            setting.open_site_comment = True  # 全站评论
+            setting.analyticscode = ''   # 分析代码
+            setting.beiancode = ''  # 备案号
             setting.show_gongan_code = False
             setting.save()
         value = BlogSettings.objects.first()
