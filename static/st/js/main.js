@@ -1,5 +1,35 @@
 ﻿(function ($) {
     "use strict";
+
+
+    // 平滑滚动到指定位置
+    function scrollTo(ele, speed, top) {
+        // ele 目标元素
+        // speed 滚动速度
+        // top 距离顶部尺寸
+        let win = $("html, body");
+        if (top) {
+            top = ($(ele).offset().top - top);
+        } else {
+            top = $(ele).offset().top;
+        }
+        $('img').addClass('img-light-low');
+        win.animate({
+            // scrollTop:  win.scrollTop() - win.offset().top + top
+            scrollTop: win.offset().top + top
+        }, speed == undefined ? 1000 : speed, function(){ $('img').removeClass('img-light-low'); });
+        return this;
+    };
+
+    /*---------------------------------------
+    On Click data-scroll 跳转到指定位置
+    <span data-scroll="#wrapper"></span>
+    --------------------------------------- */
+    $('[data-scroll]').on('click', function () {
+        let aim = this.dataset.scroll;
+        scrollTo(aim, 1000, 0);
+    });
+
     /*-------------------------------------
     Theia Side Bar
     -------------------------------------*/
@@ -73,13 +103,9 @@
     };
 
     function ImgLoadError(e) {
-        console.log(this.el, e);
         let target = e.target, // 当前dom节点
             tagName = target.tagName,
             default_src = target.src;
-
-        console.log(target);
-
         let count = Number(target.dataset.count) || 0, // 以失败的次数，默认为0
             max = 2, // 总失败次数，总共加载 max + 1 次
             ett_text = 'Image 404 🥶';
@@ -117,6 +143,29 @@
         e.stopPropagation();   // 阻止事件冒泡
         return false;
     });
+
+
+    $('.widget-toc .toc li').on('click', function (e) {
+        let $this = $(this),
+            ul_child = $this.children('ul'),
+            this_siblings = $this.siblings('li'),
+            $a = $this.children('a').first(),
+            aim = $a.attr('href');
+        // console.log(this_siblings.children('ul'));
+        if (ul_child.length > 0) {
+            this_siblings.children('ul').slideUp(300);
+            ul_child.slideDown(300);
+        };
+        $('.widget-toc .toc a').removeClass('active');
+        $a.addClass('active');
+        scrollTo(aim, 500, 70);
+        return false;
+    });
+
+
+
+
+
 
 
     /*-------------------------------------
@@ -170,7 +219,7 @@
             });
         } else {
             removeOffcanvas();
-        }
+        };
 
         function removeOffcanvas() {
             wrapper.removeClass('open').find('> .offcanvas-mask').remove();
@@ -192,6 +241,24 @@
         return false;
     });
 
+    $('.showdirectory').on('click', function(){
+        let $this = $(this),
+            $toc = $('.widget#Toc');
+        if ($toc.hasClass('fixed')){
+            $toc.animate({opacity: 0, bottom: 0}, 300, function(){
+                $toc.removeClass(['fixed', 'run']);
+                $this.html('<i class="fas fa-align-left"></i>');
+            });
+        }else{
+            $toc.addClass('fixed');
+            $toc.css('opacity', 0);
+            $toc.animate({opacity: 1, bottom: '46px'}, 300, function(){
+                $this.html('<i class="fas fa-times"></i>');
+            });
+        }
+    });
+
+
     /*-------------------------------------
     On Scroll 
     -------------------------------------*/
@@ -199,8 +266,19 @@
         // Back Top Button
         if ($(window).scrollTop() > 700) {
             $('.scrollup').addClass('back-top');
+            $('.showdirectory').addClass('back-top');
         } else {
             $('.scrollup').removeClass('back-top');
+            $('.showdirectory').removeClass('back-top');
+            let $toc = $('.widget#Toc');
+            if ($toc.hasClass('fixed') == true && $toc.hasClass('run')==false){
+                $toc.addClass('run')
+                $toc.animate({opacity: 0, bottom: 0}, 300, function(){
+                    $toc.removeClass(['fixed', 'run']);
+                    $toc.css('opacity', 1);
+                    $('.showdirectory').html('<i class="fas fa-align-left"></i>');
+                });
+            }
         }
         if ($('body').hasClass('sticky-header')) {
             var stickyPlaceHolder = $("#rt-sticky-placeholder"),
@@ -281,22 +359,6 @@
 
     // appendTo
 
-
-    /*---------------------------------------
-    On Click Section Switch
-    --------------------------------------- */
-    $('[data-type="section-switch"]').on('click', function () {
-        if (location.pathname.replace(/^\//, '') === this.pathname.replace(/^\//, '') && location.hostname === this.hostname) {
-            var target = $(this.hash);
-            if (target.length > 0) {
-                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-                $('html,body').animate({
-                    scrollTop: target.offset().top
-                }, 1000);
-                return false;
-            }
-        }
-    });
 
     /*-------------------------------------
     点击显示搜索 Jquery Serch Box

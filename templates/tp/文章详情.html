@@ -21,9 +21,8 @@
 </style>
 {% endblock css_extra %}
 
-{% block container %}
 
-<!-- 博客容器 Single Blog Banner Start Here -->
+{% block container %}
 <section class="single-blog-wrap-layout1">
 
     <!-- 顶部大图 -->
@@ -133,8 +132,7 @@
                 <!-- 关于我 -->
                 {% include 'tp/侧边组件/侧边_关于我.html' with page_obj=page_obj %}
 
-                <div class="aaaaaa" style="position: sticky; top: 75px;">
-                <!-- <div class="aaaaaa"> -->
+                <div class="widget-sticky-container">
                     <!-- 文章目录 -->
                     {% include 'tp/侧边组件/侧边_文章目录.html' with article=article %}
 
@@ -151,8 +149,6 @@
     </div>
 
 </section>
-<!-- 博客容器 Single Blog Banner End Here -->
-
 {% endblock container %}
 
 
@@ -160,29 +156,22 @@
 {% block script %}
 <!-- 固定侧边widget -->
 <script src="{% static 'st/js/lightense.min.js' %}"></script>
-<script src="{% static 'st/js/sticksy.min.js' %}"></script>
-<!-- <script src="{% static 'st/js/jquery.autofix_anything.js' %}"></script> -->
 <script>
 
-    // var stickyEl = $('.widget.is-sticky').sticksy({
-    //     topSpacing: 70, // 距离顶部的距离
-    //     listen: true,   // 侦听容器中的DOM更改
-    // });
     +function(){
 
-    window.addEventListener('load', function () {
-        var el = document.querySelectorAll('.markdown-body img');
-		Lightense(el, {
-            time: 300,
-            padding: 40,
-            offset: 40,
-            keyboard: true,
-            cubicBezier: 'cubic-bezier(.2, 0, .1, 1)',
-            background: 'rgba(0, 0, 0, .8)',
-            zIndex: 2147483647
-        })
-    }, false);
-
+        window.addEventListener('load', function () {
+            var el = document.querySelectorAll('.markdown-body img');
+            Lightense(el, {
+                time: 300,
+                padding: 40,
+                offset: 40,
+                keyboard: true,
+                cubicBezier: 'cubic-bezier(.2, 0, .1, 1)',
+                background: 'rgba(0, 0, 0, .8)',
+                zIndex: 2147483647
+            })
+        }, false);
     }();
 
 </script>

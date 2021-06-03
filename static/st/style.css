@@ -122,15 +122,15 @@ svg{
 } */
 
 /* 图片亮度 */
-/* img{
-  -ms-filter: brightness(150%);
-  -moz-filter: brightness(150%);
-  -webkit-filter: brightness(150%);
-  filter: brightness(150%);
-} */
+.img-light-low{
+  -ms-filter: brightness(50%);
+  -moz-filter: brightness(50%);
+  -webkit-filter: brightness(50%);
+  filter: brightness(50%);
+}
 
 /* 灰度图片 */
-img-gray{
+.img-gray{
   -ms-filter: grayscale(100%);
   -moz-filter: grayscale(100%);
   -webkit-filter: grayscale(100%);
@@ -1816,7 +1816,7 @@ h6 {
   100% {height: 75%;}
 }
 /* 滚动到顶部 */
-.scrollup {
+.scrollup, .showdirectory {
   overflow: hidden;
   position: fixed;
   height: 40px;
@@ -1831,13 +1831,19 @@ h6 {
   display: block;
   font-size: 16px;
   color: var(--global-background);
+  cursor: pointer;
   -webkit-transition: all 0.5s cubic-bezier(0, 0, 0.15, 1.88);
   -moz-transition: all 0.5s cubic-bezier(0, 0, 0.15, 1.88);
   -ms-transition: all 0.5s cubic-bezier(0, 0, 0.15, 1.88);
   -o-transition: all 0.5s cubic-bezier(0, 0, 0.15, 1.88);
   transition: all 0.5s cubic-bezier(0, 0, 0.15, 1.88);
 }
-.scrollup i {
+@media only screen and (min-width: 991px) {
+  .showdirectory {
+    display: none;
+  }
+}
+.scrollup i, .showdirectory i {
   display: inline-block;
   -webkit-transition: all 0.5s ease-out;
   -moz-transition: all 0.5s ease-out;
@@ -1846,7 +1852,9 @@ h6 {
   transition: all 0.5s ease-out;
 }
 .scrollup:hover,
-.scrollup:focus {
+.scrollup:focus,
+.showdirectory:hover,
+.showdirectory:focus {
   color: var(--global-background);
 }
 .scrollup:hover i,
@@ -1854,9 +1862,50 @@ h6 {
   -webkit-animation: toBottomFromTop 0.5s forwards;
   animation: toBottomFromTop 0.5s forwards;
 }
+.showdirectory:hover i,
+.showdirectory:focus i {
+  -webkit-animation: toleftFromright 0.5s forwards;
+  animation: toleftFromright 0.5s forwards;
+}
 .scrollup.back-top {
   bottom: 20px;
 }
+.showdirectory.back-top {
+  bottom: 65px;
+}
+@-webkit-keyframes toleftFromright {
+  49% {
+    -webkit-transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+  50% {
+    opacity: 0;
+    -webkit-transform: translateX(100%);
+    -ms-transform: translateX(100%);
+    transform: translateX(100%);
+  }
+  51% {
+    opacity: 1;
+  }
+}
+@keyframes toleftFromright {
+  49% {
+    -webkit-transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+  50% {
+    opacity: 0;
+    -webkit-transform: translateX(100%);
+    -ms-transform: translateX(100%);
+    transform: translateX(100%);
+  }
+  51% {
+    opacity: 1;
+  }
+}
+
 @-webkit-keyframes toBottomFromTop {
   49% {
     -webkit-transform: translateY(-100%);
@@ -3861,9 +3910,17 @@ div#wrapper.open > .offcanvas-mask {
   background-color: var(--global-color);
 }
 /*------------------- 4.7 Widget -------------------*/
+
+.widget-sticky-container {
+  position: sticky;
+  top: 75px;
+}
 @media only screen and (max-width: 991px) {
   .sidebar-break-md {
     margin-top: 5rem;
+  }
+  .widget-sticky-container {
+    position: unset;
   }
 }
 .sidebar-widget-area {
@@ -3907,8 +3964,6 @@ div#wrapper.open > .offcanvas-mask {
 .widget-about .about-author-social li:hover {
   animation: swing 0.8s;
 }
-
-
 .widget-about-2 {
   background-color: #f8f8f8;
   padding: 50px 45px 32px;
@@ -4956,6 +5011,62 @@ div#wrapper.open > .offcanvas-mask {
 }
 .widget-post-tab .tab-content .tab-pane .post-list .post-item:hover .item-img a img {
   transform: scale(1.2);
+}
+.widget.fixed {
+  position: fixed;
+  bottom: 0;
+  right: 20px;
+  background: blueviolet;
+  border-radius: 10px 10px 7%;
+  width: 300px;
+  z-index: 3;
+  opacity: 0;
+  display: block !important;
+}
+@media only screen and (max-width: 991px) {
+  .widget#Toc {
+    display: none;
+  }
+}
+.widget-toc .toc ul {
+  padding-left: 0;
+}
+.widget-toc .toc li {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 1px 0;
+}
+.widget-toc .toc li>ul {
+  display: none;
+}
+.widget-toc .toc li ul li {
+  margin-left: 10px;
+}
+.widget-toc .toc a {
+  line-height: 2;
+  color: var(--global-color);
+  padding: 5px 10px;
+  border-radius: 10px;
+  
+  display: -webkit-box;
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -ms-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+.widget-toc .toc a.active,
+.widget-toc .toc a:hover {
+  color: #fff;
+  background: linear-gradient(90deg,#6296ff,#2875ff)!important;
 }
 /*=======================================================================
 5. Blogxer Style
@@ -8292,7 +8403,8 @@ img.loading {
 }
 /*------------------- 5.5 Error Page Style -------------------*/
 .error-page-wrap {
-  padding: 12rem 0 10rem;
+  padding: 20vh 0 0;
+  height: 100vh;
 }
 .error-page-box {
   text-align: center;
@@ -8310,7 +8422,7 @@ img.loading {
   text-shadow: -5px 1px 0 var(--global-color-depth2);
 }
 .error-page-box .error-title {
-  font-size: 30px;
+  font-size: 20px;
   font-weight: 300;
   color: var(--global-color);
   margin: auto;
@@ -8320,7 +8432,7 @@ img.loading {
 }
 @media only screen and (max-width: 575px) {
   .error-page-box .error-title {
-    font-size: 30px;
+    font-size: 16px;
   }
 }
 .error-page-box p {

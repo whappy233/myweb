@@ -1,38 +1,14 @@
 <!-- 侧边--文章目录 -->
 
 
-<div class="widget is-sticky" id="toc">
+<div class="widget" id="Toc">
     <div class="section-heading heading-dark text_uppercase">
         <h3 class="item-heading">目录</h3>
     </div>
-    <div class="widget-categories">
+    <div class="widget-toc">
         {{article.toc|safe}}
-
-        <div class="toc">
-            <ul>
-                <li><a href="#django-中间件">Django 中间件</a>
-                    <ul>
-                        <li><a href="#写法1">写法1:</a></li>
-                        <li><a href="#写法2">写法2:</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-
-
-        <ul>
-            <li>
-                <a href="#">Beauty
-                    <span>(35)</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">Fashion
-                    <span>(10)</span>
-                </a>
-            </li>
-        </ul>
-
-
     </div>
 </div>
+<!-- 显示目录(small screen)-->
+<span class="showdirectory" title="Show directory"><i class="fas fa-align-left"></i></span>
+<!-- <span class="showdirectory" title="Show directory"><i class="fas fa-times"></i></span> -->
