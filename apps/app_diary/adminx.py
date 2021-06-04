@@ -34,8 +34,11 @@ class DiaryAdmin:
 
     def show_img(self, obj):
         '''展示配图'''
-        url = obj.img.url
-        return format_html(f'<img src="{url}" class="field_img">')
+        if obj.img:
+            url = obj.img.url
+            return format_html(f'<img src="{url}" class="field_img">')
+        else:
+            return ''
     show_img.short_description = '配图'  # 设置表头
 
     def block_extrabody(self, context, node):
