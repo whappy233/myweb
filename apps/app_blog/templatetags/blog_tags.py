@@ -43,6 +43,21 @@ def query(queryset, **kwargs):
     return queryset.filter(**kwargs)
 
 
+# 博客分类层级
+@register.simple_tag
+def b_category():
+    '''博客分类'''
+    cache_key = 'category_cache'
+    category = cache.get(cache_key)
+    if category:
+        logger.info(f'获取博客分类缓存:{cache_key}')
+    else:
+        category = Category.objects.filter(parent_category=None)
+        cache.set(cache_key, category, 60 * 100)
+        logger.info(f'设置博客分类缓存:{cache_key}')
+    return category
+
+
 # 返回文章列表模板
 @register.inclusion_tag('app_blog/include_tag/list.html')
 def load_article_list(articles):
