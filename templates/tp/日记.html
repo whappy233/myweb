@@ -1,0 +1,89 @@
+{% extends 'tp/base.html' %}
+{% load static %}
+{% load blog_tags %}
+
+{% block container %}
+
+<link rel="stylesheet" href="{% static 'st/css/component.css' %}">
+
+
+<section class="blog-wrap-layout17 diary_wrap">
+    <div class="container">
+        <header class="clearfix">
+            <span>Carlos's</span>
+            <h1>Diary</h1>
+        </header>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="main">
+                    <ul class="cbp_tmtimeline">
+                        {% for diary in diaries %}
+                        <li>
+                            {% with date=diary.updated %}
+                            <time class="cbp_tmtime" datetime="{{date}}">
+                                <span>{{date|date:"Y/m/d"}}</span>
+                                <span>{{date|date:"H:i"}}</span>
+                            </time>
+                            {% endwith %}
+                            <div class="cbp_tmicon" data-info='😃' data-mood='{{diary.mood}}'></div>
+                            <div class="cbp_tmlabel">
+                                <p>{{diary.body}}.</p>
+                                {% if diary.img%}
+                                <img data-src="{{diary.img.url}}" alt="配图">
+                                {% endif %}
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 侧边栏 -->
+            <div class="col-lg-4 sidebar-widget-area sidebar-break-md">
+                {% recommendations_articles 5 '侧边_推荐文章' %}
+
+                <!-- 关于我 -->
+                {% include 'tp/侧边组件/侧边_关于我.html' with page_obj=page_obj %}
+
+                <!-- 关注我 -->
+                {% include 'tp/侧边组件/侧边_关注我.html' with page_obj=page_obj %}
+
+                <!-- 文章分类 -->
+                {% include 'tp/侧边组件/侧边_分类目录.html' with page_obj=page_obj %}
+
+                <!-- 发送反馈 -->
+                {% include 'tp/侧边组件/侧边_发送反馈.html' with page_obj=page_obj %}
+
+                <!-- 广告 -->
+                {% include 'tp/侧边组件/侧边_广告.html' with page_obj=page_obj %}
+
+                <!-- 相册展示 -->
+                {% include 'tp/侧边组件/侧边_相册展示.html' with page_obj=page_obj %}
+
+                <!-- 大轮播图 -->
+                {% include 'tp/侧边组件/侧边_大轮播图.html' with page_obj=page_obj %}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock container %}
+
+
+{% block script %}
+<script>
+    $(window).on('scroll', function () {
+        var tt = $('.cbp_tmtime');
+        tt.each(function (index, element) {
+            let $ele = $(element);
+            if (element.getBoundingClientRect().top < 70) {
+                $ele.addClass('sticky');
+            } else {
+                $ele.removeClass('sticky');
+            }
+        });
+    });
+</script>
+
+{% endblock script %}

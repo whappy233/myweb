@@ -31,6 +31,7 @@ urlpatterns = [
     path('comment/', include('app_comments.urls', namespace='app_comments')),
     path('user/', include('app_user.urls', namespace='app_uesr')),
     path('gallery/', include('app_gallery.urls', namespace='app_gallery')),
+    path('diary/', include('app_diary.urls', namespace='app_diary')),
 
     re_path(r'^media/(?P<path>.*)', serve, {'document_root': settings.MEDIA_ROOT}),  # 媒体文件
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),  # 静态文件

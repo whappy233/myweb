@@ -86,6 +86,8 @@
                             <nav id="dropdown" class="template-main-menu">
                                 <ul>
                                     <!-- 分类 -->
+                                    {% b_category as bbcate %}
+                                    {% if bbcate.count > 0 %}
                                     <li>
                                         <a href="#">栏目</a>
                                         <ul class="dropdown-menu-col-1 animation">
@@ -95,6 +97,7 @@
                                             {% endfor %}
                                         </ul>
                                     </li>
+                                    {% endif %}
                                     <!-- Page -->
                                     <li class="possition-static hide-on-mobile-menu">
                                         <a href="#">PAGES</a>
@@ -105,24 +108,10 @@
                                                         <div class="menu-ctg-title">Home</div>
                                                         <ul class="sub-menu">
                                                             <li>
-                                                                <a href="index.html">
-                                                                    <i class="fas fa-home"></i>Home 1</a>
+                                                                <a href="index.html"><i class="fas fa-home"></i>Home 1</a>
                                                             </li>
                                                             <li>
-                                                                <a href="index2.html">
-                                                                    <i class="fas fa-home"></i>Home 2</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="index3.html">
-                                                                    <i class="fas fa-home"></i>Home 3</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="index4.html">
-                                                                    <i class="fas fa-home"></i>Home 4</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="index5.html">
-                                                                    <i class="fas fa-home"></i>Home 5</a>
+                                                                <a href="index2.html"><i class="fas fa-home"></i>Home 2</a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -130,48 +119,28 @@
                                                         <div class="menu-ctg-title">Home</div>
                                                         <ul class="sub-menu">
                                                             <li>
-                                                                <a href="index6.html">
-                                                                    <i class="fas fa-home"></i>Home 6</a>
+                                                                <a href="index.html"><i class="fas fa-home"></i>Home 1</a>
                                                             </li>
                                                             <li>
-                                                                <a href="index7.html">
-                                                                    <i class="fas fa-home"></i>Home 7</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="index8.html">
-                                                                    <i class="fas fa-home"></i>Home 8</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="index9.html">
-                                                                    <i class="fas fa-home"></i>Home 9</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="index10.html">
-                                                                    <i class="fas fa-home"></i>Home 10</a>
+                                                                <a href="index2.html"><i class="fas fa-home"></i>Home 2</a>
                                                             </li>
                                                         </ul>
                                                     </div>
+
                                                     <div class="col-3">
                                                         <div class="menu-ctg-title">Home</div>
                                                         <ul class="sub-menu">
                                                             <li>
-                                                                <a href="index11.html">
-                                                                    <i class="fas fa-home"></i>Home 11</a>
+                                                                <a href="index11.html"><i class="fas fa-home"></i>Home 11</a>
                                                             </li>
                                                             <li>
-                                                                <a href="index12.html">
-                                                                    <i class="fas fa-home"></i>Home 12</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="index13.html">
-                                                                    <i class="fas fa-home"></i>Home 13</a>
+                                                                <a href="index12.html"><i class="fas fa-home"></i>Home 12</a>
                                                             </li>
                                                         </ul>
                                                         <div class="menu-ctg-title">ARCHIVES</div>
                                                         <ul class="sub-menu">
                                                             <li>
-                                                                <a href="archives1.html">
-                                                                    <i class="fab fa-cloudversify"></i>Archive 1</a>
+                                                                <a href="archives1.html"><i class="fab fa-cloudversify"></i>Archive 1</a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -179,22 +148,13 @@
                                                         <div class="menu-ctg-title">ARCHIVES</div>
                                                         <ul class="sub-menu">
                                                             <li>
-                                                                <a href="archives2.html">
-                                                                    <i class="fab fa-cloudversify"></i>Archive 2</a>
+                                                                <a href="archives2.html"><i class="fab fa-cloudversify"></i>Archive 2</a>
                                                             </li>
                                                         </ul>
                                                         <div class="menu-ctg-title">AUTHORS</div>
                                                         <ul class="sub-menu">
                                                             <li>
-                                                                <a href="authors.html">
-                                                                    <i class="fas fa-users"></i>Authors</a>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="menu-ctg-title">PAGES</div>
-                                                        <ul class="sub-menu">
-                                                            <li>
-                                                                <a href="404.html">
-                                                                    <i class="fas fa-user-secret"></i>404 Error</a>
+                                                                <a href="authors.html"><i class="fas fa-users"></i>Authors</a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -231,7 +191,7 @@
                                     </li>
                                     <!-- 日记 -->
                                     <li>
-                                        <a href="{% url 'app_gallery:gallery_list' %}">日记</a>
+                                        <a href="{% url 'app_diary:index' %}">日记</a>
                                     </li>
                                 </ul>
                             </nav>

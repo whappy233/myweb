@@ -12,6 +12,7 @@ from app_blog.models import Article, Category
 from app_gallery.models import Gallery, Photo
 from app_comments.models import Comments, MpComments
 from app_blog.cn_taggit import CnTag
+from app_diary.models import Diary
 
 
 @register(xadmin.views.base.BaseAdminView)
@@ -44,6 +45,9 @@ class GlobalSettings:
                 {'title': '文章', 'url': self.get_model_url(Article, 'changelist') ,'icon': "glyphicon glyphicon-leaf"},
                 {'title': '分类', 'url': self.get_model_url(Category, 'changelist') ,'icon': "glyphicon glyphicon-th-list"},
                 {'title': '标签', 'url': self.get_model_url(CnTag, 'changelist') ,'icon': "glyphicon glyphicon-tag"},
+            )},
+            {'title': '日记管理', 'menus': (
+                {'title': '日记', 'url': self.get_model_url(Diary, 'changelist') ,'icon': "glyphicon glyphicon-calendar"},
             )},
             {'title': '相册', 'menus': (
                 {'title': '相册', 'url': self.get_model_url(Gallery, 'changelist') ,'icon': "glyphicon glyphicon-book"},

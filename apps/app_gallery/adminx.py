@@ -97,7 +97,6 @@ class GalleryModelAdmin:
         '''展示封面'''
         url = obj.thumb.url
         return format_html(f'<img src="{url}" class="field_img">')
-
     show_thumb_img.short_description = '封面'  # 设置表头
 
 

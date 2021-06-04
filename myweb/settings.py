@@ -23,8 +23,8 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # 不要在生产环境打开 debug 开关
-# DEBUG = os.environ.get('USER_NAME') == 'Carlos'
-DEBUG = False
+DEBUG = os.environ.get('USER_NAME') == 'Carlos'
+# DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'app_gallery.apps.AppGalleryConfig',
     'app_common.apps.AppCommonConfig',
     'app_comments.apps.AppCommentsConfig',
+    'app_diary.apps.AppDiaryConfig',
+
 
     'taggit',                       # 第三方标签管理器
     'imagekit',                     # 第三方缩略图应用 pip install django-imagekit
