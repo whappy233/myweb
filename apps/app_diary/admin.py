@@ -13,9 +13,9 @@ class DiaryAdmin(admin.ModelAdmin):
 
     def show_img(self, obj):
         '''展示配图'''
-        if obj.img:
+        try:
             url = obj.img.url
             return format_html(f'<img src="{url}" class="field_img">')
-        else:
+        except:
             return ''
     show_img.short_description = '配图'  # 设置表头
