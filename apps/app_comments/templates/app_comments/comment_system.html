@@ -48,6 +48,14 @@ object: 模型的一条实例, 比如某篇文章, 某张相片
 <!-- 文章评论 -->
 <div class="blog-comment"></div>
 
+<div class="preloader mini-preloader">
+    <div class="loader">
+        <div class="line line1"></div>
+        <div class="line line2"></div>
+        <div class="line line3"></div>
+    </div>
+</div>
+
 
 <script>
 (function ($) {
@@ -206,16 +214,15 @@ object: 模型的一条实例, 比如某篇文章, 某张相片
             console.log(data);
             var extend_child = '<div href="#" class="item-btn extend" title="展开子评论"><i class="fas fa-chevron-circle-down"></i> <span>展开</span></div>';
             data.forEach(d => {
-                var cls = sty = '',
+                var cls = '',
                     margin_left = '0px';
                 if (d.parent_comment) {
                     cls = ' child-comment';
-                    sty = "display: none;";
                     margin_left = '40px';
                 };
 
                 // 容器
-                var one_comment_container = $(`<div id="${d.uuid}" class="media media-none--xs${cls}" style="${sty}" data-author="${d.author.uuid}"></div>`);
+                var one_comment_container = $(`<div id="${d.uuid}" class="media media-none--xs${cls}" style="display: none;" data-author="${d.author.uuid}"></div>`);
 
                 // 头像
                 var avatar_container = $(`<figure style="margin-left: ${margin_left}" class="avatar avatar-lg"></figure>`);
@@ -279,6 +286,9 @@ object: 模型的一条实例, 比如某篇文章, 某张相片
                 };
 
                 $comment_container.append(one_comment_container);
+                if (!d.parent_comment) {
+                    one_comment_container.slideDown(500);
+                }
             });
         };
 

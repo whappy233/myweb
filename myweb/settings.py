@@ -146,6 +146,7 @@ TEMPLATES = [
                 'myweb.contexts.carlos',
 
                 'app_blog.context_processors.contexts',
+                'app_diary.context_processors.contexts',
 
                 'app_common.context_processors.seo_processor',
 

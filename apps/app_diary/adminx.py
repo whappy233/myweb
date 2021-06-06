@@ -1,13 +1,16 @@
 
 
-from xadmin.sites import register
 from .models import Diary
 from django.utils.html import format_html
+from django.urls import reverse
+from xadmin.sites import register
+
 
 
 lightense = '''
 <script src="/static/st/js/lightense.min.js"></script>
 <script>
+$('#navbar-action').prepend('<a href="%s" class="btn btn-primary"> <i class="fa fa-eye"> 查看</i></a>')
 window.addEventListener('load', function () {
     var el = document.querySelectorAll('td>img.field_img');
     Lightense(el, {
@@ -42,4 +45,5 @@ class DiaryAdmin:
     show_img.short_description = '配图'  # 设置表头
 
     def block_extrabody(self, context, node):
-        return lightense
+        index_url = reverse('app_diary:index')
+        return lightense%(index_url)

@@ -28,8 +28,11 @@ class Serializer(Builtin_Serializer):
         value = field.value_from_object(obj)
 
         # 对于 ImageField 返回url
-        if isinstance(field, models.ImageField):  
-            return value.url
+        if isinstance(field, models.ImageField):
+            if value:
+                return value.url
+            else:
+                return ''
 
         # 受保护的类型（例如，无，数字，日期和小数之类的基元）按原样传递。
         # 所有其他值都将首先转换为字符串。

@@ -433,7 +433,7 @@
     /*-------------------------------------
     页面加载动画 Page Preloader
     -------------------------------------*/
-    $(".preloader").fadeOut(1000, function () {
+    $("#preloader").fadeOut(1000, function () {
         $(this).remove();
     });
 

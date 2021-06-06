@@ -100,7 +100,7 @@ class CommentsView(View):
 
     # 增加评论
     def post(self, request, *args, **kwargs):
-        if request.is_ajax:   
+        if request.is_ajax():   
 
             article_slug = request.POST.get('object_slug', '')
             comment_body = request.POST.get('comment_body', '')

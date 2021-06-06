@@ -55,7 +55,7 @@
     <!-- 滚动到顶部 -->
     <span data-scroll="#wrapper" class="scrollup" title="Back to the top"><i class="fas fa-angle-double-up"></i></span>
     <!-- 页面加载动画 -->
-    <div class="preloader">
+    <div class="preloader" id="preloader">
         <div class="loader">
             <div class="line line1"></div>
             <div class="line line2"></div>
@@ -209,18 +209,6 @@
                                     <li class="dark_mode">
                                         <i title="Dark" class="far fa-moon"></i>
                                     </li>
-                                    {% if request.user.is_superuser %}
-                                    <!-- 新建文章 -->
-                                    <li>
-                                        <a href="{{ add_article }}" title="新建文章"><i class="fas fa-plus"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ add_gallery }}" title="新增相册"><i class="fab fa-envira"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ add_photo }}" title="相册照片"><i class="far fa-image"></i></a>
-                                    </li>
-                                    {% endif %}
                                     {% if request.user.is_authenticated %} {# 当用户被验证 #}
                                     <!-- User -->
                                     <li class="user-wrap">
@@ -330,26 +318,18 @@
                                                     </div>
                                                     <div class="col-3 user_menu_list">
                                                         <ul class="sub-menu">
-                                                            <li>
-                                                                <a href="{% url 'app_user:profile' %}"><i class="fas fa-user-edit"></i>修改信息</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="{% url 'app_user:change_pw' %}"><i class="fas fa-key"></i>修改密码</a>
-                                                            </li>
+                                                            <li><a href="{% url 'app_user:profile' %}"><i class="fas fa-user-edit"></i>修改信息</a></li>
+                                                            <li><a href="{% url 'app_user:change_pw' %}"><i class="fas fa-key"></i>修改密码</a></li>
                                                             {% if request.user.is_superuser %}
-                                                            <li>
-                                                                <a href="{% url 'admin:index' %}"><i class="fas fa-user-cog"></i>ADMIN</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="{% url 'xadmin:index' %}"><i class="fas fa-user-shield"></i>XADMIN</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="{% url 'app_blog:refresh' %}"><i class="fas fa-redo-alt"></i>刷新缓存</a>
-                                                            </li>
+                                                            <!-- 新建文章 -->
+                                                            <li><a title="新建文章" href="{{ add_article }}"><i class="fas fa-plus"></i>新建文章</a></li>
+                                                            <li><a title="新建日记" href="{{ diary_xadmin_add }}"><i class="fas fa-book"></i>新建日记</a></li>
+                                                            <li><a title="相册照片" href="{{ add_photo }}"><i class="far fa-image"></i>新增照片</a></li>
+                                                            <li><a title="ADMIN"    href="/admin"><i class="fas fa-user-cog"></i>ADMIN</a></li>
+                                                            <li><a title="Xadmin"   href="/xadmin"><i class="fas fa-user-shield"></i>XADMIN</a></li>
+                                                            <li><a title="刷新缓存" href="{% url 'app_blog:refresh' %}"><i class="fas fa-redo-alt"></i>刷新缓存</a></li>
                                                             {% endif %}
-                                                            <li>
-                                                                <a href="{% url 'app_user:logout' %}?before={{request.get_full_path}}"><i class="fas fa-sign-out-alt"></i>退出登陆</a>
-                                                            </li>
+                                                            <li><a href="{% url 'app_user:logout' %}?before={{request.get_full_path}}"><i class="fas fa-sign-out-alt"></i>退出登陆</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>

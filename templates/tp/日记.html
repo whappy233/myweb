@@ -12,11 +12,14 @@
         <header class="clearfix">
             <span>Carlos's</span>
             <h1>Diary</h1>
+            {% if request.user.is_superuser %}
+            <a href="{{diary_xadmin}}" class="btn btn-dark" style="float: right;">Xadmin</a>
+            {% endif %}
         </header>
         <div class="row">
             <div class="col-lg-8">
                 <div class="main">
-                    <ul class="cbp_tmtimeline">
+                    <ul class="cbp_tmtimeline" id="diary_list">
                         {% for diary in diaries %}
                         <li>
                             {% with date=diary.updated %}
@@ -35,6 +38,13 @@
                         </li>
                         {% endfor %}
                     </ul>
+                    <div id='diary_list_bottom' class="preloader mini-preloader">
+                        <div class="loader">
+                            <div class="line line1"></div>
+                            <div class="line line2"></div>
+                            <div class="line line3"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -73,17 +83,85 @@
 
 {% block script %}
 <script>
-    $(window).on('scroll', function () {
-        var tt = $('.cbp_tmtime');
-        tt.each(function (index, element) {
-            let $ele = $(element);
-            if (element.getBoundingClientRect().top < 70) {
-                $ele.addClass('sticky');
-            } else {
-                $ele.removeClass('sticky');
+    $(function () {
+        var page = 1,
+            empty_page = false,
+            block_request = false;
+
+    function changeURLStatic(name, value) {
+        var url = location.href;
+        var reg = eval('/([\?|&]'+name+'=)[^&]*/gi');
+        value = value.toString().replace(/(^\s*)|(\s*$)/g,"");  //移除首尾空格
+        if(!value){
+            var url2 = url.replace(reg , '');  //正则替换
+        }else{
+            if(url.match(reg)){
+                var url2 = url.replace(reg , '$1' + value);  //正则替换
+            }else{
+                var url2 = url + (url.indexOf('?') > -1 ? '&' : '?') + name + '=' +value;  //没有参数添加参数
+            }
+        }
+        history.replaceState(null,null, url2);  //替换地址栏
+    };
+
+    // /[\?|&](page=(\d+))/.exec()
+
+
+        $(window).on('scroll', function () {
+            var tt = $('.cbp_tmtime');
+            tt.each(function (index, element) {
+                let $ele = $(element);
+                if (element.getBoundingClientRect().top < 70) {
+                    $ele.addClass('sticky');
+                } else {
+                    $ele.removeClass('sticky');
+                }
+            });
+
+            var diary_list_bottom = document.getElementById('diary_list_bottom');
+            if (diary_list_bottom.getBoundingClientRect().top - window.innerHeight <= 100 && empty_page == false && block_request == false) {
+                block_request = true;
+                page += 1;
+                $.get('?page=' + page, function (data) {
+                    // {status: 200, current_page: 2, has_next: false, page_total: 2, items_count: 11, data: Array(...) }
+                    if (data.status == '200') {
+                        if (!data.has_next) {
+                            empty_page = true;
+                            $('#diary_list_bottom').html('END');
+                        }
+                        page = data.current_page;
+
+                        history.pushState(data, '', '?page=' + page);
+
+                        let diary_list = data.data;
+                        if (diary_list && diary_list.length > 0) {
+
+                            diary_list.forEach(d => {
+                                [_, date, time] = d.updated.match(/(\d+-\d+-\d+)T(\d+:\d+)/);
+                                let diary = `
+                                <li style="display: none;"><time class="cbp_tmtime" datetime="${d.updated}"><span>${date}</span><span>${time.replace(/:\d+\.\d+/, '')}</span></time>
+                                <div class="cbp_tmicon" data-info='😎' data-mood='${d.mood}'></div>
+                                <div class="cbp_tmlabel"><p>${d.body}</p>${d.img ? '<img data-src="' + d.img + '" alt="配图">' : ''}</div></li>
+                                `;
+                                let $diary = $(diary);
+                                $('#diary_list').append($diary);
+                                $diary.slideDown(500);
+                            });
+                        } else {
+                            empty_page = true;
+                            $('#diary_list_bottom').html('END');
+                        };
+                        block_request = false;
+                    }
+                    else {
+                        empty_page = true;
+                        $('#diary_list_bottom').html('END');
+                    }
+                });
             }
         });
-    });
+    })
+
 </script>
 
 {% endblock script %}

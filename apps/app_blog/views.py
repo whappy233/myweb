@@ -32,6 +32,8 @@ class ArticleListView(ListView):
     paginate_by = 10  # 每页obj的数目 生成 page_obj 对象
     page_kwarg = 'page'  # get 请求页码的参数 /?page=2
 
+    # allow_empty = False
+
     def get_view_cache_key(self):
         return self.request.get['page']  # 当前页码
 
@@ -49,7 +51,14 @@ class ArticleListView(ListView):
         '''返回当前请求的页码'''
         page_kwarg = self.page_kwarg
         page = self.kwargs.get(page_kwarg) or self.request.GET.get(page_kwarg) or 1
-        return page
+        try:
+            page_number = int(page)
+        except ValueError:
+            if page == 'last':
+                page_number = paginator.num_pages
+            else:
+                page_number = 1
+        return page_number
 
     def get_queryset_cache_key(self):
         """ 子类重写.获得queryset的缓存key """

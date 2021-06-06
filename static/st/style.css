@@ -1776,12 +1776,23 @@ h6 {
   -ms-flex-direction: column;
   flex-direction: column
 }
+.mini-preloader {
+  position: relative;
+  z-index: 1;
+  height: 30px;
+  font-size: 12px;
+  display: -webkit-box;
+  color: var(--global-color-depth0);
+}
+.mini-preloader .loader {
+  height: 30px;
+}
 .loader {
   position: relative;
-  width: 60px;
+  width: 48px;
   height: 60px;
   border-radius: 50%;
-  margin: 75px;
+  /* margin: 75px; */
   display: inline-block;
   vertical-align: middle;
 }
@@ -3890,11 +3901,13 @@ div#wrapper.open > .offcanvas-mask {
   margin-right: 0;
 }
 .pagination-layout1 ul li a {
+  width: 3rem;
+  height: 3rem;
   display: block;
-  font-size: 18px;
+  font-size: 14px;
   color: var(--global-color);
+  border-radius: var(--root-border-radius);
   background-color: var(--global-background);
-  padding: 8px 18px;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
