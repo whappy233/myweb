@@ -6,7 +6,8 @@ from django.db.models import Count, Q
 from django.utils.safestring import mark_safe  # 标记为安全的html
 from django.template.defaultfilters import stringfilter
 from ..models import Article, Category
-from myweb.utils import cache, get_current_site
+from myweb.utils import get_current_site
+from django.core.cache import cache
 from loguru import logger
 from django.apps import apps
 

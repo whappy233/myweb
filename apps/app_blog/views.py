@@ -4,6 +4,7 @@ from django import forms
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.core import paginator
+from django.core.cache import cache
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator  # 分页
 from django.db.models import Q
@@ -15,7 +16,6 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import DetailView, ListView
 from loguru import logger
 from taggit.models import Tag  # 导入标签模型
-from myweb.utils import cache
 from .forms import EmailArticleForm, SearchForm
 from .models import Article, Category
 import time

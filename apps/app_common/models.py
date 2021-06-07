@@ -5,7 +5,8 @@ from django.core.exceptions import ValidationError
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
-from myweb.utils import cache, get_current_site
+from myweb.utils import get_current_site
+from django.core.cache import cache
 
 import re
 

@@ -1,4 +1,4 @@
-from myweb.utils import cache
+from django.core.cache import cache
 from .models import AboutBlog
 from django.shortcuts import render
 

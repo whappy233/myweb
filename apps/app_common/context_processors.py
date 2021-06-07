@@ -1,6 +1,6 @@
 
 from app_blog.models import Category, Article
-from myweb.utils import cache
+from django.core.cache import cache
 from .utils import get_blog_setting
 
 from django.utils import timezone

@@ -33,10 +33,10 @@ class ModelManager(models.Manager):
         '''可见评论的数量'''
         return self.count() - self.hidden_count()
 
-    def show(self, start=None, end=None, serialize=False, fields=None):
+    def show(self, start=None, end=None, serialize=False, fields=None, **kwargs):
         '''可见评论'''
         data = []
-        h = self.filter(is_hide=False, parent_comment=None)[start:end]
+        h = self.filter(is_hide=False, parent_comment=None, **kwargs)[start:end]
         for commnet in h:
             data.extend(commnet.get_show_children(serialize, fields))
         return data
@@ -72,7 +72,7 @@ class Comments(models.Model):
     # step1 内容类型，代表了模型的名字(比如Article, Picture)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,
                                      limit_choices_to={
-                                         "model__in": ("article", 'photo')
+                                        "model__in": ("article", 'photo')
                                      },
                                      verbose_name='关联对象类型')
     # step2 传入对象的id

@@ -29,9 +29,8 @@ class Diary(models.Model):
     created = models.DateTimeField('创建时间', auto_now_add=True)
     updated = models.DateTimeField('更新时间', auto_now=True)
 
-
     class Meta:
-        ordering = ('-updated',)
+        ordering = ('-created',)
         verbose_name = '日记'
         verbose_name_plural = verbose_name
 

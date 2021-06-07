@@ -7397,6 +7397,7 @@ img.loading {
 .single-blog-box-layout1 .blog-comment .media .media-body .reply span:hover {
   background: var(--global-hover-background);
   border-radius: 5px;
+  cursor: alias;
 }
 .single-blog-box-layout1 .blog-comment .media .media-body .reply .badge-success {
     color: gray;

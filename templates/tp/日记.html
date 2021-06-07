@@ -22,7 +22,7 @@
                     <ul class="cbp_tmtimeline" id="diary_list">
                         {% for diary in diaries %}
                         <li>
-                            {% with date=diary.updated %}
+                            {% with date=diary.created %}
                             <time class="cbp_tmtime" datetime="{{date}}">
                                 <span>{{date|date:"Y/m/d"}}</span>
                                 <span>{{date|date:"H:i"}}</span>
@@ -88,24 +88,22 @@
             empty_page = false,
             block_request = false;
 
-    function changeURLStatic(name, value) {
-        var url = location.href;
-        var reg = eval('/([\?|&]'+name+'=)[^&]*/gi');
-        value = value.toString().replace(/(^\s*)|(\s*$)/g,"");  //移除首尾空格
-        if(!value){
-            var url2 = url.replace(reg , '');  //正则替换
-        }else{
-            if(url.match(reg)){
-                var url2 = url.replace(reg , '$1' + value);  //正则替换
+        // 更改地址栏URI而不刷新页面
+        function changeURLStatic(name, value) {
+            var url = location.href;
+            var reg = eval('/([\?|&]'+name+'=)[^&]*/gi');
+            value = value.toString().replace(/(^\s*)|(\s*$)/g,"");  //移除首尾空格
+            if(!value){
+                var url2 = url.replace(reg , '');  //正则替换
             }else{
-                var url2 = url + (url.indexOf('?') > -1 ? '&' : '?') + name + '=' +value;  //没有参数添加参数
+                if(url.match(reg)){
+                    var url2 = url.replace(reg , '$1' + value);  //正则替换
+                }else{
+                    var url2 = url + (url.indexOf('?') > -1 ? '&' : '?') + name + '=' +value;  //没有参数添加参数
+                }
             }
-        }
-        history.replaceState(null,null, url2);  //替换地址栏
-    };
-
-    // /[\?|&](page=(\d+))/.exec()
-
+            history.replaceState(null,null, url2);  //替换地址栏
+        };
 
         $(window).on('scroll', function () {
             var tt = $('.cbp_tmtime');
@@ -125,27 +123,25 @@
                 $.get('?page=' + page, function (data) {
                     // {status: 200, current_page: 2, has_next: false, page_total: 2, items_count: 11, data: Array(...) }
                     if (data.status == '200') {
+
                         if (!data.has_next) {
                             empty_page = true;
                             $('#diary_list_bottom').html('END');
                         }
                         page = data.current_page;
-
-                        history.pushState(data, '', '?page=' + page);
-
                         let diary_list = data.data;
                         if (diary_list && diary_list.length > 0) {
 
                             diary_list.forEach(d => {
-                                [_, date, time] = d.updated.match(/(\d+-\d+-\d+)T(\d+:\d+)/);
+                                [_, date, time] = d.created.match(/(\d+-\d+-\d+)T(\d+:\d+)/);
                                 let diary = `
-                                <li style="display: none;"><time class="cbp_tmtime" datetime="${d.updated}"><span>${date}</span><span>${time.replace(/:\d+\.\d+/, '')}</span></time>
+                                <li style="opacity:0"><time class="cbp_tmtime" datetime="${d.created}"><span>${date}</span><span>${time.replace(/:\d+\.\d+/, '')}</span></time>
                                 <div class="cbp_tmicon" data-info='😎' data-mood='${d.mood}'></div>
                                 <div class="cbp_tmlabel"><p>${d.body}</p>${d.img ? '<img data-src="' + d.img + '" alt="配图">' : ''}</div></li>
                                 `;
                                 let $diary = $(diary);
                                 $('#diary_list').append($diary);
-                                $diary.slideDown(500);
+                                $diary.animate({opacity: 1}, 500);
                             });
                         } else {
                             empty_page = true;

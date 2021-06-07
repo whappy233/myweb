@@ -4,8 +4,6 @@ from django.shortcuts import render
 from django.core import serializers
 from .models import Diary
 
-from app_common.utils import JSONEncoder
-
 
 class DiaryList(ListView):
     model = Diary
@@ -36,10 +34,9 @@ class DiaryList(ListView):
         except Http404 as e:
             if request.is_ajax():
                 print('数据为空')
-                return JsonResponse({'status': 404, 'data':None})
+                return JsonResponse({'status': 404, 'data': None})
             else:
                 raise e
-
 
         if request.is_ajax():
             paginator = context['paginator']
@@ -47,10 +44,10 @@ class DiaryList(ListView):
             is_paginated = context['is_paginated']
             object_list = context['object_list']
 
-
-            serialize_items = serializers.serialize("json", object_list, 
-                    fields=('body', 'mood', 'img', 'updated'), 
-                    ensure_ascii=False)
+            serialize_items = serializers.serialize("json", object_list,
+                                                    fields=(
+                                                        'body', 'mood', 'img', 'created'),
+                                                    ensure_ascii=False)
 
             data = {
                 'status': 200,
@@ -61,16 +58,11 @@ class DiaryList(ListView):
                 'data': serialize_items,
             }
 
-            print(data)
-
             return JsonResponse(data)
 
         return self.render_to_response(context)
 
 
-
 def details(request):
     return render(request, 'tp/日记.html')
 
-
-47

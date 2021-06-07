@@ -6,7 +6,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.base import ModelBase
 from django.utils.encoding import smart_text
 from loguru import logger
-from myweb.utils import cache
+from django.core.cache import cache
 
 
 def get_blog_setting():
