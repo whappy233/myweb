@@ -32,7 +32,7 @@
     --------------------------------------- */
     $('[data-scroll]').on('click', function () {
         let aim = this.dataset.scroll;
-        scrollTo(aim, 1000, 100);
+        scrollTo(aim, 500, 100);
     });
 
     /*-------------------------------------
@@ -132,10 +132,9 @@
     window.addEventListener('error', ImgLoadError, true)
 
 
-    /*-------------------------------------
-    对带有 data-href 属性的元素进行跳转
-    -------------------------------------*/
-
+    // -------------------------------------
+    // 对带有 data-href 属性的元素进行跳转
+    // -------------------------------------
     $('#main').on('click', '[data-href]', function (e) {
         let target = e.target,
             currtarget = e.currentTarget;
@@ -150,32 +149,10 @@
     });
 
 
-    $('.widget-toc .toc li').on('click', function (e) {
-        let $this = $(this),
-            ul_child = $this.children('ul'),
-            this_siblings = $this.siblings('li'),
-            $a = $this.children('a').first(),
-            aim = $a.attr('href');
-        // console.log(this_siblings.children('ul'));
-        if (ul_child.length > 0) {
-            this_siblings.children('ul').slideUp(300);
-            ul_child.slideDown(300);
-        };
-        $('.widget-toc .toc a').removeClass('active');
-        $a.addClass('active');
-        scrollTo(aim, 500, 70);
-        return false;
-    });
 
-
-
-
-
-
-
-    /*-------------------------------------
-    对 data-event="show_hide" mousedown 显示密码
-    -------------------------------------*/
+    // -------------------------------------
+    // 对 data-event="show_hide" mousedown 显示密码
+    // -------------------------------------
     $('[data-event="show_hide"]').on('mousedown', function(e){
         var $this = $(this);
         e.stopPropagation();
@@ -246,6 +223,10 @@
         return false;
     });
 
+
+    // -------------------------------------
+    // 显示隐藏目录
+    // -------------------------------------
     $('.showdirectory').on('click', function(){
         let $this = $(this),
             $toc = $('.widget#Toc');
@@ -263,10 +244,30 @@
         }
     });
 
+    // -------------------------------------
+    // 跳转到目录位置
+    // -------------------------------------
+    $('.widget-toc .toc li').on('click', function (e) {
+        let $this = $(this),
+            ul_child = $this.children('ul'),
+            this_siblings = $this.siblings('li'),
+            $a = $this.children('a').first(),
+            aim = $a.attr('href');
+        // console.log(this_siblings.children('ul'));
+        if (ul_child.length > 0) {
+            this_siblings.children('ul').slideUp(300);
+            ul_child.slideDown(300);
+        };
+        $('.widget-toc .toc a').removeClass('active');
+        $a.addClass('active');
+        scrollTo(aim, 500, 70);
+        return false;
+    });
 
-    /*-------------------------------------
-    On Scroll 
-    -------------------------------------*/
+
+    // -------------------------------------
+    // On Scroll 
+    // -------------------------------------
     $(window).on('scroll', function () {
         // Back Top Button
         if ($(window).scrollTop() > 700) {
@@ -430,17 +431,41 @@
         });
     });
 
-    /*-------------------------------------
-    页面加载动画 Page Preloader
-    -------------------------------------*/
+    // -------------------------------------
+    // 页面加载动画 Page Preloader
+    // -------------------------------------
     $("#preloader").fadeOut(1000, function () {
         $(this).remove();
     });
+    
+    
+    
+    // -------------------------------------
+    // 背景动画
+    // -------------------------------------
+    var $stars = $(".stars"),
+        stars = 500,     // 星星的密集程度，数字越大越多
+        r = 800;        // 星星的看起来的距离,值越大越远,可自行调制到自己满意的样子
+    for (var i = 0; i < stars; i++) {
+        var $star = $("<div/>").addClass("star");
+        $stars.append($star);
+    }
+    $(".star").each(function () {
+        var cur = $(this);
+        var s = 0.2 + (Math.random() * 1);
+        var curR = r + (Math.random() * 300);
+        cur.css({
+        transformOrigin: "0 0 " + curR + "px",
+        transform: " translate3d(0,0,-" + curR + "px) rotateY(" + (Math.random() * 360) + "deg) rotateX(" + (Math.random() * -50) + "deg) scale(" + s + "," + s + ")"
 
-    /*-------------------------------------
-    Masonry
-    画廊
-    -------------------------------------*/
+        })
+    });
+
+
+
+    // -------------------------------------
+    // Masonry 画廊
+    // -------------------------------------
     var galleryIsoContainer = $("#no-equal-gallery");
     if (galleryIsoContainer.length) {
         var blogGallerIso = galleryIsoContainer.imagesLoaded(function () {

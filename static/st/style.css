@@ -57,7 +57,8 @@ CSS INDEX 999
 [data-theme=dark] {
   --global-color:#fff;
   --global-background:rgb(52, 54, 56);
-  --global-body-background: #424242;
+  /* --global-body-background: #424242; */
+  --global-body-background: #0e1327;
   --global-color-depth0:#616161;
   --global-color-depth1:#9E9E9E;
   --global-color-depth2:#BDBDBD;
@@ -191,6 +192,37 @@ svg{
   color: #fff!important;
 }
 
+/* 背景动画 */
+.stars {
+  transform: perspective(500px);
+  transform-style: preserve-3d;
+  position: fixed;
+  bottom: 0;
+  perspective-origin: 50% 100%;
+  left: 50%;
+  animation: rotate 90s infinite linear;
+  pointer-events: none;
+}
+.star {
+  width: 2px;
+  height: 2px;
+  background: #F7F7B6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0 -300px;
+  transform: translate3d(0, 0, -300px);
+  backface-visibility: hidden;
+  pointer-events: none;
+}
+@keyframes rotate {
+  0% {
+      transform: perspective(400px) rotateZ(20deg) rotateX(-40deg) rotateY(0);
+  }
+  100% {
+      transform: perspective(400px) rotateZ(20deg) rotateX(-40deg) rotateY(-360deg);
+  }
+}
 
 
 /*=======================================================================
@@ -238,6 +270,7 @@ body {
   text-rendering: optimizeLegibility;
   color: var(--global-color-depth1);
   background-color: var(--global-body-background);
+  background-attachment: fixed;
 }
 p {
   margin: 0 0 20px 0;
@@ -1952,10 +1985,10 @@ h6 {
 /*------------------- 4.2 Footer -------------------*/
 .footer-wrap-layout1 {
   padding: 7rem 2rem;
-  background: var(--global-background);
+  background: var(--global-body-background);
 }
 .footer-wrap-layout2 {
-  background: var(--global-background);
+  background: var(--global-body-background);
   padding: 3.5rem 0;
 }
 .footer-wrap-layout3 {
