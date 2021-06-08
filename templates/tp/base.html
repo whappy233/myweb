@@ -326,11 +326,11 @@
                                                             <li><a href="{% url 'app_user:change_pw' %}"><i class="fas fa-key"></i>修改密码</a></li>
                                                             {% if request.user.is_superuser %}
                                                             <!-- 新建文章 -->
-                                                            <li><a title="新建文章" href="{{ add_article }}"><i class="fas fa-plus"></i>新建文章</a></li>
-                                                            <li><a title="新建日记" href="{{ diary_xadmin_add }}"><i class="fas fa-book"></i>新建日记</a></li>
-                                                            <li><a title="相册照片" href="{{ add_photo }}"><i class="far fa-image"></i>新增照片</a></li>
-                                                            <li><a title="ADMIN"    href="/admin"><i class="fas fa-user-cog"></i>ADMIN</a></li>
-                                                            <li><a title="Xadmin"   href="/xadmin"><i class="fas fa-user-shield"></i>XADMIN</a></li>
+                                                            <li><a target="_blank" title="新建文章" href="{{ add_article }}"><i class="fas fa-plus"></i>新建文章</a></li>
+                                                            <li><a target="_blank" title="新建日记" href="{{ diary_xadmin_add }}"><i class="fas fa-book"></i>新建日记</a></li>
+                                                            <li><a target="_blank" title="相册照片" href="{{ add_photo }}"><i class="far fa-image"></i>新增照片</a></li>
+                                                            <li><a target="_blank" title="ADMIN"   href="/admin"><i class="fas fa-user-cog"></i>ADMIN</a></li>
+                                                            <li><a target="_blank" title="Xadmin"  href="/xadmin"><i class="fas fa-user-shield"></i>XADMIN</a></li>
                                                             <li><a title="刷新缓存" href="{% url 'app_blog:refresh' %}"><i class="fas fa-redo-alt"></i>刷新缓存</a></li>
                                                             {% endif %}
                                                             <li><a href="{% url 'app_user:logout' %}?before={{request.get_full_path}}"><i class="fas fa-sign-out-alt"></i>退出登陆</a></li>
