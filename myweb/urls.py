@@ -43,6 +43,9 @@ urlpatterns = [
 
     path('sitemap.xml', sitemap, {'sitemaps':sitemaps}, name='django.contrib.sitemaps.views.sitemap'),  # 网站地图
 
+    # API
+    path('v1/', include('app_api.urls')),
+
 ] # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

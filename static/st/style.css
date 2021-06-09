@@ -2042,6 +2042,8 @@ h6 {
 }
 .footer-box-layout2 {
   text-align: center;
+  font-size: 13px;
+  font-weight: 500;
 }
 .footer-box-layout2 .footer-logo {
   padding: 10px;
@@ -2076,8 +2078,6 @@ h6 {
   display: none;
 }
 .footer-box-layout2 .footer-social li a {
-  font-size: 13px;
-  font-weight: 500;
   color: var(--global-color-depth0r);
   padding: 5px;
   -webkit-transition: all 0.3s ease-out;
@@ -3934,8 +3934,9 @@ div#wrapper.open > .offcanvas-mask {
   margin-right: 0;
 }
 .pagination-layout1 ul li a {
-  width: 3rem;
-  height: 3rem;
+  width: 40px;
+  height: 40px;
+  padding: 6px;
   display: block;
   font-size: 14px;
   color: var(--global-color);

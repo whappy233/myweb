@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',         # 网站地图App1
     'django.contrib.sitemaps',      # 网站地图App2
 
+    'rest_framework',
 
     'app_user.apps.AppUserConfig',
     'app_blog.apps.AppBlogConfig',
@@ -53,7 +54,7 @@ INSTALLED_APPS = [
     'app_common.apps.AppCommonConfig',
     'app_comments.apps.AppCommentsConfig',
     'app_diary.apps.AppDiaryConfig',
-
+    'app_api.apps.AppApiConfig',
 
     'taggit',                       # 第三方标签管理器
     'imagekit',                     # 第三方缩略图应用 pip install django-imagekit
