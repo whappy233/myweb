@@ -45,6 +45,7 @@ urlpatterns = [
 
     # API
     path('v1/', include('app_api.urls')),
+    path('api-auth/', include('rest_framework.urls')), # rest_framework API 登录页面
 
 ] # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -2,13 +2,16 @@ from django.http import Http404
 from django.contrib.auth import get_user_model
 
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from rest_framework.views import APIView, get_view_name
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework import viewsets
+from rest_framework import permissions  # 权限类
+
+from .permissions import IsOwnerOrReadOnly  # 自定义权限
 
 
 from .serializers import ArticleSerializer, UserSerializer, UserProfileSerializer
@@ -41,6 +44,7 @@ NOTE: 使用 GenericAPIView 时会自动处理 context, 而 APIView 不会,
 
 # 函数视图
 @api_view(['GET', 'POST'])
+@permission_classes((permissions.IsAuthenticatedOrReadOnly, ))  # 权限
 def article_list(request, format=None):
     """
     列出所有的 aricle, 或创建 article.
@@ -215,6 +219,10 @@ class ArticleList(generics.ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
+    # 权限
+    # IsAuthenticatedOrReadOnly 确保经过身份验证的请求获得读写访问权限, 未经身份验证的请求将获得只读读的权限
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)  
+
     # 将request.user与author绑定
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -222,6 +230,11 @@ class ArticleList(generics.ListCreateAPIView):
 class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
+
+    # 权限
+    # IsAuthenticatedOrReadOnly 确保经过身份验证的请求获得读写访问权限, 未经身份验证的请求将获得只读读的权限
+    # IsOwnerOrReadOnly 只允许文章的创建者才能编辑
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
 
 # 用户
