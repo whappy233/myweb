@@ -34,12 +34,12 @@ def notify_handler(sender, instance, created, **kwargs):
             to_list = []  # 收件人
 
             if not parent_comment:
-                subject = u'[浩瀚星海]博文评论'
+                subject = u'[星海StarSea]博文评论'
                 template = 'app_comments/comments_email.html'
                 # 发送给自己（可以写其他邮箱）
                 to_list.append('whh369@foxmail.com')
             else:
-                subject = u'[浩瀚星海]评论回复'
+                subject = u'[星海StarSea]评论回复'
                 template = 'app_comments/comments_email_reply.html'
                 # 获取评论对象，找到回复对应的评论
                 # comment_model = django_comments.get_model()

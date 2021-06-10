@@ -46,7 +46,7 @@ def send_email(to_email, vcode_str):
     #         s = smtplib.SMTP_SSL(smtp_host, int(smtp_port))  # 发件箱邮件服务器及端口号
     #     else:
     #         s = smtplib.SMTP(smtp_host, int(smtp_port))
-    #     subject = "浩瀚星海 - 重置密码验证码"
+    #     subject = "星海StarSea - 重置密码验证码"
     #     content = f"你的验证码为：{vcode_str}，验证码30分钟内有效！"
 
     #     msg = MIMEText(content, _subtype='html', _charset='utf-8')

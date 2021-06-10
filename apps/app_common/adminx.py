@@ -26,8 +26,8 @@ class BaseSetting:
 class GlobalSettings:
     """xadmin的全局配置"""
 
-    site_title = "浩瀚星海"         # 设置站点标题
-    site_footer = "浩瀚星海 2021"   # 设置站点的页脚
+    site_title = "星海StarSea"         # 设置站点标题
+    site_footer = "星海StarSea 2021"   # 设置站点的页脚
     # menu_style = "accordion"     # 设置菜单折叠，在左侧，默认的
     list_display = ['go_to']
 

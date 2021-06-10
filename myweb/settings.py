@@ -309,7 +309,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('USER_EMAIL_PW')    # SMTP 服务器密码
 # EMAIL_USE_TLS / EMAIL_USE_SSL 是互斥的，因此只能将这些设置之一设置为True。
 # EMAIL_USE_TLS = True              # 是否采用 TLS 安全连接
 EMAIL_USE_SSL = True                # 是否采 SSL 安全连接
-EMAIL_SUBJECT_PREFIX = '[浩瀚星海]'  # 邮件标题前缀,默认是'[django]'
+EMAIL_SUBJECT_PREFIX = '[星海StarSea]'  # 邮件标题前缀,默认是'[django]'
 
 
 # CkEditor 富文本编辑器配置

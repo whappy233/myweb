@@ -57,14 +57,17 @@ CSS INDEX 999
 [data-theme=dark] {
   --global-color:#fff;
   --global-background:rgb(52, 54, 56);
-  /* --global-body-background: #424242; */
   --global-body-background: #0e1327;
+  --global-hover-background:#505050;
+  /* --global-background: rgb(38 45 71 / 84%); */
+  /* --global-body-background: #424242; */
+  /* --global-hover-background:#2b3558; */
+
   --global-color-depth0:#616161;
   --global-color-depth1:#9E9E9E;
   --global-color-depth2:#BDBDBD;
   --global-blog-detail-color:#ffffff;
-  --global-hover-background:#505050;
-  --global-shadow:0 5px 12px -2px rgba(117 117 117 / 23%);
+  /* --global-shadow:0 5px 12px -2px rgba(117 117 117 / 23%); */
   --global-shadow-hover:0 5px 12px 0px rgba(165 165 165 / 23%);
   --global-img-brightness:brightness(150%);
   --global-color-blue: #219bff;
@@ -197,10 +200,10 @@ svg{
   transform: perspective(500px);
   transform-style: preserve-3d;
   position: fixed;
-  bottom: 0;
+  bottom: -10%;
   perspective-origin: 50% 100%;
   left: 50%;
-  animation: rotate 90s infinite linear;
+  animation: rotate 180s infinite linear;
   pointer-events: none;
 }
 .star {

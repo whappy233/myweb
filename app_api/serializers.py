@@ -11,7 +11,7 @@ User = get_user_model()
 
 
 '''Serializer'''
-class ArticleSerializer(serializers.Serializer):
+class ArticleSerializer1(serializers.Serializer):
     '''
     read_only: 客户端是不需要也不能够通过POST或PUT请求提交相关数据进行反序列化.
     '''

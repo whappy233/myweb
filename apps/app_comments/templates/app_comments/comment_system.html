@@ -7,6 +7,7 @@ object: 模型的一条实例, 比如某篇文章, 某张相片
 
 <!-- 评论表单  -->
 {% if object.comment_status and OPEN_SITE_COMMENT %}
+
 <div id="comment" class="blog-form">
     <div class="section-heading-4 heading-dark">
         <h3 class="item-heading">评论 {{article.visible_comments_count}}</h3>
@@ -43,7 +44,6 @@ object: 模型的一条实例, 比如某篇文章, 某张相片
         </div>
     </form>
 </div>
-{% endif %}
 
 <!-- 文章评论 -->
 <div class="blog-comment"></div>
@@ -55,6 +55,8 @@ object: 模型的一条实例, 比如某篇文章, 某张相片
         <div class="line line3"></div>
     </div>
 </div>
+
+{% endif %}
 
 
 <script>
