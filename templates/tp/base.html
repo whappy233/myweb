@@ -42,16 +42,9 @@
 
 </head>
 
-<body id="main" class="sticky-header" data-theme='light'>
+<body id="main" class="sticky-header" data-theme='dark'>
     <script>
-        var theme1;
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            theme1 = 'dark'
-        };
-        if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-            theme1 = 'light'
-        };
-        document.getElementById('main').setAttribute('data-theme', window.localStorage.getItem("theme") || theme1 || 'dark');
+        document.getElementById('main').setAttribute('data-theme', window.localStorage.getItem("theme") || 'dark');
     </script>
     <!-- 滚动到顶部 -->
     <span data-scroll="#wrapper" class="scrollup" title="Back to the top"><i class="fas fa-angle-double-up"></i></span>
@@ -95,7 +88,6 @@
                                     <li>
                                         <a href="#">栏目</a>
                                         <ul class="dropdown-menu-col-1 animation">
-                                            {% b_category as bbcate %}
                                             {% for cate in bbcate %}
                                             <li><a href="{{cate.get_absolute_url}}">{{cate.name}}</a></li>
                                             {% endfor %}

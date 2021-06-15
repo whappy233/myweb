@@ -120,8 +120,10 @@
                     <!-- 相似推荐 -->
                     {% similar_articles article 3 %}
 
+                    {% if object.comment_status and OPEN_SITE_COMMENT %}
                     <!-- 评论系统 -->
                     {% include "app_comments/comment_system.html" with object=article %}
+                    {% endif %}
 
                 </div>
             </div>
@@ -172,6 +174,28 @@
                 zIndex: 2147483647
             })
         }, false);
+
+        $('.markdown-body .codehilite>pre>span').on('click', copycode); // 复制代码
+
+        function copycode(event) {
+            var $this = $(event.currentTarget);
+            var $code = $this.next('code');
+            if ($code) {
+                let transfer = document.createElement('textarea');
+                var original_code = $code.text();
+                // original_code = `${original_code}\n${new Array(40).join('-')}\n{{SITE_NAME}}|${document.title}\n${document.location.href} (转载请备注来源😚)\n${new Date()}`;
+                document.body.appendChild(transfer);
+                transfer.value = original_code;  // 这里表示想要复制的内容
+                transfer.select();
+                if (document.execCommand('copy')) {
+                    document.execCommand('copy');
+                }
+                toastr.success('复制成功');
+                document.body.removeChild(transfer);
+            };
+            return false;
+        };
+
     }();
 
 </script>

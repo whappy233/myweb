@@ -399,6 +399,7 @@ def forget_pwd(request):
 @login_required
 def profile(request):
     '''资料编辑'''
+
     message = ''
     if request.method == 'POST':
         user_form = UserEditForm(data=request.POST, instance=request.user)

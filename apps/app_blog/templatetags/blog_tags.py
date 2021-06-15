@@ -53,7 +53,7 @@ def b_category():
     if category:
         logger.info(f'获取博客分类缓存:{cache_key}')
     else:
-        category = Category.objects.filter(parent_category=None)
+        category = Category.objects.annotate(blog_count=Count('blog_articles'))
         cache.set(cache_key, category, 60 * 100)
         logger.info(f'设置博客分类缓存:{cache_key}')
     return category

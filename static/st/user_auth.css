@@ -1,5 +1,5 @@
 body {
-    background: url(https://picsum.photos/id/10/1920/1080) no-repeat center;
+    /* background: url(https://picsum.photos/id/10/1920/1080) no-repeat center; */
     /* background: url("{% static 'st/img/bg.jpg' %}") no-repeat center; */
     background-attachment: fixed;
     background-size: cover;
@@ -50,7 +50,8 @@ button {
     position: absolute;
     border-radius: 5px;
     padding: 45px 70px 0 70px;
-    background: rgba(40, 57, 101, .9);
+    /* background: rgba(40, 57, 101, .9); */
+    background: rgb(38 45 71 / 84%)
 }
 
 @media only screen and (max-width:991px) {

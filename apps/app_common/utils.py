@@ -2,6 +2,9 @@ import datetime
 import decimal
 
 from django.contrib.humanize.templatetags import humanize
+from django.template.defaultfilters import filesizeformat
+
+
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.base import ModelBase
 from django.utils.encoding import smart_text

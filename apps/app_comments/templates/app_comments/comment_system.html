@@ -6,8 +6,6 @@ object: 模型的一条实例, 比如某篇文章, 某张相片
 
 
 <!-- 评论表单  -->
-{% if object.comment_status and OPEN_SITE_COMMENT %}
-
 <div id="comment" class="blog-form">
     <div class="section-heading-4 heading-dark">
         <h3 class="item-heading">评论 {{article.visible_comments_count}}</h3>
@@ -56,8 +54,6 @@ object: 模型的一条实例, 比如某篇文章, 某张相片
     </div>
 </div>
 
-{% endif %}
-
 
 <script>
 (function ($) {
@@ -90,9 +86,6 @@ object: 模型的一条实例, 比如某篇文章, 某张相片
     $comment_container.on('change', "input[id^='do_action_']", do_action);  // 置顶评论/隐藏评论  ajax Patch
 
     $comment_container.on('mouseover', '.reply[data-reply]', HighlightComment).on('mouseleave', '.reply[data-reply]', HighlightComment);  // 高亮回复的评论
-
-    $('.markdown-body .codehilite>pre>span').on('click', copycode); // 复制代码
-
 
     // 显示或隐藏子评论
     function toggleChildrenComments() {
@@ -322,25 +315,6 @@ object: 模型的一条实例, 比如某篇文章, 某张相片
         }
     };
 
-    function copycode(event) {
-        var $this = $(event.currentTarget);
-        var $code = $this.next('code');
-        if ($code) {
-            let transfer = document.createElement('textarea');
-            let original_code = $code.text();
-            let copytext = `${original_code}\n${new Array(40).join('-')}\n{{SITE_NAME}}|${document.title}\n${document.location.href} (转载请备注来源😚)\n${new Date()}`;
-            document.body.appendChild(transfer);
-            transfer.value = copytext;  // 这里表示想要复制的内容
-            transfer.select();
-            if (document.execCommand('copy')) {
-                document.execCommand('copy');
-            }
-            toastr.success('复制成功');
-            document.body.removeChild(transfer);
-        };
-        return false;
-    };
-
-
 })(jQuery)
 </script>
+

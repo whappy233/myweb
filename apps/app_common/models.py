@@ -2,18 +2,52 @@ from abc import abstractmethod
 from django.db import models
 
 from django.core.exceptions import ValidationError
+from django.db.models import fields
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 from myweb.utils import get_current_site
 from django.core.cache import cache
-
+from rest_framework import serializers
 import re
+import os
 
 from uuid import uuid4
 
 def uuid4_hex():
     return uuid4().hex[:10]
+
+def file_path(instance, filename):
+    ext = os.path.splitext(filename)[-1]
+    newname = uuid4().hex + ext
+    return os.path.join('uploads', now().strftime('%Y/%m/%d/'), newname)
+
+
+
+class FileStorage(models.Model):
+    name = models.CharField('文件名', max_length=50, blank=True, null=True)
+    file = models.FileField('文件', upload_to=file_path)
+    size = models.CharField('文件大小', max_length=32, blank=True, null=True, editable=False)
+    created = models.DateTimeField('上传日期', auto_now_add=True)
+    is_delete = models.BooleanField('已删除', default=False)
+
+    class Meta:
+        verbose_name = '文件存储'
+        verbose_name_plural = verbose_name
+        ordering = ['created']
+
+    def __str__(self) -> str:
+        name = self.name or os.path.basename(self.file.name)
+        return f'{name}[size: {self.size}]'
+
+class FileSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = FileStorage
+        fields = '__all__'
+        read_only_fields = ['name', 'size', 'created', 'is_delete']
+
+
 
 
 class BaseModel(models.Model):
@@ -74,7 +108,6 @@ class BlogSettings(models.Model):
         except ValidationError as e:
             from django.core.exceptions import NON_FIELD_ERRORS
             print('验证没通过： %s' % e.message_dict[NON_FIELD_ERRORS])
-
 
 
 

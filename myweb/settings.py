@@ -96,8 +96,7 @@ MIDDLEWARE = [
 
     'debug_toolbar.middleware.DebugToolbarMiddleware',  # django-debug-toolbar
 
-    'app_common.middleware.SetRemoteAddrFromForwardedFor',  #  当部署在负载平衡proxy(如nginx)上, 该中间件用于获取用户实际的 ip 地址
-    'app_common.middleware.RequestBlockingMiddleware',
+    'app_common.middleware.CommonMiddleware',
 
 ]
 
@@ -233,9 +232,18 @@ DATABASES = {
 }
 
 # 日志文件配置
-LOG_DIR = os.path.join(BASE_DIR,'log')
-if not os.path.exists(LOG_DIR): os.makedirs(LOG_DIR)
-logger.add(os.path.join(LOG_DIR, 'error.log'), rotation='1 days', retention='30 days', encoding='utf-8')
+LOG_DIR = os.path.join(BASE_DIR, 'log')
+if not os.path.exists(LOG_DIR): 
+    os.makedirs(LOG_DIR)
+logger.add(os.path.join(LOG_DIR, 'django_error.log'),  # 日志存放路径
+           enqueue=True,        # 开启进程安全
+           rotation='1 days',   # 日志按天滚动
+           retention='30 days', # 日志保留天数
+           encoding='utf-8',    # 编码方式
+           backtrace=True, diagnose=True,        # 开启错误堆栈
+           level='INFO' if DEBUG else 'WARNING', # 日志级别
+           )
+
 
 
 # 缓存
@@ -253,21 +261,37 @@ logger.add(os.path.join(LOG_DIR, 'error.log'), rotation='1 days', retention='30 
 #     }
 # }
 
-CACHE_CONTROL_MAX_AGE = 2592000
-# cache setting
+
+# Redis 缓存
 CACHES = {
     'default': {
-        # 此缓存使用 python-memcached 模块连接 memcache
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': os.environ.get('DJANGO_MEMCACHED_LOCATION') or '127.0.0.1:11211',
-        'KEY_PREFIX': 'djangoblog', # 缓存key的前缀（默认空）
-        'TIMEOUT': 15,
-    } if env_to_bool('DJANGO_MEMCACHED_ENABLE', False) else {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'TIMEOUT': 10800,
-        'LOCATION': 'unique-snowflake',
-    }
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379', # redis所在服务器或容器ip地址
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": os.environ.get('REDIS_KEYS') or '123456', # 你设置的密码
+        },
+    },
 }
+REDIS_TIMEOUT = 24*60*60
+CUBES_REDIS_TIMEOUT = 60*30
+NEVER_REDIS_TIMEOUT = 365*24*60*60
+
+
+# CACHE_CONTROL_MAX_AGE = 2592000
+# CACHES = {
+#     'default': {
+#         # 此缓存使用 python-memcached 模块连接 memcache
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': os.environ.get('REDIS_KEYS') or '127.0.0.1:11211',
+#         'KEY_PREFIX': 'djangoblog', # 缓存key的前缀（默认空）
+#         'TIMEOUT': 15,
+#     } if env_to_bool('DJANGO_MEMCACHED_ENABLE', False) else {
+#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+#         'TIMEOUT': 10800,
+#         'LOCATION': 'unique-snowflake',
+#     }
+# }
 
 
 LANGUAGE_CODE = 'zh-hans'

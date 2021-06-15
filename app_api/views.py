@@ -44,7 +44,7 @@ NOTE: 使用 GenericAPIView 时会自动处理 context, 而 APIView 不会,
 
 # 函数视图
 @api_view(['GET', 'POST'])
-@permission_classes((permissions.IsAuthenticatedOrReadOnly, ))  # 权限
+@permission_classes((permissions.IsAdminUser, ))  # 权限
 def article_list(request, format=None):
     """
     列出所有的 aricle, 或创建 article.
@@ -221,7 +221,7 @@ class ArticleList(generics.ListCreateAPIView):
 
     # 权限
     # IsAuthenticatedOrReadOnly 确保经过身份验证的请求获得读写访问权限, 未经身份验证的请求将获得只读读的权限
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)  
+    permission_classes = (permissions.IsAdminUser,)  
 
     # 将request.user与author绑定
     def perform_create(self, serializer):
@@ -234,27 +234,31 @@ class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
     # 权限
     # IsAuthenticatedOrReadOnly 确保经过身份验证的请求获得读写访问权限, 未经身份验证的请求将获得只读读的权限
     # IsOwnerOrReadOnly 只允许文章的创建者才能编辑
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+    permission_classes = (permissions.IsAdminUser, IsOwnerOrReadOnly)
 
 
 # 用户
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (permissions.IsAdminUser,)  
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class =UserSerializer
+    permission_classes = (permissions.IsAdminUser,)  
 
 
 # UserProfile
 class UserProfileList(generics.ListCreateAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
+    permission_classes = (permissions.IsAdminUser,)  
 
 class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = UserProfile.objects.all()
     serializer_class =UserProfileSerializer
+    permission_classes = (permissions.IsAdminUser,)  
 
 
 
@@ -295,11 +299,11 @@ class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
         urlpatterns = format_suffix_patterns(urlpatterns)
 '''
 class ArticleViewSet1(viewsets.ModelViewSet):
-    # 用一个视图集替代 ArticleList 和A rticleDetail 两个视图
+    # 用一个视图集替代 ArticleList 和 ArticleDetail 两个视图
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
-    # 自行添加，将request.user与author绑定
+    # 自行添加, 将request.user与author绑定
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 

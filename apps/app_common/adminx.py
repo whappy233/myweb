@@ -6,7 +6,8 @@ from django.contrib.auth.models import Group, Permission
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
-from .models import BlogSettings, Carousel
+from django.template.defaultfilters import filesizeformat
+from .models import BlogSettings, Carousel, FileStorage
 from app_user.models import UserProfile
 from app_blog.models import Article, Category
 from app_gallery.models import Gallery, Photo
@@ -59,6 +60,7 @@ class GlobalSettings:
                 {'title': 'MP Admin', 'url': url, 'icon': 'glyphicon glyphicon-move'},
             )},
             {'title': '通用', 'menus': (
+                {'title': '文件管理', 'url': self.get_model_url(FileStorage, 'changelist'),'icon': "glyphicon glyphicon-cloud-upload"},
                 {'title': '轮播图', 'url': self.get_model_url(Carousel, 'changelist'),'icon': "glyphicon glyphicon-sound-stereo"},
                 {'title': '站点配置', 'url': self.get_model_url(BlogSettings, 'changelist') ,'icon': "glyphicon glyphicon-cog"},
             )},
@@ -77,3 +79,19 @@ class CarouselAdmin:
 @register(BlogSettings)
 class BlogSettingsAdmin:
     pass
+
+
+# 文件管理
+@register(FileStorage)
+class FileStorageAdmin:
+    list_display = ['id', 'name', 'file', 'size', 'is_delete', 'created']
+    list_display_links = ['id', 'name']
+    list_editable = ['is_delete']
+    ordering = ['-created']
+
+    def save_models(self):
+        file = self.request.FILES['file']
+        if not self.new_obj.name :
+            self.new_obj.name = file.name 
+        self.new_obj.size = filesizeformat(file.size)
+        super().save_models()

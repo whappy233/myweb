@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body> 
+    <form class="newsletter-subscribe-form">
+        <div class="form-group">
+            <div class="row">
+                <label class="col-sm-2 control-label">附件:</label>
+                <div class="col-sm-7">
+                    <input id="myfile" type="file" style="display: none" multiple>
+                    <!--显示上传的文件名字-->
+                    <input type="text" id="FileCover" class="form-control" readonly="true">
+                </div>
+                <div class="col-sm-1">
+                    <button class="btn btn-primary btn-sm " type="button" onclick="$('input[id=myfile]').click();">
+                        <i class="fa fa-folder-open" id="browse">&nbsp;&nbsp;浏览</i>
+                    </button>
+                </div>
+                <div class="col-sm-1">
+                    <button class="btn btn-primary btn-sm " type="button" onclick="MyUpload()">
+                        <i class="fa fa-send" id="upload_status">&nbsp;&nbsp;上传</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="rov">
+        <label class="col-sm-2 control-label">上传进度:</label>
+        <div class="col-sm-10" id="show_upload">
+        </div>
+    </div>
+
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $('input[id=myfile]').change(function () {
+            var myfiles = document.getElementById("myfile").files;
+            var file_index = 0;
+            var file_len = myfiles.length;
+            var myfilename = null;
+            while (file_index < file_len) {
+                myfilename = myfilename + myfiles[file_index].name + ";";
+                file_index = file_index + 1;
+            }
+            //console.log(myfiles);
+            //$('#FileCover').val($(this).val());
+            $('#FileCover').val(myfilename);
+            //拼接上传的文件名字并返回到FileCover
+        })
+
+        function MyUpload() {
+            var myfiles = document.getElementById("myfile").files;//获取文件
+            var totalfile = myfiles.length;//上传的文件个数
+            var uploadedfile = 0;//已上传的文件个数
+            var data = new FormData();//构建FormData用于Ajax发送
+            var file_index = 0;
+            //每上传一个文件，添加一个进度条
+            var addhtml = " <div id=\"backname\" class=\"col-sm-9\">文件1</div>\n" +
+                "                                    <div id=\"backurl\" style=\"display: none\"></div>\n" +
+                "                                    <div class=\"col-sm-2\">上传进度:</div>\n" +
+                "                                    <div id=\"percentage\" class=\"col-sm-1\">100%</div>\n" +
+                "                                    <div class=\"col-sm-9\"></div>\n" +
+                "                                    <div class=\"progress progress-small\" >\n" +
+                "                                        <div id=\"percentagebar\" style=\"width:0%;\" class=\"progress-bar progress-bar-success \"></div>\n" +
+                "                                    </div> ";
+            $("#show_upload").empty();//每次点击上传按钮，把所有的进度条清空
+            while (file_index < myfiles.length) {
+                data.append('file', myfiles[file_index]);// 获取1个文件放入FormData中
+                var percentage = null;//上传进度
+                $.ajax({
+                    type: "POST",
+                    url: "/FileUploads/",
+                    data: data,
+                    processData: false, // 告诉jQuery不要处理数据
+                    contentType: false, // 告诉jQuery不要设置类型
+                    dataType: "json",
+                    xhr: function xhr() {
+                        var newbackname = "backname" + file_index;//文件名，本来想写后台返回的，懒
+                        var newbackurl = "backurl" + file_index;//每个文件上传后，返回的前台访问的url
+                        var newp = "percentage" + file_index;//每个文件的进度
+                        var newpbar = "percentagebar" + file_index;//每个进度条的名字
+                        var myfilename = myfiles[file_index].name;
+
+                        $("#show_upload").append(addhtml);
+                        $("#backname").attr('id', newbackname);
+                        $("#backurl").attr('id', newbackurl);
+                        $("#percentage").attr('id', newp);
+                        $("#percentagebar").attr('id', newpbar);
+
+                        var myxhr = $.ajaxSettings.xhr();
+                        if (myxhr.upload) {
+                            myxhr.upload.addEventListener('progress', function (e) {
+                                if (e.lengthComputable) {
+                                    percentage = parseInt(e.loaded / e.total * 100);
+                                    var now_percentage = percentage + "%";
+                                    $("#" + newp).html(now_percentage);
+                                    $("#" + newpbar).css({ "width": now_percentage });
+                                    $("#" + newbackname).html(myfilename);
+                                }
+                            }, false);
+                        }
+                        return myxhr;
+                    },
+                    success: function (result) {
+                        //每次上传完毕后得到返回值，取出返回的json值
+                        var filename = result.FileName;//后台返回新的文件名
+                        var fileurl = result.FileUrl;//后台返回的文件url
+                        uploadedfile = uploadedfile + 1;
+                        if (uploadedfile == totalfile) {
+                            $("#upload_status").text("重新上传");
+                            alert("文件上传完毕！");
+                        }
+                    }
+                });
+                file_index = file_index + 1;
+            }
+        }
+
+
+
+    </script>
+
+
+</body>
+
+</html>
