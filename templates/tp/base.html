@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="{% static 'st/style.css' %}">
     <!-- Modernize js -->
     <script src="{% static 'st/js/modernizr-3.6.0.min.js' %}"></script>
-    <!-- jquery-->
+    <!-- jquery -->
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     {% block css_extra %}
@@ -46,9 +46,11 @@
     <script>
         document.getElementById('main').setAttribute('data-theme', window.localStorage.getItem("theme") || 'dark');
     </script>
-    <!-- 滚动到顶部 -->
+
+    {# 滚动到顶部 #}
     <span data-scroll="#wrapper" class="scrollup" title="Back to the top"><i class="fas fa-angle-double-up"></i></span>
-    <!-- 页面加载动画 -->
+
+    {# 页面加载动画 #}
     <div class="preloader" id="preloader">
         <div class="loader">
             <div class="line line1"></div>
@@ -57,19 +59,19 @@
         </div>
     </div>
 
-    <!-- 背景动画 -->
+    {# 背景动画 #}
     <div class="stars"></div>
 
     <div id="wrapper" class="wrapper">
 
-        <!-- 头部导航 -->
+        {# 头部导航 #}
         {% block header %}
         <header class="has-mobile-menu">
             <div id="header-menu" class="header-menu menu-layout2 bg--transparent">
                 <div class="container">
                     <div class="row d-flex align-items-center">
 
-                        <!-- 左侧logo -->
+                        {# 左侧logo #}
                         <div class="col-lg-2">
                             <div class="logo-area">
                                 <a href="/" class="temp-logo" id="temp-logo">
@@ -78,11 +80,11 @@
                             </div>
                         </div>
 
-                        <!-- 中间菜单 -->
+                        {# 中间菜单 #}
                         <div class="col-lg-8 d-flex justify-content-end">
                             <nav id="dropdown" class="template-main-menu">
                                 <ul>
-                                    <!-- 分类 -->
+                                    {# 分类 #}
                                     {% b_category as bbcate %}
                                     {% if bbcate.count > 0 %}
                                     <li>
@@ -94,7 +96,7 @@
                                         </ul>
                                     </li>
                                     {% endif %}
-                                    <!-- Page -->
+                                    {# Page #}
                                     <li class="possition-static hide-on-mobile-menu">
                                         <a href="#">PAGES</a>
                                         <div class="template-mega-menu animation">
@@ -181,11 +183,11 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <!-- 相册 -->
+                                    {# 相册 #}
                                     <li>
                                         <a href="{% url 'app_gallery:gallery_list' %}">相册</a>
                                     </li>
-                                    <!-- 日记 -->
+                                    {# 日记 #}
                                     <li>
                                         <a href="{% url 'app_diary:index' %}">日记</a>
                                     </li>
@@ -193,22 +195,22 @@
                             </nav>
                         </div>
 
-                        <!-- 右侧菜单 -->
+                        {# 右侧菜单 #}
                         <div class="col-lg-2 d-flex justify-content-end right_submenu">
                             <div class="header-action-items submenu">
                                 <ul>
-                                    <!-- 搜索 -->
+                                    {# 搜索 #}
                                     <li data="header-search">
                                         <i title="Search" class="fas fa-search"></i>
                                     </li>
-                                    <!-- 夜间模式 -->
+                                    {# 夜间模式 #}
                                     <li class="dark_mode">
                                         <i title="Dark" class="far fa-moon"></i>
                                     </li>
                                     {% if request.user.is_authenticated %} {# 当用户被验证 #}
-                                    <!-- User -->
+                                    {# User #}
                                     <li class="user-wrap">
-                                        <!-- 头像 -->
+                                        {# 头像 #}
                                         {% if request.user.profile.photo %}
                                         <img src="{{ request.user.profile.photo.url }}" class="about-author-img rounded-circle" alt="{{request.user.username}}">
                                         {% else %}
@@ -317,7 +319,7 @@
                                                             <li><a href="{% url 'app_user:profile' %}"><i class="fas fa-user-edit"></i>修改信息</a></li>
                                                             <li><a href="{% url 'app_user:change_pw' %}"><i class="fas fa-key"></i>修改密码</a></li>
                                                             {% if request.user.is_superuser %}
-                                                            <!-- 新建文章 -->
+                                                            {# 新建文章 #}
                                                             <li><a target="_blank" title="新建文章" href="{{ add_article }}"><i class="fas fa-plus"></i>新建文章</a></li>
                                                             <li><a target="_blank" title="新建日记" href="{{ diary_xadmin_add }}"><i class="fas fa-book"></i>新建日记</a></li>
                                                             <li><a target="_blank" title="相册照片" href="{{ add_photo }}"><i class="far fa-image"></i>新增照片</a></li>
@@ -333,7 +335,7 @@
                                         </div>
                                     </li>
                                     {% else %}
-                                    <!-- 登陆 -->
+                                    {# 登陆 #}
                                     <li name="login-form" data-toggle="modal" data-target="#login_register_Modal">
                                         <i class="far fa-user-circle" style="pointer-events: none;"></i>
                                     </li>
@@ -350,7 +352,7 @@
         {% block container %}
         {% endblock container %}
 
-        <!-- 页脚 -->
+        {# 页脚 #}
         <footer class="footer-wrap-layout2">
             <div class="container">
                 <div class="footer-box-layout2">
@@ -379,7 +381,7 @@
             </div>
         </footer>
 
-        <!-- 搜索界面 -->
+        {# 搜索界面 #}
         <div id="header-search" class="header-search">
             <button type="button" class="close">×</button>
             <div class="header-search-form">
@@ -421,11 +423,13 @@
         </div>
 
         {% if not request.user.is_authenticated %} {# 当用户被验证 #}
-        <!--登录注册模态框-->
+        {# 登录注册模态框 #}
         {% include 'app_blog/login_register_model.html' %}
         {% endif %}
 
     </div>
+
+
 
     <!-- Plugins js -->
     <script src="{% static 'st/js/plugins.js' %}"></script>
@@ -437,11 +441,9 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <!-- Meanmenu js -->
     <script src="{% static 'st/js/meanmenu.js' %}"></script>
-    <!-- Smooth Scroll js -->
-    <script src="{% static 'st/js/jquery.smoothscroll.min.js' %}"></script>
-    
+    <!-- 平滑滚动 -->
+    <!-- <script src="{% static 'st/js/jquery.smoothscroll.min.js' %}"></script> -->
     <script src="{% static 'st/js/toastr.min.js' %}"></script>
-    
     <script src="{% static 'st/js/placeholder.min.js' %}"></script>
 
     {% block script %}

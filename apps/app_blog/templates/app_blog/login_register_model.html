@@ -8,10 +8,10 @@
 {% endcomment %}
 
 
-<!-- 登录注册表单 -->
+{# 登录注册表单 #}
 <link href="{% static 'app_blog/css/login_register_form.css' %}" rel="stylesheet" />
 
-<!-- 拖动验证 -->
+{# 拖动验证 #}
 <link href="{% static 'app_blog/css/drag.css' %}" rel="stylesheet" />
 
 
@@ -19,7 +19,7 @@
     <div class="modal-dialog" role="document" style="margin: 100px auto;">
         <div class="login_register_form">
 
-            <!-- 注册 -->
+            {# 注册 #}
             <form class="register-form" style="display: none;">
                 <input name="username" type="text" placeholder="用户名" id="r_username" required/>
                 <div style="position: relative;">
@@ -38,7 +38,7 @@
                 <p class="message">已有账户? <a name="login-form">立刻登录</a></p>
             </form>
 
-            <!-- 登录 -->
+            {# 登录 #}
             <form class="login-form" style="display: none;">
                 <input name="username" type="text" placeholder="用户名" id="user_name" required/>
                 <div style="position: relative;">
@@ -54,7 +54,7 @@
                 </div>
             </form>
 
-            <!-- 忘记密码 -->
+            {# 忘记密码 #}
             <form class="forget-form" style="display: none;">
                 <div class="form-row">
                     <input name="f_email" type="email" placeholder="绑定的邮箱" id="f_email" required/>
@@ -75,7 +75,7 @@
 </div>
 
 
-<!-- 拖动验证 -->
+{# 拖动验证 #}
 <script src="{% static 'app_blog/js/drag.js' %}"></script>
 
 <script>

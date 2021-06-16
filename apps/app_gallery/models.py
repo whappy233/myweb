@@ -19,7 +19,7 @@ class PhotoManager(models.Manager):
         '''随机获取一张图片'''
         count = self.count()
         if count > 0:
-            all_photos = self.all()
+            all_photos = self.filter(is_delete=False)
             if total == 1:
                 return choice(all_photos)
             return [choice(all_photos) for _ in range(total)]
@@ -102,7 +102,6 @@ class Photo(models.Model, AdminMixin):
 
     # image.url  # 图像URL地址
     image = models.ImageField('图片', upload_to=photo_directory_path)
-
 
     # 缩略图目的文件夹(media/photo/thumb/)
     thumb = ProcessedImageField(processors=[ResizeToFit(300)],

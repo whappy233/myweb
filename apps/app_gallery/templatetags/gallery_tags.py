@@ -1,8 +1,14 @@
 import base64
 import io
-from ..models import Photo
 from django import template
+from django.core.cache import cache
 from PIL import Image
+from loguru import logger
+
+from ..models import Photo
+
+
+register = template.Library()
 
 
 def crop_image(file, size=None, box=None, r=0):
@@ -28,8 +34,6 @@ def crop_image(file, size=None, box=None, r=0):
 
 
 # <img src="data:image/png;base64,{% get_random_background 4 %}" alt="" class="img-responsive">
-
-register = template.Library()
 'simple_tag (处理数据并返回一个字符串或者给context设置或添加变量)  {% get_random_background 0.5 %}'
 @register.simple_tag  # 注册模板标签和过滤器, 默认使用函数名作为标签名字，也可自定义 @register.simple_tag(name='name')
 def get_random_background(size=None, box=None, r=0):  # 定义标签
@@ -39,6 +43,7 @@ def get_random_background(size=None, box=None, r=0):  # 定义标签
         return pil_base64(image)
     else:
         return ''
+
 
 def pil_base64(image):
     img_buffer = io.BytesIO()

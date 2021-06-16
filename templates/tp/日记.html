@@ -23,7 +23,7 @@
                         {% for diary in diaries %}
                         <li>
                             {% with date=diary.created %}
-                            <time class="cbp_tmtime" datetime="{{date}}">
+                            <time class="cbp_tmtime sticky" datetime="{{date}}">
                                 <span>{{date|date:"Y/m/d"}}</span>
                                 <span>{{date|date:"H:i"}}</span>
                             </time>
@@ -48,29 +48,30 @@
                 </div>
             </div>
 
-            <!-- 侧边栏 -->
+            {# 侧边栏 #}
             <div class="col-lg-4 sidebar-widget-area sidebar-break-md">
-                {% recommendations_articles 5 '侧边_推荐文章' %}
 
-                <!-- 关于我 -->
+                {# 关于我 #}
                 {% include 'tp/侧边组件/侧边_关于我.html' with page_obj=page_obj %}
 
-                <!-- 关注我 -->
+                {% recommendations_articles 5 '侧边_推荐文章' %}
+
+                {# 关注我 #}
                 {% include 'tp/侧边组件/侧边_关注我.html' with page_obj=page_obj %}
 
-                <!-- 文章分类 -->
+                {# 文章分类 #}
                 {% include 'tp/侧边组件/侧边_分类目录.html' with page_obj=page_obj %}
 
-                <!-- 发送反馈 -->
+                {# 发送反馈 #}
                 {% include 'tp/侧边组件/侧边_发送反馈.html' with page_obj=page_obj %}
 
-                <!-- 广告 -->
+                {# 广告 #}
                 {% include 'tp/侧边组件/侧边_广告.html' with page_obj=page_obj %}
 
-                <!-- 相册展示 -->
+                {# 相册展示 #}
                 {% include 'tp/侧边组件/侧边_相册展示.html' with page_obj=page_obj %}
 
-                <!-- 大轮播图 -->
+                {# 大轮播图 #}
                 {% include 'tp/侧边组件/侧边_大轮播图.html' with page_obj=page_obj %}
             </div>
         </div>
@@ -105,17 +106,7 @@
             history.replaceState(null,null, url2);  //替换地址栏
         };
 
-        $(window).on('scroll', function () {
-            var tt = $('.cbp_tmtime');
-            tt.each(function (index, element) {
-                let $ele = $(element);
-                if (element.getBoundingClientRect().top < 70) {
-                    $ele.addClass('sticky');
-                } else {
-                    $ele.removeClass('sticky');
-                }
-            });
-
+        function scrollHandle(){
             var diary_list_bottom = document.getElementById('diary_list_bottom');
             if (diary_list_bottom.getBoundingClientRect().top - window.innerHeight <= 100 && empty_page == false && block_request == false) {
                 block_request = true;
@@ -127,6 +118,7 @@
                         if (!data.has_next) {
                             empty_page = true;
                             $('#diary_list_bottom').html('END');
+                            window.removeEventListener('scroll', scrollHandle, true);
                         }
                         page = data.current_page;
                         let diary_list = data.data;
@@ -146,16 +138,20 @@
                         } else {
                             empty_page = true;
                             $('#diary_list_bottom').html('END');
+                            window.removeEventListener('scroll', scrollHandle, true);
                         };
                         block_request = false;
                     }
                     else {
                         empty_page = true;
                         $('#diary_list_bottom').html('END');
+                        window.removeEventListener('scroll', scrollHandle, true);
                     }
                 });
             }
-        });
+        }
+
+        window.addEventListener('scroll', scrollHandle, true);
     })
 
 </script>

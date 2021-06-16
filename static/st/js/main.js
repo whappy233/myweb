@@ -264,28 +264,56 @@
         return false;
     });
 
-
-    // -------------------------------------
-    // On Scroll 
-    // -------------------------------------
-    $(window).on('scroll', function () {
-        // Back Top Button
-        if ($(window).scrollTop() > 700) {
-            $('.scrollup').addClass('back-top');
-            $('.showdirectory').addClass('back-top');
-        } else {
-            $('.scrollup').removeClass('back-top');
-            $('.showdirectory').removeClass('back-top');
-            let $toc = $('.widget#Toc');
-            if ($toc.hasClass('fixed') == true && $toc.hasClass('run')==false){
-                $toc.addClass('run')
-                $toc.animate({opacity: 0, bottom: 0}, 300, function(){
-                    $toc.removeClass(['fixed', 'run']);
-                    $toc.css('opacity', 1);
+    $(".widget#Toc").hover(
+        function(e){
+            // over
+            this.dataset.hover='true';
+        }, 
+        function(e){
+            // leave
+            this.dataset.hover='false';
+            var $this = $(this);
+            if (this.dataset.needhide == 'true'){
+                this.dataset.needhide='false';
+                $this.addClass('run');
+                $this.animate({opacity: 0, bottom: 0}, 300, function(){
+                    $this.removeClass(['fixed', 'run']);
+                    $this.css('opacity', 1);
                     $('.showdirectory').html('<i class="fas fa-align-left"></i>');
                 });
             }
         }
+    );
+
+    // -------------------------------------
+    // On Scroll 
+    // -------------------------------------
+    $(window).on('scroll', function (e) {
+        let $toc = $('.widget#Toc');
+        // Back Top Button
+        if ($(window).scrollTop() > 700) {
+            $('.scrollup').addClass('back-top');
+            $('.showdirectory').addClass('back-top');
+            $toc.attr('data-needhide', 'false');
+        } else {
+            $('.scrollup').removeClass('back-top');
+            $('.showdirectory').removeClass('back-top');
+
+            if ($toc.hasClass('fixed') == true && $toc.hasClass('run')==false){
+                if($toc.attr('data-hover') ==  'false'){
+                    $toc.attr('data-needhide', 'false');
+                    $toc.addClass('run');
+                    $toc.animate({opacity: 0, bottom: 0}, 300, function(){
+                        $toc.removeClass(['fixed', 'run']);
+                        $toc.css('opacity', 1);
+                        $('.showdirectory').html('<i class="fas fa-align-left"></i>');
+                    });
+                }else{
+                    $toc.attr('data-needhide', 'true');
+                };
+            };
+        };
+
         if ($('body').hasClass('sticky-header')) {
             var menu = $("#header-menu"),
                 mobile_menu = $('.mean-bar');
@@ -298,6 +326,35 @@
             }
         }
     });
+
+
+    // https://imweb.io/topic/5c7bc84ebaf81d7952094978
+    const options = {
+        // 表示重叠面积占被观察者的比例，从 0 - 1 取值，
+        // 1 表示完全被包含
+        threshold: 1.0, 
+    };
+    const callback = function(entries, observer) { 
+        entries.forEach(entry => {
+            entry.time;               // 触发的时间
+            entry.rootBounds;         // 根元素的位置矩形，这种情况下为视窗位置
+            entry.boundingClientRect; // 被观察者的位置举行
+            entry.intersectionRect;   // 重叠区域的位置矩形
+            entry.intersectionRatio;  // 重叠区域占被观察者面积的比例（被观察者不是矩形时也按照矩形计算）
+            entry.target;             // 被观察者
+        });
+        console.log(entries);
+    };
+
+    const observer = new IntersectionObserver(callback, options);
+
+    const target = document.querySelectorAll('.markdown-body>h2');
+    target.forEach(ele=>{
+        observer.observe(ele);
+    })
+
+
+
 
     /*---------------------------------------
     Comments list event

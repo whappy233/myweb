@@ -1,6 +1,3 @@
-{% load static %}
-
-
 
 <!-- 相册展示 -->
 <div class="widget">
@@ -9,60 +6,14 @@
     </div>
     <div class="widget-instagram">
         <ul>
+            {% for i in "x"|ljust:"9" %}
             <li>
                 <div class="item-box">
-                    <img src="{% static 'st/img/social-figure/social-figure47.jpg' %}" alt="Social Figure" class="img-fluid">
-                    <a href="#" class="item-icon"><i class="fab fa-instagram"></i></a>
+                    <img data-src="{% url 'app_gallery:photo' 200 200 %}?{{ forloop.counter0 }}" class="img-fluid">
+                    <a href="{% url 'app_gallery:gallery_list' %}" class="item-icon"><i class="fab fa-instagram"></i></a>
                 </div>
             </li>
-            <li>
-                <div class="item-box">
-                    <img src="{% static 'st/img/social-figure/social-figure48.jpg' %}" alt="Social Figure" class="img-fluid">
-                    <a href="#" class="item-icon"><i class="fab fa-instagram"></i></a>
-                </div>
-            </li>
-            <li>
-                <div class="item-box">
-                    <img src="{% static 'st/img/social-figure/social-figure49.jpg' %}" alt="Social Figure" class="img-fluid">
-                    <a href="#" class="item-icon"><i class="fab fa-instagram"></i></a>
-                </div>
-            </li>
-            <li>
-                <div class="item-box">
-                    <img src="{% static 'st/img/social-figure/social-figure50.jpg' %}" alt="Social Figure" class="img-fluid">
-                    <a href="#" class="item-icon"><i class="fab fa-instagram"></i></a>
-                </div>
-            </li>
-            <li>
-                <div class="item-box">
-                    <img src="{% static 'st/img/social-figure/social-figure51.jpg' %}" alt="Social Figure" class="img-fluid">
-                    <a href="#" class="item-icon"><i class="fab fa-instagram"></i></a>
-                </div>
-            </li>
-            <li>
-                <div class="item-box">
-                    <img src="{% static 'st/img/social-figure/social-figure52.jpg' %}" alt="Social Figure" class="img-fluid">
-                    <a href="#" class="item-icon"><i class="fab fa-instagram"></i></a>
-                </div>
-            </li>
-            <li>
-                <div class="item-box">
-                    <img src="{% static 'st/img/social-figure/social-figure53.jpg' %}" alt="Social Figure" class="img-fluid">
-                    <a href="#" class="item-icon"><i class="fab fa-instagram"></i></a>
-                </div>
-            </li>
-            <li>
-                <div class="item-box">
-                    <img src="{% static 'st/img/social-figure/social-figure54.jpg' %}" alt="Social Figure" class="img-fluid">
-                    <a href="#" class="item-icon"><i class="fab fa-instagram"></i></a>
-                </div>
-            </li>
-            <li>
-                <div class="item-box">
-                    <img src="{% static 'st/img/social-figure/social-figure55.jpg' %}" alt="Social Figure" class="img-fluid">
-                    <a href="#" class="item-icon"><i class="fab fa-instagram"></i></a>
-                </div>
-            </li>
+            {% endfor %}
         </ul>
     </div>
 </div>

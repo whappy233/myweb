@@ -1,4 +1,4 @@
-<!-- 文章列表模板 -->
+{# 文章列表模板 #}
 
 {% extends 'tp/base.html' %}
 {% load static %}
@@ -8,10 +8,10 @@
 
 {% block container %}
 
-<!-- 顶部滚动文章 -->
+{# 顶部滚动文章 #}
 {% recommendations_articles 5 '滚动' %}
 
-<!-- 文章列表 -->
+{# 文章列表 #}
 <section class="blog-wrap-layout17 article_list">
     <div class="container">
         <div class="row">
@@ -61,39 +61,41 @@
                 {% endfor %}
                 {% endspaceless %}
 
-                <!-- 页码 -->
+                {# 页码 #}
                 {% include 'tp/分页.html' with page_obj=page_obj %}
 
             </div>
 
-            <!-- 侧边栏 -->
+            {# 侧边栏 #}
             <div class="col-lg-4 sidebar-widget-area sidebar-break-md">
-            {% recommendations_articles 5 '侧边_推荐文章' %}
 
-            <!-- 关于我 -->
+            {# 关于我 #}
             {% include 'tp/侧边组件/侧边_关于我.html' with page_obj=page_obj %}
 
+            {% recommendations_articles 5 '侧边_推荐文章' %}
+
             {% comment %}
-            <!-- 关注我 -->
+            {# 关注我 #}
             {% include 'tp/侧边组件/侧边_关注我.html' with page_obj=page_obj %}
             {% endcomment %}
             
-            <!-- 文章分类 -->
+            {# 文章分类 #}
             {% include 'tp/侧边组件/侧边_分类目录.html' with page_obj=page_obj %}
 
-            <!-- 发送反馈 -->
+            {# 相册展示 #}
+            {% include 'tp/侧边组件/侧边_相册展示.html' with page_obj=page_obj %}
+
+            {# 发送反馈 #}
             {% include 'tp/侧边组件/侧边_发送反馈.html' with page_obj=page_obj %}
 
             {% if SHOW_GOOGLE_ADSENSE %}
-            <!-- 广告 -->
+            {# 广告 #}
             {% include 'tp/侧边组件/侧边_广告.html' with page_obj=page_obj %}
             {% endif %}
 
-            <!-- 相册展示 -->
-            {% include 'tp/侧边组件/侧边_相册展示.html' with page_obj=page_obj %}
-            
+
             {% comment %}
-            <!-- 大轮播图 -->
+            {# 大轮播图 #}
             {% include 'tp/侧边组件/侧边_大轮播图.html' with page_obj=page_obj %}
             {% endcomment %}
 

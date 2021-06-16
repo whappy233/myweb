@@ -1,3 +1,4 @@
+import base64
 import io
 from os import readlink
 
@@ -66,9 +67,26 @@ class GalleryDetail(ListView):
         return JsonResponse(data, encoder=JSONEncoder)
 
 
+
+def random_photo(request, width, height):
+    photo = Photo.objects.get_random_photo()
+    photo = Image.open(photo.image.path)
+
+    x = int(width)
+    y = int(height)
+    size = (x ,y)
+
+    crop_im = photo.resize(size, Image.ANTIALIAS)
+    img_buffer = io.BytesIO()
+    crop_im.save(img_buffer, format='png')
+    byte_data = img_buffer.getvalue()
+    return HttpResponse(byte_data)
+
+
+
 # 剪裁随机图片
 def get_random_background(request, x, y):  # 定义标签
-    photo = Photo.objects.get_random_photo()
+    photo = Photo.objects.first()
     if photo:
         photo = Image.open(photo.image.path)
         size_ = photo.size

@@ -39,7 +39,7 @@ urlpatterns = [
     # path('ckeditor/', include('ckeditor_uploader.urls')),
     path('mdeditor/', include('mdeditor.urls')),  # mdeditor 富文本上传图片
 
-    path('__debug__/', include(debug_toolbar.urls)), # django-debug-toolbar
+    # path('__debug__/', include(debug_toolbar.urls)), # django-debug-toolbar
 
     path('sitemap.xml', sitemap, {'sitemaps':sitemaps}, name='django.contrib.sitemaps.views.sitemap'),  # 网站地图
 

@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['*']
 SITE_ID = 1  # 设置站点ID
 
 
-INTERNAL_IPS = ['127.0.0.1',]  # django-debug-toolbar
+# INTERNAL_IPS = ['127.0.0.1',]  # django-debug-toolbar
 
 # Application definition
 INSTALLED_APPS = [
@@ -63,7 +63,7 @@ INSTALLED_APPS = [
 
     'mdeditor',                     # 第三方富文本编辑器
 
-    'debug_toolbar',                # django-debug-toolbar
+    # 'debug_toolbar',                # django-debug-toolbar
     'mptt',                         # 使Django项目能在数据库中存储层次结构(树形数据)的技术, 它可以让相关操作更加高效. 主要实现了修改过的前序遍历算法
 
     # xadmin 模块
@@ -94,7 +94,7 @@ MIDDLEWARE = [
     # 'django.middleware.common.CommonMiddleware',
     # 'django.middleware.cache.FetchFromCacheMiddleware'
 
-    'debug_toolbar.middleware.DebugToolbarMiddleware',  # django-debug-toolbar
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',  # django-debug-toolbar
 
     'app_common.middleware.CommonMiddleware',
 

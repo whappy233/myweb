@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- https://calendar.perfplanet.com/2020/html-and-css-techniques-to-reduce-your-javascript/ -->
+    <!-- https://www.diglog.com/ -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .diaporama {
+            width: 300px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scroll-snap-type: x mandatory;
+            display: flex;
+        }
+
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+
+        .frame {
+            scroll-snap-align: start;
+        }
+
+        /* Extra code for the look of the demo */
+        .demo-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .demo-thumbnails {
+            display: flex;
+            margin: 1rem 0;
+        }
+
+        .demo-thumbnail {
+            margin: 0 4px;
+            border: 2px solid #BFDBFE;
+            display: flex;
+        }
+
+        .demo-thumbnail:hover,
+        .demo-thumbnail:focus,
+        .demo-thumbnail.displayed {
+            border-color: #3B82F6;
+            outline: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-center">
+        <div class="diaporama smooth-scroll">
+            <img src="https://placekitten.com/300/300?image=1" width="300" height="300" alt="" class="frame" data-frame
+                id="image-1">
+            <img src="https://placekitten.com/300/300?image=2" width="300" height="300" alt="" class="frame" data-frame
+                id="image-2">
+            <img src="https://placekitten.com/300/300?image=3" width="300" height="300" alt="" class="frame" data-frame
+                id="image-3">
+            <img src="https://placekitten.com/300/300?image=4" width="300" height="300" alt="" class="frame" data-frame
+                id="image-4">
+            <img src="https://placekitten.com/300/300?image=5" width="300" height="300" alt="" class="frame" data-frame
+                id="image-5">
+        </div>
+        <div class="demo-thumbnails">
+            <a href="#image-1" class="demo-thumbnail">
+                <img src="https://placekitten.com/50/50?image=1" width="50" height="50" alt="">
+            </a>
+            <a href="#image-2" class="demo-thumbnail">
+                <img src="https://placekitten.com/50/50?image=2" width="50" height="50" alt="">
+            </a>
+            <a href="#image-3" class="demo-thumbnail">
+                <img src="https://placekitten.com/50/50?image=3" width="50" height="50" alt="">
+            </a>
+            <a href="#image-4" class="demo-thumbnail">
+                <img src="https://placekitten.com/50/50?image=4" width="50" height="50" alt="">
+            </a>
+            <a href="#image-5" class="demo-thumbnail">
+                <img src="https://placekitten.com/50/50?image=5" width="50" height="50" alt="">
+            </a>
+        </div>
+
+        <label><input type="checkbox" data-enable-js> 增强版本，具有触摸JavaScript</label>
+
+
+        <script>
+            const frameObserver = new IntersectionObserver(
+                highlightThumbnailOfDisplayedFrame,
+                {
+                    threshold: 0.5
+                }
+            );
+
+            function observeDisplayedFrame() {
+                const frames = document.querySelectorAll("[data-frame]");
+                for (const frame of frames) {
+                    frameObserver.observe(frame);
+                }
+            }
+
+            function highlightThumbnailOfDisplayedFrame(entries) {
+                for (const entry of entries) {
+                    const thumbnail = document.querySelector(
+                        '[href="#' + entry.target.id + '"]'
+                    );
+                    const isDiplayed =
+                        entry.isIntersecting && entry.intersectionRatio > 0.5;
+                    thumbnail.classList.toggle("displayed", isDiplayed);
+                }
+            }
+
+            /* Extra code to simulate the activation/deactivation of JavaScript */
+            const improvedCheckbox = document.querySelector("[data-enable-js]");
+
+            function disregardDisplayedFrame() {
+                frameObserver.disconnect();
+                const thumbnails = document.querySelectorAll(".displayed");
+                for (const thumbnail of thumbnails) {
+                    thumbnail.classList.remove("displayed");
+                }
+            }
+
+            function toggleDiaporamaImprovement() {
+                if (improvedCheckbox.checked) {
+                    observeDisplayedFrame();
+                } else {
+                    disregardDisplayedFrame();
+                }
+            }
+
+            improvedCheckbox.addEventListener("click", toggleDiaporamaImprovement);
+        </script>
+
+
+
+</body>
+
+</html>

@@ -7,7 +7,7 @@ from .models import Diary
 
 class DiaryList(ListView):
     model = Diary
-    paginate_by = 6
+    paginate_by = 60
     template_name = 'tp/日记.html'
     context_object_name = 'diaries'
     # allow_empty = True

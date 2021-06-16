@@ -197,7 +197,7 @@ def crop_image(old_photo, file, data, uid):
         old_photo:    user_profile.photo
         file:         request.FILES['file']
         data:         request.FILES['photo_file']
-        uid:          user.id
+        uid:          user.profile.uuid
     '''
 
     # 获取Ajax发送的裁剪参数data，先用json解析。

@@ -11,6 +11,7 @@ urlpatterns = [
     path('', views.GalleryListView.as_view(), name='gallery_list'),   # 使用类视图
     path('get_random_background/<int:x>x<int:y>/', views.get_random_background, name='get_random_background'),
     path('detail_ajax/', views.GalleryDetail.as_view(), name='detail_ajax'),
-
     path('gallery_detail/', views.GalleryDetail.as_view(), name='gallery_detail'),
+
+    path('photo/<int:width>/<int:height>/', views.random_photo, name='photo'),
 ]
