@@ -1,7 +1,5 @@
-import base64
-import io
-from os import readlink
 
+import io
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.db import connections
@@ -70,17 +68,19 @@ class GalleryDetail(ListView):
 
 def random_photo(request, width, height):
     photo = Photo.objects.get_random_photo()
-    photo = Image.open(photo.image.path)
+    if photo:
+        photo = Image.open(photo.image.path)
 
-    x = int(width)
-    y = int(height)
-    size = (x ,y)
+        x = int(width)
+        y = int(height)
+        size = (x ,y)
 
-    crop_im = photo.resize(size, Image.ANTIALIAS)
-    img_buffer = io.BytesIO()
-    crop_im.save(img_buffer, format='png')
-    byte_data = img_buffer.getvalue()
-    return HttpResponse(byte_data)
+        crop_im = photo.resize(size, Image.ANTIALIAS)
+        img_buffer = io.BytesIO()
+        crop_im.save(img_buffer, format='png')
+        byte_data = img_buffer.getvalue()
+        return HttpResponse(byte_data)
+    return HttpResponse('')
 
 
 

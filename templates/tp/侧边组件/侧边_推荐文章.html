@@ -1,9 +1,8 @@
 {% load static %}
 
 
+{# 最受欢迎文章 #}
 
-
-<!-- 最受欢迎文章 -->
 {% spaceless %}
 <div class="widget">
     <div class="section-heading heading-dark text_uppercase">
@@ -12,7 +11,7 @@
     <div class="widget-latest">
         <ul class="block-list">
             {% for article in articles %}
-            <li class="single-item ease-out">
+            <li class="single-item">
                 <div class="item-img">
                     <a href="{{ article.get_absolute_url }}">
                         <img data-src="https://picsum.photos/id/10{{ forloop.counter|add:50 }}/100/80">

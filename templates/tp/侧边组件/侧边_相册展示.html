@@ -1,5 +1,7 @@
 
-<!-- 相册展示 -->
+{# 相册展示 #}
+
+
 <div class="widget">
     <div class="section-heading heading-dark">
         <h3 class="item-heading">Photos</h3>
@@ -9,7 +11,7 @@
             {% for i in "x"|ljust:"9" %}
             <li>
                 <div class="item-box">
-                    <img data-src="{% url 'app_gallery:photo' 200 200 %}?{{ forloop.counter0 }}" class="img-fluid">
+                    <img data-src="{% url 'app_gallery:photo' 200 200 %}?{{ forloop.counter0 }}" width="200" height="200" class="img-fluid">
                     <a href="{% url 'app_gallery:gallery_list' %}" class="item-icon"><i class="fab fa-instagram"></i></a>
                 </div>
             </li>

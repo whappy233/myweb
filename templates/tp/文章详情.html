@@ -10,9 +10,9 @@
 {% block title %}{{ article.title }}{% endblock title %}
 
 {% block css_extra %}
-<!-- 代码高亮 -->
+{# 代码高亮 #}
 <link rel="stylesheet" type="text/css" href="{% static 'app_blog/css/pre_codehilite.css' %}">
-<!-- markdown -->
+{# markdown #}
 <link rel="stylesheet" href="{% static 'mdeditor/css/editormd.css' %}"/>
 <style>
     .lightense-wrap{
@@ -25,13 +25,13 @@
 {% block container %}
 <section class="single-blog-wrap-layout1">
 
-    <!-- 顶部大图 -->
+    {# 顶部大图 #}
     <div class="single-blog-banner-layout1">
-        <!-- Img -->
+        {# Img #}
         <div class="banner-img">
             <img data-src="https://picsum.photos/id/1010/1920/700" alt="{{ article.title}}">
         </div>
-        <!-- Title Meta -->
+        {# Title Meta #}
         <div class="banner-content">
             <div class="container">
                 <ul class="entry-meta meta-color-light2">
@@ -48,7 +48,7 @@
                 <h2 class="item-title">{{ article.title }}</h2>
                 <ul class="item-social">
                     <li><a href="#" class="load-more"><i class="fas fa-plus"></i>MORE</a></li>
-                    <!-- superuser -->
+                    {# superuser #}
                     {% if request.user == article.author or request.user.is_superuser %}
                     <li>
                         <a class="load-more" href="{{ article.get_admin_url }}">
@@ -89,20 +89,20 @@
         </div>
     </div>
 
-    <!-- 文章容器 -->
+    {# 文章容器 #}
     <div class="container">
         <div class="row gutters-50">
 
-            <!-- 文章 -->
+            {# 文章 #}
             <div class="col-lg-8">
                 <div class="single-blog-box-layout1">
 
-                    <!-- 文章主体 -->
+                    {# 文章主体 #}
                     <div class="markdown-body">
                         {{article.body|safe}}
                     </div>
 
-                    <!-- 面包屑 点赞 -->
+                    {# 面包屑 点赞 #}
                     <div class="blog-entry-meta">
                         <ul>
                             <li>
@@ -117,31 +117,31 @@
                         </ul>
                     </div>
 
-                    <!-- 相似推荐 -->
+                    {# 相似推荐 #}
                     {% similar_articles article 3 %}
 
                     {% if object.comment_status and OPEN_SITE_COMMENT %}
-                    <!-- 评论系统 -->
+                    {# 评论系统 #}
                     {% include "app_comments/comment_system.html" with object=article %}
                     {% endif %}
 
                 </div>
             </div>
 
-            <!-- 侧边栏 -->
+            {# 侧边栏 #}
             <div class="col-lg-4 sidebar-widget-area sidebar-break-md">
 
-                <!-- 关于我 -->
+                {# 关于我 #}
                 {% include 'tp/侧边组件/侧边_关于我.html' with page_obj=page_obj %}
 
                 <div class="widget-sticky-container">
-                    <!-- 文章目录 -->
+                    {# 文章目录 #}
                     {% include 'tp/侧边组件/侧边_文章目录.html' with article=article %}
 
-                    <!-- 推荐文章 -->
+                    {# 推荐文章 #}
                     {% recommendations_articles 5 '侧边_推荐文章' %}
 
-                    <!-- 广告 -->
+                    {# 广告 #}
                     {% include 'tp/侧边组件/侧边_广告.html' with page_obj=page_obj %}
                 </div>
 

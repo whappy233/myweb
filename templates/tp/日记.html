@@ -127,7 +127,7 @@
                             diary_list.forEach(d => {
                                 [_, date, time] = d.created.match(/(\d+-\d+-\d+)T(\d+:\d+)/);
                                 let diary = `
-                                <li style="opacity:0"><time class="cbp_tmtime" datetime="${d.created}"><span>${date}</span><span>${time.replace(/:\d+\.\d+/, '')}</span></time>
+                                <li style="opacity:0"><time class="cbp_tmtime sticky" datetime="${d.created}"><span>${date}</span><span>${time.replace(/:\d+\.\d+/, '')}</span></time>
                                 <div class="cbp_tmicon" data-info='😎' data-mood='${d.mood}'></div>
                                 <div class="cbp_tmlabel"><p>${d.body}</p>${d.img ? '<img data-src="' + d.img + '" alt="配图">' : ''}</div></li>
                                 `;

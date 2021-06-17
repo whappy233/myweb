@@ -1,16 +1,15 @@
 {% load static %}
-
 {% load user_tags %}
 
+{# 关于我 #}
 
-<!-- 关于我 -->
-{% get_user username='Carlos' as me %}
 
 {% spaceless %}
+{% get_user username='Carlos' as me %}
 <div class="widget">
     <div class="widget-about">
         <h3 class="about-author-name">Hello, I'm Carlos
-            <!-- 头像 -->
+            {# 头像 #}
             {% if me.profile.photo %}
             <img src="{{ me.profile.photo.url }}" class="about-author-img rounded-circle" alt="{{me.username}}">
             {% else %}

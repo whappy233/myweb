@@ -23,8 +23,8 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # 不要在生产环境打开 debug 开关
-DEBUG = os.environ.get('USER_NAME') == 'Carlos'
-# DEBUG = False
+# DEBUG = os.environ.get('USER_NAME') == 'Carlos'
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 

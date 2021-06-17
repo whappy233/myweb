@@ -69,8 +69,8 @@ a:hover, a:focus { color: #c2292e; }
     }
 }
 .btn--export:hover>svg { animation: headShake 1s 100; opacity: 1; }
-.btn--toggle.btn--active { z-index: 100; color: #fff; }
-.btn--toggle.btn--active:hover { color: #1f1f21; }
+.btn--toggle.btn--active { z-index: 100; font-size: 16px; color: red; border-radius:10px;}
+.btn--toggle.btn--active:hover { color:#fff; background-color:#ff000099; box-shadow: 0 0px 31px 12px rgb(255 0 0); }
 .btn--toggle .icon:nth-child(2), .btn--toggle.btn--active .icon:first-child { display: none; }
 .btn--toggle.btn--active .icon:nth-child(2) { display: block; }
 /* two seats on each side for free space */

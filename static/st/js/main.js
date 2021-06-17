@@ -2,11 +2,90 @@
     "use strict";
 
 
+    // ------------------------------------------------------------------------------------------------------------------
+    // 主题切换 
+    // 响应系统主题切换
+    let listeners = {
+        dark: (mediaQueryList) => {
+            if (mediaQueryList.matches) {
+                $(".sticky-header").attr('data-theme', 'dark');
+            }
+        },
+        light: (mediaQueryList) => {
+            if (mediaQueryList.matches) {
+                $(".sticky-header").attr('data-theme', 'light');
+            }
+        }
+    };
+    try {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', listeners.dark);
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', listeners.light);
+    } catch (error) {
+        // Safari
+        window.matchMedia('(prefers-color-scheme: dark)').addListener(listeners.dark);
+        window.matchMedia('(prefers-color-scheme: light)').addListener(listeners.light);
+    }
+    // 手动切换主题
+    $('.sticky-header').on('click', '.dark_mode', function(){
+        let body = $(".sticky-header"),
+            theme = body.attr('data-theme'),
+            theme_n = theme=='light'?'dark':'light'
+        $(".sticky-header").attr('data-theme', theme_n);
+        window.localStorage.setItem("theme", theme_n);
+    });
+
+
+    // ------------------------------------------------------------------------------------------------------------------
+    // 页面加载动画 Page Preloader
+    $("#preloader").fadeOut(1000, function () {
+        $(this).remove();
+    });
+
+
+    // ------------------------------------------------------------------------------------------------------------------
+    // 背景动画
+    let $stars = $(".stars"),
+        stars = 500,     // 星星的密集程度，数字越大越多
+        r = 800;        // 星星的看起来的距离,值越大越远,可自行调制到自己满意的样子
+    for (var i = 0; i < stars; i++) {
+        var $star = $("<div/>").addClass("star");
+        $stars.append($star);
+    }
+    $(".star").each(function () {
+        var cur = $(this);
+        var s = 0.2 + (Math.random() * 1);
+        var curR = r + (Math.random() * 300);
+        cur.css({
+        transformOrigin: "0 0 " + curR + "px",
+        transform: " translate3d(0,0,-" + curR + "px) rotateY(" + (Math.random() * 360) + "deg) rotateX(" + (Math.random() * -50) + "deg) scale(" + s + "," + s + ")"
+        })
+    });
+
+
+    // ------------------------------------------------------------------------------------------------------------------
+    // 消息提示插件
+    toastr.options = {
+        timeOut: 3000,
+        progressBar: true,
+        showMethod: "slideDown",
+        hideMethod: "slideUp",
+        showDuration: 200,
+        hideDuration: 200
+        // toastr.success('Successfully completed');
+        // toastr.error('Something went wrong');
+        // toastr.info('This is an informational message');
+        // toastr.warning('You are currently not authorized');
+        // toastr.clear();
+    };
+
+
+    // ------------------------------------------------------------------------------------------------------------------
     // 平滑滚动到指定位置
-    function scrollTo(ele, speed, top) {
+    function scrollTo(ele, speed, top, callback=function(){return false;}) {
         // ele 目标元素
         // speed 滚动速度
         // top 距离顶部尺寸
+        // callback 回调函数
         let win = $("html, body");
         if (top) {
             top = ($(ele).offset().top - top);
@@ -17,7 +96,8 @@
         win.animate({
             // scrollTop:  win.scrollTop() - win.offset().top + top
             scrollTop: win.offset().top + top
-        }, speed == undefined ? 1000 : speed, function(){ 
+        }, speed == undefined ? 1000 : speed, function(){
+            callback();
             $('img').removeClass('img-light-low');
             setTimeout(() => {
                 $('img').removeClass('ease-out');
@@ -26,46 +106,9 @@
         return this;
     };
 
-    /*---------------------------------------
-    On Click data-scroll 跳转到指定位置
-    <span data-scroll="#wrapper"></span>
-    --------------------------------------- */
-    $('[data-scroll]').on('click', function () {
-        let aim = this.dataset.scroll;
-        scrollTo(aim, 500, 100);
-    });
 
-    /*-------------------------------------
-    Theia Side Bar
-    -------------------------------------*/
-    if (typeof ($.fn.theiaStickySidebar) !== "undefined") {
-        $('#fixed-bar-coloum').theiaStickySidebar({
-            'additionalMarginTop': 50,
-            'sidebarBehavior': 'stick-to-top'
-        });
-    }
-
-    // 消息提示插件
-    toastr.options = {
-        timeOut: 3000,
-        progressBar: true,
-        showMethod: "slideDown",
-        hideMethod: "slideUp",
-        showDuration: 200,
-        hideDuration: 200
-    };
-    // toastr.success('Successfully completed');
-    // toastr.error('Something went wrong');
-    // toastr.info('This is an informational message');
-    // toastr.warning('You are currently not authorized');
-    // toastr.clear();
-
-
-
-
-    /*-------------------------------------
-    图片懒加载
-    --------------------------------------*/
+    // ------------------------------------------------------------------------------------------------------------------
+    // 图片懒加载
     //用来判断bound.top<=clientHeight的函数，返回一个bool值
     function isIn(el) {
         var bound = el.getBoundingClientRect();
@@ -132,9 +175,16 @@
     window.addEventListener('error', ImgLoadError, true)
 
 
-    // -------------------------------------
-    // 对带有 data-href 属性的元素进行跳转
-    // -------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------
+    // 点击带有 data-scroll 属性元素跳转到指定位置 data-scroll="#wrapper"
+    $('[data-scroll]').on('click', function () {
+        let aim = this.dataset.scroll;
+        scrollTo(aim, 500, 100);
+    });
+
+
+    // ------------------------------------------------------------------------------------------------------------------
+    // 点击带有 data-href 属性的元素进行URL跳转
     $('#main').on('click', '[data-href]', function (e) {
         let target = e.target,
             currtarget = e.currentTarget;
@@ -149,10 +199,8 @@
     });
 
 
-
-    // -------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------
     // 对 data-event="show_hide" mousedown 显示密码
-    // -------------------------------------
     $('[data-event="show_hide"]').on('mousedown', function(e){
         var $this = $(this);
         e.stopPropagation();
@@ -166,9 +214,18 @@
     });
 
 
-    /*-------------------------------------
-    MeanMenu 响应式导航栏
-    --------------------------------------*/
+    // ------------------------------------------------------------------------------------------------------------------
+    // 对带有data-bg-image属性的标签设置给定的背景图片 data-bg-image='img/product/top-product1.jpg' 
+    $("[data-bg-image]").each(function () {
+        let img = $(this).data("bg-image");
+        $(this).css({
+            backgroundImage: "url(" + img + ")"
+        });
+    });
+
+
+    // ------------------------------------------------------------------------------------------------------------------
+    // MeanMenu 响应式导航栏
     // if ($.fn.meanmenu) {
     //     $('nav#dropdown').meanmenu({
     //         meanMenuClose: "✕",
@@ -182,9 +239,9 @@
     //     });
     // };
 
-    /*-------------------------------------
-    Offcanvas Menu activation code
-    -------------------------------------*/
+
+    // ------------------------------------------------------------------------------------------------------------------
+    // Offcanvas Menu activation code
     $('#wrapper').on('click', '.offcanvas-menu-btn', function (e) {
         e.preventDefault();
         var $this = $(this),
@@ -224,9 +281,9 @@
     });
 
 
-    // -------------------------------------
-    // 显示隐藏目录
-    // -------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------
+    // 目录相关
+    // 小尺寸屏幕显示或隐藏目录按钮
     $('.showdirectory').on('click', function(){
         let $this = $(this),
             $toc = $('.widget#Toc');
@@ -244,26 +301,32 @@
         }
     });
 
-    // -------------------------------------
-    // 跳转到目录位置
-    // -------------------------------------
-    $('.widget-toc .toc li').on('click', function (e) {
+    // 跳转到目录指定位置
+    $('.widget-toc .toc li').on('click', function (e, trigger) {
         let $this = $(this),
+            $widget_toc = $('.widget#Toc'),
             ul_child = $this.children('ul'),
             this_siblings = $this.siblings('li'),
             $a = $this.children('a').first(),
             aim = $a.attr('href');
-        // console.log(this_siblings.children('ul'));
+
         if (ul_child.length > 0) {
             this_siblings.children('ul').slideUp(300);
             ul_child.slideDown(300);
         };
         $('.widget-toc .toc a').removeClass('active');
         $a.addClass('active');
-        scrollTo(aim, 500, 70);
+        if (trigger==true){
+            $this.parent('ul').parent('li').siblings('li').children('ul').slideUp(300);
+            $this.parent('ul').slideDown(300);
+        }else{
+            $widget_toc[0].dataset.isscroll = true;
+            scrollTo(aim, 500, 70, function(){$widget_toc[0].dataset.isscroll = false});
+        };
         return false;
     });
 
+    // 鼠标是否位于目录组件上
     $(".widget#Toc").hover(
         function(e){
             // over
@@ -285,9 +348,64 @@
         }
     );
 
-    // -------------------------------------
-    // On Scroll 
-    // -------------------------------------
+    // 检查鼠标向上还是向下滚动
+    var wheelHandle = function (e) {
+        var e = e || window.event;
+        if (e.wheelDelta) {
+            if (e.wheelDelta > 0) { //当鼠标滚轮向上滚动时
+                document.querySelector('.widget#Toc').dataset.scrollup='true';
+            }
+            if (e.wheelDelta < 0) { //当鼠标滚轮向下滚动时
+                document.querySelector('.widget#Toc').dataset.scrollup='false';
+            }
+        } else if (e.detail) {
+            if (e.detail < 0) { //当鼠标滚轮向上滚动时
+                document.querySelector('.widget#Toc').dataset.scrollup='true';
+            }
+            if (e.detail > 0) { //当鼠标滚轮向下滚动时
+                document.querySelector('.widget#Toc').dataset.scrollup='false';
+            }
+        }
+    };
+    if(document.querySelector('.widget#Toc')){
+        window.addEventListener("DOMMouseScroll", wheelHandle) // 火狐
+        window.addEventListener("wheel", wheelHandle);  // Google
+    };
+
+    // 获取 Toc href 队列
+    let TocArray = $.map($('.widget#Toc a[href]'), function(e){return $(e).attr('href').slice(1)});
+
+    // 重叠观察者. 在平屏幕滚动时更新目录当前显示高亮
+    let options = {
+        root: null,
+        rootMargin: '0% 0% -30% 0%',
+        threshold: 1.0,
+    };
+    let callback = function(entries, observer) { 
+        if (document.querySelector('.widget#Toc').dataset.isscroll=='false'){
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting){
+                    let target_id = entry.target.id;
+                    $(`a[href="#${target_id}"]`).parent('li').trigger("click", true);
+                }else if(document.querySelector('.widget#Toc').dataset.scrollup=='true'){
+                    // 向上滚动
+                    let target_id = TocArray[TocArray.indexOf(entry.target.id)-1];
+                    if (target_id){
+                        $(`a[href="#${target_id}"]`).parent('li').trigger("click", true);
+                    };
+                };
+            });
+        }
+    };
+    let observer = new IntersectionObserver(callback, options);  // 创建重叠观察者
+    document.querySelectorAll('.markdown-body>[id]').forEach(ele=>{
+        observer.observe(ele);  // 给定观察者观察的目标对象
+    });
+
+
+    // ------------------------------------------------------------------------------------------------------------------
+    // 滚动事件
     $(window).on('scroll', function (e) {
         let $toc = $('.widget#Toc');
         // Back Top Button
@@ -317,7 +435,8 @@
         if ($('body').hasClass('sticky-header')) {
             var menu = $("#header-menu"),
                 mobile_menu = $('.mean-bar');
-            if ($(window).scrollTop() > 100) {
+
+            if ($(window).scrollTop() > 70) {
                 menu.addClass('rt-sticky');
                 mobile_menu.addClass('rt-sticky');
             } else {
@@ -326,34 +445,6 @@
             }
         }
     });
-
-
-    // https://imweb.io/topic/5c7bc84ebaf81d7952094978
-    const options = {
-        // 表示重叠面积占被观察者的比例，从 0 - 1 取值，
-        // 1 表示完全被包含
-        threshold: 1.0, 
-    };
-    const callback = function(entries, observer) { 
-        entries.forEach(entry => {
-            entry.time;               // 触发的时间
-            entry.rootBounds;         // 根元素的位置矩形，这种情况下为视窗位置
-            entry.boundingClientRect; // 被观察者的位置举行
-            entry.intersectionRect;   // 重叠区域的位置矩形
-            entry.intersectionRatio;  // 重叠区域占被观察者面积的比例（被观察者不是矩形时也按照矩形计算）
-            entry.target;             // 被观察者
-        });
-        console.log(entries);
-    };
-
-    const observer = new IntersectionObserver(callback, options);
-
-    const target = document.querySelectorAll('.markdown-body>h2');
-    target.forEach(ele=>{
-        observer.observe(ele);
-    })
-
-
 
 
     /*---------------------------------------
@@ -413,12 +504,9 @@
         return false;
     });
 
-    // appendTo
 
-
-    /*-------------------------------------
-    点击显示搜索 Jquery Serch Box
-    -------------------------------------*/
+    // ------------------------------------------------------------------------------------------------------------------
+    // 点击显示搜索 Jquery Serch Box
     $('.sticky-header').on('click', 'li[data=header-search]', function (event) {
         event.preventDefault();
         var target = $("#header-search");
@@ -440,88 +528,8 @@
     });
 
 
-    /*-------------------------------------
-    主题切换 Dark/Light mode
-    -------------------------------------*/
-    // 响应系统主题切换
-    let listeners = {
-        dark: (mediaQueryList) => {
-            if (mediaQueryList.matches) {
-                $(".sticky-header").attr('data-theme', 'dark');
-            }
-        },
-        light: (mediaQueryList) => {
-            if (mediaQueryList.matches) {
-                $(".sticky-header").attr('data-theme', 'light');
-            }
-        }
-    };
-
-    try {
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', listeners.dark);
-        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', listeners.light);
-    } catch (error) {
-        // Safari
-        window.matchMedia('(prefers-color-scheme: dark)').addListener(listeners.dark);
-        window.matchMedia('(prefers-color-scheme: light)').addListener(listeners.light);
-    }
-
-
-    // 手动切换
-    $('.sticky-header').on('click', '.dark_mode', function(){
-        let body = $(".sticky-header"),
-            theme = body.attr('data-theme'),
-            theme_n = theme=='light'?'dark':'light'
-        $(".sticky-header").attr('data-theme', theme_n);
-        window.localStorage.setItem("theme", theme_n);
-    });
-
-    /*-------------------------------------
-    对 data-bg-image='img/product/top-product1.jpg' 带有
-    该属性的标签设置对应的背景图片
-    -------------------------------------*/
-    // data-bg-image='img/product/top-product1.jpg'
-    $("[data-bg-image]").each(function () {
-        var img = $(this).data("bg-image");
-        $(this).css({
-            backgroundImage: "url(" + img + ")"
-        });
-    });
-
-    // -------------------------------------
-    // 页面加载动画 Page Preloader
-    // -------------------------------------
-    $("#preloader").fadeOut(1000, function () {
-        $(this).remove();
-    });
-    
-    
-    
-    // -------------------------------------
-    // 背景动画
-    // -------------------------------------
-    var $stars = $(".stars"),
-        stars = 500,     // 星星的密集程度，数字越大越多
-        r = 800;        // 星星的看起来的距离,值越大越远,可自行调制到自己满意的样子
-    for (var i = 0; i < stars; i++) {
-        var $star = $("<div/>").addClass("star");
-        $stars.append($star);
-    }
-    $(".star").each(function () {
-        var cur = $(this);
-        var s = 0.2 + (Math.random() * 1);
-        var curR = r + (Math.random() * 300);
-        cur.css({
-        transformOrigin: "0 0 " + curR + "px",
-        transform: " translate3d(0,0,-" + curR + "px) rotateY(" + (Math.random() * 360) + "deg) rotateX(" + (Math.random() * -50) + "deg) scale(" + s + "," + s + ")"
-        })
-    });
-
-
-
-    // -------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------
     // Masonry 画廊
-    // -------------------------------------
     var galleryIsoContainer = $("#no-equal-gallery");
     if (galleryIsoContainer.length) {
         var blogGallerIso = galleryIsoContainer.imagesLoaded(function () {
@@ -534,128 +542,125 @@
         });
     }
 
-    $(function () {
 
-        /*-------------------------------------
-        Video Popup
-        视频弹出
-        -------------------------------------*/
-        var yPopup = $(".popup-youtube");
-        if (yPopup.length) {
-            yPopup.magnificPopup({
-                disableOn: 700,
-                type: 'iframe',
-                mainClass: 'mfp-fade',
-                removalDelay: 160,
-                preloader: false,
-                fixedContentPos: false
-            });
-        }
+    // ------------------------------------------------------------------------------------------------------------------
+    // Video Popup
+    // 视频弹出
+    var yPopup = $(".popup-youtube");
+    if (yPopup.length) {
+        yPopup.magnificPopup({
+            disableOn: 700,
+            type: 'iframe',
+            mainClass: 'mfp-fade',
+            removalDelay: 160,
+            preloader: false,
+            fixedContentPos: false
+        });
+    }
 
-        /*-------------------------------------
-        Carousel slider initiation
-        轮播图
-        -------------------------------------*/
-        if ($.fn.owlCarousel) {
-            $('.rc-carousel').each(function () {
-                var carousel = $(this),
-                    loop = carousel.data('loop'),
-                    items = carousel.data('items'),
-                    margin = carousel.data('margin'),
-                    stagePadding = carousel.data('stage-padding'),
-                    autoplay = carousel.data('autoplay'),
-                    autoplayTimeout = carousel.data('autoplay-timeout'),
-                    smartSpeed = carousel.data('smart-speed'),
-                    dots = carousel.data('dots'),
-                    nav = carousel.data('nav'),
-                    navSpeed = carousel.data('nav-speed'),
-                    rXsmall = carousel.data('r-x-small'),
-                    rXsmallNav = carousel.data('r-x-small-nav'),
-                    rXsmallDots = carousel.data('r-x-small-dots'),
-                    rXmedium = carousel.data('r-x-medium'),
-                    rXmediumNav = carousel.data('r-x-medium-nav'),
-                    rXmediumDots = carousel.data('r-x-medium-dots'),
-                    rSmall = carousel.data('r-small'),
-                    rSmallNav = carousel.data('r-small-nav'),
-                    rSmallDots = carousel.data('r-small-dots'),
-                    rMedium = carousel.data('r-medium'),
-                    rMediumNav = carousel.data('r-medium-nav'),
-                    rMediumDots = carousel.data('r-medium-dots'),
-                    rLarge = carousel.data('r-large'),
-                    rLargeNav = carousel.data('r-large-nav'),
-                    rLargeDots = carousel.data('r-large-dots'),
-                    rExtraLarge = carousel.data('r-extra-large'),
-                    rExtraLargeNav = carousel.data('r-extra-large-nav'),
-                    rExtraLargeDots = carousel.data('r-extra-large-dots'),
-                    center = carousel.data('center'),
-                    custom_nav = carousel.data('custom-nav') || '';
-                carousel.addClass('owl-carousel');
-                var owl = carousel.owlCarousel({
-                    loop: (loop ? true : false),
-                    items: (items ? items : 4),
-                    lazyLoad: true,
-                    margin: (margin ? margin : 0),
-                    autoplay: (autoplay ? true : false),
-                    autoplayTimeout: (autoplayTimeout ? autoplayTimeout : 1000),
-                    smartSpeed: (smartSpeed ? smartSpeed : 250),
-                    dots: (dots ? true : false),
-                    nav: (nav ? true : false),
-                    navText: ['<i class="fa fa-angle-left" aria-hidden="true"></i>', '<i class="fa fa-angle-right" aria-hidden="true"></i>'],
-                    navSpeed: (navSpeed ? true : false),
-                    center: (center ? true : false),
-                    responsiveClass: true,
-                    responsive: {
-                        0: {
-                            items: (rXsmall ? rXsmall : 1),
-                            nav: (rXsmallNav ? true : false),
-                            dots: (rXsmallDots ? true : false)
-                        },
-                        576: {
-                            items: (rXmedium ? rXmedium : 2),
-                            nav: (rXmediumNav ? true : false),
-                            dots: (rXmediumDots ? true : false)
-                        },
-                        768: {
-                            items: (rSmall ? rSmall : 3),
-                            nav: (rSmallNav ? true : false),
-                            dots: (rSmallDots ? true : false)
-                        },
-                        992: {
-                            items: (rMedium ? rMedium : 4),
-                            nav: (rMediumNav ? true : false),
-                            dots: (rMediumDots ? true : false)
-                        },
-                        1200: {
-                            items: (rLarge ? rLarge : 5),
-                            nav: (rLargeNav ? true : false),
-                            dots: (rLargeDots ? true : false)
-                        },
-                        1400: {
-                            items: (rExtraLarge ? rExtraLarge : 6),
-                            nav: (rExtraLargeNav ? true : false),
-                            dots: (rExtraLargeDots ? true : false)
-                        }
+
+    // ------------------------------------------------------------------------------------------------------------------
+    // 轮播图
+    if ($.fn.owlCarousel) {
+        $('.rc-carousel').each(function () {
+            var carousel = $(this),
+                loop = carousel.data('loop'),
+                items = carousel.data('items'),
+                margin = carousel.data('margin'),
+                stagePadding = carousel.data('stage-padding'),
+                autoplay = carousel.data('autoplay'),
+                autoplayTimeout = carousel.data('autoplay-timeout'),
+                smartSpeed = carousel.data('smart-speed'),
+                dots = carousel.data('dots'),
+                nav = carousel.data('nav'),
+                navSpeed = carousel.data('nav-speed'),
+                rXsmall = carousel.data('r-x-small'),
+                rXsmallNav = carousel.data('r-x-small-nav'),
+                rXsmallDots = carousel.data('r-x-small-dots'),
+                rXmedium = carousel.data('r-x-medium'),
+                rXmediumNav = carousel.data('r-x-medium-nav'),
+                rXmediumDots = carousel.data('r-x-medium-dots'),
+                rSmall = carousel.data('r-small'),
+                rSmallNav = carousel.data('r-small-nav'),
+                rSmallDots = carousel.data('r-small-dots'),
+                rMedium = carousel.data('r-medium'),
+                rMediumNav = carousel.data('r-medium-nav'),
+                rMediumDots = carousel.data('r-medium-dots'),
+                rLarge = carousel.data('r-large'),
+                rLargeNav = carousel.data('r-large-nav'),
+                rLargeDots = carousel.data('r-large-dots'),
+                rExtraLarge = carousel.data('r-extra-large'),
+                rExtraLargeNav = carousel.data('r-extra-large-nav'),
+                rExtraLargeDots = carousel.data('r-extra-large-dots'),
+                center = carousel.data('center'),
+                custom_nav = carousel.data('custom-nav') || '';
+            carousel.addClass('owl-carousel');
+            var owl = carousel.owlCarousel({
+                loop: (loop ? true : false),
+                items: (items ? items : 4),
+                lazyLoad: true,
+                margin: (margin ? margin : 0),
+                autoplay: (autoplay ? true : false),
+                autoplayTimeout: (autoplayTimeout ? autoplayTimeout : 1000),
+                smartSpeed: (smartSpeed ? smartSpeed : 250),
+                dots: (dots ? true : false),
+                nav: (nav ? true : false),
+                navText: ['<i class="fa fa-angle-left" aria-hidden="true"></i>', '<i class="fa fa-angle-right" aria-hidden="true"></i>'],
+                navSpeed: (navSpeed ? true : false),
+                center: (center ? true : false),
+                responsiveClass: true,
+                responsive: {
+                    0: {
+                        items: (rXsmall ? rXsmall : 1),
+                        nav: (rXsmallNav ? true : false),
+                        dots: (rXsmallDots ? true : false)
+                    },
+                    576: {
+                        items: (rXmedium ? rXmedium : 2),
+                        nav: (rXmediumNav ? true : false),
+                        dots: (rXmediumDots ? true : false)
+                    },
+                    768: {
+                        items: (rSmall ? rSmall : 3),
+                        nav: (rSmallNav ? true : false),
+                        dots: (rSmallDots ? true : false)
+                    },
+                    992: {
+                        items: (rMedium ? rMedium : 4),
+                        nav: (rMediumNav ? true : false),
+                        dots: (rMediumDots ? true : false)
+                    },
+                    1200: {
+                        items: (rLarge ? rLarge : 5),
+                        nav: (rLargeNav ? true : false),
+                        dots: (rLargeDots ? true : false)
+                    },
+                    1400: {
+                        items: (rExtraLarge ? rExtraLarge : 6),
+                        nav: (rExtraLargeNav ? true : false),
+                        dots: (rExtraLargeDots ? true : false)
                     }
-                });
-                if (custom_nav) {
-                    var nav = $(custom_nav),
-                        nav_next = $('.rt-next', nav),
-                        nav_prev = $('.rt-prev', nav);
-
-                    nav_next.on('click', function (e) {
-                        e.preventDefault();
-                        owl.trigger('next.owl.carousel');
-                        return false;
-                    });
-
-                    nav_prev.on('click', function (e) {
-                        e.preventDefault();
-                        owl.trigger('prev.owl.carousel');
-                        return false;
-                    });
                 }
             });
-        }
-    });
+            if (custom_nav) {
+                var nav = $(custom_nav),
+                    nav_next = $('.rt-next', nav),
+                    nav_prev = $('.rt-prev', nav);
+
+                nav_next.on('click', function (e) {
+                    e.preventDefault();
+                    owl.trigger('next.owl.carousel');
+                    return false;
+                });
+
+                nav_prev.on('click', function (e) {
+                    e.preventDefault();
+                    owl.trigger('prev.owl.carousel');
+                    return false;
+                });
+            }
+        });
+    }
+
 
 })(jQuery);
