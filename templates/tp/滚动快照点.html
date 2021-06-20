@@ -53,19 +53,14 @@
     </style>
 </head>
 
-<body>
+<body style="background-color: darkgray;">
     <div class="demo-center">
         <div class="diaporama smooth-scroll">
-            <img src="https://placekitten.com/300/300?image=1" width="300" height="300" alt="" class="frame" data-frame
-                id="image-1">
-            <img src="https://placekitten.com/300/300?image=2" width="300" height="300" alt="" class="frame" data-frame
-                id="image-2">
-            <img src="https://placekitten.com/300/300?image=3" width="300" height="300" alt="" class="frame" data-frame
-                id="image-3">
-            <img src="https://placekitten.com/300/300?image=4" width="300" height="300" alt="" class="frame" data-frame
-                id="image-4">
-            <img src="https://placekitten.com/300/300?image=5" width="300" height="300" alt="" class="frame" data-frame
-                id="image-5">
+            <img src="https://placekitten.com/300/300?image=1" width="300" height="300" alt="" class="frame" data-frame id="image-1">
+            <img src="https://placekitten.com/300/300?image=2" width="300" height="300" alt="" class="frame" data-frame id="image-2">
+            <img src="https://placekitten.com/300/300?image=3" width="300" height="300" alt="" class="frame" data-frame id="image-3">
+            <img src="https://placekitten.com/300/300?image=4" width="300" height="300" alt="" class="frame" data-frame id="image-4">
+            <img src="https://placekitten.com/300/300?image=5" width="300" height="300" alt="" class="frame" data-frame id="image-5">
         </div>
         <div class="demo-thumbnails">
             <a href="#image-1" class="demo-thumbnail">
@@ -84,11 +79,10 @@
                 <img src="https://placekitten.com/50/50?image=5" width="50" height="50" alt="">
             </a>
         </div>
+    </div>
 
-        <label><input type="checkbox" data-enable-js> 增强版本，具有触摸JavaScript</label>
-
-
-        <script>
+    <script>
+        window.onload=function(){
             const frameObserver = new IntersectionObserver(
                 highlightThumbnailOfDisplayedFrame,
                 {
@@ -96,46 +90,21 @@
                 }
             );
 
-            function observeDisplayedFrame() {
-                const frames = document.querySelectorAll("[data-frame]");
-                for (const frame of frames) {
-                    frameObserver.observe(frame);
-                }
-            }
-
             function highlightThumbnailOfDisplayedFrame(entries) {
                 for (const entry of entries) {
-                    const thumbnail = document.querySelector(
-                        '[href="#' + entry.target.id + '"]'
-                    );
-                    const isDiplayed =
-                        entry.isIntersecting && entry.intersectionRatio > 0.5;
+                    const thumbnail = document.querySelector('[href="#' + entry.target.id + '"]');
+                    console.log(thumbnail);
+                    const isDiplayed = entry.isIntersecting && entry.intersectionRatio > 0.5;
                     thumbnail.classList.toggle("displayed", isDiplayed);
                 }
-            }
+            };
 
-            /* Extra code to simulate the activation/deactivation of JavaScript */
-            const improvedCheckbox = document.querySelector("[data-enable-js]");
-
-            function disregardDisplayedFrame() {
-                frameObserver.disconnect();
-                const thumbnails = document.querySelectorAll(".displayed");
-                for (const thumbnail of thumbnails) {
-                    thumbnail.classList.remove("displayed");
-                }
-            }
-
-            function toggleDiaporamaImprovement() {
-                if (improvedCheckbox.checked) {
-                    observeDisplayedFrame();
-                } else {
-                    disregardDisplayedFrame();
-                }
-            }
-
-            improvedCheckbox.addEventListener("click", toggleDiaporamaImprovement);
-        </script>
-
+            const frames = document.querySelectorAll("[data-frame]");
+            for (const frame of frames) {
+                frameObserver.observe(frame);
+            };
+        }
+    </script>
 
 
 </body>

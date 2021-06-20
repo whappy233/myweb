@@ -60,7 +60,9 @@
     </div>
 
     {# 背景动画 #}
-    <div class="stars"></div>
+    <div class="stars-wrap">
+        <div  class="stars"></div>
+    </div>
 
     <div id="wrapper" class="wrapper">
 
@@ -337,7 +339,7 @@
                                     {% else %}
                                     {# 登陆 #}
                                     <li name="login-form" data-toggle="modal" data-target="#login_register_Modal">
-                                        <i class="far fa-user-circle" style="pointer-events: none;"></i>
+                                        <i class="far fa-user-circle"></i>
                                     </li>
                                     {% endif %}
                                 </ul>
@@ -382,8 +384,8 @@
         </footer>
 
         {# 搜索界面 #}
-        <div id="header-search" class="header-search">
-            <button type="button" class="close">×</button>
+        <div id="header-search" class="curtain">
+            <button type="button" class="close" title="关闭"><i style="pointer-events: none;" class="fas fa-times-circle"></i></button>
             <div class="header-search-form">
                 <form action="" method="get">
                     <input type="search" name="q" placeholder="在此输入........" value="{{keyword|default_if_none:''}}" />

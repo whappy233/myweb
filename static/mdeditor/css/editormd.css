@@ -3599,6 +3599,7 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   border-radius: 10px;
+  cursor: zoom-in;
 }
 
 .markdown-body code {

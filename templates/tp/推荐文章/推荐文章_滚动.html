@@ -60,19 +60,19 @@
                             <li><i class="fas fa-tag"></i>
                                 {% with article.tags.all as tags%}
                                 {% for tag in tags %}
-                                <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                                <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}" title="{{ tag.name }}">{{ tag.name }}</a>
                                 {% endfor %}
                                 {% endwith %}
                             </li>
                             <li><i class="fas fa-calendar-alt"></i>{% format_time article.pub_time "%Y-%m-%d %H:%M" %}</li>
                         </ul>
                         <h2 class="item-title">
-                            <a href="{{ article.get_absolute_url }}">
+                            <a href="{{ article.get_absolute_url }}" title="{{ article.title }}">
                                 {{ article.title }}
                             </a>
                         </h2>
                     </div>
-                    <a href="{{ article.get_absolute_url }}" class="mask ease-in-out"></a>
+                    <a href="{{ article.get_absolute_url }}" class="mask ease-in-out" title="{{ article.title }}"></a>
                 </div>
             </div>
             {% endfor %}

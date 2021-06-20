@@ -12,7 +12,7 @@
             {% b_category as categorise %}
             {% for category in categorise %}
             <li>
-                <a href="{{category.get_absolute_url}}">{{category.name}}
+                <a href="{{category.get_absolute_url}}" title="{{category.name}}">{{category.name}}
                     <span>({{category.blog_count}})</span>
                 </a>
             </li>

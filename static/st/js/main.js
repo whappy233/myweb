@@ -45,7 +45,7 @@
     // ------------------------------------------------------------------------------------------------------------------
     // 背景动画
     let $stars = $(".stars"),
-        stars = 500,     // 星星的密集程度，数字越大越多
+        stars = 400,     // 星星的密集程度，数字越大越多
         r = 800;        // 星星的看起来的距离,值越大越远,可自行调制到自己满意的样子
     for (var i = 0; i < stars; i++) {
         var $star = $("<div/>").addClass("star");
@@ -150,6 +150,9 @@
         check();
     };
 
+    // 图片加载失败占位图
+    window.addEventListener('error', ImgLoadError, true)
+
     function ImgLoadError(e) {
         let target = e.target, // 当前dom节点
             tagName = target.tagName,
@@ -170,9 +173,6 @@
             }
         };
     };
-
-    // 图片加载失败占位图
-    window.addEventListener('error', ImgLoadError, true)
 
 
     // ------------------------------------------------------------------------------------------------------------------
@@ -348,60 +348,66 @@
         }
     );
 
-    // 检查鼠标向上还是向下滚动
-    var wheelHandle = function (e) {
-        var e = e || window.event;
-        if (e.wheelDelta) {
-            if (e.wheelDelta > 0) { //当鼠标滚轮向上滚动时
-                document.querySelector('.widget#Toc').dataset.scrollup='true';
-            }
-            if (e.wheelDelta < 0) { //当鼠标滚轮向下滚动时
-                document.querySelector('.widget#Toc').dataset.scrollup='false';
-            }
-        } else if (e.detail) {
-            if (e.detail < 0) { //当鼠标滚轮向上滚动时
-                document.querySelector('.widget#Toc').dataset.scrollup='true';
-            }
-            if (e.detail > 0) { //当鼠标滚轮向下滚动时
-                document.querySelector('.widget#Toc').dataset.scrollup='false';
-            }
-        }
-    };
-    if(document.querySelector('.widget#Toc')){
-        window.addEventListener("DOMMouseScroll", wheelHandle) // 火狐
-        window.addEventListener("wheel", wheelHandle);  // Google
-    };
+    if (window.IntersectionObserver) {
 
-    // 获取 Toc href 队列
-    let TocArray = $.map($('.widget#Toc a[href]'), function(e){return $(e).attr('href').slice(1)});
+        // 检查鼠标向上还是向下滚动
+        var wheelHandle = function (e) {
+            var e = e || window.event;
+            if (e.wheelDelta) {
+                if (e.wheelDelta > 0) { //当鼠标滚轮向上滚动时
+                    document.querySelector('.widget#Toc').dataset.scrollup='true';
+                }
+                if (e.wheelDelta < 0) { //当鼠标滚轮向下滚动时
+                    document.querySelector('.widget#Toc').dataset.scrollup='false';
+                }
+            } else if (e.detail) {
+                if (e.detail < 0) { //当鼠标滚轮向上滚动时
+                    document.querySelector('.widget#Toc').dataset.scrollup='true';
+                }
+                if (e.detail > 0) { //当鼠标滚轮向下滚动时
+                    document.querySelector('.widget#Toc').dataset.scrollup='false';
+                }
+            }
+        };
 
-    // 重叠观察者. 在平屏幕滚动时更新目录当前显示高亮
-    let options = {
-        root: null,
-        rootMargin: '0% 0% -30% 0%',
-        threshold: 1.0,
-    };
-    let callback = function(entries, observer) { 
-        if (document.querySelector('.widget#Toc').dataset.isscroll=='false'){
-            entries.forEach(entry => {
+        if(document.querySelector('.widget#Toc')){
+            window.addEventListener("DOMMouseScroll", wheelHandle) // 火狐
+            window.addEventListener("wheel", wheelHandle);  // Google
+        };
 
-                if (entry.isIntersecting){
-                    let target_id = entry.target.id;
-                    $(`a[href="#${target_id}"]`).parent('li').trigger("click", true);
-                }else if(document.querySelector('.widget#Toc').dataset.scrollup=='true'){
-                    // 向上滚动
-                    let target_id = TocArray[TocArray.indexOf(entry.target.id)-1];
-                    if (target_id){
+        // 获取 Toc href 队列
+        let TocArray = $.map($('.widget#Toc a[href]'), function(e){return $(e).attr('href').slice(1)});
+
+        // 重叠观察者. 在平屏幕滚动时更新目录当前显示高亮
+        let options = {
+            root: null,
+            rootMargin: '0% 0% -30% 0%',
+            threshold: 1.0,
+        };
+
+        let callback = function(entries, observer) { 
+            if (document.querySelector('.widget#Toc').dataset.isscroll=='false'){
+                entries.forEach(entry => {
+
+                    if (entry.isIntersecting){
+                        let target_id = entry.target.id;
                         $(`a[href="#${target_id}"]`).parent('li').trigger("click", true);
+                    }else if(document.querySelector('.widget#Toc').dataset.scrollup=='true'){
+                        // 向上滚动
+                        let target_id = TocArray[TocArray.indexOf(entry.target.id)-1];
+                        if (target_id){
+                            $(`a[href="#${target_id}"]`).parent('li').trigger("click", true);
+                        };
                     };
-                };
-            });
-        }
+                });
+            }
+        };
+
+        let observer = new IntersectionObserver(callback, options);  // 创建重叠观察者
+        document.querySelectorAll('.markdown-body>[id]').forEach(ele=>{
+            observer.observe(ele);  // 给定观察者观察的目标对象
+        });
     };
-    let observer = new IntersectionObserver(callback, options);  // 创建重叠观察者
-    document.querySelectorAll('.markdown-body>[id]').forEach(ele=>{
-        observer.observe(ele);  // 给定观察者观察的目标对象
-    });
 
 
     // ------------------------------------------------------------------------------------------------------------------
@@ -506,57 +512,28 @@
 
 
     // ------------------------------------------------------------------------------------------------------------------
-    // 点击显示搜索 Jquery Serch Box
-    $('.sticky-header').on('click', 'li[data=header-search]', function (event) {
-        event.preventDefault();
+    // 点击显示搜索界面
+    $('.sticky-header').on('click', 'li[data=header-search]', function (e) {
+        e.preventDefault();
         var target = $("#header-search");
         target.addClass("open");
         setTimeout(function () {
             target.find('input').focus();
         }, 600);
+        $('body').addClass('modal-open');
         return false;
     });
 
-    $("#header-search, #header-search button.close").on("click keyup", function (event) {
+    $("#header-search, #image-view, .curtain button.close").on("click keyup", function (e) {
         if (
-            event.target === this ||
-            event.target.className === "close" ||
-            event.keyCode === 27
+            e.target === this ||
+            e.target.className === "close" ||
+            e.keyCode === 27
         ) {
             $(this).removeClass("open");
+            $('body').removeClass('modal-open');
         }
     });
-
-
-    // ------------------------------------------------------------------------------------------------------------------
-    // Masonry 画廊
-    var galleryIsoContainer = $("#no-equal-gallery");
-    if (galleryIsoContainer.length) {
-        var blogGallerIso = galleryIsoContainer.imagesLoaded(function () {
-            blogGallerIso.isotope({
-                itemSelector: ".no-equal-item",
-                masonry: {
-                    columnWidth: ".no-equal-item"
-                }
-            });
-        });
-    }
-
-
-    // ------------------------------------------------------------------------------------------------------------------
-    // Video Popup
-    // 视频弹出
-    var yPopup = $(".popup-youtube");
-    if (yPopup.length) {
-        yPopup.magnificPopup({
-            disableOn: 700,
-            type: 'iframe',
-            mainClass: 'mfp-fade',
-            removalDelay: 160,
-            preloader: false,
-            fixedContentPos: false
-        });
-    }
 
 
     // ------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,28 @@
+{% load blog_tags %}
+{% load common_tags %}
+
+
+{# 侧边--标签云 #}
+
+{% setList "#EF5350" "#EC407A" "#AB47BC" "#7E57C2" "#5C6BC0" "#42A5F5" "#03A9F4" "#26C6DA" "#26A69A" "#D4E157" "#FFEE58" "#FFCA28" "#FFA726" "#FF7043" "#8D6E63" "#9CCC65" "#66BB6A" as tt %}
+<div class="widget">
+    <div class="section-heading heading-dark text_uppercase">
+        <h3 class="item-heading">所有标签</h3>
+    </div>
+    <div class="widget-categories">
+        <div style="padding: 0 15px 10px;">
+
+            {% b_tags as tags %}
+            {% for tag in tags %}
+            {% widthratio tag.blog_count 0.9 16 as size %}
+            {% widthratio tag.blog_count 0.95 50 as weight %}
+
+            <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}" title="{{ tag.name }}"
+            style="color:{{ tt|random }};font-size: {{size}}px;font-weight: {{weight|add:400}};">
+                #{{ tag.name }}
+            </a>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>

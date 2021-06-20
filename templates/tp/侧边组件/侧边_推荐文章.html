@@ -11,9 +11,10 @@
     <div class="widget-latest">
         <ul class="block-list">
             {% for article in articles %}
-            <li class="single-item">
+            {% with uri=article.get_absolute_url %}
+            <li class="single-item" data-href="{{ uri }}">
                 <div class="item-img">
-                    <a href="{{ article.get_absolute_url }}">
+                    <a href="{{ uri }}" title="{{ article.title }}">
                         <img data-src="https://picsum.photos/id/10{{ forloop.counter|add:50 }}/100/80">
                     </a>
                 </div>
@@ -22,18 +23,17 @@
                         <li><i class="fas fa-tag"></i>
                             {% with article.tags.all as tags%}
                             {% for tag in tags %}
-                            <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                            <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}" title="{{ tag.name }}">{{ tag.name }}</a>
                             {% endfor %}
                             {% endwith %}
                         </li>
                     </ul>
                     <h2 class="item-title">
-                        <a href="{{ article.get_absolute_url }}">
-                            {{ article.title }}
-                        </a>
+                        <a href="{{ uri }}" title="{{ article.title }}">{{ article.title }}</a>
                     </h2>
                 </div>
             </li>
+            {% endwith %}
             {% endfor %}
         </ul>
     </div>

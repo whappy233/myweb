@@ -137,7 +137,7 @@ class Article(models.Model, AdminMixin):
     IMG_LINK = '/static/app_blog/images/occupying.png'
     STATUS_CHOICES = (('d', '草稿'), ('p', '发布'),)
 
-    tags = TaggableManager(blank=True, through=CnTaggedItem)  # 添加标签管理器
+    tags = TaggableManager(through=CnTaggedItem, blank=True)  # 添加标签管理器
     title = models.CharField('标题', max_length=250)
     # slug 字段用于 URL 中，仅包含字母数字下划线以及连字符。根据 slug 字段，可对博客构建具有良好外观和 SEO 友好的 URL。
     # 使用 unique_for_date 参数可采用发布日期与 slug 对帖子构建URL

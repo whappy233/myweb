@@ -42,8 +42,7 @@ class StatsMiddleware:
         try:
             response.content = response.content.replace(b'<!!LOAD_TIMES!!>', str(o)[:5].encode())
         except:
-            logger.error(f'不支持的 content 类型: "{type(response)}"')
-            print(f'不支持的 content 类型: "{type(response)}"')
+            logger.warning(f'不支持的 content 类型: "{type(response)}"')
         return response
         # response["X-total-time"] = int(total * 1000)
 

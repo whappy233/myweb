@@ -32,7 +32,7 @@
                             <li><i class="fas fa-tag"></i>
                                 {% with article.tags.all as tags%}
                                 {% for tag in tags %}
-                                <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                                <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}" title="{{ tag.name }}">{{ tag.name }}</a>
                                 {% endfor %}
                                 {% endwith %}
                             </li>
@@ -40,7 +40,7 @@
                             <li><i class="far fa-clock"></i>5分钟阅读</li>
                         </ul>
                         <h3 class="item-title">
-                            <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+                            <a href="{{ article.get_absolute_url }}" title="{{ article.title }}">{{ article.title }}</a>
                         </h3>
                         <p>{{ article.summary }}</p>
                         <div class="action-area">
@@ -81,6 +81,9 @@
             
             {# 文章分类 #}
             {% include 'tp/侧边组件/侧边_分类目录.html' with page_obj=page_obj %}
+
+            {# 标签云 #}
+            {% include 'tp/侧边组件/侧边_标签云.html' %}
 
             {# 相册展示 #}
             {% include 'tp/侧边组件/侧边_相册展示.html' with page_obj=page_obj %}

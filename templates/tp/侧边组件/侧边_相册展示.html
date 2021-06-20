@@ -10,9 +10,9 @@
         <ul>
             {% for i in "x"|ljust:"9" %}
             <li>
-                <div class="item-box">
+                <div class="item-box" data-href="{% url 'app_gallery:gallery_list' %}">
                     <img data-src="{% url 'app_gallery:photo' 200 200 %}?{{ forloop.counter0 }}" width="200" height="200" class="img-fluid">
-                    <a href="{% url 'app_gallery:gallery_list' %}" class="item-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="{% url 'app_gallery:gallery_list' %}" class="item-icon" title="相册"><i class="fab fa-instagram"></i></a>
                 </div>
             </li>
             {% endfor %}

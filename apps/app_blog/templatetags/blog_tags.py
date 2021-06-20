@@ -5,6 +5,7 @@ from django import template
 from django.db.models import Count, Q
 from django.utils.safestring import mark_safe  # 标记为安全的html
 from django.template.defaultfilters import stringfilter
+from ..cn_taggit import CnTag
 from ..models import Article, Category
 from myweb.utils import get_current_site
 from django.core.cache import cache
@@ -57,6 +58,22 @@ def b_category():
         cache.set(cache_key, category, 60 * 100)
         logger.info(f'设置博客分类缓存:{cache_key}')
     return category
+
+
+# 博客标签
+@register.simple_tag
+def b_tags():
+    '''博客分类'''
+    cache_key = 'tags_cache'
+    tags = cache.get(cache_key)
+    if tags:
+        logger.info(f'获取博客Tags缓存:{cache_key}')
+    else:
+        tags = CnTag.objects.annotate(blog_count=Count('taggit_taggeditem_items')).filter(blog_count__gt=0).values('name', 'slug', 'blog_count')
+        cache.set(cache_key, tags, 60 * 100)
+        logger.info(f'设置博客Tags缓存:{cache_key}')
+    return tags
+
 
 
 # 返回文章列表模板
