@@ -262,6 +262,9 @@ from .serializers import ArticleIndexSer
 from drf_haystack.filters import HaystackFilter, BaseHaystackFilterBackend
 # https://blog.csdn.net/smartwu_sir/article/details/80209907
 
+# 用法
+# http://127.0.0.1:8000/search/?text__contains=bug
+
 class ContentSearchViewSet(HaystackViewSet):
 
     # 这里可以写多个模型，相应的serializer 里也可以写多个 index_classes
