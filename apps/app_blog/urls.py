@@ -17,7 +17,7 @@ urlpatterns = [
 
     path('<int:article_id>/share/', views.article_share, name='article_share'),                 # 分享文章
 
-    path('search/', MySearchView(), name='haystack_search'),         # 搜索
+    path('se/', MySearchView(), name='haystack_search'),         # 搜索
 
     path('feed/', LatestArticlesFeed(), name='article_feed'),       # 订阅链接
 
@@ -28,3 +28,9 @@ urlpatterns = [
 ]
 
 
+from rest_framework.routers import DefaultRouter
+from .views import ContentSearchViewSet
+
+router = DefaultRouter()
+router.register(r"search", ContentSearchViewSet, basename="sea")
+urlpatterns += router.urls

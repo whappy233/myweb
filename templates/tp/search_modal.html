@@ -1,0 +1,28 @@
+
+
+{# 搜索界面 #}
+<div id="header-search" class="curtain">
+    <button type="button" class="close" title="关闭"><i style="pointer-events: none;" class="fas fa-times-circle"></i></button>
+    <div class="header-search-form">
+        <form action="{% url 'app_blog:haystack_search' %}" method="get">
+            <input type="search" name="q" placeholder="在此输入........" value="{{keyword|default_if_none:''}}"/>
+            <button type="submit" class="search-btn">
+                <i class="flaticon-magnifying-glass"></i>
+            </button>
+        </form>
+        <div class="header-search-result">
+            <div class="result_meta">找到<span>20</span>条结果</div>
+            <ul>
+                <li><a href="#"><i class="fas fa-poll-h"></i>搜索界面 Search Box Start Here搜索界面 Search Box Start Here搜索界面 Search Box Start Here</a></li>
+                <li><a href="#"><i class="fas fa-poll-h"></i>1</a></li>
+                <li><a href="#"><i class="fas fa-poll-h"></i>2</a></li>
+                <li><a href="#"><i class="fas fa-poll-h"></i>3</a></li>
+                <li><a href="#"><i class="fas fa-poll-h"></i>4</a></li>
+                <li><a href="#"><i class="fas fa-poll-h"></i>5</a></li>
+                <li><a href="#"><i class="fas fa-poll-h"></i>6</a></li>
+                <li><a href="#"><i class="fas fa-poll-h"></i>7</a></li>
+                <li><a href="#"><i class="fas fa-poll-h"></i>8</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

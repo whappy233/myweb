@@ -17,6 +17,7 @@ class ArticleIndex(indexes.SearchIndex, indexes.Indexable):
     body = indexes.CharField(model_attr='body')
     title = indexes.CharField(model_attr='title')
     summary = indexes.CharField(model_attr='summary')
+    pub_time = indexes.DateTimeField(model_attr='pub_time')
 
     # 重载get_model方法. 对哪张表进行查询. 必须要有！
     def get_model(self):

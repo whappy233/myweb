@@ -10,13 +10,13 @@
 {% myhighlight <text_block> with <query> [css_class "class_name"] [html_tag "span"] [max_length 200] [start_head False] %}
 
 1.使用默认值
-{% highlight result.summary with query %}  
+{% highlight result.object.summary with query %}  
 
 2.指定使用<div></div>标签包裹(默认: span)，并且将class设置为highlight_me_please(默认: highlighted)
-{% highlight result.summary with query html_tag "div" css_class "highlight_me_please" %}  
+{% highlight result.object.summary with query html_tag "div" css_class "highlight_me_please" %}  
 
 3.max_length 限制被高亮处理后的长度(默认: 200)
-{% highlight result.summary with query max_length 40 %}
+{% highlight result.object.summary with query max_length 40 %}
 
 传递进来的参数context:
     'query': self.query,  # 搜索的关键字
@@ -61,8 +61,9 @@
             <h3>结果</h3>
 
             {% for result in page.object_list %}
-            <p><a href="{{ result.get_absolute_url }}">{{ result.title }}</a></p>
-            <p>{% myhighlight result.summary with query start_head True %}</p>
+
+            <p><a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a></p>
+            <p>{% myhighlight result.object.summary with query start_head True %}</p>
             {% empty %}
             <p>无结果.</p>
             {% endfor %}

@@ -182,7 +182,6 @@ class CommentsView(View):
         json_data = json.dumps(data, cls=JSONEncoder, separators=(',',':'))
         return HttpResponse(json_data, content_type="application/json; charset=UTF-8")
 
-
     def get_comments(self, start, end, serialize, content_type_model, object_id):
         cache_key = f'comments_s_{start}_e_{end}_ser_{serialize}_ctm_{content_type_model}_oid_{object_id}'
         data = cache.get(cache_key)
@@ -194,7 +193,6 @@ class CommentsView(View):
             cache.set(cache_key, data, 60 * 100)
             logger.info(f'设置文章评论缓存:{cache_key}')
             return data
-
 
     # 增加评论
     def post(self, request, *args, **kwargs):

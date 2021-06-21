@@ -254,6 +254,43 @@ class ArticleDetailView(DetailView):
         return obj
 
 
+
+
+
+from drf_haystack.viewsets import HaystackViewSet
+from .serializers import ArticleIndexSer
+from drf_haystack.filters import HaystackFilter, BaseHaystackFilterBackend
+# https://blog.csdn.net/smartwu_sir/article/details/80209907
+
+class ContentSearchViewSet(HaystackViewSet):
+
+    # 这里可以写多个模型，相应的serializer 里也可以写多个 index_classes
+    index_models = [Article]
+    serializer_class = ArticleIndexSer
+    # 这时filter，这里用到了type
+    # filter_backends = [HaystackFilter]
+    # filter_fields = ("type",)
+
+    # def get_queryset(self, index_models=[]):
+    #     queryset = self.object_class()._clone()
+    #     # 这时改写的get_queryset函数，用到了 pub_time
+    #     # 如果上面没有把 pub_time 和 type 加进去，这里是不能使用的
+    #     queryset = queryset.models(*self.get_index_models()).order_by("-pub_time")
+    #     # queryset = queryset.models(*self.index_models).order_by("-")
+    #     return queryset
+
+    # def get_index_models(self):
+    #     # 这是自己写的传入一个model参数，可以过滤掉不同的模型，配合上面的queryset使用
+    #     model = self.request.query_params.get("model", None)
+    #     di = {
+    #         None: self.index_models,
+    #         "article": [Article],
+    #     }
+    #     return di.get(model, self.index_models)
+
+
+
+
 # 所有文章 (函数视图)
 @login_required
 def article_list(request, tag_slug=None, author_name=None):
@@ -353,8 +390,6 @@ def ajax_test(request):
         if keyword:
             data = {'count': f'Carlos-{timezone.now()}', }
             return JsonResponse(data)
-
-
 
 
 
