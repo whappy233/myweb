@@ -26,6 +26,6 @@ django-mptt==0.12.0
 beautifulsoup4==4.9.3
 django-redis==5.0.0
 djangorestframework==3.12.4
-whoosh 
-django-haystack 
-jieba  
+whoosh==2.7.4
+django-haystack==3.0
+jieba==0.42.1
