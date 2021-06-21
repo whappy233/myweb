@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <!-- Favicon -->
-  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+  <link rel="shortcut icon" href="{% static 'st/img/favicon.ico' %}" type="image/x-icon">
   <title>星海StarSea|Gallery</title>
   <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:400,700" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="{% static 'gallery/css/gallery_room.css' %}" />
@@ -99,7 +99,7 @@
     <!-- 头部 -->
     <header class="codrops-header">
       <!-- logo -->
-      <a class="codrops-header__title" href="/"><img src="{% static 'st/img/logo.png' %}" alt="logo"></a>
+      <a class="codrops-header__title" href="/"><img src="{{ SITE_LOGO }}" alt="logo"></a>
 
       <!-- button -->
       <button class="btn btn--info btn--toggle {% if isEmpty == '1' %}hidden{% endif %}" id="btn_info">

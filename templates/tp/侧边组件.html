@@ -23,9 +23,10 @@
     {% include 'tp/侧边组件/侧边_推荐文章.html' with page_obj=page_obj %}
     {% endcomment %}
 
+    {% if SHOW_GOOGLE_ADSENSE %}
     <!-- 广告 -->
     {% include 'tp/侧边组件/侧边_广告.html' with page_obj=page_obj %}
-
+    {% endif %}
     <!-- 相册展示 -->
     {% include 'tp/侧边组件/侧边_相册展示.html' with page_obj=page_obj %}
     

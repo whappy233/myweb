@@ -200,7 +200,7 @@ from django.views.decorators.csrf import csrf_exempt
 def ajax_login(request):
     if request.method == 'POST' and request.is_ajax():
         # 在前端发送ajax json 请求时(application/json;charset=UTF-8), 数据存放在request.body中,  request.POST, 没有数据.
-        print(request.body)  # --> b'{"username":"891953720","password":"wu910hao"}'
+        # print(request.body)  # --> b'{"username":"891953720","password":"123456789"}'
 
         form = LoginForm(request.POST)
         if form.is_valid():

@@ -12,9 +12,9 @@
             </div>
             <h2 class="error-title">页面未找到!</h2>
             <div class="error-newsletter">
-                <form action="/" method="GET">
+                <form action="{% url 'app_blog:haystack_search' %}" method="GET">
                     <div class="input-group stylish-input-group">
-                        <input type="text" class="form-control" name="search" placeholder="搜索 . . .">
+                        <input type="text" class="form-control" name="q" placeholder="搜索 . . .">
                         <span class="input-group-addon">
                             <button type="submit">
                                 <span class="flaticon-magnifying-glass" aria-hidden="true"></span>

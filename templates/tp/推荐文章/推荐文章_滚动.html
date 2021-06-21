@@ -53,11 +53,11 @@
             {% for article in articles %}
             <div class="blog-box-layout13">
                 <div class="item-img">
-                    <img data-src="https://picsum.photos/id/10{{ forloop.counter|add:20 }}/262/196" 
+                    <img data-src="https://picsum.photos/id/2{{ forloop.counter|add:20 }}/262/196" 
                         alt="{{ article.title }}">
                     <div class="item-content">
                         <ul class="entry-meta meta-color-light">
-                            <li><i class="fas fa-tag"></i>
+                            <li><i class="fas fa-hashtag"></i>
                                 {% with article.tags.all as tags%}
                                 {% for tag in tags %}
                                 <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}" title="{{ tag.name }}">{{ tag.name }}</a>

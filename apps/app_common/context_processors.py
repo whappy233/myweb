@@ -20,6 +20,7 @@ def seo_processor(requests):
         setting = get_blog_setting()
         value = {
             'SITE_NAME': setting.sitename,
+            'SITE_LOGO': setting.sitelogo.url,
             'SHOW_GOOGLE_ADSENSE': setting.show_google_adsense,
             'GOOGLE_ADSENSE_CODES': setting.google_adsense_codes,
             'ALLOW_REGISTER': setting.allow_register,

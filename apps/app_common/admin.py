@@ -3,7 +3,7 @@ from django.template.defaultfilters import filesizeformat
 
 # Register your models here.
 
-from .models import BlogSettings, Carousel, FileStorage
+from .models import SiteSettings, Carousel, FileStorage
 
 
 
@@ -17,8 +17,8 @@ class CarouselAdmin(admin.ModelAdmin):
 
 
 # 网站配置
-@admin.register(BlogSettings)
-class BlogSettingsAdmin(admin.ModelAdmin):
+@admin.register(SiteSettings)
+class SiteSettingsAdmin(admin.ModelAdmin):
     pass
 
 

@@ -56,23 +56,25 @@
 
                 {% recommendations_articles 5 '侧边_推荐文章' %}
 
-                {# 关注我 #}
-                {% include 'tp/侧边组件/侧边_关注我.html' with page_obj=page_obj %}
-
                 {# 文章分类 #}
                 {% include 'tp/侧边组件/侧边_分类目录.html' with page_obj=page_obj %}
-
-                {# 发送反馈 #}
-                {% include 'tp/侧边组件/侧边_发送反馈.html' with page_obj=page_obj %}
-
-                {# 广告 #}
-                {% include 'tp/侧边组件/侧边_广告.html' with page_obj=page_obj %}
 
                 {# 相册展示 #}
                 {% include 'tp/侧边组件/侧边_相册展示.html' with page_obj=page_obj %}
 
+                {% if SHOW_GOOGLE_ADSENSE %}
+                {# 广告 #}
+                {% include 'tp/侧边组件/侧边_广告.html' with page_obj=page_obj %}
+                {% endif %}
+
+                {% comment %}
+                {# 发送反馈 #}
+                {% include 'tp/侧边组件/侧边_发送反馈.html' with page_obj=page_obj %}
+                {# 关注我 #}
+                {% include 'tp/侧边组件/侧边_关注我.html' with page_obj=page_obj %}
                 {# 大轮播图 #}
                 {% include 'tp/侧边组件/侧边_大轮播图.html' with page_obj=page_obj %}
+                {% endcomment %}
             </div>
         </div>
     </div>

@@ -25,7 +25,7 @@
                         <img src="{% static 'st/img/blog/blog110.jpg' %}" alt="{{articles.0.title}}">
                         <div class="item-content">
                             <ul class="entry-meta meta-color-light">
-                                <li><i class="fas fa-tag"></i>
+                                <li><i class="fas fa-hashtag"></i>
                                     {% with articles.0.tags.all as tags%}
                                     {% for tag in tags %}
                                     <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
@@ -50,7 +50,7 @@
                         <img src="{% static 'st/img/blog/blog111.jpg' %}" alt="{{articles.1.title}}">
                         <div class="item-content">
                             <ul class="entry-meta meta-color-light">
-                                <li><i class="fas fa-tag"></i>
+                                <li><i class="fas fa-hashtag"></i>
                                     {% with articles.1.tags.all as tags%}
                                     {% for tag in tags %}
                                     <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
@@ -72,7 +72,7 @@
                         <img src="{% static 'st/img/blog/blog112.jpg' %}" alt="{{articles.2.title}}">
                         <div class="item-content">
                             <ul class="entry-meta meta-color-light">
-                                <li><i class="fas fa-tag"></i>
+                                <li><i class="fas fa-hashtag"></i>
                                     {% with articles.2.tags.all as tags%}
                                     {% for tag in tags %}
                                     <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
@@ -97,7 +97,7 @@
                         <img src="{% static 'st/img/blog/blog113.jpg' %}" alt="{{articles.3.title}}">
                         <div class="item-content">
                             <ul class="entry-meta meta-color-light">
-                                <li><i class="fas fa-tag"></i>
+                                <li><i class="fas fa-hashtag"></i>
                                     {% with articles.3.tags.all as tags%}
                                     {% for tag in tags %}
                                     <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>

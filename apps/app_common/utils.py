@@ -17,9 +17,9 @@ def get_blog_setting():
     if value:
         return value
     else:
-        from .models import BlogSettings
-        if not BlogSettings.objects.count():
-            setting = BlogSettings()
+        from .models import SiteSettings
+        if not SiteSettings.objects.count():
+            setting = SiteSettings()
             setting.sitename = '星海StarSea'
             setting.site_description = '该说些什么好呢?啊哈哈哈'
             setting.site_seo_description = '基于Django的博客系统'
@@ -29,12 +29,12 @@ def get_blog_setting():
             setting.sidebar_comment_count = 5
             setting.show_google_adsense = False
             setting.allow_register = False  # 允许注册?
-            setting.open_site_comment = True  # 全站评论
+            setting.open_site_comment = False  # 全站评论
             setting.analyticscode = ''   # 分析代码
             setting.beiancode = ''  # 备案号
             setting.show_gongan_code = False
             setting.save()
-        value = BlogSettings.objects.first()
+        value = SiteSettings.objects.first()
         logger.info('set cache get_blog_setting')
         cache.set('get_blog_setting', value)
         return value

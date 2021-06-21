@@ -41,14 +41,6 @@ class PublishedManager(ModelManager):
         return super(PublishedManager, self).get_queryset().filter(pub_time__lte=timezone.now(), status='p')
 
 
-# 获取第一个 Superuser
-def get_one_superuser():
-    '''获取第一个 Superuser'''
-    user = User.objects.filter(is_staff=True, is_superuser=True).first()
-    if user:
-        return user
-    return User.objects.create_superuser('891953720', 'dsfs@ds.vom', 'wu910hao')
-
 
 # 文章分类 Model
 class Category(models.Model):
@@ -149,7 +141,7 @@ class Article(models.Model, AdminMixin):
     # body = RichTextUploadingField('正文')
     body = MDTextField('正文')
     img_link = models.CharField('图片地址', default=IMG_LINK, max_length=255)
-    summary = models.TextField('文章摘要', max_length=300, default='文章摘要等同于网页description内容，请务必填写...')
+    summary = models.TextField('文章摘要', max_length=300)
     pub_time = models.DateTimeField('发布时间', default=timezone.now, null=True, blank=True)
     created = models.DateTimeField('创建时间', auto_now_add=True)
     updated = models.DateTimeField('更新时间', auto_now=True)

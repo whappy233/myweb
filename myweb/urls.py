@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include, re_path
-import debug_toolbar
+# import debug_toolbar
 import xadmin
 
 # 添加网站地图

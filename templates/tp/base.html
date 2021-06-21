@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'st/img/favicon.ico' %}" type="image/x-icon">
     <title>{% block title %}{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}{% endblock title %}</title>
     <!-- Normalize CSS -->
     <link rel="stylesheet" href="{% static 'st/css/normalize.css' %}">
@@ -77,7 +77,7 @@
                         <div class="col-lg-2">
                             <div class="logo-area">
                                 <a href="/" class="temp-logo" id="temp-logo">
-                                    <img src="{% static 'st/img/logo.png' %}" alt="logo" class="img-fluid">
+                                    <img src="{{ SITE_LOGO }}" alt="logo" class="img-fluid">
                                 </a>
                             </div>
                         </div>
@@ -359,7 +359,7 @@
             <div class="container">
                 <div class="footer-box-layout2">
                     <div class="footer-logo">
-                        <a href="/"><img src="{% static 'st/img/logo.png' %}" alt="logo"></a>
+                        <a href="/"><img src="{{ SITE_LOGO }}" alt="logo"></a>
                     </div>
                     <ul class="footer-social">
                         <li><a href="/sitemap.xml" title="SiteMap" target="_blank">SiteMap</a></li>
@@ -377,6 +377,9 @@
                         <a href="/" title="{{ SITE_NAME }}" style="color: dodgerblue;">{{ SITE_NAME }}</a>.
                     </div>
                     <div>
+                        {{ BEIAN_CODE }}
+                    </div>
+                    <div>
                         {{ Carlos }}
                     </div>
                 </div>
@@ -387,7 +390,7 @@
         <div id="header-search" class="curtain">
             <button type="button" class="close" title="关闭"><i style="pointer-events: none;" class="fas fa-times-circle"></i></button>
             <div class="header-search-form">
-                <form action="" method="get">
+                <form action="{% url 'app_blog:haystack_search' %}" method="get">
                     <input type="search" name="q" placeholder="在此输入........" value="{{keyword|default_if_none:''}}" />
                     <button type="submit" class="search-btn">
                         <i class="flaticon-magnifying-glass"></i>

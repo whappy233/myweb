@@ -1,0 +1,118 @@
+{% load highlight %}
+{% load more_like_this %}
+{% load my_filters_and_tags %}
+
+
+
+{% comment %}
+
+{% highlight <text_block> with <query> [css_class "class_name"] [html_tag "span"] [max_length 200] %}
+{% myhighlight <text_block> with <query> [css_class "class_name"] [html_tag "span"] [max_length 200] [start_head False] %}
+
+1.使用默认值
+{% highlight result.summary with query %}  
+
+2.指定使用<div></div>标签包裹(默认: span)，并且将class设置为highlight_me_please(默认: highlighted)
+{% highlight result.summary with query html_tag "div" css_class "highlight_me_please" %}  
+
+3.max_length 限制被高亮处理后的长度(默认: 200)
+{% highlight result.summary with query max_length 40 %}
+
+传递进来的参数context:
+    'query': self.query,  # 搜索的关键字
+    'form': self.form,
+    'page': page,
+    'paginator': paginator,
+    'suggestion': None,
+
+{% endcomment %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>search</title>
+    <style>
+        span.highlighted {
+            background-color: burlywood;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>搜索</h2>
+
+    <form method="get" action=".">
+        <table>
+            {{ form.as_table }}
+            <tr>
+                <td> </td>
+                <td>
+                    <input type="submit" value="Search">
+                </td>
+            </tr>
+        </table>
+
+        {% if query %}
+            <h3>结果</h3>
+
+            {% for result in page.object_list %}
+            <p><a href="{{ result.get_absolute_url }}">{{ result.title }}</a></p>
+            <p>{% myhighlight result.summary with query start_head True %}</p>
+            {% empty %}
+            <p>无结果.</p>
+            {% endfor %}
+
+            {# 分页插件, 下一页和上一页记得要带上q={{ query }}参数, 否则单击下一页时会丢失搜索参数q, 而显示出来全部的文章的第二页 #}
+            <div>
+                {% if page.has_previous %}
+                <a href="?q={{ query }}&page={{ page.previous_page_number }}">上一页</a>
+                {% endif %}
+                <span class="current">
+                    Page{{ page.number }} of {{ paginator.num_pages }}.
+                </span>
+
+
+                {% if page.number <= 5 %}   <!--当前页面数小于5时-->
+                {% for page_num in paginator.page_range %}
+                    {%if forloop.counter <= 5 %}
+                    <a href="/search?q={{query}}&page={{page_num}}" {% if page.number == page_num %}class="active"{% endif %}>
+                        {{ page_num }}
+                    </a>
+                    {%endif%}
+                {% endfor %}
+                {% else %}
+                    {% if page.number|add:1 > paginator.num_pages %}
+                        <a href="/search?q={{query}}&page={{page.number|add:-4}}">{{ page.number|add:-4}}</a>
+                    {% endif %}
+                    {% if page.number|add:2 > paginator.num_pages %}
+                        <a href="/search?q={{query}}&page={{page.number|add:-3}}">{{ page.number|add:-3}}</a>
+                    {% endif %}
+                    <a href="/search?q={{query}}&page={{page.number|add:-2}}" >{{ page.number|add:-2}}</a>
+                    <a href="/search?q={{query}}&page={{page.number|add:-1}}">{{ page.number|add:-1}}</a>
+                    <a href="/search?q={{query}}&page={{page.number}}" class="active">{{ page.number }}</a>
+                    {% if page.number|add:1 <= paginator.num_pages %}
+                        <a href="/search?q={{query}}&page={{page.number|add:1}}">{{ page.number|add:1}}</a>
+                    {% endif %}
+                    {% if page.number|add:2 <= paginator.num_pages %}
+                        <a href="/search?q={{query}}&page={{page.number|add:2}}">{{ page.number|add:2}}</a>
+                    {% endif %}
+                {% endif %}
+
+
+                {% if page.has_next %}
+                <a href="?q={{ query }}&page={{ page.next_page_number }}">下一页</a>
+                {% endif %}
+            </div>
+
+        {% else %}
+            {# 显示一些要运行的示例查询，可能是查询语法，其他内容? #}
+        {% endif %}
+    </form>
+</body>
+
+</html>

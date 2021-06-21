@@ -3,6 +3,7 @@ from django.db import models
 
 from django.core.exceptions import ValidationError
 from django.db.models import fields
+from django.template.defaultfilters import default
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
@@ -70,9 +71,10 @@ class BaseModel(models.Model):
 
 
 
-class BlogSettings(models.Model):
+class SiteSettings(models.Model):
     '''站点设置 '''
     sitename = models.CharField("网站名称", max_length=200, null=False, blank=False, default='')
+    sitelogo = models.ImageField('网站logo', upload_to='set_settings/logo/%Y%m%d/', default='set_settings/logo/default.png', blank=True)
     site_description = models.TextField("网站描述", max_length=1000, null=False, blank=False, default='')
     site_seo_description = models.TextField("网站SEO描述", max_length=1000, null=False, blank=False, default='')
     site_keywords = models.TextField("网站关键字", max_length=1000, null=False, blank=False, default='')
@@ -97,7 +99,7 @@ class BlogSettings(models.Model):
         return self.sitename
 
     def clean(self):
-        if BlogSettings.objects.exclude(id=self.id).count():
+        if SiteSettings.objects.exclude(id=self.id).count():
             raise ValidationError(_('只能有一个配置'))
 
     def save(self, *args, **kwargs):

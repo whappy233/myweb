@@ -23,13 +23,13 @@
                 <div class="blog-box-layout4" data-href="{{ article.get_absolute_url }}">
                     <div class="item-img">
                         <a href="{{ article.get_absolute_url }}" title="{{ article.title }}">
-                            <img class="loading" data-src="https://picsum.photos/id/10{{forloop.counter}}/380/240">
+                            <img class="loading" data-src="https://picsum.photos/id/40{{forloop.counter}}/380/240">
                         </a>
                     </div>
-                    <a class="article-meta__categories" href="{% url 'app_blog:category_detail' article.category.slug %}" title="文章分类"><i class="far fa-newspaper"></i> {{ article.category }}</a>
+                    <a class="article-meta__categories" href="{% url 'app_blog:category_detail' article.category.slug %}" title="文章分类"><i class="fas fa-book"></i> {{ article.category }}</a>
                     <div class="item-content">
                         <ul class="entry-meta meta-color-dark">
-                            <li><i class="fas fa-tag"></i>
+                            <li><i class="fas fa-hashtag"></i>
                                 {% with article.tags.all as tags%}
                                 {% for tag in tags %}
                                 <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}" title="{{ tag.name }}">{{ tag.name }}</a>

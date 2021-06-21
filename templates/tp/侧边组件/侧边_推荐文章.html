@@ -20,7 +20,7 @@
                 </div>
                 <div class="item-content">
                     <ul class="entry-meta meta-color-dark">
-                        <li><i class="fas fa-tag"></i>
+                        <li><i class="fas fa-hashtag"></i>
                             {% with article.tags.all as tags%}
                             {% for tag in tags %}
                             <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}" title="{{ tag.name }}">{{ tag.name }}</a>

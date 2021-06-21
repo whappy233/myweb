@@ -29,10 +29,8 @@ ALLOWED_HOSTS = ['*']
 
 SITE_ID = 1  # 设置站点ID
 
-
 # INTERNAL_IPS = ['127.0.0.1',]  # django-debug-toolbar
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',         # 管理员站点
     'django.contrib.auth',          # 认证授权系统
@@ -47,6 +45,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
+    'haystack',    # django 搜索框架, haystack 要放在被搜索的应用的上面
+
     'app_user.apps.AppUserConfig',
     'app_blog.apps.AppBlogConfig',
     'app_gallery.apps.AppGalleryConfig',
@@ -57,22 +57,20 @@ INSTALLED_APPS = [
 
     'taggit',                       # 第三方标签管理器
     'imagekit',                     # 第三方缩略图应用 pip install django-imagekit
-    # 'ckeditor',                     # 第三方富文本编辑器 pip install django-ckeditor==6.0.0
-    # 'ckeditor_uploader',            # 第三方富文本编辑器_文件上传组件
+    # 'ckeditor',                   # 第三方富文本编辑器 pip install django-ckeditor==6.0.0
+    # 'ckeditor_uploader',          # 第三方富文本编辑器_文件上传组件
 
     'mdeditor',                     # 第三方富文本编辑器
 
-    # 'debug_toolbar',                # django-debug-toolbar
+    # 'debug_toolbar',              # django-debug-toolbar
     'mptt',                         # 使Django项目能在数据库中存储层次结构(树形数据)的技术, 它可以让相关操作更加高效. 主要实现了修改过的前序遍历算法
 
     # xadmin 模块
     'xadmin',
     'crispy_forms',
     'reversion',
-
 ]
 
-# 中间件
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -96,7 +94,6 @@ MIDDLEWARE = [
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',  # django-debug-toolbar
 
     'app_common.middleware.CommonMiddleware',
-
 ]
 
 # 表示Python模块，定义程序的根URL路径
@@ -122,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# 模板配置
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -320,19 +317,34 @@ LOGIN_URL = 'app_user:login'
 LOGOUT_URL = 'app_user:logout'   
 
 
+# djanho 搜索框架配置
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'myweb.whoosh_cn_backend.WhooshEngine',                   # 使用 Whoosh 引擎
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),    # 存放 Whoosh 索引文件的文件夹, python manage.py rebuild_index 生成的数据将存放在此
+    },
+}
+# 设置每页显示的数目, 默认为20
+HAYSTACK_SEARCH_RESULTS_PER_PAGE  =  8
+# 每次数据库更新后自动更新索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+
+
+
 # 邮箱配置
 if DEBUG:  # 输出到 Shell
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST =  'smtp.qq.com'      # SMTP 服务器主机  默认localhost
-EMAIL_PORT = 465                 # SMTP 端口 默认25
-EMAIL_HOST_USER = os.environ.get('USER_EMAIL')  # SMTP 服务器用户名
-EMAIL_HOST_PASSWORD = os.environ.get('USER_EMAIL_PW')    # SMTP 服务器密码
+EMAIL_HOST =  'smtp.qq.com'             # SMTP 服务器主机  默认localhost
+EMAIL_PORT = 465                        # SMTP 端口 默认25
+EMAIL_HOST_USER = os.environ.get('USER_EMAIL')              # SMTP 服务器用户名
+EMAIL_HOST_PASSWORD = os.environ.get('USER_EMAIL_PW')       # SMTP 服务器密码
 # EMAIL_USE_TLS / EMAIL_USE_SSL 是互斥的，因此只能将这些设置之一设置为True。
-# EMAIL_USE_TLS = True              # 是否采用 TLS 安全连接
-EMAIL_USE_SSL = True                # 是否采 SSL 安全连接
-EMAIL_SUBJECT_PREFIX = '[星海StarSea]'  # 邮件标题前缀,默认是'[django]'
+# EMAIL_USE_TLS = True                  # 是否采用 TLS 安全连接
+EMAIL_USE_SSL = True                    # 是否采 SSL 安全连接
+EMAIL_SUBJECT_PREFIX = '[星海StarSea]'   # 邮件标题前缀,默认是'[django]'
 
 
 # CkEditor 富文本编辑器配置
@@ -406,25 +418,26 @@ MDEDITOR_CONFIGS = {
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # 引擎（默认）
 SESSION_COOKIE_NAME = "sessionid"  # Session的cookie保存在浏览器上时的key，
 SESSION_COOKIE_PATH = "/"  # Session的cookie保存的路径（默认）
-SESSION_COOKIE_DOMAIN = None  # Session的cookie保存的域名（默认）
-SESSION_COOKIE_SECURE = False  # 是否只有HTTPS连接才能发送cookie
-SESSION_COOKIE_HTTPONLY = True  # 是否Session的cookie只支持http传输（默认）
+SESSION_COOKIE_DOMAIN = None  # Session的cookie保存的域名（默认） 
 SESSION_COOKIE_AGE = 60 * 30  # Session的cookie失效日期（30min）（默认）
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # 是否关闭浏览器使得Session过期（默认）
 SESSION_SAVE_EVERY_REQUEST = True  # 是否每次请求都保存Session，默认修改之后才保存
 
 
+SESSION_COOKIE_SECURE = False  # 是否只有HTTPS连接才能发送cookie
+SESSION_COOKIE_HTTPONLY = True  # 是否Session的cookie只支持http传输（默认）
+
 
 # SECURITY安全设置 - 支持https时建议开启
-# if not DEBUG:
-#     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-#     SECURE_SSL_REDIRECT = True # 将所有非SSL请求永久重定向到SSL
-#     SECURE_HSTS_SECONDS = 60
-#     SECURE_HSTS_INCLUDE_SUBDOMAINS = True # 严格要求使用https协议传输
-#     SECURE_CONTENT_TYPE_NOSNIFF = True # 防止浏览器猜测资产的内容类型
-#     SESSION_COOKIE_SECURE = True # 仅通过https传输cookie
-#     CSRF_COOKIE_SECURE = True # 仅通过https传输cookie
-#     SECURE_HSTS_PRELOAD = True # HSTS为
-#     SECURE_FRAME_DENY = True  # 避免让自己的网页的框架和保护他们免受[点击劫持]
-#     SECURE_BROWSER_XSS_FILTER = True  # 启用浏览器的XSS过滤保护
-#     SESSION_COOKIE_HTTPONLY = True  # 防止COOKIE窃听，使客户端到服务端总是COOKIE加密传输
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = True # 将所有非SSL请求永久重定向到SSL
+    SECURE_HSTS_SECONDS = 60
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True # 严格要求使用https协议传输
+    SECURE_CONTENT_TYPE_NOSNIFF = True # 防止浏览器猜测资产的内容类型
+    SESSION_COOKIE_SECURE = True # 仅通过https传输cookie
+    CSRF_COOKIE_SECURE = True # 仅通过https传输cookie
+    SECURE_HSTS_PRELOAD = True # HSTS为
+    SECURE_FRAME_DENY = True  # 避免让自己的网页的框架和保护他们免受[点击劫持]
+    SECURE_BROWSER_XSS_FILTER = True  # 启用浏览器的XSS过滤保护
+    SESSION_COOKIE_HTTPONLY = True  # 防止COOKIE窃听，使客户端到服务端总是COOKIE加密传输

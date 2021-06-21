@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
 from django.template.defaultfilters import filesizeformat
-from .models import BlogSettings, Carousel, FileStorage
+from .models import SiteSettings, Carousel, FileStorage
 from app_user.models import UserProfile
 from app_blog.models import Article, Category
 from app_gallery.models import Gallery, Photo
@@ -62,7 +62,7 @@ class GlobalSettings:
             {'title': '通用', 'menus': (
                 {'title': '文件管理', 'url': self.get_model_url(FileStorage, 'changelist'),'icon': "glyphicon glyphicon-cloud-upload"},
                 {'title': '轮播图', 'url': self.get_model_url(Carousel, 'changelist'),'icon': "glyphicon glyphicon-sound-stereo"},
-                {'title': '站点配置', 'url': self.get_model_url(BlogSettings, 'changelist') ,'icon': "glyphicon glyphicon-cog"},
+                {'title': '站点配置', 'url': self.get_model_url(SiteSettings, 'changelist') ,'icon': "glyphicon glyphicon-cog"},
             )},
         )
 
@@ -76,8 +76,8 @@ class CarouselAdmin:
 
 
 # 网站配置
-@register(BlogSettings)
-class BlogSettingsAdmin:
+@register(SiteSettings)
+class SiteSettingsAdmin:
     pass
 
 

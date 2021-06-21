@@ -12,9 +12,9 @@
             </div>
             <h2 class="error-title">出了点小状况，可能是我做错了一些事情，但现在我知道了它，我会尝试修复它! YSML</h2>
             <div class="error-newsletter">
-                <form action="/" method="GET">
+                <form action="{% url 'app_blog:haystack_search' %}" method="GET">
                     <div class="input-group stylish-input-group">
-                        <input type="text" class="form-control" name="search" placeholder="搜索 . . .">
+                        <input type="text" class="form-control" name="q" placeholder="搜索 . . .">
                         <span class="input-group-addon">
                             <button type="submit">
                                 <span class="flaticon-magnifying-glass" aria-hidden="true"></span>

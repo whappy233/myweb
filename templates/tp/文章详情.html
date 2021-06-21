@@ -90,7 +90,7 @@
         <div class="banner-content">
             <div class="container">
                 <ul class="entry-meta meta-color-light2">
-                    <li><i class="fas fa-tag"></i>
+                    <li><i class="fas fa-hashtag"></i>
                         {% with article.tags.all as tags%}
                         {% for tag in tags %}
                         <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
@@ -168,9 +168,9 @@
                                 {% with total_likes=article.users_like.count users_like=article.users_like.all %}
                                 <a href="javascript:void(0)" data-id="{{ article.id }}"
                                     data-action="{% if request.user in users_like %}un{% endif %}like">
-                                    <i class="far fa-heart"
-                                        style="{% if request.user in users_like %}color:red{% endif %}"></i>{{
-                                    total_likes }}</a>
+                                    <i class="far fa-heart" style="{% if request.user in users_like %}color:red{% endif %}"></i>
+                                    {{ total_likes }}
+                                </a>
                                 {% endwith %}
                             </li>
                         </ul>
@@ -200,8 +200,10 @@
                     {# 推荐文章 #}
                     {% recommendations_articles 5 '侧边_推荐文章' %}
 
+                    {% if SHOW_GOOGLE_ADSENSE %}
                     {# 广告 #}
                     {% include 'tp/侧边组件/侧边_广告.html' with page_obj=page_obj %}
+                    {% endif %}
                 </div>
 
             </div>
