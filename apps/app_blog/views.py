@@ -264,6 +264,7 @@ from drf_haystack.filters import HaystackFilter, BaseHaystackFilterBackend
 
 # 用法
 # http://127.0.0.1:8000/search/?text__contains=bug
+# not__contains,startswith,endswith,=,同样适用,page还有page_size选项
 
 class ContentSearchViewSet(HaystackViewSet):
 
