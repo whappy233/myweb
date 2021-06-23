@@ -1584,8 +1584,7 @@ h6 {
 }
 .inner-page-banner {
   display: block;
-  padding: 12rem 0;
-  background-color: #e5e5e5;
+  padding: 12rem 0 5rem;
 }
 .inner-page-banner .breadcrumbs-area {
   position: relative;
@@ -1608,6 +1607,11 @@ h6 {
     margin-bottom: 10px;
     font-size: 32px;
   }
+}
+.inner-page-banner .breadcrumbs-area form {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 .inner-page-banner .breadcrumbs-area ul li {
   display: inline-block;
@@ -3045,9 +3049,8 @@ nav.template-main-menu > ul > li > ul > li:hover ul.third-level {
   left: 0px;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: brightness(20%) saturate(120%) blur(50px);
+  backdrop-filter: brightness(20%) saturate(120%) blur(50px);
   transition: all 0.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
   transform: scale(1.5);
   opacity: 0;
@@ -3074,43 +3077,24 @@ nav.template-main-menu > ul > li > ul > li:hover ul.third-level {
   margin: 0px auto;
   padding: 15px;
   outline: none;
-  background: linear-gradient(to right, transparent, rgba(200, 200, 200, 0.5), transparent);
+  background: linear-gradient(to right, transparent, rgba(134, 134, 134, 0.5), transparent);
 }
-.curtain .header-search-form .search-btn {
-  background-color: transparent;
-  box-shadow: none;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  position: absolute;
-  right: 26%;
-  top: 24%;
-}
+
+
 @media only screen and (max-width: 1200px) {
   .curtain .header-search-form input[type="search"] {
-    width: 60%;
+    width: 70%;
   }
-  .curtain .header-search-form .search-btn {
-    right: 21%;
+}
+@media only screen and (max-width: 700px) {
+  .curtain .header-search-form input[type="search"] {
+    width: 75%;
   }
 }
 @media only screen and (max-width: 575px) {
   .curtain .header-search-form input[type="search"] {
-    width: 75%;
+    width: 95%;
   }
-  .curtain .header-search-form .search-btn {
-    right: 14%;
-  }
-}
-.curtain .header-search-form .search-btn i:before {
-  font-size: 22px;
-  font-weight: 700;
-  color: #fff;
-  margin-left: 0;
-}
-.curtain .header-search-form .search-btn:focus {
-  box-shadow: none;
-  outline: none;
 }
 .curtain .header-search-result {
   text-align: left;
@@ -3124,41 +3108,83 @@ nav.template-main-menu > ul > li > ul > li:hover ul.third-level {
   border-bottom: 1px solid rgb(187, 187, 187);
 }
 .curtain .header-search-result ul{
+  min-height: 100px;
   max-height: 500px;
   overflow-y: auto;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 .curtain .header-search-result li{
-  padding: 0 10px;
+  padding: 5px 10px;
+  margin: 5px;
   border-radius: var(--root-border-radius);
-  margin-right: 5px;
+  display: flex; 
+  align-items:center;
+  background-color: rgba(255, 255, 255, 10%);
 }
-.curtain .header-search-result li a{
-  color: rgb(187, 187, 187);
+.curtain .header-search-result li .item-img{
+  width: 20%;
+  margin-right: 10px;
+  overflow: hidden;
+  border-radius: 5px;
+}
+.curtain .header-search-result li .item-img img{
+  width: 100%;
+  transform: scale(1) rotate(0deg);
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+.curtain .header-search-result li .item-content{
+  width: 80%;
+}
+.curtain .header-search-result li .item-content h3,
+.curtain .header-search-result li .item-content p{
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+.curtain .header-search-result li .item-content h3{
+  -webkit-line-clamp: 1;
+  margin-bottom: 5px;
+  font-size: 16px;
   font-weight: 600;
-  line-height: 2;
+  color: #fff;
+}
+.curtain .header-search-result li .item-content p{
+  -webkit-line-clamp: 2;
+  margin: 0 0 0 5px;
+  font-size: 14px;
+  color: #BDBDBD;
 }
 @media only screen and (max-width: 767px){
+  .curtain .header-search-result li{
+    line-height: 1.2;
+  }
   .curtain .header-search-result{
     font-size: 14px;
-  }
-  .curtain .header-search-result li{
-    line-height: 1;
-    overflow: hidden;
-    -o-text-overflow: ellipsis;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
   }
 }
 @media only screen and (max-width: 1200px) {
   .curtain .header-search-result {
-    width: 60%!important;
+    width: 70%!important;
+  }
+}
+@media only screen and (max-width: 700px) {
+  .curtain .header-search-result {
+    width: 75%!important;
   }
 }
 @media only screen and (max-width: 575px) {
   .curtain .header-search-result {
-    width: 75%!important;
+    width: 95%!important;
   }
   .curtain .header-search-result ul{
     max-height: 400px;
@@ -3168,7 +3194,10 @@ nav.template-main-menu > ul > li > ul > li:hover ul.third-level {
   margin-right: 10px;
 }
 .curtain .header-search-result li:hover{
-  background-color: rgb(53, 53, 53);
+  background-color: rgb(255 255 255 / 20%);
+}
+.curtain .header-search-result li:hover .item-img img{
+  transform: scale(1.1) rotate(2deg);
 }
 .curtain .header-search-result li a:hover{
   color: #fff;
@@ -3967,6 +3996,10 @@ div#wrapper.open > .offcanvas-mask {
   margin-right: 5px;
   display: inline-block;
 }
+.pagination-layout1 ul li.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
 .pagination-layout1 ul li:last-child {
   margin-right: 0;
 }
@@ -3974,7 +4007,7 @@ div#wrapper.open > .offcanvas-mask {
   width: 40px;
   height: 40px;
   padding: 6px;
-  display: block;
+  display: inline-block;
   font-size: 14px;
   color: var(--global-color);
   border-radius: var(--root-border-radius);
@@ -3985,13 +4018,14 @@ div#wrapper.open > .offcanvas-mask {
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
-.pagination-layout1 ul li a:hover {
+.pagination-layout1 ul li:not(.disabled) a:hover {
   color: var(--global-hover-background);
   background-color: var(--global-color);
 }
 .pagination-layout1 ul li.active a {
   color: var(--global-background);
   background-color: var(--global-color);
+  pointer-events: none;
 }
 /*------------------- 4.7 Widget -------------------*/
 

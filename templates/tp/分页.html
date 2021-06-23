@@ -1,15 +1,46 @@
-<!-- 页码 -->
+{% comment %}
+    分页
+    参数: 
+        page_obj: 分页对象
+        keyword: 搜索关键字
+{% endcomment %}
 
 
-
+{% with page_count=page_obj.paginator.num_pages current_page=page_obj.number kw_data='&q='|add:keyword %}
 <div class="pagination-layout1">
     <ul>
-        <li><a href="/?page=prev" title="上一页"><i class="fas fa-chevron-left"></i></a></li>
-        <li class="active"><a href="/?page=1" title="1">1</a></li>
-        <li><a href="/?page=2" title="2">2</a></li>
-        <li><a href="/?page=3" title="3">3</a></li>
-        <li>...</li>
-        <li><a href="/?page=16" title="16">16</a></li>
-        <li><a href="/?page=next" title="下一页"><i class="fas fa-chevron-right"></i></a></li>
+        <!-- 上一页 -->
+        {% if page_obj.has_previous %}
+        <li><a href="?page={{page.previous_page_number}}{{kw_data}}" title="上一页"><i class="fas fa-chevron-left"></i></a></li>
+        {% else %}
+        <li class="disabled"><a href="javascript:void(0)" title="上一页"><i class="fas fa-chevron-left"></i></a></li>
+        {% endif %}
+
+        <!-- 首页 -->
+        {% if current_page|add:-1 > 2 %}<li><a href="?page=1{{kw_data}}" title="首页">1</a></li>{% endif %}
+        {% if current_page|add:-1 > 3 %}<li><span>...</span></li>{% endif %}
+
+        <!-- 前2页 -->
+        {% if current_page|add:-2 >= 1 %}<li><a href="?page={{current_page|add:-2}}{{kw_data}}">{{ current_page|add:-2}}</a></li>{% endif %}
+        <!-- 前1页 -->
+        {% if current_page|add:-1 >= 1 %}<li><a href="?page={{current_page|add:-1}}{{kw_data}}">{{ current_page|add:-1}}</a></li>{% endif %}
+        <!-- 当前页 -->
+        <li class="active"><a href="javascript:void(0)">{{ current_page }}</a></li>
+        <!-- 后1页 -->
+        {% if current_page|add:1 <= page_count %}<li><a href="?page={{current_page|add:1}}{{kw_data}}">{{ current_page|add:1}}</a></li>{% endif %}
+        <!-- 后2页 -->
+        {% if current_page|add:2 <= page_count %}<li><a href="?page={{current_page|add:2}}{{kw_data}}">{{ current_page|add:2}}</a></li>{% endif %}
+
+        <!-- 尾页 -->
+        {% if current_page|add:3 < page_count %}<li><span>...</span></li>{% endif %}
+        {% if current_page|add:2 < page_count %}<li><a href="?page={{page_count}}{{kw_data}}" title="尾页">{{page_count}}</a></li>{% endif %}
+
+        <!-- 下一页 -->
+        {% if page_obj.has_next %}
+        <li><a href="?page={{page.next_page_number}}{{kw_data}}" title="下一页"><i class="fas fa-chevron-right"></i></a></li>
+        {% else %}
+        <li class="disabled"><a href="javascript:void(0)" title="下一页"><i class="fas fa-chevron-right"></i></a></li>
+        {% endif %}
     </ul>
 </div>
+{% endwith %}

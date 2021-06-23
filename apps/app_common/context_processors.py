@@ -7,9 +7,6 @@ from django.utils import timezone
 from loguru import logger
 
 
-
-
-
 def seo_processor(requests):
     key = 'seo_processor'
     value = cache.get(key)

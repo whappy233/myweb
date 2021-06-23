@@ -1,7 +1,6 @@
 from django.urls import include, path, re_path
 
-from . import views
-from .search_views import MySearchView
+from . import views, search_view
 from .feeds import LatestArticlesFeed
 
 
@@ -17,7 +16,7 @@ urlpatterns = [
 
     path('<int:article_id>/share/', views.article_share, name='article_share'),                 # 分享文章
 
-    path('se/', MySearchView(), name='haystack_search'),         # 搜索
+    path('search/', search_view.MySearchView(), name='haystack_search'),         # 搜索
 
     path('feed/', LatestArticlesFeed(), name='article_feed'),       # 订阅链接
 
@@ -29,8 +28,7 @@ urlpatterns = [
 
 
 from rest_framework.routers import DefaultRouter
-from .views import ContentSearchViewSet
 
 router = DefaultRouter()
-router.register(r"search", ContentSearchViewSet, basename="sea")
+router.register(r"api/search", search_view.ContentSearchViewSet, basename="api_search")
 urlpatterns += router.urls

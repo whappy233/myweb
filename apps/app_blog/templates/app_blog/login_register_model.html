@@ -79,226 +79,226 @@
 <script src="{% static 'app_blog/js/drag.js' %}"></script>
 
 <script>
+    $(function(){
 
-    // 在form表单中存在多个 submit 时, 用于获取触发 submit 的 按钮 
-    $(".login_register_form form button[type=submit]").click(function() {
-        $("button[type=submit]", $(this).parents("form")).removeAttr("clicked");
-        $(this).attr("clicked", "true");
-    });
+        // 在form表单中存在多个 submit 时, 用于获取触发 submit 的 按钮 
+        $(".login_register_form form button[type=submit]").click(function() {
+            $("button[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
 
-    $.ajaxSetup({
-        data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
-    });
+        $.ajaxSetup({
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+        });
 
-    function ajax_form_fail(form_ele, data, success=false) {
-        let err_mag_ele = $(form_ele).children('.err-message')
-        if (!success){
-            err_mag_ele.css('color', '#ff7e7e');
-            $(".login_register_form").removeClass('shake_effect');
-            setTimeout(function () {
-                $(".login_register_form").addClass('shake_effect')
-            }, 10);
-        }else{
-            err_mag_ele.css({'color':'white', 'line-height': '1.5'});
+        function ajax_form_fail(form_ele, data, success=false) {
+            let err_mag_ele = $(form_ele).children('.err-message')
+            if (!success){
+                err_mag_ele.css('color', '#ff7e7e');
+                $(".login_register_form").removeClass('shake_effect');
+                setTimeout(function () {
+                    $(".login_register_form").addClass('shake_effect')
+                }, 10);
+            }else{
+                err_mag_ele.css({'color':'white', 'line-height': '1.5'});
+            }
+            err_mag_ele.html(data.msg);
+            err_mag_ele.removeClass('hidden');
         }
-        err_mag_ele.html(data.msg);
-        err_mag_ele.removeClass('hidden');
-    }
-    // 登录
-    function to_login() {
-        $.ajax({
-            url: "{% url 'app_user:ajax_login' %}",
-            type: 'post',
-            // 发送 ajax json 请求
-            // contentType:'application/json;charset=UTF-8',  
-            // data: JSON.stringify({
-            //     username: $("#user_name").val(),
-            //     password: $("#password").val()
-            // }
-            data: {
-                username: $("#user_name").val(),
-                password: $("#password").val()
-            },
-            success: function (data) {
-                if (data.status == 200) {
-                    let aim = $('#login_submit').data('aim');
-                    if (aim){
-                        window.location.href = aim;
-                    }else{
-                        location.reload();
+        // 登录
+        function to_login() {
+            $.ajax({
+                url: "{% url 'app_user:ajax_login' %}",
+                type: 'post',
+                // 发送 ajax json 请求
+                // contentType:'application/json;charset=UTF-8',  
+                // data: JSON.stringify({
+                //     username: $("#user_name").val(),
+                //     password: $("#password").val()
+                // }
+                data: {
+                    username: $("#user_name").val(),
+                    password: $("#password").val()
+                },
+                success: function (data) {
+                    if (data.status == 200) {
+                        let aim = $('#login_submit').data('aim');
+                        if (aim){
+                            window.location.href = aim;
+                        }else{
+                            location.reload();
+                        }
                     }
-                }
-                else {
-                    ajax_form_fail('.login-form', data);
+                    else {
+                        ajax_form_fail('.login-form', data);
+                        $('#drag-login').empty();
+                        $('#drag-login').drag();
+                        $('#login_submit').attr('disabled', true)
+                    }
+                },
+                error: function (xhr, status, error) {
+                    ajax_form_fail('.login-form', { 'msg': error });
                     $('#drag-login').empty();
                     $('#drag-login').drag();
                     $('#login_submit').attr('disabled', true)
                 }
-            },
-            error: function (xhr, status, error) {
-                ajax_form_fail('.login-form', { 'msg': error });
-                $('#drag-login').empty();
-                $('#drag-login').drag();
-                $('#login_submit').attr('disabled', true)
-            }
-        })
-    }
-    // 注册
-    function to_register() {
-        $.ajax({
-            url: "{% url 'app_user:ajax_register' %}",
-            type: 'post',
-            data: {
-                username: $("#r_username").val(),
-                password1: $("#r_password").val(),
-                password2: $("#rr_password").val(),
-                email: $("#r_email").val(),
-                check_code: '666'
-            },
-            success: function (data) {
-                if (data.status == 200) {
-                    ajax_form_fail('.register-form', data, true);
+            })
+        }
+        // 注册
+        function to_register() {
+            $.ajax({
+                url: "{% url 'app_user:ajax_register' %}",
+                type: 'post',
+                data: {
+                    username: $("#r_username").val(),
+                    password1: $("#r_password").val(),
+                    password2: $("#rr_password").val(),
+                    email: $("#r_email").val(),
+                    check_code: '666'
+                },
+                success: function (data) {
+                    if (data.status == 200) {
+                        ajax_form_fail('.register-form', data, true);
+                    }
+                    else {
+                        ajax_form_fail('.register-form', data);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    ajax_form_fail('.register-form', { 'msg': error });
                 }
-                else {
-                    ajax_form_fail('.register-form', data);
-                }
-            },
-            error: function (xhr, status, error) {
-                ajax_form_fail('.register-form', { 'msg': error });
-            }
-        })
-    }
-    // 忘记密码
-    function forget_pw(data){
-        $.ajax({
-            url: "{% url 'app_user:forget_pwd' %}",
-            type: 'post',
-            data: {
-                email: $("#f_email").val(),
-                vcode: $('#verify_code').val(),
-                pw1: $("#n_pw1").val(),
-                pw2: $("#n_pw2").val(),
-            },
-            success: function (data) {
-                if (data.status == 200) {
-                    ajax_form_fail('.forget-form', {msg:'<p class="message">密码重置成功去<a name="login-form">登录</a></p>'}, true);
-                }
-                else {
+            })
+        }
+        // 忘记密码
+        function forget_pw(data){
+            $.ajax({
+                url: "{% url 'app_user:forget_pwd' %}",
+                type: 'post',
+                data: {
+                    email: $("#f_email").val(),
+                    vcode: $('#verify_code').val(),
+                    pw1: $("#n_pw1").val(),
+                    pw2: $("#n_pw2").val(),
+                },
+                success: function (data) {
+                    if (data.status == 200) {
+                        ajax_form_fail('.forget-form', {msg:'<p class="message">密码重置成功去<a name="login-form">登录</a></p>'}, true);
+                    }
+                    else {
+                        ajax_form_fail('.forget-form', data);
+                    }
+                },
+                error: function (xhr, status, error) {
                     ajax_form_fail('.forget-form', data);
                 }
-            },
-            error: function (xhr, status, error) {
-                ajax_form_fail('.forget-form', data);
+            })
+        }
+
+        $(".register-form").on('submit', function () {
+            let password1 = $("#r_password").val(),
+                password2 = $("#rr_password").val();
+
+            if (password1 != password2){
+                ajax_form_fail('.register-form', { 'msg': '两个密码字段不一致。' });
+            }else if (password1.length < 6){
+                ajax_form_fail('.register-form', { 'msg': '密码长度太短。密码必须包含至少 8 个字符。' });
+            }else{
+                to_register();
             }
+            return false;
         })
-    }
 
-    $(".register-form").on('submit', function () {
-        let password1 = $("#r_password").val(),
-            password2 = $("#rr_password").val();
+        $(".login-form").on('submit', function () {
+            to_login();
+            return false;
+        })
 
-        if (password1 != password2){
-            ajax_form_fail('.register-form', { 'msg': '两个密码字段不一致。' });
-        }else if (password1.length < 6){
-            ajax_form_fail('.register-form', { 'msg': '密码长度太短。密码必须包含至少 8 个字符。' });
-        }else{
-            to_register();
+        $(".forget-form").on('submit', function (e) {
+            let ele = $(this).find("button[type=submit][clicked=true]")[0];
+            if (ele.id == 'send_email_vcode'){
+                return false
+            }
+            forget_pw()
+            return false;
+        })
+
+        // 点击切换Form表单
+        $('.login_register_form').on('click', '.message a', form_switch);
+
+        $('#main').on('click', '[data-target="#login_register_Modal"]', form_switch);
+
+        function form_switch(e){
+            e.preventDefault();
+            let obj = $(e.target || e.srcElement);
+            let form_class_name = '.'+obj.attr('name');
+            $('.login_register_form form').css('display', 'none');
+            $(form_class_name).css('display', 'block');
         }
-        return false;
-    })
 
-    $(".login-form").on('submit', function () {
-        to_login();
-        return false;
-    })
+        // 关闭登录注册Model触发
+        $('#login_register_Modal').on('hidden.bs.modal', function () {
+            $(".login_register_form").removeClass('shake_effect');
+            $('.err-message').addClass('hidden')
+            $('#login_submit').attr('disabled', true)
+            $('#drag-login').empty();
+        });
 
-    $(".forget-form").on('submit', function (e) {
-        let ele = $(this).find("button[type=submit][clicked=true]")[0];
-        if (ele.id == 'send_email_vcode'){
-            return false
+        // 打开登录注册Model触发
+        $('#login_register_Modal').on('show.bs.modal', function () {
+            // 可以设置下拉框为初始值
+            $('#drag-login').drag();
+            var e = window.event;
+            let obj = e.target || e.srcElement;
+            $('#login_submit').data('aim', obj.href||'')
+        });
+
+
+        let btn = $("#send_email_vcode");
+        // 发送验证码
+        function SendCode(e) {
+            email = document.getElementById("f_email");
+            if (email.value.length > 0) {
+
+                //调用获取验证码的接口
+                $.post("{% url 'app_user:send_email_vcode' %}", { 'email': email.value }, function (data) {
+                    if (data.status==200) {
+                        ajax_form_fail('.forget-form', data, true);
+                        //按照指定的周期（以毫秒计）来调用函数或计算表达式。
+                        //在ajax请求之后再调用函数
+                        t = setInterval(function () {countdown(e)}, 1000)
+                        //获取验证码成功后调用倒计时函数
+                        countdown(e);
+                    } else {
+                        ajax_form_fail('.forget-form', data);
+                    }
+                });
+
+            }
         }
-        forget_pw()
-        return false;
-    })
+        var time = 5;
+        // 倒计时60s
+        function countdown(e) {
+            if (time == 0) {
+                //这里时设置当时间到0的时候重新设置点击事件，并且默认time修改为60
+                //e.setAttribute("onclick","getcode(this)");
 
-    // 点击切换Form表单
-    $('.login_register_form').on('click', '.message a', form_switch);
+                btn.attr("disabled", false);
+                btn.html("获取验证码");
+                btn.removeClass("disabled");
+                btn.removeClass("layui-btn-disabled")
+                time = 5;
+                clearInterval(t);
+            } else {
+                //这里是显示时间倒计时的时候点击不生效
+                //e.setAttribute("onclick", '');
 
-    $('#main').on('click', '[data-target="#login_register_Modal"]', form_switch);
+                btn.addClass("disabled");
+                btn.attr("disabled", true);
+                btn.html("重新发送(" + time + ")");
 
-    function form_switch(e){
-        e.preventDefault();
-        let obj = $(e.target || e.srcElement);
-        let form_class_name = '.'+obj.attr('name');
-        $('.login_register_form form').css('display', 'none');
-        $(form_class_name).css('display', 'block');
-    }
-
-    // 关闭登录注册Model触发
-    $('#login_register_Modal').on('hidden.bs.modal', function () {
-        $(".login_register_form").removeClass('shake_effect');
-        $('.err-message').addClass('hidden')
-        $('#login_submit').attr('disabled', true)
-        $('#drag-login').empty();
+                //document.getElementById("getcode").innerHTML="重新发送"+time;
+                time--;
+            }
+        }
     });
-
-    // 打开登录注册Model触发
-    $('#login_register_Modal').on('show.bs.modal', function () {
-        // 可以设置下拉框为初始值
-        $('#drag-login').drag();
-        var e = window.event;
-        let obj = e.target || e.srcElement;
-        $('#login_submit').data('aim', obj.href||'')
-    });
-
-
-    let btn = $("#send_email_vcode");
-    // 发送验证码
-    function SendCode(e) {
-        email = document.getElementById("f_email");
-        if (email.value.length > 0) {
-
-            //调用获取验证码的接口
-            $.post("{% url 'app_user:send_email_vcode' %}", { 'email': email.value }, function (data) {
-                if (data.status==200) {
-                    ajax_form_fail('.forget-form', data, true);
-                    //按照指定的周期（以毫秒计）来调用函数或计算表达式。
-                    //在ajax请求之后再调用函数
-                    t = setInterval(function () {countdown(e)}, 1000)
-                    //获取验证码成功后调用倒计时函数
-                    countdown(e);
-                } else {
-                    ajax_form_fail('.forget-form', data);
-                }
-            });
-
-        }
-    }
-    var time = 5;
-    // 倒计时60s
-    function countdown(e) {
-        if (time == 0) {
-            //这里时设置当时间到0的时候重新设置点击事件，并且默认time修改为60
-            //e.setAttribute("onclick","getcode(this)");
-
-            btn.attr("disabled", false);
-            btn.html("获取验证码");
-            btn.removeClass("disabled");
-            btn.removeClass("layui-btn-disabled")
-            time = 5;
-            clearInterval(t);
-        } else {
-            //这里是显示时间倒计时的时候点击不生效
-            //e.setAttribute("onclick", '');
-
-            btn.addClass("disabled");
-            btn.attr("disabled", true);
-            btn.html("重新发送(" + time + ")");
-
-            //document.getElementById("getcode").innerHTML="重新发送"+time;
-            time--;
-        }
-    }
-
-
 </script>

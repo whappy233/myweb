@@ -29,3 +29,4 @@ djangorestframework==3.12.4
 whoosh==2.7.4
 django-haystack==3.0
 jieba==0.42.1
+drf-haystack==1.8.1

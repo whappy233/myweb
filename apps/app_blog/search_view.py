@@ -1,13 +1,31 @@
+'''
+haystack 搜索相关
+'''
 
-from django import http
-from django.conf import settings
-from django.core.paginator import Paginator, InvalidPage
-from django.http.response import HttpResponse, JsonResponse
-from haystack.views import SearchView
+from django.http import JsonResponse
 from django.shortcuts import render
-from django.http import Http404
+from haystack.views import SearchView
+from drf_haystack.viewsets import HaystackViewSet
+
+from .search_serializers import ArticleIndexSerializer
+from .models import Article
 
 
+# https://blog.csdn.net/smartwu_sir/article/details/80209907
+
+
+
+# /api/search/?text__contains=bug
+# not__contains, startswith, endswith, =, 同样适用, page还有page_size选项
+class ContentSearchViewSet(HaystackViewSet):
+
+    # 这里可以写多个模型，相应的serializer 里也可以写多个 index_classes
+    index_models = [Article]
+    serializer_class = ArticleIndexSerializer
+
+
+
+# /search/?q='关键字'
 class MySearchView(SearchView):
     template = 'tp/search.html'
 
@@ -26,9 +44,8 @@ class MySearchView(SearchView):
         # 'paginator': paginator
         # 'suggestion': None
 
-        # if not self.request.is_ajax():
-        #     return render(self.request, self.template, context)
-
+        if not self.request.is_ajax():
+            return render(self.request, self.template, context)
 
         keyword = self.request.GET.get('q', None)  # 关键子为q
         if not keyword:
@@ -52,3 +69,8 @@ class MySearchView(SearchView):
         content["data"].update(dict(blog=content_list))
 
         return JsonResponse(content, json_dumps_params={'ensure_ascii':False})#对对象进行序列化返回json格式数据
+
+
+
+
+

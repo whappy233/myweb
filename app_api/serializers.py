@@ -163,11 +163,11 @@ class ArticleSerializer(serializers.ModelSerializer):
             return ''
 
     # 允许我们改变序列化的输出内容, 给其添加额外的数据
-    def to_representation(self, value):
-        # 调用父类获取当前序列化数据，value代表每个对象实例ob
-        data = super().to_representation(value)
+    def to_representation(self, instance):
+        # 调用父类获取当前序列化数据
+        data = super().to_representation(instance)
         # 对序列化数据做修改，添加新的数据
-        data['total_likes'] = value.users_like.count()  # 点赞总数
+        data['total_likes'] = instance.users_like.count()  # 点赞总数
         return data
 
     # 字段级别验证 validate_<field_name>

@@ -122,11 +122,11 @@ class ArticleAdmin(admin.ModelAdmin):
     action_func.short_description = "对批量选择进行某些操作"
 
     def close_article_commentstatus(self, request, queryset):
-        queryset.update(comment_status='c')
+        queryset.update(comment_status=False)
     close_article_commentstatus.short_description = '关闭文章评论'
 
     def open_article_commentstatus(self, request, queryset):
-        queryset.update(comment_status='o')
+        queryset.update(comment_status=True)
     open_article_commentstatus.short_description = '打开文章评论'
 
 

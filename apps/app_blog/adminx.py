@@ -77,11 +77,11 @@ class ShortDescriptionMixin:
     make_delete_false.short_description = "逻辑删除-否"
 
     def close_article_commentstatus(self, request, queryset):
-        queryset.update(comment_status='c')
+        queryset.update(comment_status=False)
     close_article_commentstatus.short_description = '关闭文章评论'
 
     def open_article_commentstatus(self, request, queryset):
-        queryset.update(comment_status='o')
+        queryset.update(comment_status=True)
     open_article_commentstatus.short_description = '打开文章评论'
 
     # 对批量选择进行某些操作. 如果想对queryset中的对象一个一个修改或导出

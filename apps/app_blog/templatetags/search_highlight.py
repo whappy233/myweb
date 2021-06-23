@@ -1,33 +1,39 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 from django.utils.html import strip_tags
+
+'''源码位置: 
+    site-packages/haystack/utils/highlighting.py
+'''
+
 
 
 class Highlighter(object):
-    # 默认值
-    css_class = 'highlighted'
-    html_tag = 'span'
+    css_class = "highlighted"
+    html_tag = "span"
     max_length = 200
+    text_block = ""
+
+    # ++
     start_head = False
-    text_block = ''
 
     def __init__(self, query, **kwargs):
         self.query = query
 
-        if 'max_length' in kwargs:
-            self.max_length = int(kwargs['max_length'])
+        if "max_length" in kwargs:
+            self.max_length = int(kwargs["max_length"])
 
-        if 'html_tag' in kwargs:
-            self.html_tag = kwargs['html_tag']
+        if "html_tag" in kwargs:
+            self.html_tag = kwargs["html_tag"]
 
-        if 'css_class' in kwargs:
-            self.css_class = kwargs['css_class']
+        if "css_class" in kwargs:
+            self.css_class = kwargs["css_class"]
 
-        if 'start_head' in kwargs:
-            self.start_head = kwargs['start_head']
+        # ++
+        if "start_head" in kwargs:
+            self.start_head = kwargs["start_head"]
 
         self.query_words = set(
-            [word.lower() for word in self.query.split() if not word.startswith('-')])
+            [word.lower() for word in self.query.split() if not word.startswith("-")]
+        )
 
     def highlight(self, text_block):
         self.text_block = strip_tags(text_block)
@@ -44,14 +50,13 @@ class Highlighter(object):
         lower_text_block = self.text_block.lower()
 
         for word in self.query_words:
-            if not word in word_positions:
+            if word not in word_positions:
                 word_positions[word] = []
 
             start_offset = 0
 
             while start_offset < end_offset:
-                next_offset = lower_text_block.find(
-                    word, start_offset, end_offset)
+                next_offset = lower_text_block.find(word, start_offset, end_offset)
 
                 # If we get a -1 out of find, it wasn't found. Bomb out and
                 # start the next word.
@@ -100,7 +105,7 @@ class Highlighter(object):
         for count, start in enumerate(words_found[:-1]):
             current_density = 1
 
-            for end in words_found[count + 1:]:
+            for end in words_found[count + 1 :]:
                 if end - start < self.max_length:
                     current_density += 1
                 else:
@@ -117,7 +122,7 @@ class Highlighter(object):
 
     def render_html(self, highlight_locations=None, start_offset=None, end_offset=None):
         # Start by chopping the block down to the proper window.
-        # text_block为内容，start_offset,end_offset分别为第一个匹配query开始和按长度截断位置
+        # text_block 为内容, start_offset, end_offset 分别为第一个匹配 query 开始和按长度截断位置
         text = self.text_block[start_offset:end_offset]
 
         # Invert highlight_locations to a location -> term list
@@ -132,13 +137,13 @@ class Highlighter(object):
         if self.css_class:
             hl_start = '<%s class="%s">' % (self.html_tag, self.css_class)
         else:
-            hl_start = '<%s>' % (self.html_tag)
+            hl_start = "<%s>" % (self.html_tag)
 
-        hl_end = '</%s>' % self.html_tag
+        hl_end = "</%s>" % self.html_tag
 
         # Copy the part from the start of the string to the first match,
         # and there replace the match with a highlighted version.
-        # matched_so_far最终求得为text中最后一个匹配query的结尾
+        # matched_so_far 最终求得为 text 中最后一个匹配 query 的结尾
         highlighted_chunk = ""
         matched_so_far = 0
         prev = 0
@@ -146,16 +151,17 @@ class Highlighter(object):
 
         for cur, cur_str in loc_to_term:
             # This can be in a different case than cur_str
-            actual_term = text[cur:cur + len(cur_str)]
+            actual_term = text[cur : cur + len(cur_str)]
 
             # Handle incorrect highlight_locations by first checking for the term
             if actual_term.lower() == cur_str:
                 if cur < prev + len(prev_str):
                     continue
 
-                # 分别添上每个query+其后面的一部分（下一个query的前一个位置）
-                highlighted_chunk += text[prev +
-                                          len(prev_str):cur] + hl_start + actual_term + hl_end
+                # 分别添上每个 query + 其后面的一部分（下一个query的前一个位置）
+                highlighted_chunk += (
+                    text[prev + len(prev_str) : cur] + hl_start + actual_term + hl_end
+                )
                 prev = cur
                 prev_str = cur_str
 
@@ -163,20 +169,19 @@ class Highlighter(object):
                 matched_so_far = cur + len(actual_term)
 
         # Don't forget the chunk after the last term
-        # 加上最后一个匹配的query后面的部分
+        # 加上最后一个匹配的 query 后面的部分
         highlighted_chunk += text[matched_so_far:]
 
-        # 如果不要开头not start_head才加点
+        # change
+        # 如果不要开头 not start_head 才加点
         if start_offset > 0 and not self.start_head:
-            highlighted_chunk = '...%s' % highlighted_chunk
+            highlighted_chunk = "...%s" % highlighted_chunk
 
         if end_offset < len(self.text_block):
-            highlighted_chunk = '%s...' % highlighted_chunk
+            highlighted_chunk = "%s..." % highlighted_chunk
 
-        # 可见到目前为止还不包含start_offset前面的，即第一个匹配的前面的部分（text_block[:start_offset]），如需展示(当start_head为True时)便加上
+        # 可见到目前为止还不包含start_offset前面的, 即第一个匹配的前面的部分(text_block[:start_offset]),
+        # 如需展示(当start_head为True时)便加上
         if self.start_head:
-            highlighted_chunk = self.text_block[:start_offset] + \
-                highlighted_chunk
+            highlighted_chunk = self.text_block[:start_offset] + highlighted_chunk
         return highlighted_chunk
-
-
