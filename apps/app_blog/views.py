@@ -25,7 +25,7 @@ from .utils import MarkdownRender
 
 
 class ArticleListView(ListView):
-    template_name = 'tp/文章列表_index.html'  # 视图默认的模板名称是: 模型名小写_list.html
+    template_name = 'tp/首页.html'  # 视图默认的模板名称是: 模型名小写_list.html
     context_object_name = 'article_list'  # 设置上下文变量
 
     page_type = ''
@@ -99,6 +99,7 @@ class ArticleListView(ListView):
 # 文章列表
 # @method_decorator(logger.catch(), name='dispatch')
 class IndexView(ArticleListView):
+    page_type = "index"
 
     def get_queryset_data(self):
         article_list = Article.published.all()
@@ -110,11 +111,12 @@ class IndexView(ArticleListView):
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
+        context['page_type'] = IndexView.page_type
         return context
 
 # 某个标签下的文章
 class TagDetailView(ArticleListView):
-    page_type = '标签归档'
+    page_type = '标签'
 
     def get_queryset_data(self):
         tag_slug = self.kwargs.get('tag_slug')
@@ -133,12 +135,12 @@ class TagDetailView(ArticleListView):
     def get_context_data(self, **kwargs):
         context = super(TagDetailView, self).get_context_data(**kwargs)
         context['page_type'] = TagDetailView.page_type
-        context['tag_name'] = self.name
+        context['page_name'] = self.name
         return context
 
 # 某个作者下的文章
 class AuthorDetailView(ArticleListView):
-    page_type = '作者归档'
+    page_type = '作者'
 
     def get_queryset_cache_key(self):
         author_name = self.kwargs['author_name']
@@ -153,13 +155,13 @@ class AuthorDetailView(ArticleListView):
     def get_context_data(self, **kwargs):
         context = super(AuthorDetailView, self).get_context_data(**kwargs)
         context['page_type'] = AuthorDetailView.page_type
-        context['tag_name'] = self.kwargs['author_name']
+        context['page_name'] = self.kwargs['author_name']
         return context
 
 # 某个分类下的文章
 class CategoryDetailView(ArticleListView):
 
-    page_type = "分类归档"
+    page_type = "分类"
 
     def get_queryset_data(self):
         slug = self.kwargs['category_slug']
@@ -184,15 +186,20 @@ class CategoryDetailView(ArticleListView):
     def get_context_data(self, **kwargs):
         context = super(CategoryDetailView, self).get_context_data(**kwargs)
         context['page_type'] = CategoryDetailView.page_type
-        context['tag_name'] = self.category_name
+        context['page_name'] = self.category_name
         return context
+
+
+
+
+
+
 
 # 文章详情
 class ArticleDetailView(DetailView):
     '''文章详情'''
     model = Article
     template_name = 'tp/文章详情.html'
-    # template_name = 'app_blog/article_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

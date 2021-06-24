@@ -27,7 +27,7 @@ class ContentSearchViewSet(HaystackViewSet):
 
 # /search/?q='关键字'
 class MySearchView(SearchView):
-    template = 'tp/search.html'
+    template = 'tp/搜索.html'
 
     def extra_context(self):
         '''重载extra_context来添加额外的context内容'''

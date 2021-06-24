@@ -28,7 +28,7 @@
         <span class="views">
             <i class="glyphicon glyphicon-tag"></i>
             {% for tag in tags %}
-            <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">
+            <a href="{{ tag.get_absolute_url() }}">
                 {{ tag.name }}
             </a>
             {% if not forloop.last %},{% endif %}

@@ -17,7 +17,7 @@
             {% widthratio tag.blog_count 0.9 16 as size %}
             {% widthratio tag.blog_count 0.95 50 as weight %}
 
-            <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}" title="{{ tag.name }}"
+            <a href="{{ tag.get_absolute_url }}" title="{{ tag.name }}"
             style="color:{{ tt|random }};font-size: {{size}}px;font-weight: {{weight|add:400}};">
                 #{{ tag.name }}
             </a>

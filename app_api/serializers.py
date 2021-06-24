@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueTogetherValidator
 
 from app_blog.models import Article, Category
+from app_blog.cn_taggit import CnTag
 from app_user.models import UserProfile
 
 User = get_user_model()
@@ -122,10 +123,35 @@ class UserSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     '''分类序列化'''
 
+    # 生成指向文章详情的api连接地址
+    # blog_articles = serializers.HyperlinkedRelatedField(
+    #     many= True,
+    #     read_only=True,
+    #     view_name='article-detail'
+    # )
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['url'] = instance.get_absolute_url()
+        return data
+
     class Meta:
         model = Category
-        fields = ('id', 'name', 'slug')
+        fields = ('name',)
 
+
+# 标签
+class TagSerializer(serializers.ModelSerializer):
+    '''Tags序列化'''
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['tag_url'] = instance.get_absolute_url()
+        return data
+
+    class Meta:
+        model = CnTag
+        fields = ('name', )
 
 
 def title_gt_90(value):

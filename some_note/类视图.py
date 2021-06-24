@@ -43,7 +43,7 @@ from app_blog.models import Article
 from django.utils import timezone
 class ArticleDetailView(DetailView):
     queryset = Article.objects.all().order_by("-pub_date")
-    template_name = 'blog/article_detail.html'
+    template_name = 'article_detail.html'
     context_object_name = 'article'
 
     def get_object(self, queryset=None):

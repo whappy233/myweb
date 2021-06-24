@@ -15,8 +15,8 @@ from mdeditor.fields import MDTextField  # 富文本编辑器 mdeditor
 from taggit.managers import TaggableManager  # 第三方标签应用
 
 from myweb.utils import AdminMixin, cache, cache_decorator
-from app_comments.models import Comments
 from .cn_taggit import CnTaggedItem
+from app_comments.models import Comments
 
 # 无论在自定义的 Manager 中添加了什么特性，都必须能够对 Manager 实例进行简单的复制:
 # 也就是说, 以下代码必须有效:

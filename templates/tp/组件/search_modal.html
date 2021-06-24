@@ -5,7 +5,8 @@
         <i style="pointer-events: none;" class="fas fa-times-circle"></i>
     </button>
     <div class="header-search-form">
-        <input id="api_search" type="search" name="q" placeholder="在此输入........" />
+        <input id="api_search" type="search" name="q" placeholder="在此输入........" required/>
+        <span id="C3JFDE4" class="input-clean" onclick="this.previousElementSibling.value=null"><i class="fas fa-times"></i></span>
         <div class="header-search-result">
             <div class="result_meta">找到<span id="serach_result_count">0</span>条结果</div>
             <ul id="serach_result">
@@ -57,14 +58,29 @@
                         serach_result.empty();
                         serach_result_count.text(data.length);
                         data.forEach((value) => {
+                            console.log(value)
                             var item = value.object;
-                            var ele = `
-                            <li data-href="${item.url}" style="display:none">
-                            <div class="item-img"><img src="https://picsum.photos/id/1051/100/80"></div>
-                            <div class="item-content"><h3>${item.title}</h3><p>${item.summary}</p></div></li>`;
-                            var $ele = $(ele);
-                            serach_result.append($ele);
-                            $ele.fadeIn(500);
+                            if (item){
+                                var tags = item.tags.map((tag)=>{
+                                    return `<span><a href="${tag.tag_url}" title="标签:${tag.name}"><i class="fas fa-hashtag"></i>${tag.name}</a></span>`
+                                });
+                                console.log(tags);
+                                var ele = `
+                                <li style="display:none">
+                                <div class="item-img"><img src="https://picsum.photos/id/1051/100/80"></div>
+                                <div class="item-content">
+                                    <h3><a href="${item.detail_url}">${item.title}</a></h3>
+                                    <p>${item.summary}</p>
+                                    <div class="result-meta">
+                                        <span><i class="fas fa-calendar-alt"></i> ${item.pub_time}</span>
+                                        <span><a href="${item.category_url}" title="分类:${item.category_name}"><i class="fas fa-book"></i>${item.category_name}</a></span>
+                                        ${tags.join('')}
+                                    </div>
+                                </div></li>`;
+                                var $ele = $(ele);
+                                serach_result.append($ele);
+                                $ele.fadeIn(500);
+                            }
                         })
                     }
                     serach_result.data('keyword', key);

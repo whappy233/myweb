@@ -13,33 +13,33 @@
         {% if page_obj.has_previous %}
         <li><a href="?page={{page.previous_page_number}}{{kw_data}}" title="上一页"><i class="fas fa-chevron-left"></i></a></li>
         {% else %}
-        <li class="disabled"><a href="javascript:void(0)" title="上一页"><i class="fas fa-chevron-left"></i></a></li>
+        <li class="disabled"><span><i class="fas fa-chevron-left"></i></span></li>
         {% endif %}
 
         <!-- 首页 -->
         {% if current_page|add:-1 > 2 %}<li><a href="?page=1{{kw_data}}" title="首页">1</a></li>{% endif %}
-        {% if current_page|add:-1 > 3 %}<li><span>...</span></li>{% endif %}
+        {% if current_page|add:-1 > 3 %}<li class="disabled">...</li>{% endif %}
 
         <!-- 前2页 -->
         {% if current_page|add:-2 >= 1 %}<li><a href="?page={{current_page|add:-2}}{{kw_data}}">{{ current_page|add:-2}}</a></li>{% endif %}
         <!-- 前1页 -->
         {% if current_page|add:-1 >= 1 %}<li><a href="?page={{current_page|add:-1}}{{kw_data}}">{{ current_page|add:-1}}</a></li>{% endif %}
         <!-- 当前页 -->
-        <li class="active"><a href="javascript:void(0)">{{ current_page }}</a></li>
+        <li class="active"><span>{{ current_page }}</span></li>
         <!-- 后1页 -->
         {% if current_page|add:1 <= page_count %}<li><a href="?page={{current_page|add:1}}{{kw_data}}">{{ current_page|add:1}}</a></li>{% endif %}
         <!-- 后2页 -->
         {% if current_page|add:2 <= page_count %}<li><a href="?page={{current_page|add:2}}{{kw_data}}">{{ current_page|add:2}}</a></li>{% endif %}
 
         <!-- 尾页 -->
-        {% if current_page|add:3 < page_count %}<li><span>...</span></li>{% endif %}
+        {% if current_page|add:3 < page_count %}<li class="disabled">...</li>{% endif %}
         {% if current_page|add:2 < page_count %}<li><a href="?page={{page_count}}{{kw_data}}" title="尾页">{{page_count}}</a></li>{% endif %}
 
         <!-- 下一页 -->
         {% if page_obj.has_next %}
         <li><a href="?page={{page.next_page_number}}{{kw_data}}" title="下一页"><i class="fas fa-chevron-right"></i></a></li>
         {% else %}
-        <li class="disabled"><a href="javascript:void(0)" title="下一页"><i class="fas fa-chevron-right"></i></a></li>
+        <li class="disabled"><span><i class="fas fa-chevron-right"></i></span></li>
         {% endif %}
     </ul>
 </div>

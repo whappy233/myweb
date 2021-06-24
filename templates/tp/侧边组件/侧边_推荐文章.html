@@ -20,12 +20,12 @@
                 </div>
                 <div class="item-content">
                     <ul class="entry-meta meta-color-dark">
-                        <li><i class="fas fa-hashtag"></i>
-                            {% with article.tags.all as tags%}
-                            {% for tag in tags %}
-                            <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}" title="{{ tag.name }}">{{ tag.name }}</a>
+                        <li>
+                            {% for tag in article.tags.all %}
+                            <a href="{{ tag.get_absolute_url }}" title="{{ tag.name }}">
+                                <i class="fas fa-hashtag"></i>{{ tag.name }}
+                            </a>
                             {% endfor %}
-                            {% endwith %}
                         </li>
                     </ul>
                     <h2 class="item-title">

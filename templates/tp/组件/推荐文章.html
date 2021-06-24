@@ -5,13 +5,13 @@
 {# 参数 (articles, temp_class) #}
 
 {% if temp_class == '滚动' %}
-    {% include 'tp/推荐文章/推荐文章_滚动.html' with articles=articles %}
+    {% include 'tp/顶部组件/推荐文章_滚动.html' with articles=articles %}
 
 {% elif temp_class == '宫格' %}
-    {% include 'tp/推荐文章/推荐文章_宫格.html' with articles=articles %}
+    {% include 'tp/顶部组件/推荐文章_宫格.html' with articles=articles %}
 
 {% elif temp_class == '卡片' %}
-    {% include 'tp/推荐文章/推荐文章_卡片.html' with articles=articles %}
+    {% include 'tp/顶部组件/推荐文章_卡片.html' with articles=articles %}
 
 {% elif temp_class == '侧边_推荐文章' %}
     {% include 'tp/侧边组件/侧边_推荐文章.html' with articles=articles %}

@@ -49,7 +49,7 @@ def check_code(request):
 @method_decorator(never_cache, name='dispatch')
 class RegisterView(FormView):
     form_class = RegisterForm
-    template_name = 'tp/用户验证.html'
+    template_name = 'tp/登录注册页.html'
 
     def get(self, request, *args, **kwargs):
         '''处理GET请求：实例化表单的空白版本'''
@@ -191,7 +191,7 @@ def login(request):
         else:
             message = '\n'.join(v[0] for v in form.errors.values())
 
-    return render(request, 'tp/用户验证.html', {'username': username, 'message': message})
+    return render(request, 'tp/登录注册页.html', {'username': username, 'message': message})
 
 
 # ajax 登录

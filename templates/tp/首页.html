@@ -1,0 +1,38 @@
+{% extends 'tp/组件/base.html' %}
+{% load blog_tags %}
+
+
+{% comment %}
+    参数: 
+        article_list:   文章QuerySet对象
+        page_obj:   分页对象
+        keyword:    搜索关键字对象
+        page_type:  当前页面类型
+        page_name:  页面类型具体名称(具体分类名, 标签名, 作者名)
+{% endcomment %}
+
+
+{% block container %}
+
+{% if page_type|default:'index' == 'index' %}
+{# 顶部滚动文章 #}
+{% recommendations_articles 5 '滚动' %}
+{% else %}
+<section class="inner-page-banner bg-common">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumbs-area">
+                    <h1>{{page_type}}: {{page_name}}</h1>
+                    <span>共包含<strong> {{page_obj.paginator.count}} </strong>篇文章</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{# 文章列表 #}
+{% include 'tp/组件/base_list.html' with articles=article_list page_obj=page_obj keyword=query %}
+
+{% endblock container %}

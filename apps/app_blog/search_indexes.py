@@ -15,7 +15,7 @@ class ArticleIndex(indexes.SearchIndex, indexes.Indexable):
     # 其他的字段只是附属的属性, 方便调用, 并不作为检索数据.
     # 如果使用一个字段设置了document=True, 则一般约定此字段名为text, 这是在SearchIndex类里面一贯的命名, 以防止后台混乱, 不建议改.
     # template_name="article_text.txt" 参数, 默认为 your_object/templates/search/indexes/{app_name}/{model_name}_text.txt
-    text = indexes.CharField(document=True, use_template=True)  # 创建一个text字段
+    text = indexes.CharField(document=True, use_template=True, template_name="tp/search_index/article_text.txt")  # 创建一个text字段
 
     # 创建一个 body 字段, model_attr='body' 代表对应数据模型 Article 中的 body 字段
     # body = indexes.CharField(model_attr='body')

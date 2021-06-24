@@ -387,11 +387,11 @@
         </footer>
 
         {# 搜索界面 #}
-        {% include 'tp/search_modal.html' %}
+        {% include './search_modal.html' %}
 
         {% if not request.user.is_authenticated %} {# 当用户被验证 #}
         {# 登录注册模态框 #}
-        {% include 'app_blog/login_register_model.html' %}
+        {% include './login_register_model.html' %}
         {% endif %}
 
     </div>

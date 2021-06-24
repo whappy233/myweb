@@ -327,8 +327,7 @@ HAYSTACK_CONNECTIONS = {
 # 设置每页显示的数目, 默认为20
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 1
 # 每次数据库更新后自动更新索引
-# HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 
 

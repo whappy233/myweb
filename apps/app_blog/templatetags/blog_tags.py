@@ -95,7 +95,7 @@ def blog_category():
 
 
 # 最多浏览量 cache
-@register.inclusion_tag('tp/推荐文章.html')  # 指定利用返回值显示的模板
+@register.inclusion_tag('tp/组件/推荐文章.html')  # 指定利用返回值显示的模板
 def recommendations_articles(count=5, temp_class='滚动'):
     cache_key = 'recommendations_articles'
     # x = lambda:Article.published.annotate(total_comments=Count('comments')).order_by('-total_comments')[:count]
@@ -145,7 +145,7 @@ def blog_archives():
 
 # 相似文章 cache
 # @register.inclusion_tag('app_blog/include_tag/similar_articles.html')
-@register.inclusion_tag('tp/推荐文章/推荐文章_相似推荐.html')
+@register.inclusion_tag('tp/顶部组件/推荐文章_相似推荐.html')
 def similar_articles(obj, count=5):
     if isinstance(obj, Article):
         cache_key = f'similar_articles_{obj.id}'

@@ -1,0 +1,40 @@
+{% extends 'tp/组件/base.html' %}
+{% load blog_tags %}
+
+
+{% comment %}
+    参数:
+        query:      搜索的关键字
+        form: 
+        page:       分页对象
+        paginator:  paginator,
+        suggestion: None,
+{% endcomment %}
+
+
+{% block container %}
+
+<section class="inner-page-banner bg-common">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumbs-area">
+                    <h1>搜索{% if query %}: {{query}}{% endif %}</h1>
+                    <form class="search" action="{% url 'app_blog:haystack_search' %}" method="GET">
+                        <div class="search-wrap">
+                            <input class="search-input" type="search" name="q" autofocus value="{{query|default:''}}" placeholder="请输入关键字..." required>
+                            <span id="C125458" class="input-clean" onclick="this.previousElementSibling.value=null"><i class="fas fa-times"></i></span>
+                            <button class="search-btn" type="submit" title="搜索"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
+                    <span>找到<strong> {{paginator.count|default:'0'}} </strong>条结果</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# 文章列表 #}
+{% include 'tp/组件/base_list.html' with articles=page.object_list page_obj=page keyword=query %}
+
+{% endblock container %}

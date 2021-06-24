@@ -1,15 +1,19 @@
 {# 文章列表模板 #}
 
-{% extends 'tp/base.html' %}
+
 {% load static %}
 {% load blog_tags %}
 {% load gallery_tags %}
 {% load humanize %}
 
-{% block container %}
 
-{# 顶部滚动文章 #}
-{% recommendations_articles 5 '滚动' %}
+{% comment %}
+    参数: 
+        articles:   文章QuerySet对象
+        page_obj:   分页对象
+        keyword:    搜索关键字对象
+{% endcomment %}
+
 
 {# 文章列表 #}
 <section class="blog-wrap-layout17 article_list">
@@ -18,50 +22,67 @@
             <div class="col-lg-8">
 
                 {% spaceless %}
-                {% for article in article_list %}
-                <div class="blog-box-layout4" data-href="{{ article.get_absolute_url }}">
+                {% for article in articles %}
+                {% with obj=article.object|default:article %}
+                <div class="blog-box-layout4" data-href="{{ obj.get_absolute_url }}">
                     <div class="item-img">
-                        <a href="{{ article.get_absolute_url }}" title="{{ article.title }}">
+                        <a href="{{ obj.get_absolute_url }}" title="{{ obj.title }}">
                             <img class="loading" data-src="https://picsum.photos/id/40{{forloop.counter}}/380/240">
                         </a>
                     </div>
-                    <a class="article-meta__categories" href="{% url 'app_blog:category_detail' article.category.slug %}" title="文章分类"><i class="fas fa-book"></i> {{ article.category }}</a>
+                    <a class="article-meta__categories" href="{% url 'app_blog:category_detail' obj.category.slug %}" title="文章分类">
+                        <i class="fas fa-book"></i> {{ obj.category }}
+                    </a>
                     <div class="item-content">
                         <ul class="entry-meta meta-color-dark">
-                            <li><i class="fas fa-hashtag"></i>
-                                {% with article.tags.all as tags%}
-                                {% for tag in tags %}
-                                <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}" title="{{ tag.name }}">{{ tag.name }}</a>
+                            <li>
+                                {% for tag in obj.tags.all %}
+                                <a href="{{ tag.get_absolute_url }}" title="{{ tag.name }}"><i class="fas fa-hashtag"></i>{{ tag.name }}</a>
                                 {% endfor %}
-                                {% endwith %}
                             </li>
-                            <li><i class="fas fa-calendar-alt"></i>{% format_time article.pub_time "%Y-%m-%d %H:%M" %}</li>
-                            <li><i class="far fa-clock"></i>5分钟阅读</li>
+                            <li><i class="fas fa-calendar-alt"></i>{{ obj.pub_time|naturaltime }}</li>
+                            <li><i class="far fa-clock"></i>50分钟阅读</li>
                         </ul>
                         <h3 class="item-title">
-                            <a href="{{ article.get_absolute_url }}" title="{{ article.title }}">{{ article.title }}</a>
+                            <a href="{{ obj.get_absolute_url }}" title="{{ obj.title }}">{{ obj.title }}</a>
                         </h3>
-                        <p>{{ article.summary }}</p>
+                        <p>{{ obj.summary }}</p>
                         <div class="action-area">
                             <div class="eye-container item-btn">
                                 <div class="eye"></div>
                                 <div class="eye"></div>
                             </div>
                             <ul class="response-area">
-                                <li><a href="#3" data-rr="666" title="热度 {{ article.views }}"><i class="fas fa-thermometer-full"></i>{{ article.views }}</a></li>
-                                <li><a href="javascript:void(0)" title="点赞数 {{ article.users_like.count }}"><i class="far fa-heart"></i>{{ article.users_like.count }}</a></li>
-                                <li><a href="{{ article.get_absolute_url }}#comment" title="{{ article.visible_comments_count }} 条评论"><i class="far fa-comment"></i>{{ article.visible_comments_count }}</a></li>
+                                <li>
+                                    <a href="#3" data-rr="666" title="热度 {{ obj.views }}">
+                                        <i class="fas fa-thermometer-full"></i>
+                                        {{ obj.views }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" title="点赞数 {{ obj.users_like.count }}">
+                                        <i class="far fa-heart"></i>
+                                        {{ obj.users_like.count }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ obj.get_absolute_url }}#comment" title="{{ obj.visible_comments_count }} 条评论">
+                                        <i class="far fa-comment"></i>
+                                        {{ obj.visible_comments_count }}
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </div>
+                {% endwith %}
                 {% empty %}
                 <span style="text-align: center;display: block;">暂无文章</span>
                 {% endfor %}
                 {% endspaceless %}
 
-                {# 页码 #}
-                {% include 'tp/分页.html' with page=page_obj %}
+                {# 分页 #}
+                {% include 'tp/组件/分页组件.html' with page=page_obj keyword=keyword %}
 
             </div>
 
@@ -108,4 +129,3 @@
     </div>
 </section>
 
-{% endblock container %}

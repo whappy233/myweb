@@ -1,6 +1,7 @@
-﻿{% extends 'tp/base.html' %}
+﻿{% extends 'tp/组件/base.html' %}
 {% load static %}
 {% load blog_tags %}
+{% load humanize %}
 
 {# 参数: article #}
 
@@ -78,6 +79,8 @@
 
 
 {% block container %}
+
+{% spaceless %}
 <section class="single-blog-wrap-layout1">
 
     {# 顶部大图 #}
@@ -90,15 +93,13 @@
         <div class="banner-content">
             <div class="container">
                 <ul class="entry-meta meta-color-light2">
-                    <li><i class="fas fa-hashtag"></i>
-                        {% with article.tags.all as tags%}
-                        {% for tag in tags %}
-                        <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
-                        {% endfor %}
-                        {% endwith %}
-                    </li>
-                    <li><i class="fas fa-calendar-alt"></i>{% format_time article.pub_time "%Y-%m-%d %H:%M" %}</li>
+                    <li><i class="fas fa-calendar-alt"></i>{{ article.pub_time|naturaltime }}</li>
                     <li><i class="far fa-clock"></i>5分钟阅读</li>
+                    <li>
+                        {% for tag in article.tags.all %}
+                        <a href="{{ tag.get_absolute_url }}"><i class="fas fa-hashtag"></i>{{ tag.name }}</a>
+                        {% endfor %}
+                    </li>
                 </ul>
                 <h2 class="item-title">{{ article.title }}</h2>
                 <ul class="item-social">
@@ -212,6 +213,7 @@
     </div>
 
 </section>
+{% endspaceless %}
 
 {# 图片查看 #}
 <div id="image-view" class="curtain">

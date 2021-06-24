@@ -28,7 +28,7 @@
                                 <li><i class="fas fa-hashtag"></i>
                                     {% with articles.0.tags.all as tags%}
                                     {% for tag in tags %}
-                                    <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                                    <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
                                     {% endfor %}
                                     {% endwith %}
                                 </li>
@@ -53,7 +53,7 @@
                                 <li><i class="fas fa-hashtag"></i>
                                     {% with articles.1.tags.all as tags%}
                                     {% for tag in tags %}
-                                    <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                                    <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
                                     {% endfor %}
                                     {% endwith %}
                                 </li>
@@ -75,7 +75,7 @@
                                 <li><i class="fas fa-hashtag"></i>
                                     {% with articles.2.tags.all as tags%}
                                     {% for tag in tags %}
-                                    <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                                    <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
                                     {% endfor %}
                                     {% endwith %}
                                 </li>
@@ -100,7 +100,7 @@
                                 <li><i class="fas fa-hashtag"></i>
                                     {% with articles.3.tags.all as tags%}
                                     {% for tag in tags %}
-                                    <a href="{% url 'app_blog:article_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                                    <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
                                     {% endfor %}
                                     {% endwith %}
                                 </li>
