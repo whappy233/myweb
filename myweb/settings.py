@@ -197,35 +197,34 @@ TEMPLATES = [
 # 'django.db.backends.mysql'
 # 'django.db.backends.sqlite3'
 # 'django.db.backends.oracle
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'blog',
-#         'USER': 'root',
-#         'PASSWORD': '********',
-#         'PORT': '3306',
-#         'HOST': 'localhost',
-#         # 'CONN_MAX_AGE': 0,  # 数据库连接的生命周期，默认为0请求结束时关闭数据库，设置为None无限持久连接
-#         # 设置mysql启用严格模式, 不指定会有警告信息
-#         # 'OPTIONS': {'init_command':"SET sql_mode='STRICT_TRANS_TABLES'"},
-#         # TIME_ZONE：设置时区
-#         # DISABLE_SERVER_SIDE_CURSORS：True时禁用服务器端游标
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'myweb',
+        'USER': 'root',
+        'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD') or '123456',
+        'PORT': '3306',
+        'HOST': 'localhost',
+        # 'CONN_MAX_AGE': 0,  # 数据库连接的生命周期，默认为0请求结束时关闭数据库，设置为None无限持久连接
+        # 设置mysql启用严格模式, 不指定会有警告信息
+        # 'OPTIONS': {'init_command':"SET sql_mode='STRICT_TRANS_TABLES'"},
+        # TIME_ZONE:设置时区
+        # DISABLE_SERVER_SIDE_CURSORS：True时禁用服务器端游标
+    }
+}
 # migrate管理命令会同时在每一个数据库上运行，默认情况下它在default数据库上运行 ，
 # 可以通过选项 --database 来指定需要同步的数据库。如不指定会同步到default数据库上.
 # python manage.py migrate   #同步默认数据库
 # python manage.py migrate --database=db1
 # python manage.py migrate --database=db2
 
-
 # sqlite
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # 日志文件配置
 LOG_DIR = os.path.join(BASE_DIR, 'log')

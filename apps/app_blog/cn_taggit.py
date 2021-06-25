@@ -6,6 +6,7 @@ from django.urls import reverse
 
 
 class CnTag(Tag):
+    # color = model.
     class Meta:
         proxy = True
         verbose_name = '标签'

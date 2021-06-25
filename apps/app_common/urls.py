@@ -5,8 +5,10 @@ from rest_framework import routers
 
 
 router = routers.DefaultRouter()
-router.register(r'', FileView)
+router.register(r'', FileView, basename='files')
 
+
+app_name = 'app_common'
 urlpatterns = [
     path('files/', include(router.urls)),
     path('FileUploads/', FileUploads),

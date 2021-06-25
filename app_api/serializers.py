@@ -80,16 +80,16 @@ class UserSerializer(serializers.ModelSerializer):
 
     profile = UserProfileSerializer()  # 序列化器使用嵌套后,创建和更新的行为可能不明确,并且可能需要相关模型之间的复杂依赖关系,REST framework要求你始终显式的编写create和update方法.
 
-    # profile = serializers.PrimaryKeyRelatedField(read_only=True)
+    '''显示添加反向关联字段'''
+    # profile = serializers.PrimaryKeyRelatedField(read_only=True, queryset=UserProfile.objects.all())
     # blog_articles = serializers.PrimaryKeyRelatedField(many=True, read_only=True) # 以对应关系 model 的主键展现
     # blog_articles = serializers.StringRelatedField(many=True, read_only=True)     # 以对应关系 model 的 __str__() 形式展现
-
     # view_name 和 urls.py 中的 name 参数相对应，表示使用哪个 url, 果使用的是标准路由器类, 那么它的格式为 <model_name>-detail 的字符串
     # lookup_field 表示用哪个字段来作为 url 的唯一识别标记, 默认值为 pk.
     blog_articles = serializers.HyperlinkedRelatedField(                            # 自动生成一个 url 字段来表示超链接
-        many=True,
-        read_only=True,
-        view_name='article-detail'
+        many = True,
+        read_only = True,
+        view_name = 'app_api:article-detail'
     )
 
     class Meta:
@@ -125,9 +125,9 @@ class CategorySerializer(serializers.ModelSerializer):
 
     # 生成指向文章详情的api连接地址
     # blog_articles = serializers.HyperlinkedRelatedField(
-    #     many= True,
-    #     read_only=True,
-    #     view_name='article-detail'
+    #     many = True,
+    #     read_only = True,
+    #     view_name = 'app_api:article-detail'
     # )
 
     def to_representation(self, instance):

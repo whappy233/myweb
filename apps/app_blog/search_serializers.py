@@ -63,7 +63,7 @@ class ArticleIndexSerializer(HSER.HaystackSerializer):
 
     object = ArticleSerializer(read_only=True)  # 只读,不可以进行反序列化
 
-    # detail = serializers.HyperlinkedRelatedField(read_only=True, view_name='article-detail')
+    # detail = serializers.HyperlinkedRelatedField(read_only=True, view_name='app_api:article-detail')
 
     # def to_representation(self, instance):
     #     '''改变序列化的输出内容, 给其添加额外的数据'''

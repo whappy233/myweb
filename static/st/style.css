@@ -56,7 +56,7 @@ CSS INDEX 999
 
 [data-theme=dark] {
   --global-color:#fff;
-  --global-background:rgb(52, 54, 56);
+  --global-background:rgba(38, 42, 59, 0.9);
   --global-body-background: #0e1327;
   --global-hover-background:#505050;
   /* --global-background: rgb(38 45 71 / 84%); */
@@ -3108,8 +3108,9 @@ nav.template-main-menu > ul > li > ul > li:hover ul.third-level {
   left: 0px;
   width: 100%;
   height: 100%;
+  background: #000000de;
   -webkit-backdrop-filter: brightness(20%) saturate(120%) blur(50px);
-  backdrop-filter: brightness(20%) saturate(120%) blur(50px);
+  backdrop-filter: saturate(120%) blur(40px);
   transition: all 0.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
   transform: scale(1.5);
   opacity: 0;
@@ -3341,6 +3342,7 @@ nav.template-main-menu > ul > li > ul > li:hover ul.third-level {
 }
 .header-menu.menu-layout2.rt-sticky {
   background-color: var(--global-background);
+  backdrop-filter: saturate(1.5) blur(20px);
 }
 .mean-bar.rt-sticky {
   background-color: var(--global-background) !important;
@@ -4112,6 +4114,7 @@ div#wrapper.open > .offcanvas-mask {
   cursor: not-allowed;
 }
 .pagination-layout1 ul li a {
+  display: block;
   line-height: 40px;
   color: var(--global-color);
   border-radius: var(--root-border-radius);
@@ -6126,11 +6129,6 @@ img.loading {
 }
 .blog-box-layout4:hover .item-img img {
   transform: scale(1.1) rotate(2deg);
-}
-.blog-box-layout4:hover {
-  -webkit-box-shadow: var(--global-shadow-hover);
-  -moz-box-shadow: var(--global-shadow-hover);
-  box-shadow: var(--global-shadow-hover);
 }
 .blog-box-layout5 {
   margin-bottom: 40px;

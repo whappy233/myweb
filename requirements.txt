@@ -30,3 +30,6 @@ whoosh==2.7.4
 django-haystack==3.0
 jieba==0.42.1
 drf-haystack==1.8.1
+mysqlclient==2.0.3
+# 安装 mysqlclient 时报错: OSError: mysql_config not found问题
+# 解决: sudo apt-get install libmysqlclient-dev 
