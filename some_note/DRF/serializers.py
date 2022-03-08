@@ -1,3 +1,4 @@
+from django.db.models import fields
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework.parsers import JSONParser
@@ -43,8 +44,8 @@ class ArticleSerializer(serializers.Serializer):
     title = serializers.CharField(required=True, allow_blank=True, max_length=90)
     body = serializers.CharField(required=False, allow_blank=True)
 
-    # 控制serializer在某些情况下如何显示，比如渲染HTML的时候。
-    # {'base_template': 'textarea.html'}标志等同于在 Django Form 类中使用widget=widgets.Textarea。
+    # 控制serializer在某些情况下如何显示，比如渲染HTML的时候.
+    # {'base_template': 'textarea.html'}标志等同于在 Django Form 类中使用widget=widgets.Textarea.
     # 这对于控制如何显示可浏览器浏览的API特别有用
     # body = serializers.CharField(required=False, allow_blank=True, style={'base_template': 'textarea.html'})
 
@@ -55,7 +56,7 @@ class ArticleSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         """
-        根据提供的验证过的数据创建并返回一个新的`Article`实例。
+        根据提供的验证过的数据创建并返回一个新的`Article`实例.
         """
         return Article.objects.create(**validated_data)
 
@@ -100,8 +101,8 @@ serializer.save()
 # ------------------------------------------------------------------------------------------------------------
 # ModelSerializer
 # 该类并不会做任何特别神奇的事情，它们只是创建序列化器类(Serializer)的快捷方式：
-#     一组自动确定的字段。
-#     默认简单实现的create()和update()方法。
+#     一组自动确定的字段.
+#     默认简单实现的create()和update()方法.
 # ------------------------------------------------------------------------------------------------------------
 class ArticleSerializer(serializers.ModelSerializer):
 
@@ -143,3 +144,8 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email')

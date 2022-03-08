@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from rest_framework.validators import UniqueTogetherValidator
+from .dynamic_fields import DynamicFieldsModelSerializer
 
 from app_blog.models import Article, Category
 from app_blog.cn_taggit import CnTag
 from app_user.models import UserProfile
 
-User = get_user_model()
 
 # REST framework 提供了 Serializer 类和 ModelSerializer 类两种方式来自定义序列化器
 
@@ -73,7 +73,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 # User
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(DynamicFieldsModelSerializer):
     '''User 序列化'''
 
     # 关系序列化. NOTE: 'profile' ,'blog_articles' 必须为模型中定义的反向查询名称
@@ -94,7 +94,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'blog_articles', 'profile')
+        fields = ('id', 'username', 'email', 'blog_articles', 'profile', 'last_login')
+        list_fields = ('id', 'username', 'email', 'blog_articles', 'profile')
 
     # 注册时提交的数据分别存入 User 和 UserProfile 模型
     def create(self, validated_data):

@@ -36,6 +36,7 @@ class FileView(ModelViewSet):
         instance.save(update_fields=['is_delete'])
 
     # /storage/files/3/download/
+    # 增加额外的URI
     @action(methods=['get', 'post'], detail=True)
     def download(self, request, pk=None, *args, **kwargs):
         instance = self.get_object()

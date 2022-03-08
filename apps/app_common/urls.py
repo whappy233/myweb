@@ -5,7 +5,7 @@ from rest_framework import routers
 
 
 router = routers.DefaultRouter()
-router.register(r'', FileView, basename='files')
+router.register(r'', FileView, basename='file')
 
 
 app_name = 'app_common'

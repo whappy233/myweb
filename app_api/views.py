@@ -2,7 +2,7 @@ from django.http import Http404
 from django.contrib.auth import get_user_model
 
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.response import Response
 
 from rest_framework.views import APIView, get_view_name
@@ -100,11 +100,12 @@ def article_detail(request, pk, format=None):
 @permission_classes((permissions.IsAdminUser,))
 def api_root(request, format=None):
     return Response({
-        'users': reverse('app_api:users-list', request=request, format=format),
-        'userprofiles': reverse('app_api:userprofiles-list', request=request, format=format),
-        'articles': reverse('app_api:articles-list', request=request, format=format),
-        'files': reverse('app_common:files-list', request=request, format=format),
-        'search': reverse('app_blog:api_search-list', request=request, format=format),
+        '用户': reverse('app_api:user-list', request=request, format=format),
+        '用户额外信息': reverse('app_api:userprofile-list', request=request, format=format),
+        '最近登录用户': reverse('app_api:user-recent_users', request=request, format=format),
+        '文章': reverse('app_api:article-list', request=request, format=format),
+        '文件': reverse('app_common:file-list', request=request, format=format),
+        '搜索': reverse('app_blog:api_search-list', request=request, format=format),
     })
 
 
@@ -327,7 +328,6 @@ class UserProfileViewSet1(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
 
-
     # 动态加载序列化器类
     # def get_serializer_class(self):
     #     if self.action == 'create':
@@ -337,9 +337,23 @@ class UserProfileViewSet1(viewsets.ModelViewSet):
     #     return CustomSerializer1
 
 
-class UserViewSet1(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    # /users/recent_users/
+    @action(detail=False, url_name='recent_users', permission_classes=(permissions.IsAdminUser,))
+    def recent_users(self, request):
+        recent_users = User.objects.all().order_by('-last_login')
+
+        page = self.paginate_queryset(recent_users)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(recent_users, many=True, fields=('id', 'username', 'last_login'))
+        return Response(serializer.data)
+
 
 # class UserViewSet(viewsets.ReadOnlyModelViewSet):
 #     """

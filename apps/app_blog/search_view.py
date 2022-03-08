@@ -7,17 +7,24 @@ from django.shortcuts import render
 from haystack.views import SearchView
 from drf_haystack.viewsets import HaystackViewSet
 
+from rest_framework.throttling import AnonRateThrottle
+
 from .search_serializers import ArticleIndexSerializer
 from .models import Article
 
 
 # https://blog.csdn.net/smartwu_sir/article/details/80209907
 
+# 使用限制器确保未验证用户每分钟只能调用20次的视图
+class OncePerDayUserThrottle(AnonRateThrottle):
+        rate = '20/min'  # 每分钟20次
 
 
 # /api/search/?text__contains=bug
 # not__contains, startswith, endswith, =, 同样适用, page还有page_size选项
 class ContentSearchViewSet(HaystackViewSet):
+
+    throttle_classes = (OncePerDayUserThrottle,)
 
     # 这里可以写多个模型，相应的serializer 里也可以写多个 index_classes
     index_models = [Article]
