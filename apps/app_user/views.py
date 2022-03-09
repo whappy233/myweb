@@ -30,6 +30,8 @@ from app_common.utils import get_blog_setting
 
 from .utils import validateEmail
 
+
+
 # 返回验证码图片
 def check_code(request):
     try:
@@ -53,6 +55,7 @@ class RegisterView(FormView):
 
     def get(self, request, *args, **kwargs):
         '''处理GET请求：实例化表单的空白版本'''
+
         if request.user.is_authenticated:
             return redirect('app_blog:article_list')
         return super(RegisterView, self).get(request, *args, **kwargs)
@@ -62,6 +65,7 @@ class RegisterView(FormView):
         Handle POST requests: instantiate a form instance with the passed
         POST variables and then check if it's valid.
         """
+
         if get_blog_setting().allow_register:
             return super(RegisterView, self).post(request, *args, **kwargs)
         else:
@@ -69,24 +73,28 @@ class RegisterView(FormView):
 
     def get_form_kwargs(self):
         '''给 Form 表单传递额外的参数'''
+
         kwargs = super(RegisterView, self).get_form_kwargs()
         kwargs['_request'] = self.request
         return kwargs
 
     def get_success_url(self, id=None):
         """表单验证成功后，返回要重定向的URL"""
+
         if id:
             return f"{reverse('app_user:register_result')}?type=register&id={id}"
         return '/'
 
     def form_invalid(self, form):
         """表单验证失败 render."""
+
         username = self.request.POST.get('username', '')
         err_message = '\n'.join(v[0] for v in form.errors.values())
         return self.render_to_response(self.get_context_data(err_message=err_message, r_username = username))
 
     def get_context_data(self, **kwargs):
         """在 context 添加新的值."""
+        
         kwargs['is_register'] = True
         return super().get_context_data(**kwargs)
 
@@ -144,18 +152,6 @@ def ajax_register(request):
 @sensitive_post_parameters('password')  # 记录未处理的异常时将password隐藏
 def login(request):
     '''登录'''
-    # 第三步
-    # from .tasks import XXX
-    # r = XXX.delay()  # 添加到Celery, 可通过 r.result获取结果
-    # print(dir(r))
-    # r.ready()     # 查看任务状态，返回布尔值,  任务执行完成, 返回 True, 否则返回 False.
-    # r.wait()      # 会阻塞等待任务完成, 返回任务执行结果，很少使用；
-    # r.get(timeout=1)       # 获取任务执行结果，可以设置等待时间，如果超时但任务未完成返回None；
-    # r.result      # 任务执行结果，未完成返回None；
-    # r.state       # PENDING, START, SUCCESS，任务当前的状态
-    # r.status      # PENDING, START, SUCCESS，任务当前的状态
-    # r.successful  # 任务成功返回true
-    # r.traceback  # 如果任务抛出了一个异常，可以获取原始的回溯信息
 
     # 如果登录用户访问注册页面，跳转到首页
     if request.user.is_authenticated:

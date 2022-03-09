@@ -6,7 +6,7 @@
 # 当我们希望只展示作者自己发表的文章列表且按文章发布时间逆序排列时，
 # 我们就可以通过更具体的 get_queryset 方法来返回一个我们想要显示的对象列表。
 from django.views.generic import ListView
-from app_blog.models import Article
+from apps.app_blog.models import Article
 from django.utils import timezone
 class IndexView(ListView):
     template_name = 'blog/article_list.html'
@@ -19,7 +19,7 @@ class IndexView(ListView):
 '''get_context_data()'''
 # get_context_data可以用于给模板传递模型以外的内容或参数
 from django.views.generic import ListView
-from app_blog.models import Article
+from apps.app_blog.models import Article
 from django.utils import timezone
 class IndexView(ListView):
     queryset = Article.objects.all().order_by("-pub_date")
@@ -28,7 +28,7 @@ class IndexView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['now'] = timezone.now() #只有这行代码有用
+        context['now'] = timezone.now() # 只有这行代码有用
         return context
 
 
@@ -39,7 +39,7 @@ class IndexView(ListView):
 # 这时候你可以通过更具体的get_object()方法来返回一个更具体的对象。代码如下:
 from django.views.generic import DetailView
 from django.http import Http404
-from app_blog.models import Article
+from apps.app_blog.models import Article
 from django.utils import timezone
 class ArticleDetailView(DetailView):
     queryset = Article.objects.all().order_by("-pub_date")
@@ -56,7 +56,7 @@ class ArticleDetailView(DetailView):
 from django.http import JsonResponse
 from django.views import View
 class OrderView(View):
-    """登陆后可以访问"""
+
     def get(self, request, *args, **kwargs):
         # 打印用户jwt信息
         print(request.user_info)
@@ -73,7 +73,6 @@ class OrderView(View):
     def delete(self, request, *args, **kwargs):
         print(request.user_info)
         return JsonResponse({'data': '删除订单'})
-
 
 
 
@@ -108,7 +107,8 @@ class RestaurantCreate(CreateView):
 
     # Associate form.instance.user with self.request.user
     # form_valid方法作用是添加前端表单字段以外的信息。
-    # 在用户在创建餐厅时，我们不希望用户能更改创建用户，于是在前端表单里把user故意除外了(见forms.py)，而选择在后台添加user信息
+    # 在用户在创建餐厅时，我们不希望用户能更改创建用户，
+    # 于是在前端表单里把user故意除外了(见forms.py)，而选择在后台添加user信息
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(RestaurantCreate, self).form_valid(form)
@@ -293,4 +293,8 @@ def zzz(text='基于类的Form视图'):
     class AuthorCreate(AjaxableResponseMixin, CreateView):
         model = Author
         fields = ['name']
+
+
+
+from django.contrib.auth.views import LoginView, LogoutView
 

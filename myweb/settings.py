@@ -22,6 +22,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 # Django文档建议不直接在settings.py里输入字符串
 SECRET_KEY = os.environ['SECRET_KEY']
 
+
 # 不要在生产环境打开 debug 开关
 DEBUG = os.environ.get('USER_NAME') == 'Carlos'
 
@@ -43,9 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',         # 网站地图App1
     'django.contrib.sitemaps',      # 网站地图App2
 
-    'rest_framework',
-
-    'haystack',    # django 搜索框架, haystack 要放在被搜索的应用的上面
+    'rest_framework',               # rtf
+    'haystack',                     # django 搜索框架, haystack 要放在被搜索的应用的上面
 
     'app_user.apps.AppUserConfig',
     'app_blog.apps.AppBlogConfig',
@@ -72,11 +72,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # 'django.middleware.cache.UpdateCacheMiddleware', # 缓存整个站点, 必须放在列表首位
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'django.middleware.cache.UpdateCacheMiddleware', # 缓存整个站点, 必须放在列表首位
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.cache.FetchFromCacheMiddleware', # 缓存整个站点, 必须在最后一位
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # 在视图函数执行前向每个接收到的user对象添加HttpRequest属性，表示当前登录的用户
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -94,6 +93,7 @@ MIDDLEWARE = [
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',  # django-debug-toolbar
 
     'app_common.middleware.CommonMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware', # 缓存整个站点, 必须在最后一位
 ]
 
 # 表示Python模块，定义程序的根URL路径
@@ -128,8 +128,8 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',   # 在模板中可以直接使用request对象
-                'django.contrib.auth.context_processors.auth',  # 在模板里面可以直接使用user，perms对象
+                'django.template.context_processors.request',           # 在模板中可以直接使用request对象
+                'django.contrib.auth.context_processors.auth',          # 在模板里面可以直接使用user，perms对象
                 'django.contrib.messages.context_processors.messages',  # 在模板里面可以直接使用message对象
 
                 # 其他
@@ -228,17 +228,21 @@ DATABASES = {
 
 # 日志文件配置
 LOG_DIR = os.path.join(BASE_DIR, 'log')
-if not os.path.exists(LOG_DIR): 
+if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
+
+# 移除之前添加的处理程序并停止向其接收器发送日志。
+logger.remove(handler_id=None)  # 清除自动产生的handler
+
 logger.add(os.path.join(LOG_DIR, 'django_error.log'),  # 日志存放路径
            enqueue=True,        # 开启进程安全
-           rotation='1 days',   # 日志按天滚动
+           rotation='1 days',   # 日志按天切割
            retention='30 days', # 日志保留天数
+           # compression='zip',   # zip压缩
            encoding='utf-8',    # 编码方式
            backtrace=True, diagnose=True,        # 开启错误堆栈
-           level='INFO' if DEBUG else 'WARNING', # 日志级别
-           )
-
+           level='INFO' if DEBUG else 'WARNING',  # 日志级别
+        )
 
 
 # 缓存
@@ -291,9 +295,9 @@ NEVER_REDIS_TIMEOUT = 365*24*60*60
 
 LANGUAGE_CODE = 'zh-hans'
 TIME_ZONE = 'Asia/Shanghai'  # 设置时区
-USE_I18N = True  # 默认为True，是否启用自动翻译系统
-USE_L10N = True  # 默认False，以本地化格式显示数字和时间
-USE_TZ = False  # 默认值True。若使用了本地时间，必须设为False
+USE_I18N = True     # 默认为True，是否启用自动翻译系统
+USE_L10N = True     # 默认False，以本地化格式显示数字和时间
+USE_TZ = False      # 默认值True。若使用了本地时间，必须设为False
 
 
 # 静态文件
@@ -439,3 +443,19 @@ if not DEBUG:
     SECURE_FRAME_DENY = True  # 避免让自己的网页的框架和保护他们免受[点击劫持]
     SECURE_BROWSER_XSS_FILTER = True  # 启用浏览器的XSS过滤保护
     SESSION_COOKIE_HTTPONLY = True  # 防止COOKIE窃听，使客户端到服务端总是COOKIE加密传输
+
+
+# ========================
+# 消息中间件(接收和发送任务消息)
+CELERY_BROKER_URL = f"redis://:{os.environ.get('REDIS_KEYS', 'qqqq')}@127.0.0.1:6379/1"
+# 存储 worker 执行的结果
+CELERY_RESULT_BACKEND = f"redis://:{os.environ.get('REDIS_KEYS', 'qqqq')}@127.0.0.1:6379/2"
+# 手动指定时区
+CELERY_ENABLE_UTC = False
+CELERY_TIMEZONE = 'Asia/Shanghai'
+
+
+try:
+    from .local_settings import *
+except ImportError as e:
+    ...

@@ -37,7 +37,9 @@ class StatsMiddleware:
 
     def __call__(self,request):
         s = time.time()
+
         response = self.get_response(request)
+        
         o = time.time() - s
         try:
             response.content = response.content.replace(b'<!!LOAD_TIMES!!>', str(o)[:5].encode())

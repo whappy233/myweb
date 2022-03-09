@@ -62,14 +62,17 @@ class ArticleListView(ListView):
 
     def get_queryset_cache_key(self):
         """ 子类重写.获得queryset的缓存key """
+
         raise NotImplementedError()
 
     def get_queryset_data(self):
         """ 子类重写.获取queryset的数据 """
+
         raise NotImplementedError()
 
     def get_queryset_from_cache(self, cache_key):
         """ 缓存页面数据 """ 
+
         value = cache.get(cache_key)
         if value:
             logger.info(f'获取视图缓存, KEY: {cache_key}')
@@ -81,7 +84,8 @@ class ArticleListView(ListView):
             return article_list
 
     def get_queryset(self):
-        """ 从缓存获取数据 """
+        """ 获取查询集 """
+
         key = self.get_queryset_cache_key()
         value = self.get_queryset_from_cache(key)
         q = self.request.GET.get('q', None)
@@ -90,6 +94,8 @@ class ArticleListView(ListView):
         return value
 
     def get_context_data(self, **kwargs):
+        '''获取 context'''
+
         context = super(ArticleListView, self).get_context_data(**kwargs)
         context['section'] = 'blog'
         context['form'] = SearchForm()

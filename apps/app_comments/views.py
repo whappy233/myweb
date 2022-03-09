@@ -171,9 +171,9 @@ class CommentsView(View):
                 end = self.paginate_by * page
             else:
                 start = end = None
-
         except Exception as e:
             return HttpResponse(json.dumps({'status':403,'err_msg':'请求参数错误'}, ensure_ascii=False), content_type="application/json; charset=UTF-8")
+        
         comments = self.get_comments(start, end, serialize=True, content_type_model=content_type_model, object_id=object_id)
         if len(comments) < 1:
             return HttpResponse(json.dumps({'status':404,'err_msg':'请求数据为空'}, ensure_ascii=False), content_type="application/json; charset=UTF-8")

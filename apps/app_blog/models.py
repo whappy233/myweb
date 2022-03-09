@@ -149,7 +149,7 @@ class Article(models.Model, AdminMixin):
     article_order = models.IntegerField('排序,数字越大越靠前', blank=True, null=False, default=0)
 
     views = models.PositiveIntegerField('阅读次数', default=0, blank=True)
-    status = models.CharField('文章状态', max_length=10, choices=STATUS_CHOICES, default='d')
+    status = models.CharField('文章状态', max_length=10, choices=STATUS_CHOICES, default='d')  # " self.get_status_display  显示完整的信息 "
     is_delete = models.BooleanField('已删除', default=False)
     comment_status = models.BooleanField('是否开启评论', default=True)
 

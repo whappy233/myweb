@@ -60,11 +60,12 @@ def debug_task(self):
 from __future__ import absolute_import
 # 这将确保在Django启动时始终导入该应用，以便 shared_task 将使用此应用.
 from .celery import app as celery_app
-__all__ = ['celery_app']
+__all__ = ('celery_app',)
 
 # 6.各应用创建tasks.py文件，这里为deploy/tasks.py
 from __future__ import absolute_import
 from celery import shared_task
+import time
 @shared_task
 def add(x, y):
     return x + y
@@ -163,15 +164,16 @@ def report():
 Tips:
 '''
 # 如果你同时使用了异步任务和计划任务，有一种更简单的启动方式 celery -A website worker -b -l info，可同时启动worker和beat
-# 如果使用的不是rabbitmq做队列那么需要在主配置文件中website/celery.py配置broker和backend，如下：
+# 如果使用的不是 rabbitmq 做队列那么需要在主配置文件中 website/celery.py 配置 broker 和 backend，如下：
 
 # redis做MQ配置
 app = Celery('website', backend='redis', broker='redis://localhost')
+
 # rabbitmq做MQ配置
 app = Celery('website', backend='amqp', broker='amqp://admin:admin@localhost')
 
 # celery不能用root用户启动的话需要在主配置文件中添加 platforms.C_FORCE_ROOT = True
-# celery在长时间运行后可能出现内存泄漏，需要添加配置 CELERYD_MAX_TASKS_PER_CHILD = 10, 表示每个worker执行了多少个任务就死掉
+# celery在长时间运行后可能出现内存泄漏，需要添加配置 CELERYD_MAX_TASKS_PER_CHILD = 10, 表示每个 worker 执行了多少个任务就死掉
 
 
 # 如果异步的任务包括耗时的I/O操作
