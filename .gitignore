@@ -9,3 +9,4 @@ log/
 db.sqlite3
 media/
 whoosh_index/
+myweb/local_settings.py
