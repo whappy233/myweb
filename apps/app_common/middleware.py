@@ -21,9 +21,9 @@ class CommonMiddleware(MiddlewareMixin):
             中间件函数，用到哪个就写哪个，不需要写所有的中间件函数。
         '''
 
-        logger.warning('START'+50*'=')
+        logger.warning(f'START {80*"-"}')
         logger.exception(exception)
-        logger.warning('END'+52*'='+'\n')
+        logger.warning(f'END   {80*"-"}\n\n\n')
         return None
 
     def process_request(self, request):

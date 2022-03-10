@@ -207,7 +207,7 @@ class ChoicesFieldListFilter(ListFieldFilter):
 
     def choices(self):
         yield {
-            'selected': self.lookup_exact_val is '',
+            'selected': self.lookup_exact_val == '',
             'query_string': self.query_string({}, [self.lookup_exact_name]),
             'display': _('All')
         }
@@ -553,7 +553,7 @@ class AllValuesFieldListFilter(ListFieldFilter):
 
     def choices(self):
         yield {
-            'selected': (self.lookup_exact_val is '' and self.lookup_isnull_val is ''),
+            'selected': (self.lookup_exact_val == '' and self.lookup_isnull_val == ''),
             'query_string': self.query_string({}, [self.lookup_exact_name, self.lookup_isnull_name]),
             'display': _('All'),
         }

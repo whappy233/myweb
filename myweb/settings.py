@@ -240,7 +240,7 @@ logger.add(os.path.join(LOG_DIR, 'django_error.log'),  # 日志存放路径
            retention='30 days', # 日志保留天数
            # compression='zip',   # zip压缩
            encoding='utf-8',    # 编码方式
-           backtrace=True, diagnose=True,        # 开启错误堆栈
+           backtrace=True, diagnose=False,        # 开启错误堆栈
            level='INFO' if DEBUG else 'WARNING',  # 日志级别
         )
 
