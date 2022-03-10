@@ -20,11 +20,10 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 # 确保生产环境使用的密码并未用于其它环境，且未被提交至版本控制系统
 # Django文档建议不直接在settings.py里输入字符串
-SECRET_KEY = os.environ['SECRET_KEY']
-
+SECRET_KEY = 'xxxxxx'
 
 # 不要在生产环境打开 debug 开关
-DEBUG = os.environ.get('USER_NAME') == 'Carlos'
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -191,7 +190,7 @@ TEMPLATES = [
 # ------------------------------------------------------------------------------------
 
 
-# 数据库 mysql
+
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 # 'django.db.backends.postgresql'
 # 'django.db.backends.mysql'
@@ -199,17 +198,8 @@ TEMPLATES = [
 # 'django.db.backends.oracle
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'myweb',
-        'USER': 'root',
-        'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD') or '123456',
-        'PORT': '3306',
-        'HOST': 'localhost',
-        # 'CONN_MAX_AGE': 0,  # 数据库连接的生命周期，默认为0请求结束时关闭数据库，设置为None无限持久连接
-        # 设置mysql启用严格模式, 不指定会有警告信息
-        # 'OPTIONS': {'init_command':"SET sql_mode='STRICT_TRANS_TABLES'"},
-        # TIME_ZONE:设置时区
-        # DISABLE_SERVER_SIDE_CURSORS：True时禁用服务器端游标
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 # migrate管理命令会同时在每一个数据库上运行，默认情况下它在default数据库上运行 ，
@@ -218,13 +208,6 @@ DATABASES = {
 # python manage.py migrate --database=db1
 # python manage.py migrate --database=db2
 
-# sqlite
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 
 # 日志文件配置
 LOG_DIR = os.path.join(BASE_DIR, 'log')
@@ -233,7 +216,6 @@ if not os.path.exists(LOG_DIR):
 
 # 移除之前添加的处理程序并停止向其接收器发送日志。
 logger.remove(handler_id=None)  # 清除自动产生的handler
-
 logger.add(os.path.join(LOG_DIR, 'django_error.log'),  # 日志存放路径
            enqueue=True,        # 开启进程安全
            rotation='1 days',   # 日志按天切割
@@ -260,29 +242,12 @@ logger.add(os.path.join(LOG_DIR, 'django_error.log'),  # 日志存放路径
 #     }
 # }
 
-
-# Redis 缓存
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379', # redis所在服务器或容器ip地址
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "PASSWORD": os.environ.get('REDIS_KEYS') or '123456', # 你设置的密码
-        },
-    },
-}
-REDIS_TIMEOUT = 24*60*60
-CUBES_REDIS_TIMEOUT = 60*30
-NEVER_REDIS_TIMEOUT = 365*24*60*60
-
-
 # CACHE_CONTROL_MAX_AGE = 2592000
 # CACHES = {
 #     'default': {
 #         # 此缓存使用 python-memcached 模块连接 memcache
 #         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-#         'LOCATION': os.environ.get('REDIS_KEYS') or '127.0.0.1:11211',
+#         'LOCATION': '127.0.0.1:11211',
 #         'KEY_PREFIX': 'djangoblog', # 缓存key的前缀（默认空）
 #         'TIMEOUT': 15,
 #     } if env_to_bool('DJANGO_MEMCACHED_ENABLE', False) else {
@@ -292,6 +257,10 @@ NEVER_REDIS_TIMEOUT = 365*24*60*60
 #     }
 # }
 
+# Redis 缓存
+REDIS_TIMEOUT = 24*60*60
+CUBES_REDIS_TIMEOUT = 60*30
+NEVER_REDIS_TIMEOUT = 365*24*60*60
 
 LANGUAGE_CODE = 'zh-hans'
 TIME_ZONE = 'Asia/Shanghai'  # 设置时区
@@ -339,14 +308,6 @@ if DEBUG:  # 输出到 Shell
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST =  'smtp.qq.com'             # SMTP 服务器主机  默认localhost
-EMAIL_PORT = 465                        # SMTP 端口 默认25
-EMAIL_HOST_USER = os.environ.get('USER_EMAIL')              # SMTP 服务器用户名
-EMAIL_HOST_PASSWORD = os.environ.get('USER_EMAIL_PW')       # SMTP 服务器密码
-# EMAIL_USE_TLS / EMAIL_USE_SSL 是互斥的，因此只能将这些设置之一设置为True。
-# EMAIL_USE_TLS = True                  # 是否采用 TLS 安全连接
-EMAIL_USE_SSL = True                    # 是否采 SSL 安全连接
-EMAIL_SUBJECT_PREFIX = '[星海StarSea]'   # 邮件标题前缀,默认是'[django]'
 
 
 # CkEditor 富文本编辑器配置
@@ -445,17 +406,8 @@ if not DEBUG:
     SESSION_COOKIE_HTTPONLY = True  # 防止COOKIE窃听，使客户端到服务端总是COOKIE加密传输
 
 
-# ========================
-# 消息中间件(接收和发送任务消息)
-CELERY_BROKER_URL = f"redis://:{os.environ.get('REDIS_KEYS', 'qqqq')}@127.0.0.1:6379/1"
-# 存储 worker 执行的结果
-CELERY_RESULT_BACKEND = f"redis://:{os.environ.get('REDIS_KEYS', 'qqqq')}@127.0.0.1:6379/2"
-# 手动指定时区
-CELERY_ENABLE_UTC = False
-CELERY_TIMEZONE = 'Asia/Shanghai'
 
-
-# try:
-#     from .local_settings import *
-# except ImportError as e:
-#     ...
+try:
+    from .local_settings import *
+except ImportError as e:
+    ...
