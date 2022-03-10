@@ -3214,7 +3214,7 @@
 .markdown-body code,
 .markdown-body kbd,
 .markdown-body pre {
-  font-family: "Meiryo UI", "YaHei Consolas Hybrid", Consolas, "Malgun Gothic", "Segoe UI", "Trebuchet MS", Helvetica, monospace, monospace;
+  font-family: Menlo, Monaco, 'Courier New', monospace;
   font-size: 1em;
 }
 
@@ -3350,15 +3350,11 @@
   margin-left: 0;
 }
 
-.markdown-body code {
-  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
-  font-size: 12px;
-}
-
 .markdown-body pre {
   margin-top: 0;
   margin-bottom: 0;
-  font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-family: Menlo, Monaco, 'Courier New', monospace;
+  font-size: 1.1em !important;
 }
 
 .markdown-body .octicon {
@@ -3663,7 +3659,7 @@ table.codehilitetable .code {
   padding: 10px 5px;
   overflow: inherit;
   font-size: 85%;
-  line-height: 1.45;
+  line-height: 1.5;
   margin: 0;
 }
 

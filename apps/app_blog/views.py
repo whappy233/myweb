@@ -21,7 +21,7 @@ from .models import Article, Category
 import time
 
 
-from .utils import MarkdownRender
+from myweb.utils import markdown_render
 
 
 class ArticleListView(ListView):
@@ -259,7 +259,7 @@ class ArticleDetailView(DetailView):
             obj.body, obj.toc = cache_md
             logger.info(f'获取文章Markdown缓存, KEY: {md_key}')
         else:
-            obj.body, obj.toc = MarkdownRender(obj.body)
+            obj.body, obj.toc = markdown_render(obj.body, True)
             cache.set(md_key, (obj.body, obj.toc), 60 * 60 * 12)
             logger.info(f'设置文章Markdown缓存, KEY: {md_key}')
 

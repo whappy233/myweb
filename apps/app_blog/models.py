@@ -1,7 +1,6 @@
 import base64
 from uuid import uuid4
 
-import markdown
 from ckeditor_uploader.fields import RichTextUploadingField  # 富文本编辑器 ckeditor
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
@@ -14,7 +13,7 @@ from loguru import logger
 from mdeditor.fields import MDTextField  # 富文本编辑器 mdeditor
 from taggit.managers import TaggableManager  # 第三方标签应用
 
-from myweb.utils import AdminMixin, cache, cache_decorator
+from myweb.utils import AdminMixin, cache, cache_decorator, markdown_render
 from .cn_taggit import CnTaggedItem
 from app_comments.models import Comments
 
@@ -189,10 +188,9 @@ class Article(models.Model, AdminMixin):
         self.save(update_fields=['status', 'pub_time'])
 
     def body_to_markdown(self):
-        return markdown.markdown(self.body, extensions=[
-            'markdown.extensions.extra',
-            'markdown.extensions.codehilite',
-        ])
+        content, _ = markdown_render(self.body)
+        return content
+
 
     # 标准 urls
     def get_absolute_url(self):  # 构建URL

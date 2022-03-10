@@ -2,7 +2,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib import auth
-from .utils import validateEmail
+from myweb.utils import validateEmail
 from .models import UserProfile
 from django.core.exceptions import ValidationError
 import re

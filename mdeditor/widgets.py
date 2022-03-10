@@ -16,20 +16,22 @@ class MDEditorWidget(forms.Textarea):
     提供用于富文本编辑的Editor.md的小部件。
     see Editor.md docs: https://pandao.github.io/editor.md/examples/index.html
     """
-    def __init__(self, config_name='default', *args, **kwargs):
+    def __init__(self, config_name='default', image_upload_folder='default', *args, **kwargs):
         super(MDEditorWidget, self).__init__(*args, **kwargs)
         # Setup config from defaults.
         self.config = MDConfig(config_name)
+        self.image_upload_folder = image_upload_folder
 
     def render(self, name, value, renderer=None, attrs=None):
         """
-        renderer: django2.1 新增加的参数，此处不做应用，赋值None做兼容处理
+        renderer: django2.1 新增加的参数, 此处不做应用, 赋值None做兼容处理
         """
         if value is None:
             value = ''
 
         final_attrs = self.build_attrs(self.attrs, attrs, name=name)
         return mark_safe(render_to_string('markdown.html', {
+            'image_upload_folder': self.image_upload_folder,
             'final_attrs': flatatt(final_attrs),
             'value': conditional_escape(force_text(value)),
             'id': final_attrs['id'],

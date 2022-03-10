@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe  # 标记为安全的html
 from django.template.defaultfilters import stringfilter
 from ..cn_taggit import CnTag
 from ..models import Article, Category
-from myweb.utils import get_current_site
+from myweb.utils import get_blog_setting
 from django.core.cache import cache
 from loguru import logger
 from django.apps import apps
@@ -170,7 +170,6 @@ def similar_articles(obj, count=5):
 def load_breadcrumb(article):
     """获得文章面包屑"""
     names = article.get_category_tree()
-    from app_common.utils import get_blog_setting
     blogsetting = get_blog_setting()
     names.append((blogsetting.sitename, '/'))
     names = names[::-1]
@@ -283,7 +282,6 @@ def truncatechars_content(content):
     :return:
     """
     from django.template.defaultfilters import truncatechars_html
-    from app_common.utils import get_blog_setting
     blogsetting = get_blog_setting()
     return truncatechars_html(content, blogsetting.article_sub_length)
 

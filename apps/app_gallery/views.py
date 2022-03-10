@@ -1,15 +1,15 @@
 
 import io
+import os
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.db import connections
-from django.http.response import (HttpResponse, HttpResponseForbidden,
-                                  JsonResponse)
+from django.http.response import (HttpResponse, HttpResponseForbidden, JsonResponse)
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from PIL import Image
 
-from app_common.utils import JSONEncoder
+from myweb.utils import JSONEncoder
 from .models import Gallery, Photo
 
 
@@ -69,17 +69,19 @@ class GalleryDetail(ListView):
 def random_photo(request, width, height):
     photo = Photo.objects.get_random_photo()
     if photo:
-        photo = Image.open(photo.image.path)
+        img_path = photo.image.path
+        if os.path.isfile(img_path):
+            photo = Image.open(img_path)
 
-        x = int(width)
-        y = int(height)
-        size = (x ,y)
+            x = int(width)
+            y = int(height)
+            size = (x ,y)
 
-        crop_im = photo.resize(size, Image.ANTIALIAS)
-        img_buffer = io.BytesIO()
-        crop_im.save(img_buffer, format='png')
-        byte_data = img_buffer.getvalue()
-        return HttpResponse(byte_data)
+            crop_im = photo.resize(size, Image.ANTIALIAS)
+            img_buffer = io.BytesIO()
+            crop_im.save(img_buffer, format='png')
+            byte_data = img_buffer.getvalue()
+            return HttpResponse(byte_data)
     return HttpResponse('')
 
 

@@ -35,7 +35,7 @@
 </style>
 
 <div class="wmd-wrapper"  id="{{ id }}-wmd-wrapper">
-  <textarea {{ final_attrs|safe }}>{{ value }}</textarea>
+    <textarea {{ final_attrs|safe }}>{{ value }}</textarea>
 </div>
 
 {% if config.language == 'en' %}
@@ -82,7 +82,7 @@
             // image upload
             imageUpload: true,
             imageFormats: {{ config.upload_image_formats|safe }},
-            imageUploadURL: "/mdeditor/uploads/",
+            imageUploadURL: "/mdeditor/uploads/?image_upload_folder={{ image_upload_folder }}",  // 文件上传 URL
             toolbarIcons: function () {
                 return {{ config.toolbar|safe }}
             },

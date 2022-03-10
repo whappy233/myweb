@@ -2,7 +2,7 @@ from django.views.generic import ListView
 from django.http.response import Http404, JsonResponse
 from django.shortcuts import render
 from django.core import serializers
-from .models import Diary
+from .models import Diary, DiarySerializer
 
 
 class DiaryList(ListView):
@@ -31,6 +31,7 @@ class DiaryList(ListView):
 
         try:
             context = self.get_context_data()
+            print(context)
         except Http404 as e:
             if request.is_ajax():
                 print('数据为空')
@@ -44,9 +45,9 @@ class DiaryList(ListView):
             is_paginated = context['is_paginated']
             object_list = context['object_list']
 
+            s = DiarySerializer(object_list, many=True)
             serialize_items = serializers.serialize("json", object_list,
-                                                    fields=(
-                                                        'body', 'mood', 'img', 'created'),
+                                                    fields=('body', 'mood', 'created'),
                                                     ensure_ascii=False)
 
             data = {
@@ -55,14 +56,10 @@ class DiaryList(ListView):
                 'has_next': page_obj.has_next(),    # 是否有下页
                 'page_total': paginator.num_pages,  # 总页数
                 'items_count': paginator.count,     # 元素总数
-                'data': serialize_items,
+                'data': s.data,
             }
 
             return JsonResponse(data)
 
         return self.render_to_response(context)
-
-
-def details(request):
-    return render(request, 'tp/日记.html')
 

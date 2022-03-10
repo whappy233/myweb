@@ -1,7 +1,7 @@
 
 from app_blog.models import Category, Article
 from django.core.cache import cache
-from .utils import get_blog_setting
+from myweb.utils import get_blog_setting
 
 from django.utils import timezone
 from loguru import logger

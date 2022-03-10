@@ -3,9 +3,8 @@
 import json
 
 from app_blog.models import Article
-from app_common.utils import JSONEncoder
+from myweb.utils import JSONEncoder, validateEmail
 from app_user.models import UserProfile
-from app_user.utils import validateEmail
 
 from django import forms
 from django.apps import apps

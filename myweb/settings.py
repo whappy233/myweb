@@ -23,7 +23,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 SECRET_KEY = 'xxxxxx'
 
 # 不要在生产环境打开 debug 开关
-DEBUG = True
+DEBUG = True if os.environ.get('USER_NAME')=='Carlos' else False
 
 ALLOWED_HOSTS = ['*']
 
@@ -344,31 +344,33 @@ if timezone.now().hour >= 18:
 else:
     _mdeditor_theme = 'default'
     _editor_theme = 'default'
-MDEDITOR_CONFIGS = {
-'default':{
-    'width': '100%',  # 自定义编辑框宽度
-    'heigth': 500,   # 自定义编辑框高度
-    'toolbar': ["undo", "redo", "|",
-                "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
-                "h1", "h2", "h3", "h5", "h6", "|",
-                "list-ul", "list-ol", "hr", "|",
-                "link", "reference-link", "image", "code", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "goto-line", "|",
-                "help", "|", 
-                "preview", "watch", "fullscreen"],  # 自定义编辑框工具栏
-    'image_folder': 'body_imgs',        # 图片保存文件夹名称
-    'upload_image_formats': ["jpg", "jpeg", "gif", "png", "bmp", "webp"],  # 图片上传格式类型
-    'theme': _mdeditor_theme,           # 编辑框主题 ，dark / default
-    'editor_theme': _editor_theme,      # edit区域主题，pastel-on-dark / default
-    'preview_theme': _mdeditor_theme,   # 预览区域主题， dark / default
-    'tex': True,                        # 是否开启 tex 图表功能
-    'emoji': True,                      # 是否开启表情功能
-    'watch': True,                      # 实时预览
-    'sequence': True,                   # 是否开启序列图功能
-    'flow_chart': True,                 # 是否开启流程图功能
-    'lineNumbers': True,                # 行号
-    'lineWrapping': False,              # 自动换行
-    'search_replace': True,             # 是否开启查找替换
-    'toolbar_autofixed': True,          # 工具栏是否吸顶
+MDEDITOR_CONFIGS = { 
+    'default': {
+        'width': '100%', # 自定义编辑框宽度
+        'heigth': 500,  # 自定义编辑框高度
+        'toolbar': [    # 自定义编辑框工具栏
+            "undo", "redo", "|",
+            "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
+            "h1", "h2", "h3", "h5", "h6", "|",
+            "list-ul", "list-ol", "hr", "|",
+            "link", "reference-link", "image", "code", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "goto-line", "|",
+            "help", "|", 
+            "preview", "watch", "fullscreen"
+        ], 
+        'image_folder': 'blog_images',  # 图片上传文件夹
+        'upload_image_formats': ["jpg", "jpeg", "gif", "png", "bmp", "webp"],  # 图片上传格式类型
+        'theme': _mdeditor_theme,           # 编辑框主题 ，dark / default
+        'editor_theme': _editor_theme,      # edit区域主题，pastel-on-dark / default
+        'preview_theme': _mdeditor_theme,   # 预览区域主题， dark / default
+        'tex': True,                        # 是否开启 tex 图表功能
+        'emoji': True,                      # 是否开启表情功能
+        'watch': True,                      # 实时预览
+        'sequence': True,                   # 是否开启序列图功能
+        'flow_chart': True,                 # 是否开启流程图功能
+        'lineNumbers': True,                # 行号
+        'lineWrapping': False,              # 自动换行
+        'search_replace': True,             # 是否开启查找替换
+        'toolbar_autofixed': True,          # 工具栏是否吸顶
     }
 }
 

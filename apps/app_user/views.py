@@ -15,20 +15,15 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic.edit import FormView
 from django.contrib.auth.forms import UserCreationForm
 from loguru import logger
-from myweb.utils import GenerateEncrypted, get_current_site
 
 from .models import UserProfile
-from .utils import create_validate_code as CheckCode
-from .utils import crop_image, generate_vcode, send_email
+from myweb.utils import GenerateEncrypted, get_current_site, get_blog_setting, crop_image, generate_vcode, send_email, validateEmail, create_validate_code as CheckCode
+
 
 from .forms import (EditForm, LoginForm, ProfileEditForm, PwdChangeForm,
                     RegisterForm, UserEditForm, UserPhotoUploadForm)
 
 # from app_common.decorators import check_honeypot, honeypot_exempt
-
-from app_common.utils import get_blog_setting
-
-from .utils import validateEmail
 
 
 

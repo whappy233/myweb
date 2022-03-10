@@ -21,6 +21,11 @@ class UploadView(generic.View):
         return super(UploadView, self).dispatch(*args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+
+        image_upload_folder = request.GET.get('image_upload_folder', 'default')
+        if image_upload_folder == 'default':
+            image_upload_folder = MDEDITOR_CONFIGS['image_folder']
+
         upload_image = request.FILES.get("editormd-image-file", None)
         media_root = settings.MEDIA_ROOT
 
@@ -45,7 +50,7 @@ class UploadView(generic.View):
             })
 
         # image floder check
-        file_path = os.path.join(media_root, MDEDITOR_CONFIGS['image_folder'])
+        file_path = os.path.join(media_root, image_upload_folder)
         if not os.path.exists(file_path):
             try:
                 os.makedirs(file_path)
@@ -67,5 +72,5 @@ class UploadView(generic.View):
         return JsonResponse({'success': 1,
                              'message': "上传成功！",
                              'url': os.path.join(settings.MEDIA_URL,
-                                                 MDEDITOR_CONFIGS['image_folder'],
+                                                 image_upload_folder,
                                                  file_full_name)})

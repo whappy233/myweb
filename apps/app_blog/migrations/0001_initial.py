@@ -5,7 +5,7 @@ from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
 import mdeditor.fields
-import myweb.utils
+from myweb.utils import AdminMixin
 import taggit.managers
 
 
@@ -84,7 +84,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': '文章',
                 'ordering': ('-pub_time',),
             },
-            bases=(models.Model, myweb.utils.AdminMixin),
+            bases=(models.Model, AdminMixin),
         ),
         migrations.AddIndex(
             model_name='article',

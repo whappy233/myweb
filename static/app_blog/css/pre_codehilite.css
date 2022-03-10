@@ -1,5 +1,5 @@
 pre { line-height: 125%; }
-td.linenos pre { color: #000000; padding: 0; background-color:var(--global-background);; } /* 行号 pre 容器 */
+td.linenos pre { color: var(--global-color); padding: 0; background-color:var(--global-background);; } /* 行号 pre 容器 */
 span.linenos { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
 td.linenos pre.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
 span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
