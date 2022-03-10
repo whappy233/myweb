@@ -455,7 +455,7 @@ CELERY_ENABLE_UTC = False
 CELERY_TIMEZONE = 'Asia/Shanghai'
 
 
-try:
-    from .local_settings import *
-except ImportError as e:
-    ...
+# try:
+#     from .local_settings import *
+# except ImportError as e:
+#     ...
