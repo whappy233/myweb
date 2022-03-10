@@ -5,7 +5,6 @@
 
 {# 参数: article #}
 
-
 {# 网页标题 #}
 {% block title %}{{ article.title }}{% endblock title %}
 
@@ -15,8 +14,6 @@
 {# markdown #}
 <link rel="stylesheet" href="{% static 'mdeditor/css/editormd.css' %}" />
 <style>
-
-
     .image-wrap {
         top: 0;
         left: 0;
@@ -72,18 +69,13 @@
         background-color: #0000004b;
         line-height: 2;
     }
-
-
 </style>
 {% endblock css_extra %}
 
-
 {% block container %}
-
-{% spaceless %}
 <section class="single-blog-wrap-layout1">
-
     {# 顶部大图 #}
+    {% spaceless %}
     <div class="single-blog-banner-layout1">
         {# Img #}
         <div class="banner-img">
@@ -145,6 +137,7 @@
             </div>
         </div>
     </div>
+    {% endspaceless %}
 
     {# 文章容器 #}
     <div class="container">
@@ -159,6 +152,7 @@
                         {{article.body|safe}}
                     </div>
 
+                    {% spaceless %}
                     {# 面包屑 点赞 #}
                     <div class="blog-entry-meta">
                         <ul>
@@ -180,15 +174,17 @@
                     {# 相似推荐 #}
                     {% similar_articles article 3 %}
 
-                    {% if object.comment_status and OPEN_SITE_COMMENT %}
                     {# 评论系统 #}
+                    {% if object.comment_status and OPEN_SITE_COMMENT %}
                     {% include "app_comments/comment_system.html" with object=article %}
                     {% endif %}
 
+                    {% endspaceless %}
                 </div>
             </div>
 
             {# 侧边栏 #}
+            {% spaceless %}
             <div class="col-lg-4 sidebar-widget-area sidebar-break-md">
 
                 {# 关于我 #}
@@ -208,22 +204,19 @@
                 </div>
 
             </div>
+            {% endspaceless %}
 
         </div>
     </div>
 
 </section>
-{% endspaceless %}
-
 {# 图片查看 #}
 <div id="image-view" class="curtain">
     <button type="button" class="close" title="close"><i style="pointer-events: none;" class="fas fa-times-circle"></i></button>
     <div class="image-wrap"></div>
     <div class="image-description"><p></p></div>
 </div>
-
 {% endblock container %}
-
 
 {% block script %}
 <script>

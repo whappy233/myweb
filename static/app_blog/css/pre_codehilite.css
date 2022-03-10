@@ -1,19 +1,19 @@
 pre { line-height: 125%; }
-td.linenos pre { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+td.linenos pre { color: #000000; padding: 0; background-color:var(--global-background);; } /* 行号 pre 容器 */
 span.linenos { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
 td.linenos pre.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
 span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
 .codehilite .hll { background-color: #ffffcc }
-.codehilite .c { color: #4CAF50; font-style: italic } /* 注释 */
+.codehilite .c { color: #338b37; font-style: italic } /* 注释 */
 .codehilite .err { border: 0px solid #FF0000 } /* 错误 */
 .codehilite .k { color: #03A9F4; font-weight: bold } /* 关键词 */
 .codehilite .o { color: var(--global--color) } /* Operator */
-.codehilite .ch { color: #4CAF50; font-style: italic } /* 注释.Hashbang */
-.codehilite .cm { color: #4CAF50; font-style: italic } /* 注释.多行 */
+.codehilite .ch { color: #338b37; font-style: italic } /* 注释.Hashbang */
+.codehilite .cm { color: #338b37; font-style: italic } /* 注释.多行 */
 .codehilite .cp { color: #BC7A00 } /* 注释.Preproc */
-.codehilite .cpf { color: #4CAF50; font-style: italic } /* 注释.PreprocFile */
-.codehilite .c1 { color: #4CAF50; font-style: italic } /* 注释.单行 */
-.codehilite .cs { color: #4CAF50; font-style: italic } /* 注释.Special */
+.codehilite .cpf { color: #338b37; font-style: italic } /* 注释.PreprocFile */
+.codehilite .c1 { color: #338b37; font-style: italic } /* 注释.单行 */
+.codehilite .cs { color: #338b37; font-style: italic } /* 注释.Special */
 .codehilite .gd { color: #A00000 } /* Generic.Deleted */
 .codehilite .ge { font-style: italic } /* Generic.Emph */
 .codehilite .gr { color: #FF0000 } /* Generic.错误 */
@@ -24,7 +24,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 .codehilite .gs { font-weight: bold } /* Generic.Strong */
 .codehilite .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
 .codehilite .gt { color: #0044DD } /* Generic.Traceback */
-.codehilite .kc { color: #AB4ABB; font-weight: bold } /* 关键词.Constant */
+.codehilite .kc { color: #03A9F4; font-weight: bold } /* 关键词.Constant */
 .codehilite .kd { color: #AB4ABB; font-weight: bold } /* 关键词.Declaration */
 .codehilite .kn { color: #AB4ABB; font-weight: bold } /* 关键词.Namespace */
 .codehilite .kp { color: #AB4ABB } /* 关键词.Pseudo */
@@ -34,17 +34,17 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 .codehilite .s { color: #D67D0A } /* 文字.字符串 */
 .codehilite .na { color: #7D9029 } /* 名字.Attribute */
 .codehilite .nb { color: #AB4ABB } /* 名字.Builtin */
-.codehilite .nc { color: #4DB6AC; font-weight: bold } /* 名字.Class */
+.codehilite .nc { color: #03A9F4; font-weight: bold } /* 名字.Class */
 .codehilite .no { color: #880000 } /* 名字.Constant */
-.codehilite .nd { color: #4DB6AC } /* 名字.Decorator */
+.codehilite .nd { color: #d3b100 } /* 装饰器 */
 .codehilite .ni { color: #999999; font-weight: bold } /* 名字.Entity */
 .codehilite .ne { color: #D2413A; font-weight: bold } /* 名字.Exception */
-.codehilite .nf { color: #4FC3F7 } /* 名字.Function */
+.codehilite .nf { color: #d3b100 } /* 名字.Function */
 .codehilite .nl { color: #A0A000 } /* 名字.Label */
-.codehilite .nn { color: #4DB6AC; font-weight: bold } /* 名字.Namespace */
+.codehilite .nn { color: #03A9F4; font-weight: bold } /* 名字.Namespace */
 .codehilite .nt { color: #AB4ABB; font-weight: bold } /* 名字.Tag */
 .codehilite .nv { color: #19177C } /* 名字.变量 */
-.codehilite .ow { color: #4DB6AC; font-weight: bold } /* Operator.Word */
+.codehilite .ow { color: #03A9F4; font-weight: bold } /* Operator.Word */
 .codehilite .w { color: #bbbbbb } /* Text.Whitespace */
 .codehilite .mb { color: var(--global--color) } /* 文字.数字.Bin */
 .codehilite .mf { color: var(--global--color) } /* 文字.数字.Float */
@@ -65,7 +65,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 .codehilite .s1 { color: #D67D0A } /* 文字.字符串.Single */
 .codehilite .ss { color: #19177C } /* 文字.字符串.Symbol */
 .codehilite .bp { color: #AB4ABB } /* 名字.Builtin.Pseudo */
-.codehilite .fm { color: #4DB6AC } /* 名字.Function.Magic */
+.codehilite .fm { color: #03A9F4 } /* 名字.Function.Magic */
 .codehilite .vc { color: #19177C } /* 名字.变量.Class */
 .codehilite .vg { color: #19177C } /* 名字.变量.Global */
 .codehilite .vi { color: #19177C } /* 名字.变量.Instance */

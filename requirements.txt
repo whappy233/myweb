@@ -11,7 +11,6 @@ django-ckeditor==6.0.0
 django-guardian==2.3.0
 loguru==0.4.1
 django-mdeditor==0.1.18
-mistune==0.8.4
 pygments==2.7.4
 uwsgi==2.0.19.1
 django-crispy-forms>=1.6.0

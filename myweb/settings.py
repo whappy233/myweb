@@ -385,14 +385,14 @@ else:
     _editor_theme = 'default'
 MDEDITOR_CONFIGS = {
 'default':{
-    'width': '90%',  # 自定义编辑框宽度
+    'width': '100%',  # 自定义编辑框宽度
     'heigth': 500,   # 自定义编辑框高度
     'toolbar': ["undo", "redo", "|",
                 "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
                 "h1", "h2", "h3", "h5", "h6", "|",
                 "list-ul", "list-ol", "hr", "|",
-                "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "goto-line", "|",
-                "help", "info", "||",
+                "link", "reference-link", "image", "code", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "goto-line", "|",
+                "help", "|", 
                 "preview", "watch", "fullscreen"],  # 自定义编辑框工具栏
     'image_folder': 'body_imgs',        # 图片保存文件夹名称
     'upload_image_formats': ["jpg", "jpeg", "gif", "png", "bmp", "webp"],  # 图片上传格式类型
