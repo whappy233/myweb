@@ -28,7 +28,8 @@ class CommonMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         self.get_real_ip(request)
-        return None
+        return self.access_frequency_restriction(request)
+
 
     def access_frequency_restriction(self, request):
         '''IP访问频率控制'''
@@ -47,13 +48,13 @@ class CommonMiddleware(MiddlewareMixin):
         while history_time and visit_time-history_time[-1] > 60:
             history_time.pop()
         # 如果访问次数小于50次就将访问的ip时间插入到对应ip的key值列表的第一位置,如{"127.0.0.1":[时间2,时间1]}
-        print(history_time)
-        if len(history_time) < 50:
+        if len(history_time) < 5:
             history_time.insert(0, visit_time)
             return None
         else:
             # 如果大于50次就禁止访问
-            return HttpResponse(f"访问过于频繁, 还需等待{60-(visit_time-history_time[-1])}秒才能继续访问")
+            logger.warning(f'访过于频繁, IP:{ip} URL;{request.get_raw_uri()}')
+            return HttpResponse(f"访问过于频繁, 还需等待{60-(visit_time-history_time[-1])}秒才能继续访问", status=403)
 
     def get_real_ip(self, request):
         """

@@ -19,7 +19,7 @@ class TitleKeywordFilter(admin.SimpleListFilter):
         return (
             ('python', '含python文章'),
             ('django', '含django文章'),
-             )
+            )
 
     def queryset(self, request, queryset):
         """

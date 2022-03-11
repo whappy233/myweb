@@ -31,7 +31,6 @@ class DiaryList(ListView):
 
         try:
             context = self.get_context_data()
-            print(context)
         except Http404 as e:
             if request.is_ajax():
                 print('数据为空')
@@ -46,9 +45,9 @@ class DiaryList(ListView):
             object_list = context['object_list']
 
             s = DiarySerializer(object_list, many=True)
-            serialize_items = serializers.serialize("json", object_list,
-                                                    fields=('body', 'mood', 'created'),
-                                                    ensure_ascii=False)
+            # serialize_items = serializers.serialize("json", object_list,
+            #                                         fields=('body', 'mood', 'created'),
+            #                                         ensure_ascii=False)
 
             data = {
                 'status': 200,

@@ -188,7 +188,7 @@ class CommentsView(View):
             logger.info(f'获取文章评论缓存:{cache_key}')
             return data
         else:
-            data = Comments.objects.show(start, end, serialize=True, content_type__model=content_type_model, object_id=object_id)
+            data = Comments.objects.visible_comments(start, end, serialize=True, content_type__model=content_type_model, object_id=object_id)
             cache.set(cache_key, data, 60 * 100)
             logger.info(f'设置文章评论缓存:{cache_key}')
             return data

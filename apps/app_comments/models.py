@@ -21,7 +21,8 @@ def uuid4_hex():
 
 # 自定义 Comments 管理器. 在默认管理器上增加方法
 class ModelManager(models.Manager):
-    def hidden_count(self):
+
+    def invisible_count(self):
         '''不可见评论的数量'''
         hidden = set()
         h = self.filter(is_hide=True)
@@ -29,11 +30,11 @@ class ModelManager(models.Manager):
             hidden.update(commnet.get_all_children())
         return len(hidden)
 
-    def show_count(self):
+    def visible_count(self):
         '''可见评论的数量'''
-        return self.count() - self.hidden_count()
+        return self.count() - self.invisible_count()
 
-    def show(self, start=None, end=None, serialize=False, fields=None, **kwargs):
+    def visible_comments(self, start=None, end=None, serialize=False, fields=None, **kwargs):
         '''可见评论'''
         data = []
         h = self.filter(is_hide=False, parent_comment=None, **kwargs)[start:end]
@@ -45,6 +46,7 @@ class ModelManager(models.Manager):
 # 评论模型
 class Comments(models.Model):
     '''评论模型'''
+
     body = MDTextField('评论内容')
     uuid = models.CharField('唯一标识', max_length=32,
                             unique=True, default=uuid4_hex, editable=False)

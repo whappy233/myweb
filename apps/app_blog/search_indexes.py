@@ -8,7 +8,7 @@ haystack 搜索相关
 from haystack import indexes
 from .models import Article
 
-# 类名必须为需要检索的 Model_name+Index, 这里需要检索 Article, 所以创建 NoteIndex
+# 类名必须为需要检索的 Model_name+Index, 这里需要检索 Article, 所以创建 ArticleIndex
 class ArticleIndex(indexes.SearchIndex, indexes.Indexable):
 
     # 每个索引里面必须有且只能有一个字段为 document=True, 这代表haystack 和搜索引擎将使用此字段的内容作为索引进行检索(primary field).
