@@ -114,24 +114,24 @@ class ArticleAdmin(ShortDescriptionMixin):
                     'comments_count'
                     ]
 
-    search_fields = ['title', 'body']  # 搜索字段
+    search_fields = ('title', 'body',)  # 搜索字段
 
-    list_filter = ['pub_time', 'created', 'updated', 'status', 'tags', 'category__name', 'is_delete']  # 过滤字段
+    list_filter = ('pub_time', 'created', 'updated', 'status', 'tags', 'category__name', 'is_delete',)  # 过滤字段
 
     prepopulated_fields = {'slug':('title',)}  # 自动生成slug, 根据title填充slug
 
     raw_id_fields = ['author',]  # 下拉框改为微件(多个外键使建议使用)
 
-    filter_horizontal = ['users_like']  # 多对多
+    filter_horizontal = ('users_like',)  # 多对多
 
-    # filter_vertical = ['users_like']  # 多对多
+    # filter_vertical = ('users_like',)  # 多对多
 
     actions_on_top = True   # 执行动作的位置
     # actions_on_bottom = False
 
-    ordering = ['created']  # 默认排序
+    ordering = ('created',)  # 默认排序
 
-    # fields = ['title', 'slug', 'author', 'body', 'status']  # 在详细编辑页面的显示字段
+    # fields = ('title', 'slug', 'author', 'body', 'status',)  # 在详细编辑页面的显示字段
 
     empty_value_display = '<span>-</span>'  # 字段值为空时显示的文本(可为纯文本,可为html)
 
@@ -139,11 +139,11 @@ class ArticleAdmin(ShortDescriptionMixin):
 
     list_per_page = 20  # 每页显示条目数
 
-    list_editable = ['status', 'is_delete', 'comment_status']  # 设置可编辑字段
+    list_editable = ('status', 'is_delete', 'comment_status',)  # 设置可编辑字段
 
     date_hierarchy = 'pub_time'  # 按日期月份筛选
 
-    list_display_links = ['title']  # 设置带连接的字段, 连接到updata 页面
+    list_display_links = ('title',)  # 设置带连接的字段, 连接到updata 页面
 
     actions = ['make_published', 'make_published_false', 'make_delete_true',
                 'make_delete_false', 'action_func', 'close_article_commentstatus',
@@ -209,7 +209,7 @@ class TagAdmin:
 # 分类
 @register(Category)
 class CategoryAdmin:
-    list_display = ['id', 'name', 'parent_category', 'slug']
+    list_display = ('id', 'name', 'parent_category', 'slug',)
     prepopulated_fields = {'slug':('name',)}  # 自动生成slug, 根据name填充slug
     search_fields = ['name',]
-    ordering = ['parent_category']
+    ordering = ('parent_category',)

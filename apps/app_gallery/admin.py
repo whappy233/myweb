@@ -14,7 +14,7 @@ class GalleryModelAdmin(admin.ModelAdmin):
     form = GalleryForm
     list_display = ('title', 'is_visible', 'created_time', 'last_mod_time', 'is_delete', 'show_thumb_img')
     list_filter = ('created_time',)
-    ordering = ['-last_mod_time']
+    ordering = ('-last_mod_time',)
 
     # 为什么要重写save_model方法?
     # 当我们通过 GalleryForm 创建 gallery 对象时，默认的form.save()方法只能将相关字段存入到 Gallery 模型对应的表单里。
@@ -79,8 +79,8 @@ class GalleryModelAdmin(admin.ModelAdmin):
 class PhotoModelAdmin(admin.ModelAdmin):
     list_display = ('title', 'gallery', 'create_date', 'is_delete', 'show_thumb_img')
     list_filter = ('gallery', 'create_date')
-    exclude = ['thumb']
-    ordering = ['-create_date']
+    exclude = ('thumb',)
+    ordering = ('-create_date',)
 
     def save_model(self, request, obj, form, change):
         if form.is_valid():

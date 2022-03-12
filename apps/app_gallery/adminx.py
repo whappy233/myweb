@@ -35,9 +35,9 @@ class GalleryModelAdmin:
     form = GalleryForm
     list_display = ('id', 'title', 'uuid', 'created_time', 'last_mod_time', 'is_delete', 'is_visible', 'show_thumb_img')
     list_filter = ('created_time',)
-    ordering = ['-last_mod_time']
-    list_editable = ['title', 'thumb', 'is_delete', 'is_visible']
-    list_display_links = ['uuid']
+    ordering = ('-last_mod_time',)
+    list_editable = ('title', 'thumb', 'is_delete', 'is_visible',)
+    list_display_links = ('uuid',)
 
     # 为什么要重写save_model方法?
     # 当我们通过 GalleryForm 创建 gallery 对象时，默认的form.save()方法只能将相关字段存入到 Gallery 模型对应的表单里。
@@ -109,10 +109,10 @@ class GalleryModelAdmin:
 class PhotoModelAdmin:
     list_display = ('id', 'title', 'description', 'gallery', 'create_date', 'is_delete', 'show_thumb_img')
     list_filter = ('gallery', 'create_date')
-    exclude = ['thumb']
-    ordering = ['-create_date']
-    list_display_links = ['title']
-    list_editable = ['is_delete']
+    exclude = ('thumb',)
+    ordering = ('-create_date',)
+    list_display_links = ('title',)
+    list_editable = ('is_delete',)
     list_per_page = 20  # 每页显示20个
 
     def save_models(self):

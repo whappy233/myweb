@@ -1,3 +1,4 @@
+import re
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
@@ -8,11 +9,11 @@ from mptt.admin import DraggableMPTTAdmin
 # admin.site.register(Comments)  # 注册方式1
 @admin.register(Comments)  # 注册方式2（使用包装）
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'body', 'link_to_userinfo', 'parent_comment', 'link_to_article', 'created_time', 'is_hide']  # 显示字段
-    search_fields = ['author', 'body', 'content_object']  # 搜索字段
-    list_filter = ['created_time', 'is_hide']  # 过滤器
-    list_editable = ['is_hide']
-    actions = ['disable_commentstatus', 'enable_commentstatus']
+    list_display = ('id', 'body', 'link_to_userinfo', 'parent_comment', 'link_to_article', 'created_time', 'is_hide',)  # 显示字段
+    search_fields = ('author', 'body', 'content_object',)  # 搜索字段
+    list_filter = ('created_time', 'is_hide',)  # 过滤器
+    list_editable = ('is_hide',)
+    actions = ('disable_commentstatus', 'enable_commentstatus',)
     list_display_links = ('body',) # 可点击的项
     # raw_id_fields = ['article',]  # 下拉框改为微件
 
@@ -30,8 +31,7 @@ class CommentAdmin(admin.ModelAdmin):
     # admin/accounts/bloguser/2/change/
     # 链接到用户信息
     def link_to_userinfo(self, obj):
-        info = (obj.author._meta.app_label, obj.author._meta.model_name)
-        link = reverse('admin:%s_%s_change' % info, args=(obj.author.id,))
+        link = reverse('admin:auth_user_change', args=(obj.author.id,))
         return format_html(u'<a href="%s">%s</a>' %(link, obj.author.username))
     link_to_userinfo.short_description = '用户'
 
@@ -50,10 +50,10 @@ class MpCommentAdmin(DraggableMPTTAdmin):
     mptt_indent_field = "body"
 
     # 搜索字段
-    search_fields = ['body']
+    search_fields = ('body',)
     # 过滤器
-    list_filter = ['is_overhead', 'is_hide', 'object_id', 'content_type', 'parent_comment']  
-    actions = ['enable_commentstatus', 'disable_commentstatus', 'enable_overhead', 'disable_overhead']
+    list_filter = ('is_overhead', 'is_hide', 'object_id', 'content_type', 'parent_comment',)  
+    actions = ('enable_commentstatus', 'disable_commentstatus', 'enable_overhead', 'disable_overhead',)
     # 可点击的项
     list_display_links = ('indented_title',)
 

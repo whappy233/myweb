@@ -5,7 +5,7 @@ from .models import Comments, MpComments
 
 
 class ActionMixIn:
-    actions = ['enable_commentstatus', 'disable_commentstatus', 'enable_overhead', 'disable_overhead']
+    actions = ('enable_commentstatus', 'disable_commentstatus', 'enable_overhead', 'disable_overhead',)
 
     def enable_commentstatus(self, request, queryset):
         '''显示评论'''
@@ -36,10 +36,10 @@ class CommentAdmin(ActionMixIn):
                     'content_type', 'link_to_article',
                     'created_time', 'is_overhead', 'is_hide']
     # 搜索字段
-    search_fields = ['body']  
+    search_fields = ('body',)  
     # 过滤器
-    list_filter = ['created_time', 'is_overhead', 'is_hide', 'object_id', 'content_type', 'parent_comment']  
-    list_editable = ['is_overhead', 'is_hide']
+    list_filter = ('created_time', 'is_overhead', 'is_hide', 'object_id', 'content_type', 'parent_comment',)  
+    list_editable = ('is_overhead', 'is_hide',)
     # 可点击的项
     list_display_links = ('link_to_body', 'link_to_uuid')
 
@@ -81,10 +81,10 @@ class MpCommentsAdmin(ActionMixIn):
                     'created_time',
                     'level', 'lft', 'rght', 'tree_id', 'is_overhead', 'is_hide']
     # 搜索字段
-    search_fields = ['body']  
+    search_fields = ('body',)  
     # 过滤器
-    list_filter = ['is_overhead', 'is_hide', 'object_id', 'content_type', 'parent_comment']  
-    list_editable = ['is_overhead', 'is_hide']
+    list_filter = ('is_overhead', 'is_hide', 'object_id', 'content_type', 'parent_comment',)  
+    list_editable = ('is_overhead', 'is_hide',)
     # 可点击的项
     list_display_links = ('body', 'link_to_uuid')
 

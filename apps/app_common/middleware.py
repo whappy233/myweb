@@ -1,7 +1,8 @@
 
+from math import floor
 import time
 from loguru import logger
-from django.shortcuts import HttpResponse
+from django.shortcuts import HttpResponse, render
 from django.utils.deprecation import MiddlewareMixin
 
 
@@ -34,6 +35,9 @@ class CommonMiddleware(MiddlewareMixin):
     def access_frequency_restriction(self, request):
         '''IP访问频率控制'''
 
+        if '/media/' in request.get_raw_uri():
+            return
+
         # 获取访问者IP
         ip = request.META.get("REMOTE_ADDR")
         # 获取访问当前时间
@@ -48,13 +52,13 @@ class CommonMiddleware(MiddlewareMixin):
         while history_time and visit_time-history_time[-1] > 60:
             history_time.pop()
         # 如果访问次数小于50次就将访问的ip时间插入到对应ip的key值列表的第一位置,如{"127.0.0.1":[时间2,时间1]}
-        if len(history_time) < 5:
+        if len(history_time) < 50:
             history_time.insert(0, visit_time)
             return None
         else:
             # 如果大于50次就禁止访问
             logger.warning(f'访过于频繁, IP:{ip} URL;{request.get_raw_uri()}')
-            return HttpResponse(f"访问过于频繁, 还需等待{60-(visit_time-history_time[-1])}秒才能继续访问", status=403)
+            return render(request, 'app_common/snippets/request_terminate.html', {'wait_time': floor(60-(visit_time-history_time[-1]))}, status=400)
 
     def get_real_ip(self, request):
         """

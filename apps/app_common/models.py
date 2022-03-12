@@ -2,8 +2,6 @@ from abc import abstractmethod
 from django.db import models
 
 from django.core.exceptions import ValidationError
-from django.db.models import fields
-from django.template.defaultfilters import default
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
@@ -22,7 +20,6 @@ def file_path(instance, filename):
     ext = os.path.splitext(filename)[-1]
     newname = uuid4().hex + ext
     return os.path.join('uploads', now().strftime('%Y/%m/%d/'), newname)
-
 
 
 class FileStorage(models.Model):
@@ -49,8 +46,6 @@ class FileSerializers(serializers.ModelSerializer):
         read_only_fields = ['name', 'size', 'created', 'is_delete']
 
 
-
-
 class BaseModel(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.CharField('唯一标识', max_length=10, unique=True, default=uuid4_hex, editable=False)
@@ -68,7 +63,6 @@ class BaseModel(models.Model):
     @abstractmethod
     def get_absolute_url(self):
         pass
-
 
 
 class SiteSettings(models.Model):
@@ -112,7 +106,6 @@ class SiteSettings(models.Model):
             print('验证没通过： %s' % e.message_dict[NON_FIELD_ERRORS])
 
 
-
 # 轮播图
 class Carousel(models.Model):
     # 轮播图大小 820*200
@@ -132,22 +125,7 @@ class Carousel(models.Model):
         return self.content[:25]
 
 
-# 死链
-class Silian(models.Model):
-    badurl = models.CharField('死链地址', max_length=200, help_text='注意：地址是以http开头的完整链接格式')
-    remark = models.CharField('死链说明', max_length=50, blank=True, null=True)
-    add_date = models.DateTimeField('提交日期', auto_now_add=True)
-
-    class Meta:
-        verbose_name = '死链'
-        verbose_name_plural = verbose_name
-        ordering = ['-add_date']
-
-    def __str__(self):
-        return self.badurl
-
-
-# 友链
+# 友情链接
 class FriendLink(models.Model):
     name = models.CharField('网站名称', max_length=50)
     description = models.CharField('网站描述', max_length=100, blank=True)
@@ -178,19 +156,4 @@ class FriendLink(models.Model):
     def show_to_false(self):
         self.is_show = True
         self.save(update_fields=['is_show'])
-
-
-# 关于
-class AboutBlog(models.Model):
-    body = models.TextField(verbose_name='About 内容')
-    create_date = models.DateTimeField(verbose_name='创建时间', auto_now_add=True)
-    update_date = models.DateTimeField(verbose_name='修改时间', auto_now=True)
-
-    class Meta:
-        verbose_name = 'About'
-        verbose_name_plural = verbose_name
-
-    def __str__(self):
-        return 'About'
-
 

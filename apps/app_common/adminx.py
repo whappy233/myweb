@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
 from django.template.defaultfilters import filesizeformat
-from .models import SiteSettings, Carousel, FileStorage
+from .models import SiteSettings, Carousel, FileStorage, FriendLink
 from app_user.models import UserProfile
 from app_blog.models import Article, Category
 from app_gallery.models import Gallery, Photo
@@ -30,9 +30,9 @@ class GlobalSettings:
     site_title = "星海StarSea"         # 设置站点标题
     site_footer = "星海StarSea 2021"   # 设置站点的页脚
     # menu_style = "accordion"     # 设置菜单折叠，在左侧，默认的
-    list_display = ['go_to']
+    list_display = ('go_to',)
 
-    global_search_models = [UserProfile]
+    # global_search_models = (UserProfile,)  # 全局搜索的模块, 默认搜索所有定义了 search_fields 
 
     def get_site_menu(self):
         '''自定义导航菜单顺序'''
@@ -63,6 +63,7 @@ class GlobalSettings:
                 {'title': '文件管理', 'url': self.get_model_url(FileStorage, 'changelist'),'icon': "glyphicon glyphicon-cloud-upload"},
                 {'title': '轮播图', 'url': self.get_model_url(Carousel, 'changelist'),'icon': "glyphicon glyphicon-sound-stereo"},
                 {'title': '站点配置', 'url': self.get_model_url(SiteSettings, 'changelist') ,'icon': "glyphicon glyphicon-cog"},
+                {'title': '友情链接', 'url': self.get_model_url(FriendLink, 'changelist') ,'icon': "glyphicon glyphicon-cog"},
             )},
         )
 
@@ -70,24 +71,31 @@ class GlobalSettings:
 # 轮播图
 @register(Carousel)
 class CarouselAdmin:
-    list_display = ['id', 'number', 'title', 'content', 'img_url', 'url']
+    list_display = ('id', 'number', 'title', 'content', 'img_url', 'url',)
     search_fields = ['title',]
-    ordering = ['number', '-id'] 
+    ordering = ('number', '-id',) 
+
+
+# 友情链接
+@register(FriendLink)
+class FriendLinkAdmin:
+    list_display = ('name', 'description', 'description', 'logo', 'create_date', 'is_active', 'is_show')
+    search_fields = ('name', 'description')
 
 
 # 网站配置
 @register(SiteSettings)
 class SiteSettingsAdmin:
-    pass
+    ...
 
 
 # 文件管理
 @register(FileStorage)
 class FileStorageAdmin:
-    list_display = ['id', 'name', 'file', 'size', 'is_delete', 'created']
-    list_display_links = ['id', 'name']
-    list_editable = ['is_delete']
-    ordering = ['-created']
+    list_display = ('id', 'name', 'file', 'size', 'is_delete', 'created',)
+    list_display_links = ('id', 'name',)
+    list_editable = ('is_delete',)
+    ordering = ('-created',)
 
     def save_models(self):
         file = self.request.FILES['file']

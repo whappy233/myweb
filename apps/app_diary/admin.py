@@ -5,11 +5,11 @@ from django.utils.html import format_html
 # 日记
 @admin.register(Diary)
 class DiaryAdmin(admin.ModelAdmin):
-    list_display = ['id', 'mood', 'body', 'slug', 'show_img', 'created', 'updated']
-    search_fields = ['body', 'slug']
-    list_filter = ['mood', 'created', 'updated' ]
-    ordering = ['created']
-    list_display_links = ['id', 'mood', 'body', 'slug']
+    list_display = ('id', 'mood', 'body', 'slug', 'show_img', 'created', 'updated',)
+    search_fields = ('body', 'slug',)
+    list_filter = ('mood', 'created', 'updated',)
+    ordering = ('created',)
+    list_display_links = ('id', 'mood', 'body', 'slug',)
 
     def show_img(self, obj):
         '''展示配图'''

@@ -15,9 +15,9 @@ class UserProfileAdmin:
                     'show_img', 'telephone', 'introduction',
                     'last_mod_time', 'is_active', 'is_superuser']  # 要显示的字段
 
-    search_fields = ['user__username', 'user__email', 'telephone']   # 搜索字段
+    search_fields = ('user__username', 'user__email', 'telephone',)   # 搜索字段
 
-    list_display_links = ['id', 'link_to_uuid', 'user', 'w_name']
+    list_display_links = ('id', 'link_to_uuid', 'user', 'w_name',)
 
     list_filter = ['is_wanderer', 'user__is_active',
                    'user__is_superuser', 'user__date_joined']  # 过滤器
@@ -61,7 +61,7 @@ class UserProfileInline:
 
 class UserAdmina(UserAdmin):
     # 用户创建的项目
-    inlines = [UserProfileInline]
+    inlines = (UserProfileInline,)
 
 
 xadmin.site.unregister(User)

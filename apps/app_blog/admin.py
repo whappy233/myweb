@@ -35,18 +35,18 @@ class TitleKeywordFilter(admin.SimpleListFilter):
 # admin.site.register(Article, ArticleAdmin)  # 注册方式1
 @admin.register(Article)  # 注册方式2（使用包装）
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ['id', 'show_tags', 'title', 'link_to_userinfo', 
+    list_display = ('id', 'show_tags', 'title', 'link_to_userinfo', 
                     'link_to_categoryinfo', 'pub_time', 'updated', 
-                    'status', 'is_delete', 'slug', 'comment_status']  # 显示字段
-    search_fields = ['title', 'body']  # 搜索字段
-    list_filter = [TitleKeywordFilter, 'pub_time', 'created', 'updated', 'status']  # 过滤字段
+                    'status', 'is_delete', 'slug', 'comment_status')  # 显示字段
+    search_fields = ('title', 'body',)  # 搜索字段
+    list_filter = (TitleKeywordFilter, 'pub_time', 'created', 'updated', 'status',)  # 过滤字段
     prepopulated_fields = {'slug':('title',)}  # 自动生成slug, 根据title填充slug
     raw_id_fields = ['author',]  # 下拉框改为微件(多个外键使建议使用)
-    filter_horizontal = ['users_like']  # 多对多
-    # filter_vertical = ['users_like']  # 多对多
+    filter_horizontal = ('users_like',)  # 多对多
+    # filter_vertical = ('users_like',)  # 多对多
     actions_on_top = True   # 执行动作的位置
     # actions_on_bottom = False
-    ordering = ['author']  # 默认排序
+    ordering = ('author',)  # 默认排序
     fields = ['tags', 'title', 'author', 'category', 'img_link',
             'summary', 'body', 'pub_time', 'status', 'is_delete',
             'slug', 'views', 'comment_status', 'article_order', 'users_like']
@@ -192,10 +192,10 @@ class ArticleAdmin(admin.ModelAdmin):
 # admin.site.register(Category, CategoryAdmin)  # 注册方式1
 @admin.register(Category)  # 注册方式2（使用包装）
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'parent_category', 'slug']
+    list_display = ('name', 'parent_category', 'slug',)
     prepopulated_fields = {'slug':('name',)}  # 自动生成slug, 根据name填充slug
     search_fields = ['name',]
-    ordering = ['parent_category'] 
+    ordering = ('parent_category',) 
 
 
 

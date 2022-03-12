@@ -29,11 +29,11 @@ window.addEventListener('load', function () {
 # 日记
 @register(Diary)
 class DiaryAdmin:
-    list_display = ['id', 'mood', 'body', 'slug', 'show_img', 'created', 'updated']
-    search_fields = ['body', 'slug']
+    list_display = ('id', 'mood', 'body', 'slug', 'show_img', 'created', 'updated',)
+    search_fields = ('body', 'slug',)
     list_filter = ['mood', 'created', 'updated' ]
-    ordering = ['created']
-    list_display_links = ['id', 'mood', 'body', 'slug']
+    ordering = ('created',)
+    list_display_links = ('id', 'mood', 'body', 'slug',)
 
     def show_img(self, obj):
         '''展示配图'''

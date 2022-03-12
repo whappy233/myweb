@@ -13,9 +13,7 @@ from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 
-from .models import AboutBlog, FileSerializers, FileStorage
-
-
+from .models import FileSerializers, FileStorage
 
 
 # rest_framework
@@ -35,7 +33,7 @@ class FileView(ModelViewSet):
         # 只需要更新 is_delete 的字段，而不是更新全表，减轻数据库写入的工作量
         instance.save(update_fields=['is_delete'])
 
-    # /storage/files/3/download/
+    # /files/3/download/
     # 增加额外的URI
     @action(methods=['get', 'post'], detail=True)
     def download(self, request, pk=None, *args, **kwargs):
@@ -43,31 +41,6 @@ class FileView(ModelViewSet):
         response = FileResponse(open(instance.file.path, 'rb'))
         response['Content-Disposition'] = f'attachment;filename="{instance.name}"'
         return response
-
-
-# 关于
-def AboutView(request):
-    obj = AboutBlog.objects.first()
-    if obj:
-        ud = obj.update_date.strftime("%Y%m%d%H%M%S")
-        md_key = '{}_md_{}'.format(obj.id, ud)
-        cache_md = cache.get(md_key)
-        if cache_md:
-            body = cache_md
-        else:
-            body = obj.body_to_markdown()
-            cache.set(md_key, body, 3600 * 24 * 15)
-    else:
-        repo_url = 'https://github.com/Hopetree'
-        body = '<li>作者 Github 地址：<a href="{}">{}</a></li>'.format(
-            repo_url, repo_url)
-    return render(request, 'blog/about.html', context={'body': body})
-
-
-
-def xxxs(request):
-    return render(request, 'tp/upload_process.html')
-
 
 
 @csrf_exempt
@@ -91,7 +64,7 @@ def FileUploads(request):
             #print(name, etx, finally_name)
         else:
             finally_name = file.name
- 		#文件分块上传
+        #文件分块上传
         upload_file_to = open(os.path.join(upload_url, finally_name), 'wb+')
         for chunk in file.chunks():
             upload_file_to.write(chunk)

@@ -1,6 +1,6 @@
 
 from django.urls import include, path
-from .views import FileView, FileUploads, xxxs
+from .views import FileView, FileUploads
 from rest_framework import routers
 
 
@@ -12,6 +12,4 @@ app_name = 'app_common'
 urlpatterns = [
     path('files/', include(router.urls)),
     path('FileUploads/', FileUploads),
-    path('xxxs/', xxxs),
-
 ]
