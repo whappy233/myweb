@@ -149,7 +149,7 @@ class Comments(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'ID:{self.id}-{self.body[:10]}... (🔗 {self.content_type}-ID:{self.object_id})'
+        return f'ID: {self.id}-{self.body[:10]}... ({self.content_type}ID: {self.object_id})'
 
     def natural_key(self):
         return {'uuid': self.uuid, 'author_uuid': self.author.uuid, 'username': self.author.username}
@@ -200,7 +200,7 @@ class MpComments(MPTTModel):
 
     def __str__(self):
         hide = '❌'if self.is_hide else '✅'
-        return f'ID:{self.id}-{self.body} {hide} (🔗 {self.content_type}-ID:{self.object_id})'
+        return f'ID: {self.id}-{self.body} {hide} ({self.content_type}ID: {self.object_id})'
 
 
 # 隐藏的评论数
