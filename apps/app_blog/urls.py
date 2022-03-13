@@ -23,6 +23,7 @@ urlpatterns = [
     path('ajax_app_test/', views.ajax_test, name='ajax_app_test'),  # ajax 请求
     path('blog/like/', views.blog_like, name='blog_like'),          # 点赞 +1 (ajax)
     path('refresh/', views.refresh_memcache, name='refresh'),       # 刷新(清空) Redis缓存
+    path('clash/', views.clash, name='clash'),
 
 ]
 

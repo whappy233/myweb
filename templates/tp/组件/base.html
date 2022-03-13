@@ -90,7 +90,7 @@
                                     {% b_category as bbcate %}
                                     {% if bbcate.count > 0 %}
                                     <li>
-                                        <a href="#">栏目</a>
+                                        <a href="#">分类</a>
                                         <ul class="dropdown-menu-col-1 animation">
                                             {% for cate in bbcate %}
                                             <li><a href="{{cate.get_absolute_url}}">{{cate.name}}</a></li>
@@ -99,6 +99,7 @@
                                     </li>
                                     {% endif %}
                                     {# Page #}
+                                    {% comment %}
                                     <li class="possition-static hide-on-mobile-menu">
                                         <a href="#">PAGES</a>
                                         <div class="template-mega-menu animation">
@@ -185,6 +186,7 @@
                                             </li>
                                         </ul>
                                     </li>
+                                    {% endcomment %}
                                     {# 相册 #}
                                     <li>
                                         <a href="{% url 'app_gallery:gallery_list' %}">相册</a>
@@ -332,6 +334,7 @@
                                                             <li><a target="_blank" title="相册照片" href="{{ add_photo }}"><i class="far fa-image"></i>新增照片</a></li>
                                                             <li><a target="_blank" title="Xadmin"  href="/xadmin"><i class="fas fa-user-shield"></i>XADMIN</a></li>
                                                             <li><a title="刷新缓存" href="{% url 'app_blog:refresh' %}"><i class="fas fa-redo-alt"></i>刷新缓存</a></li>
+                                                            <li><a title="Clash" href="{% url 'app_blog:clash' %}"><i class="fas fa-redo-alt"></i>Clash</a></li>
                                                             {% endif %}
                                                             <li><a href="{% url 'app_user:logout' %}?before={{request.get_full_path}}"><i class="fas fa-sign-out-alt"></i>退出登陆</a></li>
                                                         </ul>

@@ -382,6 +382,23 @@ def refresh_memcache(request):
         logger.error(e)
         return HttpResponse(e)
 
+
+@login_required
+def clash(request):
+    try:
+        if request.user.is_superuser:
+            if cache and cache is not None:
+                cache.clear()
+            return redirect("app_blog:article_list")
+        else:
+            return HttpResponseForbidden()
+    except Exception as e:
+        logger.error(e)
+        return HttpResponse(e)
+
+
+
+
 # 400
 def page_not_found_view(request, exception, template_name='blog/error_page.html'):
     if exception: 
